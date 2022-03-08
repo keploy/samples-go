@@ -85,7 +85,6 @@ func PutURL(c echo.Context) error {
 			return
 		}
 	*/
-	fmt.Print("Hello, world!")
 	c.JSON(http.StatusOK, successResponse{
 		ts:  time.Now().UnixNano(),
 		url: "http://localhost:8080/" + id,
