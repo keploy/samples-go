@@ -20,13 +20,13 @@ type ConnectionDetails struct {
 	db_name  string // The database name (default "postgres")
 }
 
-type errorResponse struct {
-	err string `json:"error"`
+type urlRequestBody struct {
+	URL string `json:"url"`
 }
 
 type successResponse struct {
-	ts  int64  `json:"ts"`
-	url string `json:"url"`
+	TS  int64  `json:"ts"`
+	URL string `json:"url"`
 }
 
 /*
@@ -55,18 +55,17 @@ func NewConnection(conn_details ConnectionDetails) (*sql.DB, error) {
 }
 
 func PutURL(c echo.Context) error {
-	var req_body map[string]string
+	req_body := new(urlRequestBody)
 
 	err := c.Bind(req_body)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, errorResponse{err: "Failed to decode request."})
-		return err
+		fmt.Println(req_body)
+		return echo.NewHTTPError(http.StatusBadRequest, "Failed to decode request.")
 	}
-	u := req_body["url"]
+	u := req_body.URL
 
 	if u == "" {
-		c.JSON(http.StatusBadRequest, errorResponse{err: "Missing url parameter"})
-		return err
+		return echo.NewHTTPError(http.StatusBadRequest, "Missing URL parameter")
 	}
 
 	//t := time.Now()
@@ -85,11 +84,11 @@ func PutURL(c echo.Context) error {
 			return
 		}
 	*/
-	c.JSON(http.StatusOK, successResponse{
-		ts:  time.Now().UnixNano(),
-		url: "http://localhost:8080/" + id,
+
+	return c.JSON(http.StatusOK, &successResponse{
+		TS:  time.Now().UnixNano(),
+		URL: "http://localhost:8080/" + id,
 	})
-	return nil
 }
 
 func GenerateShortLink(initialLink string) string {
