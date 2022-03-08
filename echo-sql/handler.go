@@ -1,1 +1,5 @@
-package main 
+package main
+
+func NewConnection() {
+
+}
