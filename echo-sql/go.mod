@@ -12,6 +12,7 @@ require (
 	github.com/go-playground/universal-translator v0.17.0 // indirect
 	github.com/go-playground/validator/v10 v10.4.1 // indirect
 	github.com/google/uuid v1.3.0 // indirect
+	github.com/itchyny/base58-go v0.2.0 // indirect
 	github.com/keploy/go-sdk v0.3.4 // indirect
 	github.com/labstack/echo/v4 v4.7.0 // indirect
 	github.com/labstack/gommon v0.3.1 // indirect
