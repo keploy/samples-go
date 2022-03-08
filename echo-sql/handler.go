@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"crypto/sha256"
 	"database/sql"
 	"fmt"
@@ -22,6 +23,13 @@ type ConnectionDetails struct {
 	db_name  string // The database name (default "postgres")
 }
 
+type URLEntry struct {
+	ID           string
+	Redirect_URL string
+	Created_At   time.Time
+	Updated_At   time.Time
+}
+
 type urlRequestBody struct {
 	URL string `json:"url"`
 }
@@ -41,6 +49,7 @@ func NewConnection(conn_details ConnectionDetails) (*sql.DB, error) {
 		conn_details.host, conn_details.port, conn_details.user, conn_details.password, conn_details.db_name)
 
 	driver := ksql.Driver{Driver: pq.Driver{}}
+
 	sql.Register("keploy", &driver)
 
 	db, err := sql.Open("keploy", db_info)
@@ -48,14 +57,27 @@ func NewConnection(conn_details ConnectionDetails) (*sql.DB, error) {
 		return nil, err
 	}
 
-	defer db.Close()
-
 	err = db.Ping()
 	if err != nil {
 		return nil, err
 	}
 
 	return db, nil
+}
+
+func InsertURL(c context.Context, entry URLEntry) error {
+	sql_query := `
+		INSERT INTO url_map (id, redirect_url, created_at, updated_at)
+		VALUES ($1, $2, $3, $4)
+	`
+
+	_, err := Database.ExecContext(c, sql_query, entry.ID, entry.Redirect_URL, entry.Created_At, entry.Updated_At)
+	if err != nil {
+		fmt.Printf(err.Error())
+		return err
+	}
+
+	return nil
 }
 
 func PutURL(c echo.Context) error {
@@ -72,24 +94,19 @@ func PutURL(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Missing URL parameter")
 	}
 
-	c.Request().Context()
-	//t := time.Now()
 	id := GenerateShortLink(u)
-	
-	// Insert into PostgreSQL database. (eventually)
-	/*
-		err = Upsert(c.Request.Context(), url{
-			ID:      id,
-			Created: t,
-			Updated: t,
-			URL:     u,
-		})
+	t := time.Now()
 
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, errorResponse{err: err})
-			return
-		}
-	*/
+	err = InsertURL(c.Request().Context(), URLEntry{
+		ID:           id,
+		Created_At:   t,
+		Updated_At:   t,
+		Redirect_URL: u,
+	})
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "Unable to shorten URL", err)
+	}
 
 	return c.JSON(http.StatusOK, &successResponse{
 		TS:  time.Now().UnixNano(),

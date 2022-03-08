@@ -1,6 +1,8 @@
 package main
 
 import (
+	"database/sql"
+
 	"github.com/keploy/go-sdk/integrations/kecho/v4"
 	"github.com/keploy/go-sdk/keploy"
 	"github.com/labstack/echo/v4"
@@ -20,11 +22,14 @@ const (
 	dbname   = "postgres"
 )
 
+var Database *sql.DB
+
 func main() {
+	var err error
 	logger, _ = zap.NewProduction()
 	defer logger.Sync() // flushes buffer
 
-	_, err := NewConnection(ConnectionDetails{
+	Database, err = NewConnection(ConnectionDetails{
 		host:     "localhost",
 		port:     "5438",
 		user:     "postgres",
@@ -35,6 +40,8 @@ func main() {
 	if err != nil {
 		logger.Fatal("Failed to establish connection to local PostgreSQL instance:", zap.Error(err))
 	}
+
+	defer Database.Close()
 
 	// init Keploy
 	k := keploy.New(keploy.Config{
