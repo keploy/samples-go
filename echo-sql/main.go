@@ -1,7 +1,13 @@
 package main
 
 import (
+	"database/sql"
+
+	"github.com/keploy/go-sdk/integrations/kecho/v4"
+	"github.com/keploy/go-sdk/integrations/ksql"
+	"github.com/keploy/go-sdk/keploy"
 	"github.com/labstack/echo/v4"
+	"github.com/lib/pq"
 	_ "github.com/lib/pq"
 	"go.uber.org/zap"
 )
@@ -34,21 +40,24 @@ func main() {
 		logger.Fatal("Failed to establish connection to local PostgreSQL instance:", zap.Error(err))
 	}
 
-	/*
-		// init Keploy
-		k := keploy.New(keploy.Config{
-			App: keploy.AppConfig{
-				Name: "sample-url-shortener",
-				Port: port,
-			},
-			Server: keploy.ServerConfig{
-				URL: "http://localhost:8081/api",
-			},
-		})*/
+	// init Keploy
+	k := keploy.New(keploy.Config{
+		App: keploy.AppConfig{
+			Name: "sample-url-shortener",
+			Port: port,
+		},
+		Server: keploy.ServerConfig{
+			URL: "http://localhost:8081/api",
+		},
+	})
+
+	driver := ksql.Driver{Driver: pq.Driver{}}
+
+	sql.Register("keploy", &driver)
 
 	r := echo.New() // Init echo
 
-	//kecho.EchoV4(k, r) // Tie echo router in with Keploy
+	kecho.EchoV4(k, r) // Tie echo router in with Keploy
 
 	r.GET("/:param", nil)
 	r.POST("/url", PutURL)
