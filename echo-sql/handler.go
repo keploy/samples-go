@@ -9,7 +9,9 @@ import (
 	"time"
 
 	"github.com/itchyny/base58-go"
+	"github.com/keploy/go-sdk/integrations/ksql"
 	"github.com/labstack/echo/v4"
+	"github.com/lib/pq"
 )
 
 type ConnectionDetails struct {
@@ -38,8 +40,10 @@ func NewConnection(conn_details ConnectionDetails) (*sql.DB, error) {
 		"password=%s dbname=%s sslmode=disable",
 		conn_details.host, conn_details.port, conn_details.user, conn_details.password, conn_details.db_name)
 
-	db, err := sql.Open("postgres", db_info)
-	err = db.Ping()
+	driver := ksql.Driver{Driver: pq.Driver{}}
+	sql.Register("keploy", &driver)
+
+	db, err := sql.Open("keploy", db_info)
 	if err != nil {
 		return nil, err
 	}
@@ -68,8 +72,10 @@ func PutURL(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Missing URL parameter")
 	}
 
+	c.Request().Context()
 	//t := time.Now()
 	id := GenerateShortLink(u)
+	
 	// Insert into PostgreSQL database. (eventually)
 	/*
 		err = Upsert(c.Request.Context(), url{

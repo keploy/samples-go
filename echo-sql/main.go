@@ -1,13 +1,9 @@
 package main
 
 import (
-	"database/sql"
-
 	"github.com/keploy/go-sdk/integrations/kecho/v4"
-	"github.com/keploy/go-sdk/integrations/ksql"
 	"github.com/keploy/go-sdk/keploy"
 	"github.com/labstack/echo/v4"
-	"github.com/lib/pq"
 	_ "github.com/lib/pq"
 	"go.uber.org/zap"
 )
@@ -50,10 +46,6 @@ func main() {
 			URL: "http://localhost:8081/api",
 		},
 	})
-
-	driver := ksql.Driver{Driver: pq.Driver{}}
-
-	sql.Register("keploy", &driver)
 
 	r := echo.New() // Init echo
 
