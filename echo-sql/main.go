@@ -1,9 +1,6 @@
 package main
 
 import (
-	"database/sql"
-	"fmt"
-
 	"github.com/keploy/go-sdk/integrations/kecho/v4"
 	"github.com/keploy/go-sdk/keploy"
 	"github.com/labstack/echo/v4"
@@ -27,19 +24,14 @@ func main() {
 	logger, _ = zap.NewProduction()
 	defer logger.Sync() // flushes buffer
 
-	// Connect to PostgreSQL database
-	db_info := fmt.Sprintf("host=%s port=%s user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		host, db_port, user, password, dbname)
+	_, err := NewConnection(ConnectionDetails{
+		host:     "localhost",
+		port:     "5438",
+		user:     "postgres",
+		password: "postgres",
+		db_name:  "postgres",
+	})
 
-	db, err := sql.Open("postgres", db_info)
-	err = db.Ping()
-	if err != nil {
-		logger.Fatal("Failed to open PostgreSQL instance:", zap.Error(err))
-	}
-	defer db.Close()
-
-	err = db.Ping()
 	if err != nil {
 		logger.Fatal("Failed to establish connection to local PostgreSQL instance:", zap.Error(err))
 	}
