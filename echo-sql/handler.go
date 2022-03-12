@@ -61,14 +61,45 @@ func NewConnection(conn_details ConnectionDetails) (*sql.DB, error) {
 }
 
 func InsertURL(c context.Context, entry URLEntry) error {
-	sql_query := `
+	insert_query := `
 		INSERT INTO url_map (id, redirect_url, created_at, updated_at)
 		VALUES ($1, $2, $3, $4)
 	`
 
-	_, err := Database.ExecContext(c, sql_query, entry.ID, entry.Redirect_URL, entry.Created_At, entry.Updated_At)
+	select_query := `
+			SELECT * 
+			FROM url_map
+			WHERE id = $1
+	`
+
+	update_timestamp := `
+			UPDATE url_map
+			SET updated_at = $1
+			WHERE id = $2
+	`
+
+	res, err := Database.QueryContext(c, select_query, entry.ID) // See if the URL already exists
 	if err != nil {
-		fmt.Printf(err.Error())
+		return err
+	}
+
+	if res.Next() { // If we get rows back, that means we have a duplicate URL
+		var entry URLEntry
+		err := res.Scan(&entry.ID, &entry.Redirect_URL, &entry.Created_At, &entry.Updated_At)
+		if err != nil {
+			return err
+		}
+
+		_, err = Database.ExecContext(c, update_timestamp, entry.Updated_At, entry.ID)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	_, err = Database.ExecContext(c, insert_query, entry.ID, entry.Redirect_URL, entry.Created_At, entry.Updated_At)
+	if err != nil {
 		return err
 	}
 
@@ -106,7 +137,7 @@ func PutURL(c echo.Context) error {
 	})
 
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, "Unable to shorten URL", err)
+		return echo.NewHTTPError(http.StatusInternalServerError, "Unable to shorten URL", err.Error())
 	}
 
 	return c.JSON(http.StatusOK, &successResponse{

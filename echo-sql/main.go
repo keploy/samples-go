@@ -12,7 +12,7 @@ import (
 
 const port = "8080"
 
-var logger *zap.Logger
+var Logger *zap.Logger
 
 const (
 	host     = "localhost"
@@ -26,8 +26,8 @@ var Database *sql.DB
 
 func main() {
 	var err error
-	logger, _ = zap.NewProduction()
-	defer logger.Sync() // flushes buffer
+	Logger, _ = zap.NewProduction()
+	defer Logger.Sync() // flushes buffer
 
 	Database, err = NewConnection(ConnectionDetails{
 		host:     "localhost",
@@ -38,7 +38,7 @@ func main() {
 	})
 
 	if err != nil {
-		logger.Fatal("Failed to establish connection to local PostgreSQL instance:", zap.Error(err))
+		Logger.Fatal("Failed to establish connection to local PostgreSQL instance:", zap.Error(err))
 	}
 
 	defer Database.Close()
