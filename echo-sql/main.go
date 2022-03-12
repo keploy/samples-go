@@ -58,7 +58,7 @@ func main() {
 
 	kecho.EchoV4(k, r) // Tie echo router in with Keploy
 
-	r.GET("/:param", nil)
+	r.GET("/:param", GetURL)
 	r.POST("/url", PutURL)
 
 	r.Start(":" + port)

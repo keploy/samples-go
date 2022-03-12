@@ -106,6 +106,38 @@ func InsertURL(c context.Context, entry URLEntry) error {
 	return nil
 }
 
+func GetURL(c echo.Context) error {
+	err := Database.PingContext(c.Request().Context())
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "Could not connect to Postgres.")
+	}
+	id := c.Param("param")
+
+	find_url_query := `
+		SELECT * 
+		FROM url_map
+		WHERE id = $1
+	`
+	res, err := Database.QueryContext(c.Request().Context(), find_url_query, id) // Attempt to find a matching URL
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "Error encountered while attempting to lookup URL.")
+	}
+
+	if !res.Next() {
+		return echo.NewHTTPError(http.StatusNotFound, "Invalid URL ID.")
+	}
+
+	var entry URLEntry
+	err = res.Scan(&entry.ID, &entry.Redirect_URL, &entry.Created_At, &entry.Updated_At)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "Could not successfully scan retrieved DB entry.")
+	}
+
+	c.Redirect(http.StatusPermanentRedirect, entry.Redirect_URL)
+	return nil
+}
+
 func PutURL(c echo.Context) error {
 
 	err := Database.PingContext(c.Request().Context())
