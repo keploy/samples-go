@@ -57,11 +57,6 @@ func NewConnection(conn_details ConnectionDetails) (*sql.DB, error) {
 		return nil, err
 	}
 
-	err = db.Ping()
-	if err != nil {
-		return nil, err
-	}
-
 	return db, nil
 }
 
@@ -81,9 +76,15 @@ func InsertURL(c context.Context, entry URLEntry) error {
 }
 
 func PutURL(c echo.Context) error {
+
+	err := Database.PingContext(c.Request().Context())
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "Could not connect to Postgres.")
+	}
+
 	req_body := new(urlRequestBody)
 
-	err := c.Bind(req_body)
+	err = c.Bind(req_body)
 	if err != nil {
 		fmt.Println(req_body)
 		return echo.NewHTTPError(http.StatusBadRequest, "Failed to decode request.")
