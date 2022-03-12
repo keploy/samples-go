@@ -108,7 +108,7 @@ func InsertURL(c context.Context, entry URLEntry) error {
 
 func PutURL(c echo.Context) error {
 
-	err := Database.PingContext(c.Request().Context())
+	err := Database.PingContext(c.Request().Context()) 
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Could not connect to Postgres.")
 	}
@@ -137,7 +137,7 @@ func PutURL(c echo.Context) error {
 	})
 
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, "Unable to shorten URL", err.Error())
+		return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Unable to shorten URL: %s", err.Error()))
 	}
 
 	return c.JSON(http.StatusOK, &successResponse{
