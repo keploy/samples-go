@@ -14,14 +14,6 @@ const port = "8080"
 
 var Logger *zap.Logger
 
-const (
-	host     = "localhost"
-	db_port  = "5438"
-	user     = "postgres"
-	password = "postgres"
-	dbname   = "postgres"
-)
-
 var Database *sql.DB
 
 func main() {
