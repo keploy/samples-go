@@ -108,7 +108,7 @@ func InsertURL(c context.Context, entry URLEntry) error {
 
 func PutURL(c echo.Context) error {
 
-	err := Database.PingContext(c.Request().Context()) 
+	err := Database.PingContext(c.Request().Context())
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Could not connect to Postgres.")
 	}
@@ -141,7 +141,7 @@ func PutURL(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, &successResponse{
-		TS:  time.Now().UnixNano(),
+		TS:  t.UnixNano(),
 		URL: "http://localhost:8080/" + id,
 	})
 }
