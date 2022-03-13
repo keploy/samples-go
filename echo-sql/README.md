@@ -1,6 +1,6 @@
 # Example URL Shortener
 
-A sample url shortener app to test Keploy integration capabilities
+A sample url shortener app to test Keploy integration capabilities using [Echo](https://echo.labstack.com/) and PostgreSQL. 
 
 ## Installation
 
@@ -14,7 +14,7 @@ docker-compose up
 ### Setup URL shortener
 
 ```bash
-git clone https://github.com/keploy/example-url-shortener && cd example-url-shortener
+git clone https://github.com/keploy/example-url-shortener && cd example-url-shortener/echo-sql
 go mod download
 ```
 
