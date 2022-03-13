@@ -18,6 +18,11 @@ git clone https://github.com/keploy/example-url-shortener && cd example-url-shor
 go mod download
 ```
 
+### Start PostgreSQL instance
+```bash
+docker-compose up -d
+```
+
 ### Run the application
 
 ```shell
@@ -62,7 +67,7 @@ If you're using Keploy cloud, open [this](https://app.keploy.io/testlist).
 
 You should be seeing an app named `sample-url-shortener` with the test cases we just captured.
 
-![testcases](testcases.png?raw=true "Web console testcases")
+![testcases](https://github.com/petergeorgas/samples-go/blob/main/gin-mongo/testcases.png?raw=true)
 
 Now, let's see the magic! 🪄💫
 
@@ -89,9 +94,9 @@ mongoDB 😄**
 
 Go to the Keploy Console/testruns to get deeper insights on what testcases ran, what failed.
 
-![testruns](testrun1.png?raw=true "Recent testruns")
-![testruns](testrun2.png?raw=true "Summary")
-![testruns](testrun3.png?raw=true "Detail")
+![testruns](https://raw.githubusercontent.com/petergeorgas/samples-go/main/gin-mongo/testrun1.png)
+![testruns](https://raw.githubusercontent.com/petergeorgas/samples-go/main/gin-mongo/testrun2.png)
+![testruns](https://raw.githubusercontent.com/petergeorgas/samples-go/main/gin-mongo/testrun3.png)
 
 ### Make a code change
 
@@ -111,5 +116,5 @@ FAIL
 
 To deep dive the problem go to [test runs](http://localhost:8081/testruns)
 
-![testruns](testrun4.png?raw=true "Recent testruns")
-![testruns](testrun5.png?raw=true "Detail")
+![testruns](https://raw.githubusercontent.com/petergeorgas/samples-go/main/gin-mongo/testrun4.png)
+![testruns](https://raw.githubusercontent.com/petergeorgas/samples-go/main/gin-mongo/testrun5.png)
