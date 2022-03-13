@@ -87,10 +87,10 @@ ok      test-app-url-shortener  6.268s  coverage: 80.3% of statements in ./...
 
 **We got 80.3% without writing any testcases or mocks for mongo db!!**
 
-So no need to setup dependencies like mongoDB, web-go locally or write mocks for your testing.
+So no need to setup dependencies like PostgreSQL, web-go locally or write mocks for your testing.
 
 **The application thinks it's talking to
-mongoDB 😄**
+Postgres 😄**
 
 Go to the Keploy Console/testruns to get deeper insights on what testcases ran, what failed.
 
@@ -100,7 +100,7 @@ Go to the Keploy Console/testruns to get deeper insights on what testcases ran, 
 
 ### Make a code change
 
-Now try changing something like renaming `url` to `urls` in [handlers.go](./handler.go) on line 96 and running ` go test -coverpkg=./... -covermode=atomic ./...` again
+Now try changing something like renaming `url` to `urls` in [handlers.go](./handler.go) on line 39 and running ` go test -coverpkg=./... -covermode=atomic ./...` again
 
 ```shell
 {"msg":"result","testcase id":"05a576e1-c03a-4c25-a469-4bea0307cd08","passed":false}
