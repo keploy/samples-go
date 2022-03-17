@@ -14,7 +14,7 @@ docker-compose up
 ### Setup URL shortener
 
 ```bash
-git clone https://github.com/keploy/example-url-shortener && cd example-url-shortener/echo-sql
+git clone https://github.com/keploy/samples-go && cd samples-go/echo-sql
 go mod download
 ```
 
@@ -85,7 +85,7 @@ output should look like
 ok      test-app-url-shortener  6.268s  coverage: 80.3% of statements in ./...
 ```
 
-**We got 80.3% without writing any testcases or mocks for mongo db!!**
+**We got 80.3% without writing any testcases or mocks for Postgres!**
 
 So no need to setup dependencies like PostgreSQL, web-go locally or write mocks for your testing.
 
