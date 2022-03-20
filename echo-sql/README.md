@@ -33,7 +33,7 @@ go run handler.go main.go
 
 To genereate testcases we just need to make some API calls. You can use [Postman](https://www.postman.com/), [Hoppscotch](https://hoppscotch.io/), or simply `curl`
 
-###1. Generate shortned url
+### Generate shortned url
 
 ```bash
 curl --request POST \
@@ -53,7 +53,7 @@ this will return the shortened url. The ts would automatically be ignored during
 }
 ```
 
-###2. Redirect to original url from shortened url
+### Redirect to original url from shortened url
 
 ```bash
 curl --request GET \
