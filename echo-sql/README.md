@@ -40,7 +40,7 @@ curl --request POST \
   --url http://localhost:8080/url \
   --header 'content-type: application/json' \
   --data '{
-  "url": "https://google.com"
+  "url": "https://github.com"
 }'
 ```
 
@@ -48,8 +48,8 @@ this will return the shortened url. The ts would automatically be ignored during
 
 ```
 {
-  "ts": 1645540022,
-  "url": "http://localhost:8080/Lhr4BWAi"
+	"ts": 1647802058801841100,
+	"url": "http://localhost:8080/GuwHCgoQ"
 }
 ```
 
@@ -57,23 +57,23 @@ this will return the shortened url. The ts would automatically be ignored during
 
 ```bash
 curl --request GET \
-  --url http://localhost:8080/Lhr4BWAi
+  --url http://localhost:8080/GuwHCgoQ
 ```
 
-or by querying through the browser `http://localhost:8080/Lhr4BWAi`
+or by querying through the browser `http://localhost:8080/GuwHCgoQ`
 
 Now both these API calls were captured as a testcase and should be visible on the [Keploy console](http://localhost:8081/testlist).
 If you're using Keploy cloud, open [this](https://app.keploy.io/testlist).
 
 You should be seeing an app named `sample-url-shortener` with the test cases we just captured.
 
-![testcases](https://github.com/petergeorgas/samples-go/blob/main/gin-mongo/testcases.png?raw=true)
+![testcases](https://i.imgur.com/7I4TY07.png)
 
 Now, let's see the magic! 🪄💫
 
 ## Test mode
 
-Now that we have our testcase captured, run the test file.
+Now that we have our testcase captured, run the test file (in the echo-sql directory, not the Keploy directory).
 
 ```shell
  go test -coverpkg=./... -covermode=atomic  ./...
@@ -82,10 +82,10 @@ Now that we have our testcase captured, run the test file.
 output should look like
 
 ```shell
-ok      test-app-url-shortener  6.268s  coverage: 80.3% of statements in ./...
+ok      echo-psql-url-shortener 5.820s  coverage: 74.4% of statements in ./...
 ```
 
-**We got 80.3% without writing any testcases or mocks for Postgres!**
+**We got 74.4% without writing any testcases or mocks for Postgres!**
 
 So no need to setup dependencies like PostgreSQL, web-go locally or write mocks for your testing.
 
@@ -94,27 +94,31 @@ Postgres 😄**
 
 Go to the Keploy Console/testruns to get deeper insights on what testcases ran, what failed.
 
-![testruns](https://raw.githubusercontent.com/petergeorgas/samples-go/main/gin-mongo/testrun1.png)
-![testruns](https://raw.githubusercontent.com/petergeorgas/samples-go/main/gin-mongo/testrun2.png)
-![testruns](https://raw.githubusercontent.com/petergeorgas/samples-go/main/gin-mongo/testrun3.png)
+![testruns](https://i.imgur.com/euROA3X.png)
+![testruns](https://user-images.githubusercontent.com/21143531/159177972-8f1b0c92-05ea-4c10-9583-47ddb5e952be.png)
+![testrun](https://user-images.githubusercontent.com/21143531/159178008-f7d38738-d841-437a-a3b4-bb7e5b07b808.png)
 
 ### Make a code change
 
 Now try changing something like renaming `url` to `urls` in [handlers.go](./handler.go) on line 39 and running ` go test -coverpkg=./... -covermode=atomic ./...` again
 
 ```shell
-{"msg":"result","testcase id":"05a576e1-c03a-4c25-a469-4bea0307cd08","passed":false}
-{"msg":"result","testcase id":"cad6d926-b531-477c-935c-dd7314c4357a","passed":true}
-{"msg":"test run completed","run id":"19d4cba1-b77c-4301-884a-5b3f08dc6248","passed overall":false}
---- FAIL: TestKeploy (5.72s)
-    keploy.go:42: Keploy test suite failed
+starting test execution {"id": "2b2c95e2-bf5e-4a58-a20e-f8d75b453d11", "total tests": 2}
+testing 1 of 2  {"testcase id": "5a6695f8-8158-42cc-a860-d6f290145f70"}
+testing 2 of 2  {"testcase id": "9833898b-b654-43a6-a581-ca20b1b92f0f"}
+result  {"testcase id": "9833898b-b654-43a6-a581-ca20b1b92f0f", "passed": false}
+result  {"testcase id": "5a6695f8-8158-42cc-a860-d6f290145f70", "passed": true}
+test run completed      {"run id": "2b2c95e2-bf5e-4a58-a20e-f8d75b453d11", "passed overall": false}
+--- FAIL: TestKeploy (5.32s)
+    keploy.go:43: Keploy test suite failed
 FAIL
-coverage: 80.3% of statements in ./...
-FAIL    test-app-url-shortener  6.213s
+coverage: 74.4% of statements in ./...
+FAIL    echo-psql-url-shortener 5.795s
 FAIL
 ```
 
 To deep dive the problem go to [test runs](http://localhost:8081/testruns)
 
-![testruns](https://raw.githubusercontent.com/petergeorgas/samples-go/main/gin-mongo/testrun4.png)
-![testruns](https://raw.githubusercontent.com/petergeorgas/samples-go/main/gin-mongo/testrun5.png)
+![recent test runs](https://user-images.githubusercontent.com/21143531/159178101-403e9fab-f92b-4db3-87d7-1abdef0a7a7d.png)
+
+![expected vs actual response](https://user-images.githubusercontent.com/21143531/159178125-9cffa7b5-509d-40ea-be4f-985b7b85d877.png)
