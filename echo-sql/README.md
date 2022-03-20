@@ -100,7 +100,7 @@ Go to the Keploy Console/testruns to get deeper insights on what testcases ran, 
 
 ### Make a code change
 
-Now try changing something like renaming `url` to `urls` in [handlers.go](./handler.go) on line 39 and running ` go test -coverpkg=./... -covermode=atomic ./...` again
+Now try changing something like renaming `url` to `urls` in [handler.go](./handler.go) on line 39 and running ` go test -coverpkg=./... -covermode=atomic ./...` again
 
 ```shell
 starting test execution {"id": "2b2c95e2-bf5e-4a58-a20e-f8d75b453d11", "total tests": 2}
