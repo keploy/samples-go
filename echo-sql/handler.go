@@ -82,7 +82,7 @@ func InsertURL(c context.Context, entry URLEntry) error {
 	if err != nil {
 		return err
 	}
-
+	defer res.Close()
 	if res.Next() { // If we get rows back, that means we have a duplicate URL
 		var entry URLEntry
 		err := res.Scan(&entry.ID, &entry.Redirect_URL, &entry.Created_At, &entry.Updated_At)
@@ -109,6 +109,7 @@ func InsertURL(c context.Context, entry URLEntry) error {
 func GetURL(c echo.Context) error {
 	err := Database.PingContext(c.Request().Context())
 	if err != nil {
+		Logger.Error(err.Error())
 		return echo.NewHTTPError(http.StatusInternalServerError, "Could not connect to Postgres.")
 	}
 	id := c.Param("param")
@@ -121,9 +122,10 @@ func GetURL(c echo.Context) error {
 	res, err := Database.QueryContext(c.Request().Context(), find_url_query, id) // Attempt to find a matching URL
 
 	if err != nil {
+		Logger.Error(err.Error())
 		return echo.NewHTTPError(http.StatusInternalServerError, "Error encountered while attempting to lookup URL.")
 	}
-
+	defer res.Close()
 	if !res.Next() {
 		return echo.NewHTTPError(http.StatusNotFound, "Invalid URL ID.")
 	}
@@ -131,6 +133,7 @@ func GetURL(c echo.Context) error {
 	var entry URLEntry
 	err = res.Scan(&entry.ID, &entry.Redirect_URL, &entry.Created_At, &entry.Updated_At)
 	if err != nil {
+		Logger.Fatal(err.Error())
 		return echo.NewHTTPError(http.StatusInternalServerError, "Could not successfully scan retrieved DB entry.")
 	}
 
@@ -142,6 +145,7 @@ func PutURL(c echo.Context) error {
 
 	err := Database.PingContext(c.Request().Context())
 	if err != nil {
+		Logger.Error(err.Error())
 		return echo.NewHTTPError(http.StatusInternalServerError, "Could not connect to Postgres.")
 	}
 
@@ -150,6 +154,7 @@ func PutURL(c echo.Context) error {
 	err = c.Bind(req_body)
 	if err != nil {
 		fmt.Println(req_body)
+		Logger.Error(err.Error())
 		return echo.NewHTTPError(http.StatusBadRequest, "Failed to decode request.")
 	}
 	u := req_body.URL
@@ -169,6 +174,7 @@ func PutURL(c echo.Context) error {
 	})
 
 	if err != nil {
+		Logger.Error(err.Error())
 		return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Unable to shorten URL: %s", err.Error()))
 	}
 
