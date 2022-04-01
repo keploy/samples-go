@@ -1,11 +1,15 @@
 tasks:
   - name: keploy-server
+    before: |
+      git clone https://github.com/keploy/keploy.git && cd keploy
     init: |
-      git clone https://github.com/keploy/keploy.git && cd keploy docker-compose up
+      docker-compose up
 
   - name: echo-sql
+    before: |
+      cd echo-sql && go mod download
     init: |
-      cd echo-sql && go mod download && docker-compose up -d
+      docker-compose up -d
     command: |
       go run handler.go main.go
 
