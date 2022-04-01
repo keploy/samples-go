@@ -29,6 +29,10 @@ docker-compose up -d
 go run handler.go main.go
 ```
 
+### Skip above steps with Gitpod
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/Sarthak160/samples-go/tree/gitpod)
+
 ## Generate testcases
 
 To genereate testcases we just need to make some API calls. You can use [Postman](https://www.postman.com/), [Hoppscotch](https://hoppscotch.io/), or simply `curl`
