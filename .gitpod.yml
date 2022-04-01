@@ -1,0 +1,19 @@
+tasks:
+  - name: keploy-server
+    init: |
+      git clone https://github.com/keploy/keploy.git && cd keploy docker-compose up
+
+  - name: echo-sql
+    init: |
+      cd echo-sql && go mod download && docker-compose up -d
+    command: |
+      go run handler.go main.go
+
+  - name: terminal 3
+    init: echo 'This is terminal 3'
+    command: echo 'Lets get started !'
+    
+ports:
+  - port: 8080
+    onOpen: open-preview
+
