@@ -31,7 +31,7 @@ go run handler.go main.go
 
 ### Skip above steps with Gitpod
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/Sarthak160/samples-go/tree/gitpod)
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/Sarthak160/samples-go/tree/echo-sql-gitpod)
 
 ## Generate testcases
 
