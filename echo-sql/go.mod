@@ -2,6 +2,8 @@ module echo-psql-url-shortener
 
 go 1.17
 
+// replace github.com/keploy/go-sdk => ../../github.com/keploy/go-sdk
+
 require (
 	github.com/itchyny/base58-go v0.2.0
 	github.com/keploy/go-sdk v0.3.5
