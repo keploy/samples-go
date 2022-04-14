@@ -1,23 +1,20 @@
 tasks:
   - name: keploy-server
     before: |
-      git clone https://github.com/keploy/keploy.git && cd keploy
+      cd /tmp && git clone https://github.com/keploy/keploy.git && cd keploy
     init: |
       docker-compose up
-
   - name: echo-sql
     before: |
       cd echo-sql && go mod download
     init: |
       docker-compose up -d
     command: |
-      go run handler.go main.go
-
-  - name: terminal 3
-    init: echo 'This is terminal 3'
-    command: echo 'Lets get started !'
+      gp open ../GITPOD.md && go run handler.go main.go
+  - name: user terminal
+    init: cd echo-sql && echo "quickly try out keploy using the instructions above!"
+    # command: echo 'Lets get started !'
     
 ports:
   - port: 8081
     onOpen: open-preview
-
