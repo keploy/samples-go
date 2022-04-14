@@ -15,3 +15,4 @@ func TestKeploy(t *testing.T) {
 	keploy.SetTestMode()
 	go main()
 	keploy.AssertTests(t)
+}
