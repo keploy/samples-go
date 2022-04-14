@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"os"
 
 	"github.com/keploy/go-sdk/integrations/kecho/v4"
 	"github.com/keploy/go-sdk/keploy"
@@ -10,13 +11,16 @@ import (
 	"go.uber.org/zap"
 )
 
-const port = "8080"
+var port = "8080"
 
 var Logger *zap.Logger
 
 var Database *sql.DB
 
 func main() {
+	if os.Getenv("PORT") != "" {
+		port = os.Getenv("PORT")
+	}
 	var err error
 	Logger, _ = zap.NewProduction()
 	defer Logger.Sync() // flushes buffer
