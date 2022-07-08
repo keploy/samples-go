@@ -12,6 +12,9 @@ import (
 )
 
 var port = "8080"
+var DBHost = "localhost"
+var DBPort = "5438"
+var KeployURL = "http://localhost:8081/api"
 
 var Logger *zap.Logger
 
@@ -21,13 +24,22 @@ func main() {
 	if os.Getenv("PORT") != "" {
 		port = os.Getenv("PORT")
 	}
+	if os.Getenv("DB_HOST") != "" {
+		DBHost = os.Getenv("DB_HOST")
+	}
+	if os.Getenv("DB_PORT") != "" {
+		DBPort = os.Getenv("DB_PORT")
+	}
+	if os.Getenv("KEPLOY_URL") != "" {
+		KeployURL = os.Getenv("KEPLOY_URL")
+	}
 	var err error
 	Logger, _ = zap.NewProduction()
 	defer Logger.Sync() // flushes buffer
 
 	Database, err = NewConnection(ConnectionDetails{
-		host:     "localhost",
-		port:     "5438",
+		host:     DBHost,
+		port:     DBPort,
 		user:     "postgres",
 		password: "postgres",
 		db_name:  "postgres",
@@ -46,7 +58,7 @@ func main() {
 			Port: port,
 		},
 		Server: keploy.ServerConfig{
-			URL: "http://localhost:8081/api",
+			URL: KeployURL,
 		},
 	})
 
