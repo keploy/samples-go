@@ -13,3 +13,15 @@ services:
           # - ./postgres-data:/var/lib/postgresql/data
           # copy the sql script to create tables
           - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+    app:
+      build: .
+      ports:
+        - '8080:8080'
+      environment:
+        - DB_HOST=postgres
+        - DB_PORT=5432
+        - KEPLOY_URL=http://host.docker.internal:8081/api
+      depends_on:
+        - postgres
+
