@@ -10,13 +10,13 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/keploy/go-sdk/integrations/kmongo"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 // Creating userCollection and validate variables to create a collection and validate models using the github.com/go-playground/validator/v10 library, respectively.
-var userCollection *mongo.Collection = configs.GetCollection(configs.DB, "users")
+var userCollection *kmongo.Collection = configs.GetCollection(configs.DB, "users")
 var validate = validator.New()
 
 // Creating a CreateUser function that returns a Gin-gonic handler.

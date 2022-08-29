@@ -7,6 +7,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/keploy/go-sdk/integrations/kmongo"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -44,7 +45,8 @@ func ConnectDB() *mongo.Client {
 var DB *mongo.Client = ConnectDB()
 
 // GetCollection function to retrieve and create collections on the database.
-func GetCollection(client *mongo.Client, collectionName string) *mongo.Collection {
-	collection := client.Database("users-profile").Collection(collectionName)
+func GetCollection(client *mongo.Client, collectionName string) *kmongo.Collection {
+	database := client.Database("users-profile")
+	collection := kmongo.NewCollection(database.Collection(collectionName))
 	return collection
 }
