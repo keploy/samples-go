@@ -59,6 +59,9 @@ func main() {
 	r.POST("/url", PutURL)
 	r.DELETE("/:param", DeleteURL)
 	r.PUT("/:param", UpdateURL)
-	r.Start(":" + port)
+	err = r.Start(":" + port)
+	if err != nil {
+		panic(err)
+	}
 
 }
