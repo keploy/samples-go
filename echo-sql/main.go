@@ -11,7 +11,7 @@ import (
 	"go.uber.org/zap"
 )
 
-var port = "8080"
+var port = "8082"
 
 var Logger *zap.Logger
 
@@ -52,11 +52,16 @@ func main() {
 
 	r := echo.New() // Init echo
 
-	kecho.EchoV4(k, r) // Tie echo router in with Keploy
+	// kecho.EchoV4(k, r) // Tie echo router in with Keploy
+	r.Use(kecho.EchoMiddlewareV4(k))
 
 	r.GET("/:param", GetURL)
 	r.POST("/url", PutURL)
-
-	r.Start(":" + port)
+	r.DELETE("/:param", DeleteURL)
+	r.PUT("/:param", UpdateURL)
+	err = r.Start(":" + port)
+	if err != nil {
+		panic(err)
+	}
 
 }
