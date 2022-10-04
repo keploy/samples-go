@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/keploy/go-sdk/integrations/kecho/v4"
+
 	"github.com/keploy/go-sdk/keploy"
 	"github.com/labstack/echo/v4"
 	_ "github.com/lib/pq"
@@ -44,9 +45,6 @@ func main() {
 		App: keploy.AppConfig{
 			Name: "sample-url-shortener",
 			Port: port,
-		},
-		Server: keploy.ServerConfig{
-			URL: "http://localhost:8081/api",
 		},
 	})
 
