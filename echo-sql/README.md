@@ -227,7 +227,7 @@ FAIL
 
 ```
 
-To deep dive the problem you can look at the keploy logs or goto [the UI](http://localhost:8081/testruns)
+To deep dive the problem you can look at the keploy logs or goto [the UI](http://localhost:6789/testruns)
 ```shell
  <=========================================> 
   TESTRUN STARTED with id: "3b20b4d9-58d4-485e-97a7-70856591bd7a"
