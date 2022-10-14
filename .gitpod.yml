@@ -16,5 +16,5 @@ tasks:
     # command: echo 'Lets get started !'
     
 ports:
-  - port: 8081
+  - port: 6789
     onOpen: open-preview

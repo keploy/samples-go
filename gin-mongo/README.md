@@ -51,7 +51,7 @@ curl --request GET \
 or by querying through the browser `http://localhost:8080/Lhr4BWAi`
 
 
-Now both these API calls were captured as a testcase and should be visible on the [Keploy console](http://localhost:8081/testlist).
+Now both these API calls were captured as a testcase and should be visible on the [Keploy console](http://localhost:6789/testlist).
 If you're using Keploy cloud, open [this](https://app.keploy.io/testlist).
 
 You should be seeing an app named `sample-url-shortener` with the test cases we just captured.
@@ -100,7 +100,7 @@ FAIL    test-app-url-shortener  6.213s
 FAIL
 ```
 
-To deep dive the problem go to [test runs](http://localhost:8081/testruns)
+To deep dive the problem go to [test runs](http://localhost:6789/testruns)
 
 ![testruns](testrun4.png?raw=true "Recent testruns")
 ![testruns](testrun5.png?raw=true "Detail")
