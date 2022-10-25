@@ -6,8 +6,8 @@ go 1.17
 
 require (
 	github.com/itchyny/base58-go v0.2.0
-	github.com/keploy/go-sdk v0.6.2
-	github.com/labstack/echo/v4 v4.7.2
+	github.com/keploy/go-sdk v0.6.5
+	github.com/labstack/echo/v4 v4.9.0
 	github.com/lib/pq v1.10.4
 	go.uber.org/zap v1.22.0
 )
