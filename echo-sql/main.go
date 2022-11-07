@@ -5,13 +5,14 @@ import (
 	"os"
 
 	"github.com/keploy/go-sdk/integrations/kecho/v4"
+
 	"github.com/keploy/go-sdk/keploy"
 	"github.com/labstack/echo/v4"
 	_ "github.com/lib/pq"
 	"go.uber.org/zap"
 )
 
-var port = "8080"
+var port = "8082"
 
 var Logger *zap.Logger
 
@@ -45,18 +46,20 @@ func main() {
 			Name: "sample-url-shortener",
 			Port: port,
 		},
-		Server: keploy.ServerConfig{
-			URL: "http://localhost:8081/api",
-		},
 	})
 
 	r := echo.New() // Init echo
 
-	kecho.EchoV4(k, r) // Tie echo router in with Keploy
+	// kecho.EchoV4(k, r) // Tie echo router in with Keploy
+	r.Use(kecho.EchoMiddlewareV4(k))
 
 	r.GET("/:param", GetURL)
 	r.POST("/url", PutURL)
-
-	r.Start(":" + port)
+	r.DELETE("/:param", DeleteURL)
+	r.PUT("/:param", UpdateURL)
+	err = r.Start(":" + port)
+	if err != nil {
+		panic(err)
+	}
 
 }

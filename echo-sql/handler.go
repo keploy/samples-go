@@ -84,8 +84,8 @@ func InsertURL(c context.Context, entry URLEntry) error {
 	}
 	defer res.Close()
 	if res.Next() { // If we get rows back, that means we have a duplicate URL
-		var entry URLEntry
-		err := res.Scan(&entry.ID, &entry.Redirect_URL, &entry.Created_At, &entry.Updated_At)
+		var saved_entry URLEntry
+		err := res.Scan(&saved_entry.ID, &saved_entry.Redirect_URL, &saved_entry.Created_At, &saved_entry.Updated_At)
 		if err != nil {
 			return err
 		}
@@ -141,6 +141,89 @@ func GetURL(c echo.Context) error {
 	return nil
 }
 
+func DeleteURL(c echo.Context) error {
+	err := Database.PingContext(c.Request().Context())
+	if err != nil {
+		Logger.Error(err.Error())
+		return echo.NewHTTPError(http.StatusInternalServerError, "Could not connect to Postgres.")
+	}
+	id := c.Param("param")
+
+	sqlStatement := `
+	DELETE FROM url_map
+	WHERE id = $1;`
+	res, err := Database.ExecContext(c.Request().Context(), sqlStatement, id)
+	if err != nil {
+		Logger.Error(err.Error())
+		return echo.NewHTTPError(http.StatusInternalServerError, "Error encountered while attempting to delete URL.")
+	}
+
+	rowsAffected, _ := res.RowsAffected()
+	return c.JSON(http.StatusOK, map[string]int64{
+		"rows_affected": rowsAffected,
+	})
+}
+
+func UpdateURL(c echo.Context) error {
+	err := Database.PingContext(c.Request().Context())
+	if err != nil {
+		Logger.Error(err.Error())
+		return echo.NewHTTPError(http.StatusInternalServerError, "Could not connect to Postgres.")
+	}
+	id := c.Param("param")
+
+	req_body := new(urlRequestBody)
+	err = c.Bind(req_body)
+	if err != nil {
+		fmt.Println(req_body)
+		Logger.Error(err.Error())
+		return echo.NewHTTPError(http.StatusBadRequest, "Failed to decode request.")
+	}
+
+	u := req_body.URL
+
+	if u == "" {
+		return echo.NewHTTPError(http.StatusBadRequest, "Missing URL parameter")
+	}
+
+	select_query := `
+			SELECT * 
+			FROM url_map
+			WHERE id = $1
+	`
+
+	update_timestamp := `
+			UPDATE url_map
+			SET updated_at = $1, redirect_url = $2
+			WHERE id = $3
+	`
+
+	res, err := Database.QueryContext(c.Request().Context(), select_query, id) // See if the URL already exists
+	if err != nil {
+		return err
+	}
+	defer res.Close()
+	if res.Next() { // If we get rows back, that means we have a duplicate URL
+		var saved_entry URLEntry
+		err := res.Scan(&saved_entry.ID, &saved_entry.Redirect_URL, &saved_entry.Created_At, &saved_entry.Updated_At)
+		if err != nil {
+			return err
+		}
+		result, err := Database.ExecContext(c.Request().Context(), update_timestamp, time.Now(), u, id)
+		if err != nil {
+			return err
+		}
+
+		rowsAffected, _ := result.RowsAffected()
+		return c.JSON(http.StatusOK, map[string]int64{
+			"rows_affected": rowsAffected,
+		})
+	}
+	return c.JSON(http.StatusOK, map[string]string{
+		"error": "no document exists with given id",
+	})
+}
+
 func PutURL(c echo.Context) error {
 
 	err := Database.PingContext(c.Request().Context())
@@ -180,7 +263,7 @@ func PutURL(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, &successResponse{
 		TS:  t.UnixNano(),
-		URL: "http://localhost:8080/" + id,
+		URL: "http://localhost:8082/" + id,
 	})
 }
 

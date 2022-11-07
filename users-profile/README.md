@@ -44,7 +44,7 @@ go run .
 
 
 ## Generate Test Cases
-> Keploy Port: http://localhost:8081/testlist
+> Keploy Port: http://localhost:6789/testlist
 
 To generate Test Cases, you need to make some API calls. It could be using Thunder Client, Postman Desktop Agent, or your preferred API testing tool.
 
