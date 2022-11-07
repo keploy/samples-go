@@ -3,7 +3,6 @@
 A sample application that get, create, update, and delete the data of a user in the database (MongoDB for this application).
 
 
-
 ## Prerequisites
 1. [Go](https://go.dev/doc/install) 1.16 or later
 2. [Docker](https://docs.docker.com/engine/install/) for running Keploy server
@@ -20,8 +19,6 @@ cd keploy
 docker-compose up
 ```
 
-
-
 ### Start Users-Profile sample application
 ```
 git clone https://github.com/keploy/samples-go
@@ -32,7 +29,6 @@ go run .
 ```
 
 
-
 ## Routes
 > Sample Application Port: http://localhost:8080
 - `/user` : POST - Create a new user in the database
@@ -40,7 +36,6 @@ go run .
 - `/user/:userId` : PUT - Edit an existing user in the database
 - `/user/:userId` : DELETE - Delete an existing user from the database
 - `/users` : GET - Get all users from the database
-
 
 
 ## Generate Test Cases

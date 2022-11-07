@@ -1,4 +1,4 @@
-# Example URL Shortener
+# URL Shortener
 A sample url shortener app to test Keploy integration capabilities
 
 ## Installation
@@ -59,7 +59,7 @@ You should be seeing an app named `sample-url-shortener` with the test cases we 
 ![testcases](testcases.png?raw=true "Web console testcases")
 
 
-Now, let's see the magic! 🪄💫
+Now, let's see the magic! ✨💫
 
 
 ## Test mode

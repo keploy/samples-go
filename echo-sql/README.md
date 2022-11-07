@@ -1,4 +1,4 @@
-# Example URL Shortener
+# URL Shortener
 
 A sample url shortener app to test Keploy integration capabilities using [Echo](https://echo.labstack.com/) and PostgreSQL. 
 
@@ -141,7 +141,7 @@ spec:
 
 ```
 
-Now, let's see the magic! 🪄💫
+Now, let's see the magic! ✨💫
 
 ## Test mode
 
