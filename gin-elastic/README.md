@@ -49,7 +49,7 @@ curl --request GET \
   --url http://localhost:8080/param \
   --header 'content-type: application/json' \
   --data '{
-  "indexName": "elastic-test",
+  "indexName": "es-test",
   "docId":"1"
 }'
 ```
@@ -60,7 +60,7 @@ curl --request DELETE \
   --url http://localhost:8080/param \
   --header 'content-type: application/json' \
   --data '{
-  "indexName": "elastic-test",
+  "indexName": "es-test",
   "docId":"1"
 }'
 ```
