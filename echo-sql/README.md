@@ -3,12 +3,6 @@
 A sample url shortener app to test Keploy integration capabilities using [Echo](https://echo.labstack.com/) and PostgreSQL. 
 
 ## Setup
-### Start MongoDB
-Spin up MongoDB to store the test-runs results
-
-```shell
-docker container run -it -p27017:27017 mongo
-```
 
 > Note that Testcases are exported as files in the repo by default
 
@@ -43,7 +37,11 @@ docker-compose up -d
 
 # run the sample app
 go run handler.go main.go
+
+# run the sample app in record mode
+export KEPLOY_MODE=record && go run handler.go main.go
 ```
+
 ### Skip above steps with Gitpod
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/from-referrer)
