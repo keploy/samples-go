@@ -1,0 +1,32 @@
+version: api.keploy.io/v1beta1
+kind: Http
+name: 38b2c9a7-7084-4ef3-b1bc-c56c5c42aba5
+spec:
+    metadata: {}
+    req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: /user
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Connection: close
+            Content-Length: "258"
+            Content-Type: application/json
+            User-Agent: Thunder Client (https://www.thunderclient.com)
+        body: "{\n\t\"id\": 1,\n\t\"username\": \"CurlyParadox\",               \n\t\"name\": \"Nishant Mishra\",    \n\t\"nationality\": \"Indian\",   \n\t\"title\": \"Developer Advocate at Keploy\",\n\t\"hobbies\": \"Drumming\",\n\t\"linkedin\": \"@curlyparadox\",       \n\t\"twitter\": \"@curlyParadox\"          \n}"
+    resp:
+        status_code: 400
+        header:
+            Content-Type: application/json; charset=utf-8
+        body: '{"status":400,"message":"error","data":{"data":"not an extended JSON ObjectID"}}'
+        status_message: ""
+        proto_major: 1
+        proto_minor: 1
+    objects:
+        - type: error
+          data: ""
+    assertions:
+        noise: []
+    created: 1667988700

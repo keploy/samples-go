@@ -1,0 +1,34 @@
+version: api.keploy.io/v1beta1
+kind: Http
+name: 8a8dd8f2-9bdf-486e-8f0c-51baafb2fc10
+spec:
+    metadata: {}
+    req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: /user
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Connection: close
+            Content-Length: "248"
+            Content-Type: application/json
+            User-Agent: Thunder Client (https://www.thunderclient.com)
+        body: "{\n\t\"username\": \"CurlyParadox\",               \n\t\"name\": \"Nishant Mishra\",    \n\t\"nationality\": \"Indian\",   \n\t\"title\": \"Developer Advocate at Keploy\",\n\t\"hobbies\": \"Drumming\",\n\t\"linkedin\": \"@curlyparadox\",       \n\t\"twitter\": \"@curlyParadox\"          \n}"
+    resp:
+        status_code: 201
+        header:
+            Content-Type: application/json; charset=utf-8
+        body: '{"status":201,"message":"success","data":{"data":{"InsertedID":"636b7ff06d460237cbc6f457"}}}'
+        status_message: ""
+        proto_major: 1
+        proto_minor: 1
+    objects:
+        - type: error
+          data: ""
+    mocks:
+        - 8a8dd8f2-9bdf-486e-8f0c-51baafb2fc10-0
+    assertions:
+        noise: []
+    created: 1667989488
