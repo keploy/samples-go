@@ -35,9 +35,13 @@ git clone https://github.com/keploy/samples-go && cd samples-go/echo-sql
 # start Postgres
 docker-compose up -d
 
+# run the sample app
+go run handler.go main.go
+
 # run the sample app in record mode
 export KEPLOY_MODE=record && go run handler.go main.go
 ```
+
 ### Skip above steps with Gitpod
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/from-referrer)
