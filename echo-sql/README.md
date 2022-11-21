@@ -1,12 +1,14 @@
-# Example URL Shortener
+# URL Shortener
 
 A sample url shortener app to test Keploy integration capabilities using [Echo](https://echo.labstack.com/) and PostgreSQL. 
 
-## Setup
+## Installation Setup
 
 > Note that Testcases are exported as files in the repo by default
 
-### Installation on Mac
+<details>
+<summary>Mac</summary>
+
 ```shell
 curl --silent --location "https://github.com/keploy/keploy/releases/latest/download/keploy_darwin_all.tar.gz" | tar xz -C /tmp
 
@@ -16,10 +18,13 @@ sudo mv /tmp/keploy /usr/local/bin
 keploy
 ```
 
-### Installation on Linux
+</details>
+
+<details>
+<summary>Linux</summary>
+
 ```shell
 curl --silent --location "https://github.com/keploy/keploy/releases/latest/download/keploy_linux_amd64.tar.gz" | tar xz -C /tmp
-
 
 sudo mv /tmp/keploy /usr/local/bin 
 
@@ -27,18 +32,21 @@ sudo mv /tmp/keploy /usr/local/bin
 keploy
 ```
 
-### Start sample URL shortener
+</details>
+
+### Start URL shortener application 
 
 ```bash
 git clone https://github.com/keploy/samples-go && cd samples-go/echo-sql
 
-# start Postgres
+# Start Postgres
 docker-compose up -d
 
 # run the sample app in record mode
 export KEPLOY_MODE=record && go run handler.go main.go
 ```
-### Skip above steps with Gitpod
+
+#### Skip above steps with Gitpod
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/from-referrer)
 
@@ -66,14 +74,15 @@ this will return the shortened url. The ts would automatically be ignored during
 }
 ```
 
-### Redirect to original url from shortened url
+### Redirect to original URL from shortened URL 
 
+1. By using Curl Command
 ```bash
 curl --request GET \
   --url http://localhost:8082/GuwHCgoQ
 ```
 
-or by querying through the browser `http://localhost:8082/GuwHCgoQ`
+2. Or by querying through the browser `http://localhost:8082/GuwHCgoQ`
 
 Now both these API calls were captured as **editable** testcases and written to `keploy-tests` folder. The folder would also have a mocks folder and contain `mocks` of the postgres operations. Here's what the folder structure look like:
 
@@ -94,7 +103,7 @@ Now both these API calls were captured as **editable** testcases and written to 
 
 ```
 
-The test files should look like the sample below and the format is common for both *http tests* and *mocks*. 
+The test files should look like the sample below and the format is common for both ***http tests*** and ***mocks***. 
 ```yaml
 version: api.keploy.io/v1beta1
 kind: Http
@@ -141,7 +150,7 @@ spec:
 
 ```
 
-Now, let's see the magic! 🪄💫
+Now, let's see the magic! ✨💫
 
 ## Test mode
 
@@ -157,14 +166,14 @@ output should look like
 ok      echo-psql-url-shortener 6.534s  coverage: 51.1% of statements in ./...
 ```
 
-**We got 51.1% without writing any e2e testcases or mocks for Postgres!**
+> **We got 51.1% without writing any e2e testcases or mocks for Postgres!**
 
-So no need to setup fake database/apis like Postgres or write mocks for them. Keploy automatically mocks them and, 
+So no need to setup fake database/apis like Postgres or write mocks for them. Keploy automatically mocks them and, **The application thinks it's talking to Postgres 😄**
 
-**The application thinks it's talking to
-Postgres 😄**
+Go to the `Keploy Console` or the `UI` to get deeper insights on what testcases ran, what failed.
 
-Go to the Keploy Console or the UI to get deeper insights on what testcases ran, what failed.
+<details>
+<summary>𝗜𝗻𝘀𝗶𝗴𝗵𝘁𝘀 𝗼𝗻 𝗞𝗲𝗽𝗹𝗼𝘆 𝗖𝗼𝗻𝘀𝗼𝗹𝗲</summary>
 
 ```shell
  <=========================================> 
@@ -199,6 +208,10 @@ Testrun passed for testcase with id: "34ba2282-1224-4fde-89de-f337e0a4816c"
 ![testruns](https://user-images.githubusercontent.com/21143531/159177972-8f1b0c92-05ea-4c10-9583-47ddb5e952be.png)
 ![testrun](https://user-images.githubusercontent.com/21143531/159178008-f7d38738-d841-437a-a3b4-bb7e5b07b808.png)
 
+</details>
+
+---
+
 ### Make a code change
 
 Now try changing something like renaming `url` to `urls` in [handler.go](./handler.go) on line 39 and running ` go test -coverpkg=./... -covermode=atomic ./...` again
@@ -221,7 +234,11 @@ FAIL
 
 ```
 
+
 To deep dive the problem you can look at the keploy logs or goto [the UI](http://localhost:6789/testruns)
+<details>
+<summary>𝗞𝗲𝗽𝗹𝗼𝘆 𝗟𝗼𝗴𝘀</summary>
+
 ```shell
  <=========================================> 
   TESTRUN STARTED with id: "3b20b4d9-58d4-485e-97a7-70856591bd7a"
@@ -314,3 +331,5 @@ Testrun passed for testcase with id: "34ba2282-1224-4fde-89de-f337e0a4816c"
 ![recent test runs](https://user-images.githubusercontent.com/21143531/159178101-403e9fab-f92b-4db3-87d7-1abdef0a7a7d.png)
 
 ![expected vs actual response](https://user-images.githubusercontent.com/21143531/159178125-9cffa7b5-509d-40ea-be4f-985b7b85d877.png)
+
+</details>
