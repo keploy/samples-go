@@ -1,0 +1,35 @@
+version: api.keploy.io/v1beta1
+kind: Http
+name: ec9f55fb-afba-499c-8cde-178e380559c0
+spec:
+    metadata: {}
+    req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: /users
+        header:
+            Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+            Accept-Encoding: gzip, deflate
+            Accept-Language: en-IN,en-GB;q=0.9,en;q=0.8
+            Connection: keep-alive
+            Upgrade-Insecure-Requests: "1"
+            User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Safari/605.1.15
+        body: ""
+    resp:
+        status_code: 200
+        header:
+            Content-Type: application/json; charset=utf-8
+        body: '{"status":200,"message":"success","data":{"data":null}}'
+        status_message: ""
+        proto_major: 1
+        proto_minor: 1
+    objects:
+        - type: error
+          data: ""
+    mocks:
+        - ec9f55fb-afba-499c-8cde-178e380559c0-0
+        - ec9f55fb-afba-499c-8cde-178e380559c0-1
+    assertions:
+        noise: []
+    created: 1667988347
