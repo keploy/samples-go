@@ -1,0 +1,32 @@
+version: api.keploy.io/v1beta1
+kind: Http
+name: fa6569bd-9abe-4412-af1f-a2c6cec217be
+spec:
+    metadata: {}
+    req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: /user
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Connection: close
+            Content-Length: "260"
+            Content-Type: application/json
+            User-Agent: Thunder Client (https://www.thunderclient.com)
+        body: "{\n\t\"id\": \"1\",\n\t\"username\": \"CurlyParadox\",               \n\t\"name\": \"Nishant Mishra\",    \n\t\"nationality\": \"Indian\",   \n\t\"title\": \"Developer Advocate at Keploy\",\n\t\"hobbies\": \"Drumming\",\n\t\"linkedin\": \"@curlyparadox\",       \n\t\"twitter\": \"@curlyParadox\"          \n}"
+    resp:
+        status_code: 400
+        header:
+            Content-Type: application/json; charset=utf-8
+        body: '{"status":400,"message":"error","data":{"data":"cannot unmarshal into an ObjectID, the length must be 24 but it is 1"}}'
+        status_message: ""
+        proto_major: 1
+        proto_minor: 1
+    objects:
+        - type: error
+          data: ""
+    assertions:
+        noise: []
+    created: 1667988713

@@ -1,0 +1,27 @@
+version: api.keploy.io/v1beta1
+kind: Generic
+name: ec9f55fb-afba-499c-8cde-178e380559c0-0
+spec:
+    metadata:
+        FindOptions: '[]'
+        filter: map[]
+        name: mongodb
+        operation: Find.Next
+        type: NO_SQL_DB
+    objects:
+        - type: '*bool'
+          data: H4sIAAAAAAAA/2JmYmAABAAA//+cpHUwBAAAAA==
+---
+version: api.keploy.io/v1beta1
+kind: Generic
+name: ec9f55fb-afba-499c-8cde-178e380559c0-1
+spec:
+    metadata:
+        FindOptions: '[]'
+        filter: map[]
+        name: mongodb
+        operation: Find.Close
+        type: NO_SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=
