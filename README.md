@@ -22,6 +22,8 @@ One-click deploy sample URL Shortener application sample with Keploy using Gitpo
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/from-referrer)
 
+Then, continue with [Generating Test Cases](https://github.com/keploy/samples-go/tree/main/echo-sql#generate-shortned-url)
+
 ## Sample Apps with Keploy GO SDK
 
 1. [Echo-SQL](https://github.com/keploy/samples-go/tree/main/echo-sql)
