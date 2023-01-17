@@ -6,7 +6,7 @@ go 1.17
 
 require (
 	github.com/itchyny/base58-go v0.2.0
-	github.com/keploy/go-sdk v0.6.5
+	github.com/keploy/go-sdk v0.7.8
 	github.com/labstack/echo/v4 v4.9.0
 	github.com/lib/pq v1.10.4
 	go.uber.org/zap v1.22.0
@@ -15,6 +15,7 @@ require (
 require (
 	github.com/99designs/gqlgen v0.17.1 // indirect
 	github.com/agnivade/levenshtein v1.1.1 // indirect
+	github.com/araddon/dateparse v0.0.0-20210429162001-6b43995a97de // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.1 // indirect
 	github.com/creasty/defaults v1.5.2 // indirect
 	github.com/go-chi/chi v1.5.4 // indirect
@@ -47,7 +48,7 @@ require (
 	github.com/xdg-go/scram v1.1.0 // indirect
 	github.com/xdg-go/stringprep v1.0.2 // indirect
 	github.com/youmark/pkcs8 v0.0.0-20201027041543-1326539a0a0a // indirect
-	go.keploy.io/server v0.5.6 // indirect
+	go.keploy.io/server v0.7.16 // indirect
 	go.mongodb.org/mongo-driver v1.8.3 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
@@ -61,7 +62,7 @@ require (
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013 // indirect
 	google.golang.org/grpc v1.45.0 // indirect
-	google.golang.org/protobuf v1.28.0 // indirect
+	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

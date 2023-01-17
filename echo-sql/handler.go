@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/itchyny/base58-go"
-	"github.com/keploy/go-sdk/integrations/ksql"
+	"github.com/keploy/go-sdk/integrations/ksql/v2"
 	"github.com/labstack/echo/v4"
 	"github.com/lib/pq"
 )
