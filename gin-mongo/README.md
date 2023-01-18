@@ -1,16 +1,42 @@
-# Example URL Shortener
+# URL Shortener
 A sample url shortener app to test Keploy integration capabilities
 
 ## Installation
 ### Start keploy server
+> Note that Testcases are exported as files in the repo by default
+
+<details>
+<summary>Mac</summary>
+
 ```shell
-git clone https://github.com/keploy/keploy.git && cd keploy
-docker-compose up
+curl --silent --location "https://github.com/keploy/keploy/releases/latest/download/keploy_darwin_all.tar.gz" | tar xz -C /tmp
+
+sudo mv /tmp/keploy /usr/local/bin
+
+# start keploy with default settings
+keploy
 ```
+
+</details>
+
+<details>
+<summary>Linux</summary>
+
+```shell
+curl --silent --location "https://github.com/keploy/keploy/releases/latest/download/keploy_linux_amd64.tar.gz" | tar xz -C /tmp
+
+sudo mv /tmp/keploy /usr/local/bin 
+
+# start keploy with default settings
+keploy
+```
+
+</details>
 
 ### Setup URL shortener
 ```bash
 git clone https://github.com/keploy/example-url-shortener && cd example-url-shortener
+
 go mod download
 ```
 
@@ -42,7 +68,7 @@ this will return the shortened url. The ts would automatically be ignored during
 }
 ```
 
-###2. Redirect to original url from shortened url
+### 2. Redirect to original url from shortened url
 ```bash
 curl --request GET \
   --url http://localhost:8080/Lhr4BWAi
@@ -77,8 +103,7 @@ ok      test-app-url-shortener  6.268s  coverage: 80.3% of statements in ./...
 
 So no need to setup dependencies like mongoDB, web-go locally or write mocks for your testing.
 
-**The application thinks it's talking to
-mongoDB 😄**
+**The application thinks it's talking to MongoDB 😄**
 
 Go to the Keploy Console/testruns to get deeper insights on what testcases ran, what failed.
 
