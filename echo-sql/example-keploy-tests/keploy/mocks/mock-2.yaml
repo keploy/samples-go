@@ -1,0 +1,61 @@
+version: api.keploy.io/v1beta2
+kind: SQL
+name: mock-2-0
+spec:
+    metadata:
+        name: SQL
+        operation: Ping
+        type: SQL_DB
+    type: error
+    int: 0
+    error:
+        - nil
+---
+version: api.keploy.io/v1beta2
+kind: SQL
+name: mock-2-1
+spec:
+    metadata:
+        arguments: '[{ 1 Lhr4BWAi}]'
+        name: SQL
+        operation: QueryContext
+        query: "\"\n\t\tSELECT * \n\t\tFROM url_map\n\t\tWHERE id = $1\n\t\""
+        type: SQL_DB
+    type: error
+    int: 0
+    error:
+        - nil
+---
+version: api.keploy.io/v1beta2
+kind: SQL
+name: mock-2-2
+spec:
+    metadata:
+        name: SQL
+        operation: QueryContext.Close
+        type: SQL_DB
+    type: table
+    table:
+        cols:
+            - name: id
+              type: '[]uint8'
+              precision: 0
+              scale: 0
+            - name: redirect_url
+              type: string
+              precision: 0
+              scale: 0
+            - name: created_at
+              type: time.Time
+              precision: 0
+              scale: 0
+            - name: updated_at
+              type: time.Time
+              precision: 0
+              scale: 0
+        rows:
+            - '[`[76 104 114 52 66 87 65 105]` | `https://google.com` | `"2023-01-17T16:05:17.249666Z"` | `"2023-01-17T16:05:17.249666Z"` | ]'
+    int: 0
+    error:
+        - nil
+        - nil

@@ -1,0 +1,121 @@
+name: 1cfc1974-301d-4147-a037-3740a34de8f7
+status: PASSED
+success: 2
+failure: 0
+total: 2
+tests:
+    - name: 1cfc1974-301d-4147-a037-3740a34de8f7
+      status: PASSED
+      started: 1673971633
+      completed: 1673971633
+      test_case_path: /workspace/samples-go/echo-sql/keploy/tests
+      mock_path: /workspace/samples-go/echo-sql/keploy/mocks
+      test_case_id: test-1
+      req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: /url
+        header:
+            Accept: '*/*'
+            Content-Length: "33"
+            Content-Type: application/json
+            User-Agent: curl/7.68.0
+        body: |-
+            {
+              "url": "https://google.com"
+            }
+        body_type: ""
+      mocks:
+        - mock-1-0
+        - mock-1-1
+        - mock-1-2
+        - mock-1-3
+        - mock-1-4
+        - mock-1-5
+      resp:
+        status_code: 200
+        header:
+            Content-Type: application/json; charset=UTF-8
+        body: |
+            {"ts":1673971633389151807,"url":"http://localhost:8082/Lhr4BWAi"}
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+      noise:
+        - body.ts
+      result:
+        status_code:
+            normal: true
+            expected: 200
+            actual: 200
+        headers_result:
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=UTF-8
+              actual:
+                key: Content-Type
+                value:
+                    - application/json; charset=UTF-8
+        body_result:
+            normal: true
+            type: JSON
+            expected: |
+                {"ts":1673971517249666447,"url":"http://localhost:8082/Lhr4BWAi"}
+            actual: |
+                {"ts":1673971633389151807,"url":"http://localhost:8082/Lhr4BWAi"}
+        dep_result: []
+    - name: 1cfc1974-301d-4147-a037-3740a34de8f7
+      status: PASSED
+      started: 1673971633
+      completed: 1673971633
+      test_case_path: /workspace/samples-go/echo-sql/keploy/tests
+      mock_path: /workspace/samples-go/echo-sql/keploy/mocks
+      test_case_id: test-2
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: /Lhr4BWAi
+        header:
+            Accept: '*/*'
+            User-Agent: curl/7.68.0
+        body: ""
+        body_type: ""
+      mocks:
+        - mock-2-0
+        - mock-2-1
+        - mock-2-2
+      resp:
+        status_code: 308
+        header:
+            Location: https://google.com
+        body: ""
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+      result:
+        status_code:
+            normal: true
+            expected: 308
+            actual: 308
+        headers_result:
+            - normal: true
+              expected:
+                key: Location
+                value:
+                    - https://google.com
+              actual:
+                key: Location
+                value:
+                    - https://google.com
+        body_result:
+            normal: true
+            type: PLAIN
+            expected: ""
+            actual: ""
+        dep_result: []
