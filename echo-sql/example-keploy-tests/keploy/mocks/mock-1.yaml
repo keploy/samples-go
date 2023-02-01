@@ -1,0 +1,118 @@
+version: api.keploy.io/v1beta2
+kind: SQL
+name: mock-1-0
+spec:
+    metadata:
+        name: SQL
+        operation: Ping
+        type: SQL_DB
+    type: error
+    int: 0
+    error:
+        - nil
+---
+version: api.keploy.io/v1beta2
+kind: SQL
+name: mock-1-1
+spec:
+    metadata:
+        arguments: '[{ 1 Lhr4BWAi}]'
+        name: SQL
+        operation: QueryContext
+        query: "\"\n\t\t\tSELECT * \n\t\t\tFROM url_map\n\t\t\tWHERE id = $1\n\t\""
+        type: SQL_DB
+    type: error
+    int: 0
+    error:
+        - nil
+---
+version: api.keploy.io/v1beta2
+kind: SQL
+name: mock-1-2
+spec:
+    metadata:
+        name: SQL
+        operation: QueryContext.Close
+        type: SQL_DB
+    type: table
+    table:
+        cols:
+            - name: id
+              type: <nil>
+              precision: 0
+              scale: 0
+            - name: redirect_url
+              type: <nil>
+              precision: 0
+              scale: 0
+            - name: created_at
+              type: <nil>
+              precision: 0
+              scale: 0
+            - name: updated_at
+              type: <nil>
+              precision: 0
+              scale: 0
+        rows:
+            - '[`<nil>` | `<nil>` | `<nil>` | `<nil>` | ]'
+    int: 0
+    error:
+        - EOF
+        - nil
+---
+version: api.keploy.io/v1beta2
+kind: SQL
+name: mock-1-3
+spec:
+    metadata:
+        arguments: '[{ 1 Lhr4BWAi} { 2 https://google.com} { 3 2023-01-17 16:05:17.249666447 +0000 UTC m=+15.492241194} { 4 2023-01-17 16:05:17.249666447 +0000 UTC m=+15.492241194}]'
+        name: SQL
+        operation: ExecContext
+        query: |-
+            "
+            		INSERT INTO url_map (id, redirect_url, created_at, updated_at)
+            		VALUES ($1, $2, $3, $4)
+            	"
+        type: SQL_DB
+    type: error
+    int: 0
+    error:
+        - nil
+---
+version: api.keploy.io/v1beta2
+kind: SQL
+name: mock-1-4
+spec:
+    metadata:
+        arguments: '[{ 1 Lhr4BWAi} { 2 https://google.com} { 3 2023-01-17 16:05:17.249666447 +0000 UTC m=+15.492241194} { 4 2023-01-17 16:05:17.249666447 +0000 UTC m=+15.492241194}]'
+        name: SQL
+        operation: ExecContext.LastInsertId
+        query: |-
+            "
+            		INSERT INTO url_map (id, redirect_url, created_at, updated_at)
+            		VALUES ($1, $2, $3, $4)
+            	"
+        type: SQL_DB
+    type: int
+    int: 0
+    error:
+        - LastInsertId is not supported by this driver
+---
+version: api.keploy.io/v1beta2
+kind: SQL
+name: mock-1-5
+spec:
+    metadata:
+        arguments: '[{ 1 Lhr4BWAi} { 2 https://google.com} { 3 2023-01-17 16:05:17.249666447 +0000 UTC m=+15.492241194} { 4 2023-01-17 16:05:17.249666447 +0000 UTC m=+15.492241194}]'
+        name: SQL
+        operation: ExecContext.RowsAffected
+        query: |-
+            "
+            		INSERT INTO url_map (id, redirect_url, created_at, updated_at)
+            		VALUES ($1, $2, $3, $4)
+            	"
+        type: SQL_DB
+    type: int
+    int: 1
+    error:
+        - nil

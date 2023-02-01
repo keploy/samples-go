@@ -1,20 +1,14 @@
 tasks:
   - name: keploy-server
+    openMode: split-right
     before: |
-      cd /tmp && git clone https://github.com/keploy/keploy.git && cd keploy
-    init: |
-      docker-compose up
-  - name: echo-sql
+      curl --silent --location "https://github.com/keploy/keploy/releases/latest/download/keploy_linux_amd64.tar.gz" | tar xz -C /tmp
+      sudo mv /tmp/keploy /usr/local/bin && keploy
+  - name: echo-sql-sample-application
+    openMode: split-right
     before: |
       cd echo-sql && go mod download
     init: |
       docker-compose up -d
     command: |
-      gp open ../GITPOD.md && go run handler.go main.go
-  - name: user terminal
-    init: cd echo-sql && echo "quickly try out keploy using the instructions above!"
-    # command: echo 'Lets get started !'
-    
-ports:
-  - port: 6789
-    onOpen: open-preview
+      export KEPLOY_MODE=record && go run handler.go main.go
