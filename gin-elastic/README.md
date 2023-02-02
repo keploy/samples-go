@@ -1,29 +1,35 @@
 # Example Sample elastic-search app for performing CRUD operations
 A sample elastic-search app to test Keploy integration capabilities
 
-## Installation
-### Start keploy server
-
+## Installation Setup
+ 
 #### MacOS
 ```shell
 curl --silent --location "https://github.com/keploy/keploy/releases/latest/download/keploy_darwin_all.tar.gz" | tar xz -C /tmp
 
-sudo mv /tmp/keploy /usr/local/bin && keploy
+sudo mv /tmp/keploy /usr/local/bin
+
+# start keploy with default settings
+keploy
 ```
 #### Linux
 ```shell
 curl --silent --location "https://github.com/keploy/keploy/releases/latest/download/keploy_linux_amd64.tar.gz" | tar xz -C /tmp
 
+sudo mv /tmp/keploy /usr/local/bin
 
-sudo mv /tmp/keploy /usr/local/bin && keploy
+# start keploy with default settings
+keploy
 ```
 
 #### Linux ARM
 ```shell
 curl --silent --location "https://github.com/keploy/keploy/releases/latest/download/keploy_linux_arm64.tar.gz" | tar xz -C /tmp
 
+sudo mv /tmp/keploy /usr/local/bin
 
-sudo mv /tmp/keploy /usr/local/bin && keploy
+# start keploy with default settings
+keploy
 ```
 
 ### Setup elastic-search app
@@ -34,8 +40,14 @@ go mod download
 
 ### Run the application
 ```shell
+# Start the elastic server
 docker-compose up -d
+
+# run the sample app
 go run handler.go main.go
+
+# run the sample app in record mode
+export KEPLOY_MODE=record && go run handler.go main.go
 
 ```
 
@@ -92,8 +104,7 @@ Now, let's see the magic! 🪄💫
 
 Now that we have our testcase captured, run the tests.
 ```shell
- export KEPLOY_MODE=test 
- go run handler.go  main.go
+ export KEPLOY_MODE=test && go run handler.go  main.go
 ```
 This will set Keploy in test mode
 output should look like
