@@ -42,6 +42,9 @@ go mod download
 
 ### Run the application
 ```shell
+# Start mongo server on localhost:27017
+docker-compose up -d
+
 # run the sample app
 go run handler.go main.go
 
