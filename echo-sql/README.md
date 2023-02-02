@@ -87,7 +87,7 @@ curl --request GET \
 
 2. Or by querying through the browser `http://localhost:8082/GuwHCgoQ`
 
-Now both these API calls were captured as **editable** testcases and written to `keploy-tests` folder. The folder would also have a mocks folder and contain `mocks` of the postgres operations. Here's what the folder structure look like:
+Now both these API calls were captured as **editable** testcases and written to `keploy/tests` folder. The keploy directory would also have `mocks` folder that contains all the outputs of postgres operations. Here's what the folder structure look like:
 
 ```
 .
@@ -96,12 +96,13 @@ Now both these API calls were captured as **editable** testcases and written to 
 ├── go.mod
 ├── go.sum
 ├── handler.go
-├── keploy-tests
-│   ├── cb32305f-1bcc-4eab-a6f3-e3e815cb9f48.yaml
-│   ├── db7ca851-550b-4c0b-b3e4-00d5809a2f72.yaml
+├── keploy
+│   ├── tests
+│       ├── test-1.yaml
+│       ├── test-2.yaml
 │   └── mocks
-│       ├── cb32305f-1bcc-4eab-a6f3-e3e815cb9f48.yaml
-│       └── db7ca851-550b-4c0b-b3e4-00d5809a2f72.yaml
+│       ├── mock-1.yaml
+│       └── mock-2.yaml
 
 
 ```
