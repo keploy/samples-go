@@ -35,14 +35,18 @@ keploy
 
 ### Setup URL shortener
 ```bash
-git clone https://github.com/keploy/example-url-shortener && cd example-url-shortener
+git clone https://github.com/keploy/example-url-shortener && cd gin-mongo
 
 go mod download
 ```
 
 ### Run the application
 ```shell
+# run the sample app
 go run handler.go main.go
+
+# run the sample app in record mode
+export KEPLOY_MODE=record && go run handler.go main.go
 
 ```
 
