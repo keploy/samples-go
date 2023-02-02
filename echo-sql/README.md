@@ -4,7 +4,7 @@ A sample url shortener app to test Keploy integration capabilities using [Echo](
 
 ## Installation Setup
 
-> Note that Testcases are exported as files in the repo by default
+> Note that Testcases are exported as files in the local repository by default
 
 <details>
 <summary>Mac</summary>
@@ -111,7 +111,7 @@ The test files should look like the sample below and the format is common for bo
 ```yaml
 version: api.keploy.io/v1beta1
 kind: Http
-name: cb32305f-1bcc-4eab-a6f3-e3e815cb9f48
+name: test-1
 spec:
     metadata: {}
     req:
@@ -141,12 +141,12 @@ spec:
         - type: error
           data: ""
     mocks:
-        - cb32305f-1bcc-4eab-a6f3-e3e815cb9f48-0
-        - cb32305f-1bcc-4eab-a6f3-e3e815cb9f48-1
-        - cb32305f-1bcc-4eab-a6f3-e3e815cb9f48-2
-        - cb32305f-1bcc-4eab-a6f3-e3e815cb9f48-3
-        - cb32305f-1bcc-4eab-a6f3-e3e815cb9f48-4
-        - cb32305f-1bcc-4eab-a6f3-e3e815cb9f48-5
+        - mock-1-0
+        - mock-1-1
+        - mock-1-2
+        - mock-1-3
+        - mock-1-4
+        - mock-1-5
     assertions:
         noise:
             - body.ts
