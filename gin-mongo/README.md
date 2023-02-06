@@ -33,6 +33,7 @@ keploy
 
 </details>
 
+
 ### Setup URL shortener
 ```bash
 git clone https://github.com/keploy/example-url-shortener && cd gin-mongo
@@ -75,64 +76,64 @@ this will return the shortened url. The ts would automatically be ignored during
 }
 ```
 
-### 2. Redirect to original url from shortened url
+### Redirect to original url from shortened url
+1. By using Curl Command
 ```bash
 curl --request GET \
   --url http://localhost:8080/Lhr4BWAi
 ```
 
-or by querying through the browser `http://localhost:8080/Lhr4BWAi`
+2. By querying through the browser `http://localhost:8080/Lhr4BWAi`
 
+Now both these API calls were captured as editable testcases and written to keploy/tests folder. The keploy directory would also have mocks folder that contains all the outputs of postgres operations. Here's what the folder structure look like:
 
-Now both these API calls were captured as a testcase and should be visible on the [Keploy console](http://localhost:6789/testlist).
-If you're using Keploy cloud, open [this](https://app.keploy.io/testlist).
+```
+.
+├── README.md
+├── docker-compose.yml
+├── go.mod
+├── go.sum
+├── handler.go
+├── keploy
+│   ├── tests
+│       ├── test-1.yaml
+│       ├── test-2.yaml
+│       ├── test-3.yaml
+│   └── mocks
+│       ├── mock-1.yaml
+│       └── mock-2.yaml
+│       └── mock-3.yaml
 
-You should be seeing an app named `sample-url-shortener` with the test cases we just captured.
+```
 
-![testcases](testcases.png?raw=true "Web console testcases")
+![testcases](assets/testcases.png)
 
 
 Now, let's see the magic! 🪄💫
 
+## Generate Test Runs
 
-## Test mode
-
-Now that we have our testcase captured, run the test file.
-```shell
- go test -coverpkg=./... -covermode=atomic  ./...
+To generate Test Runs, close the application and run the below command:
 ```
-output should look like
-```shell
-ok      test-app-url-shortener  6.268s  coverage: 80.3% of statements in ./...
+export KEPLOY_MODE="test"
+go test -v -coverpkg=./... -covermode=atomic  ./...
 ```
 
-**We got 80.3% without writing any testcases or mocks for mongo db!!**
 
-So no need to setup dependencies like mongoDB, web-go locally or write mocks for your testing.
-
-**The application thinks it's talking to MongoDB 😄**
-
-Go to the Keploy Console/testruns to get deeper insights on what testcases ran, what failed.
-
-![testruns](testrun1.png?raw=true "Recent testruns")
-![testruns](testrun2.png?raw=true "Summary")
-![testruns](testrun3.png?raw=true "Detail")
+Once done, you can see the Test Runs on the Keploy server, like this:
+![test-runs](assets/testrun.png)
 
 ### Make a code change
 Now try changing something like renaming `url` to `urls` in [handlers.go](./handler.go) on line 96 and running ` go test -coverpkg=./... -covermode=atomic  ./...` again
 ```shell
-{"msg":"result","testcase id":"05a576e1-c03a-4c25-a469-4bea0307cd08","passed":false}
-{"msg":"result","testcase id":"cad6d926-b531-477c-935c-dd7314c4357a","passed":true}
-{"msg":"test run completed","run id":"19d4cba1-b77c-4301-884a-5b3f08dc6248","passed overall":false}
---- FAIL: TestKeploy (5.72s)
-    keploy.go:42: Keploy test suite failed
+{"msg":"result","testcase id": "test-3", "passed": false}
+{"msg":"result","testcase id": "test-2", "passed": false}
+{"msg":"result","testcase id": "test-1", "passed": false}
+{"msg":"test run completed","run id": "97d0870c-737d-414d-80af-c56802f974e8", "passed overall": false}
+--- FAIL: TestKeploy (5.77s)
 FAIL
-coverage: 80.3% of statements in ./...
-FAIL    test-app-url-shortener  6.213s
+coverage: 64.8% of statements in ./...
+FAIL    test-app-url-shortener  6.787s
 FAIL
 ```
 
-To deep dive the problem go to [test runs](http://localhost:6789/testruns)
-
-![testruns](testrun4.png?raw=true "Recent testruns")
-![testruns](testrun5.png?raw=true "Detail")
