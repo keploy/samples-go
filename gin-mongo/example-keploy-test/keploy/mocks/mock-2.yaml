@@ -1,0 +1,16 @@
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-2-0
+spec:
+    metadata:
+        UpdateOptions: '[{<nil> <nil> <nil> <nil> 0xc0000ae5d8}]'
+        filter: map[_id:6BqYx41B]
+        name: mongodb
+        operation: UpdateOne
+        type: NO_SQL_DB
+        update: '[{$set {6BqYx41B 2023-02-06 10:35:30.584546 +0530 IST m=+187.670615501 2023-02-06 10:35:30.584546 +0530 IST m=+187.670615501 https://github.com/keploy}}]'
+    objects:
+        - type: '*mongo.UpdateResult'
+          data: H4sIAAAAAAAA/4r738jMyMgTWpCSWJIalFpcmlPC+L+JgZGFkcc3sSQ5IzXFOb80r4SRhYGR1zc/JTMtE1kktKA4tagESYQLJuLpwijAwMAg+b+JmYmRrbikKDMvnYeLgcPMqTCywsTQiQEQAAD//6myp5h5AAAA
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638zKyPS/jYGBgfV/CwMjIyAAAP//7jjoexEAAAA=
