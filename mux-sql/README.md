@@ -102,7 +102,7 @@ Now both these API calls were captured as editable testcases and written to ``ke
 
 ```
 
-![testcases](assets/testcases.png)
+![testcases](https://imgur.com/a/kQYM3kD)
 
 
 Now, let's see the magic! 🪄💫
@@ -116,6 +116,6 @@ go test -v -coverpkg=./... -covermode=atomic  ./...
 ```
 
 Once done, you can see the Test Runs on the Keploy server, like this:
-![test-runs](assets/testrun.png)
+![test-runs](https://imgur.com/a/5wYF3IP)
 
 

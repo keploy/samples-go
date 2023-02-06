@@ -106,7 +106,7 @@ Now both these API calls were captured as editable testcases and written to kepl
 
 ```
 
-![testcases](assets/testcases.png)
+![testcases](https://imgur.com/bcEvNED)
 
 
 Now, let's see the magic! 🪄💫
@@ -121,7 +121,7 @@ go test -v -coverpkg=./... -covermode=atomic  ./...
 
 
 Once done, you can see the Test Runs on the Keploy server, like this:
-![test-runs](assets/testrun.png)
+![test-runs](https://imgur.com/77bd1Oi)
 
 ### Make a code change
 Now try changing something like renaming `url` to `urls` in [handlers.go](./handler.go) on line 96 and running ` go test -coverpkg=./... -covermode=atomic  ./...` again
@@ -136,4 +136,3 @@ coverage: 64.8% of statements in ./...
 FAIL    test-app-url-shortener  6.787s
 FAIL
 ```
-
