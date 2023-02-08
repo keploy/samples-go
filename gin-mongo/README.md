@@ -106,7 +106,7 @@ Now both these API calls were captured as editable testcases and written to kepl
 
 ```
 
-![testcases](https://imgur.com/bcEvNED)
+![testcases](https://i.imgur.com/bcEvNED.png)
 
 
 Now, let's see the magic! 🪄💫
@@ -121,7 +121,7 @@ go test -v -coverpkg=./... -covermode=atomic  ./...
 
 
 Once done, you can see the Test Runs on the Keploy server, like this:
-![test-runs](https://imgur.com/77bd1Oi)
+![test-runs](https://i.imgur.com/77bd1Oi.png)
 
 ### Make a code change
 Now try changing something like renaming `url` to `urls` in [handlers.go](./handler.go) on line 96 and running ` go test -coverpkg=./... -covermode=atomic  ./...` again
