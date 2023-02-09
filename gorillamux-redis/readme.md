@@ -6,19 +6,15 @@ A sample contact keeper app to test Keploy integration capabilities using [Goril
 
 > Note that Testcases are exported as files in the local repository by default
 
-<details>
-<summary>Mac</summary>
+### MacOS 
 
 ```shell
 curl --silent --location "https://github.com/keploy/keploy/releases/latest/download/keploy_darwin_all.tar.gz" | tar xz -C /tmp
 
-sudo mv /tmp/keploy /usr/local/bin
-
-# start keploy with default settings
-keploy
+sudo mv /tmp/keploy /usr/local/bin && keploy
 ```
 
-</details>
+### Linux
 
 <details>
 <summary>Linux</summary>
@@ -26,11 +22,40 @@ keploy
 ```shell
 curl --silent --location "https://github.com/keploy/keploy/releases/latest/download/keploy_linux_amd64.tar.gz" | tar xz -C /tmp
 
-sudo mv /tmp/keploy /usr/local/bin 
-
-# start keploy with default settings
-keploy
+sudo mv /tmp/keploy /usr/local/bin && keploy
 ```
+</details>
+
+<details>
+<summary>Linux ARM</summary>
+
+```shell
+curl --silent --location "https://github.com/keploy/keploy/releases/latest/download/keploy_linux_arm64.tar.gz" | tar xz -C /tmp
+
+sudo mv /tmp/keploy /usr/local/bin && keploy
+```
+
+The UI can be accessed at http://localhost:6789
+</details>
+
+### Windows
+
+<details>
+<summary>Windows</summary>
+
+
+- Download the [Keploy Windows AMD64](https://github.com/keploy/keploy/releases/latest/download/keploy_windows_amd64.tar.gz), and extract the files from the zip folder.
+
+- Run the `keploy.exe` file.
+
+</details>
+
+<details>
+<summary>Windows ARM</summary>
+
+- Download the [Keploy Windows ARM64](https://github.com/keploy/keploy/releases/latest/download/keploy_windows_arm64.tar.gz), and extract the files from the zip folder.
+
+- Run the `keploy.exe` file.
 
 </details>
 
@@ -38,7 +63,7 @@ keploy
 
 1. [Redis](https://redis.io/)
 
-### Start URL shortener application 
+### Start Contact Keeper application 
 
 ```bash
 git clone https://github.com/keploy/samples-go && cd samples-go/gorillamux-redis
