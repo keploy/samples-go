@@ -1,4 +1,4 @@
-# URL Shortener
+# Product Catelog
 A sample url shortener app to test Keploy integration capabilities
 
 ## Installation
@@ -34,23 +34,20 @@ keploy
 </details>
 
 
-### Setup URL shortener
+### Setup Application
 ```bash
-git clone https://github.com/keploy/example-url-shortener && cd gin-mongo
+git clone https://github.com/keploy/samples-go && cd mux-sql
 
 go mod download
 ```
 
 ### Run the application
 ```shell
-# Start mongo server on localhost:27017
+# Start postgres SQL server 
 docker-compose up -d
 
-# run the sample app
-go run handler.go main.go
-
 # run the sample app in record mode
-export KEPLOY_MODE=record && go run handler.go main.go
+export KEPLOY_MODE=record && go run .
 
 ```
 
@@ -62,17 +59,19 @@ To genereate testcases we just need to make some API calls. You can use [Postman
 
 ```bash
 curl --request POST \
-  --url http://localhost:8080/url \
+  --url http://localhost:8010/product \
   --header 'content-type: application/json' \
   --data '{
-  "url": "https://google.com"
+    "name":"Bubbles", 
+    "price": 123
 }'
 ```
-this will return the shortened url. The ts would automatically be ignored during testing because it'll always be different. 
+this will return the response. 
 ```
 {
-  "ts": 1645540022,
-  "url": "http://localhost:8080/Lhr4BWAi"
+    "id": 1,
+    "name": "Bubbles",
+    "price": 123
 }
 ```
 
@@ -80,12 +79,12 @@ this will return the shortened url. The ts would automatically be ignored during
 1. By using Curl Command
 ```bash
 curl --request GET \
-  --url http://localhost:8080/Lhr4BWAi
+  --url http://localhost:8010/products
 ```
 
-2. By querying through the browser `http://localhost:8080/Lhr4BWAi`
+2. By querying through the browser `http://localhost:8010/products`
 
-Now both these API calls were captured as editable testcases and written to keploy/tests folder. The keploy directory would also have mocks folder that contains all the outputs of postgres operations. Here's what the folder structure look like:
+Now both these API calls were captured as editable testcases and written to ``keploy/tests folder``. The keploy directory would also have mocks folder that contains all the outputs of postgres operations. Here's what the folder structure look like:
 
 ```
 .
@@ -93,21 +92,17 @@ Now both these API calls were captured as editable testcases and written to kepl
 ├── docker-compose.yml
 ├── go.mod
 ├── go.sum
-├── handler.go
 ├── keploy
 │   ├── tests
 │       ├── test-1.yaml
 │       ├── test-2.yaml
-│       ├── test-3.yaml
 │   └── mocks
 │       ├── mock-1.yaml
 │       └── mock-2.yaml
-│       └── mock-3.yaml
 
 ```
 
-![testcases](https://imgur.com/bcEvNED)
-
+<img width="929" alt="testcases" src="https://user-images.githubusercontent.com/53110238/217449242-d2b24d72-426a-4da5-8196-6929a652cad4.png">
 
 Now, let's see the magic! 🪄💫
 
@@ -119,20 +114,8 @@ export KEPLOY_MODE="test"
 go test -v -coverpkg=./... -covermode=atomic  ./...
 ```
 
-
 Once done, you can see the Test Runs on the Keploy server, like this:
-![test-runs](https://imgur.com/77bd1Oi)
 
-### Make a code change
-Now try changing something like renaming `url` to `urls` in [handlers.go](./handler.go) on line 96 and running ` go test -coverpkg=./... -covermode=atomic  ./...` again
-```shell
-{"msg":"result","testcase id": "test-3", "passed": false}
-{"msg":"result","testcase id": "test-2", "passed": false}
-{"msg":"result","testcase id": "test-1", "passed": false}
-{"msg":"test run completed","run id": "97d0870c-737d-414d-80af-c56802f974e8", "passed overall": false}
---- FAIL: TestKeploy (5.77s)
-FAIL
-coverage: 64.8% of statements in ./...
-FAIL    test-app-url-shortener  6.787s
-FAIL
-```
+<img width="657" alt="testrun" src="https://user-images.githubusercontent.com/53110238/217449300-3a41c3e8-9d93-488c-a47f-0c6928236419.png">
+
+

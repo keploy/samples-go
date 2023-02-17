@@ -1,0 +1,16 @@
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-3-0
+spec:
+    metadata:
+        UpdateOptions: '[{<nil> <nil> <nil> <nil> 0xc00052c8e8}]'
+        filter: map[_id:7D9XGXgj]
+        name: mongodb
+        operation: UpdateOne
+        type: NO_SQL_DB
+        update: '[{$set {7D9XGXgj 2023-02-06 10:35:46.1305062 +0530 IST m=+203.216575701 2023-02-06 10:35:46.1305062 +0530 IST m=+203.216575701 https://github.com/sawo}}]'
+    objects:
+        - type: '*mongo.UpdateResult'
+          data: H4sIAAAAAAAA/4r738jMyMgTWpCSWJIalFpcmlPC+L+JgZGFkcc3sSQ5IzXFOb80r4SRhYGR1zc/JTMtE1kktKA4tagESYQLJuLpwijAwMAg+b+JmYmRrbikKDMvnYeLgcPcxTLCPSI9iwEQAAD//5Lc5pJ5AAAA
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638zKyPS/jYGBgfV/CwMjIyAAAP//7jjoexEAAAA=
