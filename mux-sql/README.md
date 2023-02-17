@@ -43,7 +43,7 @@ go mod download
 
 ### Run the application
 ```shell
-# Start mongo server on localhost:27017
+# Start postgres server 
 docker-compose up -d
 
 # run the sample app in record mode
@@ -59,7 +59,7 @@ To genereate testcases we just need to make some API calls. You can use [Postman
 
 ```bash
 curl --request POST \
-  --url http://localhost:8010/url \
+  --url http://localhost:8010/product \
   --header 'content-type: application/json' \
   --data '{
     "name":"Bubbles", 
