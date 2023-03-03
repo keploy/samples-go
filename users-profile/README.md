@@ -16,6 +16,26 @@ A sample application that get, create, update, and delete the data of a user in 
 ## Start Keploy
 > Note that Testcases are exported as files in the repo by default
 
+### MacOS (Apple Silicon)
+```shell
+mkdir -p ~/bin
+
+mkdir -p ~/tmp/keploy
+
+curl --silent --location "https://github.com/keploy/keploy/releases/latest/download/keploy_darwin_all.tar.gz" | tar xz -C ~/tmp/keploy
+
+mv ~/tmp/keploy/keploy ~/bin
+
+```
+Add  the following line to your .bash_profile file and reload the shell
+```shell
+export PATH=$PATH:$HOME/bin
+```
+Start keploy with default settings
+```shell
+keploy
+```
+
 ### MacOS 
 ```shell
 curl --silent --location "https://github.com/keploy/keploy/releases/latest/download/keploy_darwin_all.tar.gz" | tar xz -C /tmp
