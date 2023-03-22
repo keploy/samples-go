@@ -43,6 +43,7 @@ func main() {
 			ctx.Error("Unsupported path", fasthttp.StatusNotFound)
 		}
 	}
+	
 	color.Info.Tips("Listening on port %s", port)
 	log.Fatal(fasthttp.ListenAndServe(":"+port, kMiddleware(routes)))
 }

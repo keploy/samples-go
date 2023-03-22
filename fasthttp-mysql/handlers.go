@@ -9,50 +9,57 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
+// GETindex handles HTTP GET requests and returns link to the documentation.
 func GETindex(ctx *fasthttp.RequestCtx) {
 	ctx.SetContentType("text/html")
 	ctx.SetStatusCode(fasthttp.StatusOK)
 	ctx.SetBody([]byte("Please refer to the documentation for the API: https://github.com/keploy/samples-go/tree/main/fasthttp-mysql"))
 }
 
+// POSTMovie handles HTTP POST requests for adds a new movie.
 func POSTMovie(ctx *fasthttp.RequestCtx) {
-
-	db := models.Connect()
-	defer db.Close()
-	body := bytes.NewReader(ctx.PostBody())
 	var movie models.Movie
+
+	body := bytes.NewReader(ctx.PostBody())
 	if err := json.NewDecoder(body).Decode(&movie); err != nil {
 		color.Error.Tips("Invalid JSON: %s", err)
 		ctx.Error("Invalid JSON", fasthttp.StatusBadRequest)
 		return
 	}
+
+	db := models.Connect()
+	defer db.Close()
 	models.AddMovie(ctx, db, movie)
-	ctx.SetContentType("application/json")
-	ctx.SetStatusCode(fasthttp.StatusOK)
+
 	byteMovie, err := json.Marshal(movie)
 	if err != nil {
 		color.Error.Tips("Parsing Error: %s", err)
 		ctx.Error("Parsing Error", fasthttp.StatusInternalServerError)
 		return
 	}
+
+	ctx.SetContentType("application/json")
+	ctx.SetStatusCode(fasthttp.StatusOK)
 	ctx.SetBody(byteMovie)
 }
 
+// GETmovie handles HTTP GET requests and returns the last movie
 func GETmovie(ctx *fasthttp.RequestCtx) {
-
 	db := models.Connect()
 	defer db.Close()
 	movie := models.SingleMovie(ctx, db)
+
 	ctx.SetContentType("application/json")
 	ctx.SetStatusCode(fasthttp.StatusOK)
 	ctx.SetBody(movie)
 }
 
+// GETAllMovies handles HTTP GET requests and returns all movies
 func GETAllMovies(ctx *fasthttp.RequestCtx) {
-
 	db := models.Connect()
 	defer db.Close()
 	movies := models.AllMovies(ctx, db)
+
 	ctx.SetContentType("application/json")
 	ctx.SetStatusCode(fasthttp.StatusOK)
 	ctx.SetBody(movies)

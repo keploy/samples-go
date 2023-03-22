@@ -8,12 +8,14 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
+// AddMovie adds a movie to the database
 func AddMovie(ctx *fasthttp.RequestCtx, db *sql.DB, movie Movie) {
 	if _, err := db.ExecContext(ctx, "INSERT INTO movies (title, year, rating) VALUES (?, ?, ?)", movie.Title, movie.Year, movie.Rating); err != nil {
 		log.Fatal(err.Error())
 	}
 }
 
+// SingleMovie returns the last movie that was added to the database.
 func SingleMovie(ctx *fasthttp.RequestCtx, db *sql.DB) (jsonMovie []byte) {
 	var (
 		movie       Movie
@@ -32,6 +34,7 @@ func SingleMovie(ctx *fasthttp.RequestCtx, db *sql.DB) (jsonMovie []byte) {
 	return jsonMovie
 }
 
+// AllMovies returns all movies in the database.
 func AllMovies(ctx *fasthttp.RequestCtx, db *sql.DB) (jsonMovies []byte) {
 	var (
 		movie  Movie
@@ -59,6 +62,7 @@ func AllMovies(ctx *fasthttp.RequestCtx, db *sql.DB) (jsonMovies []byte) {
 	return jsonMovies
 }
 
+// countMovieID returns the number of movies in the database
 func countMovieID(ctx *fasthttp.RequestCtx, db *sql.DB) int {
 	var movie Movie
 	if err := db.QueryRowContext(ctx, "SELECT COUNT(ID) FROM movies;").Scan(&movie.ID); err != nil {
@@ -67,6 +71,7 @@ func countMovieID(ctx *fasthttp.RequestCtx, db *sql.DB) int {
 	return movie.ID
 }
 
+// AllMovieWithParameter returns all movies in the database with a specific year or rating.
 // func AllMovieWithParameter(db *sql.DB, year, rating int) (jsonTitles []byte) {
 // 	var (
 // 		movie  Movie

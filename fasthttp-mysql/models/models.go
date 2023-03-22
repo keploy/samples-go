@@ -7,7 +7,7 @@ import (
 	"github.com/keploy/go-sdk/integrations/ksql/v1"
 )
 
-
+// Movie is a struct that represents a movie.
 type Movie struct {
 	ID     int    `json:"id" db:"id"`
 	Title  string `json:"title" db:"title"`
@@ -22,6 +22,7 @@ func init() {
 }
 
 
+// Connect returns a MySQL database connection object.
 func Connect() *sql.DB {
 	db, err := sql.Open("keploy", "root:root@/moviedb")
 	if err != nil {

@@ -61,7 +61,7 @@ go run .
 
 ## Routes
 >
-> Sample Application Port: <http://localhost:8081>
+> Sample Application Port: <http://localhost:8080>
 
 - POST /movie - Add a movie
 - GET /movie - Get last added movie
@@ -82,7 +82,7 @@ keploy
 
 To generate Test Cases, you need to make some API calls. It could be using Thunder Client, Postman Desktop Agent, or your preferred API testing tool.
 
-POST movie in the database
+- **POST** movie in the database
 
 ```bash
 curl --request POST \
@@ -95,14 +95,14 @@ curl --request POST \
 }'
 ```
 
-GET movie in the database
+- **GET** movie in the database
 
 ```bash
 curl --request GET \
  --url http://localhost:8080/movie
 ```
 
-GET all movies in the database
+- **GET** all movies in the database
 
 ```bash
 curl --request GET \
@@ -123,10 +123,6 @@ Once done, you can see the Test Runs on the Keploy server, like this:
 <!-- 
 Add Test Runs image here
  -->
-
-```bash
-Keploy
-```
 
 ## Check the MySQL database
 
