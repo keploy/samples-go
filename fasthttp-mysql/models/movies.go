@@ -4,18 +4,23 @@ import (
 	"database/sql"
 	"encoding/json"
 	"log"
+
+	"github.com/valyala/fasthttp"
 )
 
-func AddMovie(db *sql.DB, movie Movie) {
-	if _, err := db.Exec("INSERT INTO movies (title, year, rating) VALUES (?, ?, ?)", movie.Title, movie.Year, movie.Rating); err != nil {
+func AddMovie(ctx *fasthttp.RequestCtx, db *sql.DB, movie Movie) {
+	if _, err := db.ExecContext(ctx, "INSERT INTO movies (title, year, rating) VALUES (?, ?, ?)", movie.Title, movie.Year, movie.Rating); err != nil {
 		log.Fatal(err.Error())
 	}
 }
 
-func SingleMovie(db *sql.DB) (jsonMovie []byte) {
-	var movie Movie
-
-	if err := db.QueryRow("SELECT * FROM movies WHERE id = ?", countMovieID(db)).Scan(&movie.ID, &movie.Title, &movie.Year, &movie.Rating); err != nil {
+func SingleMovie(ctx *fasthttp.RequestCtx, db *sql.DB) (jsonMovie []byte) {
+	var (
+		movie       Movie
+		lastMovieID int
+	)
+	lastMovieID = countMovieID(ctx, db)
+	if err := db.QueryRowContext(ctx, "SELECT * FROM movies WHERE id = ?", lastMovieID).Scan(&movie.ID, &movie.Title, &movie.Year, &movie.Rating); err != nil {
 		log.Fatal(err.Error())
 	}
 
@@ -27,13 +32,13 @@ func SingleMovie(db *sql.DB) (jsonMovie []byte) {
 	return jsonMovie
 }
 
-func AllMovies(db *sql.DB) (jsonMovies []byte) {
+func AllMovies(ctx *fasthttp.RequestCtx, db *sql.DB) (jsonMovies []byte) {
 	var (
 		movie  Movie
 		movies []Movie
 	)
 
-	rows, err := db.Query("SELECT id, title, year, rating FROM movies")
+	rows, err := db.QueryContext(ctx, "SELECT id, title, year, rating FROM movies")
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -54,9 +59,9 @@ func AllMovies(db *sql.DB) (jsonMovies []byte) {
 	return jsonMovies
 }
 
-func countMovieID(db *sql.DB) int {
+func countMovieID(ctx *fasthttp.RequestCtx, db *sql.DB) int {
 	var movie Movie
-	if err := db.QueryRow("SELECT COUNT(ID) FROM movies;").Scan(&movie.ID); err != nil {
+	if err := db.QueryRowContext(ctx, "SELECT COUNT(ID) FROM movies;").Scan(&movie.ID); err != nil {
 		log.Fatal(err.Error())
 	}
 	return movie.ID

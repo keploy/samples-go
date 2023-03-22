@@ -26,7 +26,7 @@ func POSTMovie(ctx *fasthttp.RequestCtx) {
 		ctx.Error("Invalid JSON", fasthttp.StatusBadRequest)
 		return
 	}
-	models.AddMovie(db, movie)
+	models.AddMovie(ctx, db, movie)
 	ctx.SetContentType("application/json")
 	ctx.SetStatusCode(fasthttp.StatusOK)
 	byteMovie, err := json.Marshal(movie)
@@ -42,7 +42,7 @@ func GETmovie(ctx *fasthttp.RequestCtx) {
 
 	db := models.Connect()
 	defer db.Close()
-	movie := models.SingleMovie(db)
+	movie := models.SingleMovie(ctx, db)
 	ctx.SetContentType("application/json")
 	ctx.SetStatusCode(fasthttp.StatusOK)
 	ctx.SetBody(movie)
@@ -52,7 +52,7 @@ func GETAllMovies(ctx *fasthttp.RequestCtx) {
 
 	db := models.Connect()
 	defer db.Close()
-	movies := models.AllMovies(db)
+	movies := models.AllMovies(ctx, db)
 	ctx.SetContentType("application/json")
 	ctx.SetStatusCode(fasthttp.StatusOK)
 	ctx.SetBody(movies)
