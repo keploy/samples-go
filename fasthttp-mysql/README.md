@@ -43,7 +43,7 @@ The UI can be accessed at <http://localhost:6789>
 ## Start mySQL database
 
 ```bash
-docker compose up -d
+docker build -t ksql . && docker run -itd --rm -p 3306:3306 ksql
 ```
 
 ## Start Users-Profile sample application
