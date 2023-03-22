@@ -82,9 +82,32 @@ keploy
 
 To generate Test Cases, you need to make some API calls. It could be using Thunder Client, Postman Desktop Agent, or your preferred API testing tool.
 
-<!-- 
-Add API requests image here
- -->
+POST movie in the database
+
+```bash
+curl --request POST \
+ --url http://localhost:8080/movie \
+ --header 'content-type: application/json' \
+ --data '{
+    "title":"Everything Everywhere All At Once",
+    "year":2022,
+    "rating":10
+}'
+```
+
+GET movie in the database
+
+```bash
+curl --request GET \
+ --url http://localhost:8080/movie
+```
+
+GET all movies in the database
+
+```bash
+curl --request GET \
+ --url http://localhost:8080/movies
+```
 
 ## Generate Test Runs
 
