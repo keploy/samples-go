@@ -28,7 +28,7 @@ require (
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/jhump/protoreflect v1.14.0 // indirect
 	github.com/k0kubun/pp/v3 v3.1.0 // indirect
-	github.com/keploy/go-sdk v0.7.10 // indirect
+	github.com/keploy/go-sdk v0.8.2 // indirect
 	github.com/klauspost/compress v1.15.1 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/matryer/moq v0.2.5 // indirect
@@ -47,7 +47,7 @@ require (
 	github.com/xdg-go/scram v1.1.0 // indirect
 	github.com/xdg-go/stringprep v1.0.2 // indirect
 	github.com/youmark/pkcs8 v0.0.0-20201027041543-1326539a0a0a // indirect
-	go.keploy.io/server v0.7.21 // indirect
+	go.keploy.io/server v0.8.2 // indirect
 	go.mongodb.org/mongo-driver v1.8.3 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.7.0 // indirect
