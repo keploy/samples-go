@@ -33,14 +33,14 @@ keploy
 ```
 #### Windows
 ```shell
-Download the <a href = "https://github.com/keploy/keploy/releases/latest/download/keploy_windows_amd64.tar.gz" target = "_blank">Keploy Windows AMD64</a>, and extract the files from the zip folder.
+Download the <a href = "https://github.com/keploy/keploy/releases/latest/download/keploy_windows_amd64.tar.gz" target = "_blank"> Keploy Windows AMD64 </a>, and extract the files from the zip folder.
 
 Run the keploy.exe file.
 ```
 
 #### Windows ARM
 ```shell
-Download the <a href = "https://github.com/keploy/keploy/releases/latest/download/keploy_windows_arm64.tar.gz">Keploy Windows ARM64</a>, and extract the files from the zip folder.
+Download the <a href = "https://github.com/keploy/keploy/releases/latest/download/keploy_windows_arm64.tar.gz"> Keploy Windows ARM64 </a>, and extract the files from the zip folder.
 
 Run the keploy.exe file.
 ```
