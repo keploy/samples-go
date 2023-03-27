@@ -1,4 +1,4 @@
-FROM mysql:5.7
+FROM mysql
 
 # Copy the database schema
 COPY ./models/init.sql /docker-entrypoint-initdb.d/
