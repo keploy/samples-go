@@ -51,7 +51,7 @@ docker build -t ksql . && docker run -itd --rm -p 3306:3306 ksql
 ```bash
 git clone https://github.com/keploy/samples-go
 cd samples-go
-cd fasthttp-sql
+cd fasthttp-mysql
 go get .
 export KEPLOY_MODE="record" 
 go run .

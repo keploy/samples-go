@@ -13,7 +13,7 @@ CREATE TABLE movies(
     PRIMARY KEY (id)
     );
 
--- seed table with data
+-- Inital seed data
 INSERT INTO movies (title, year, rating) VALUES ('The Godfather', 1972, 9);
 INSERT INTO movies (title, year, rating) VALUES ('The Shawshank Redemption', 1994, 9);
 INSERT INTO movies (title, year, rating) VALUES ('The Dark Knight', 2008, 7);
