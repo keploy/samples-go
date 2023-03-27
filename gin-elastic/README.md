@@ -31,19 +31,6 @@ sudo mv /tmp/keploy /usr/local/bin
 # start keploy with default settings
 keploy
 ```
-#### Windows
-```shell
-Download the Keploy Windows AMD64 from "https://github.com/keploy/keploy/releases/latest/download/keploy_windows_amd64.tar.gz", and extract the files from the zip folder.
-
-Run the keploy.exe file.
-```
-
-#### Windows ARM
-```shell
-Download the Keploy Windows ARM64 from "https://github.com/keploy/keploy/releases/latest/download/keploy_windows_arm64.tar.gz", and extract the files from the zip folder.
-
-Run the keploy.exe file.
-```
 
 ### Setup elastic-search app
 ```bash
