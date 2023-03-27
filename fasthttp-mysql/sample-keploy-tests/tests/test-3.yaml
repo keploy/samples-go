@@ -1,0 +1,45 @@
+version: api.keploy.io/v1beta2
+kind: Http
+name: test-3
+spec:
+    metadata: {}
+    req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: /movie
+        header:
+            Accept: '*/*'
+            Content-Length: "85"
+            Content-Type: application/json
+            Host: localhost:8080
+            User-Agent: curl/7.88.1
+        body: |-
+            {
+                "title":"Everything Everywhere All At Once",
+                "year":2022,
+                "rating":10
+            }
+        body_type: utf-8
+    resp:
+        status_code: 200
+        header:
+            Content-Type: text/plain; charset=utf-8
+            Server: fasthttp
+        body: '{"id":0,"title":"Everything Everywhere All At Once","year":2022,"rating":10}'
+        body_type: utf-8
+        status_message: ""
+        proto_major: 1
+        proto_minor: 1
+    objects:
+        - type: error
+          data: H4sIAAAAAAAA/wEAAP//AAAAAAAAAAA=
+    mocks:
+        - mock-3-0
+        - mock-3-1
+        - mock-3-2
+        - mock-3-3
+        - mock-3-4
+    assertions:
+        noise: []
+    created: 1679888670

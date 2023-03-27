@@ -1,0 +1,261 @@
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-1-0
+spec:
+    metadata:
+        arguments: '[]'
+        name: SQL
+        operation: QueryContext
+        query: SELECT id, title, year, rating FROM movies
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-1-1
+spec:
+    metadata:
+        name: SQL
+        operation: QueryContext.Columns
+        type: SQL_DB
+    objects:
+        - type: '*[]string'
+          data: H4sIAAAAAAAA/+L538rEyPS/jYGRh4FB8n8bAwtTZgprSWZJTipLZWpiEVtRYklmXjogAAD//xce9EInAAAA
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-1-2
+spec:
+    metadata:
+        name: SQL
+        operation: QueryContext.Next
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=
+        - type: '*ksql.Value'
+          data: H4sIAAAAAAAA/+L6387KyPS/i4GBged/NxMj0/8eBkYBBobI/x0ModFKTplefqEhBpae6ba2SjogbniQUUZxcGhYdkpOgUd4bkY2iB9plGwZEOwJVeIX5l5cFRKOLBQANyQWEAAA//8vEw1tcgAAAA==
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-1-3
+spec:
+    metadata:
+        name: SQL
+        operation: QueryContext.Next
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=
+        - type: '*ksql.Value'
+          data: H4sIAAAAAAAA/+L6387KyPS/i4GBged/NxMj0/8eBkYBBobM/x0MqdFKTpleflFVBpae6ba2SjogbniQUUZxcGiUf5JhTmSUR0FGkEGUYWREjnOoYUFEaG5FZrirZ3lkWLJpSrAnVItfmHuxYUi2q2UAXCggNARqaCwgAAD//z71OWWCAAAA
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-1-4
+spec:
+    metadata:
+        name: SQL
+        operation: QueryContext.Next
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=
+        - type: '*ksql.Value'
+          data: H4sIAAAAAAAA/+L6387KyPS/i4GBged/NxMj0/8eBkYBBobI/x0ModFKTplefilVBpae6ba2SjogbniQUUZxcGhYcKK7X0myUUqIb1ZYeXiWV76vsydUiV9itptxiIGrZUAwTMgfbkgsIAAA///dgVQucgAAAA==
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-1-5
+spec:
+    metadata:
+        name: SQL
+        operation: QueryContext.Next
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=
+        - type: '*ksql.Value'
+          data: H4sIAAAAAAAA/+L6387KyPS/i4GBged/NxMj0/8eBkYBBobM/x0MqdFKTple/oEhBpae6ba2SjogbniQUUZxcGhYdkpOgUd4bkY2iB9pVFAWZRjmEZSXkx1o4OUdauhqGRDsCdXiF+ZeXBWSjSwUEAozNBYQAAD//z76ydWCAAAA
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-1-6
+spec:
+    metadata:
+        name: SQL
+        operation: QueryContext.Next
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=
+        - type: '*ksql.Value'
+          data: H4sIAAAAAAAA/+L6387KyPS/i4GBged/NxMj0/8eBkYBBob/ff87GP53Ris5ZXr5h4YYWHqm29oq6YC44UFGGcXBoWEmKbl+JaHhKZm+OTl5Ua4p+UmuOe7BeU6ZSeFBZiFGOc5h4W4eYeEpYUlhkeVRbhneKaE5Hv7hhl7Bbl5l4Tl+ziHubhF+4SaZEGP9ErPdjEMiki0Dgj2hNvlHVUEtjgUEAAD//yV+wfmoAAAA
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-1-7
+spec:
+    metadata:
+        name: SQL
+        operation: QueryContext.Next
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=
+        - type: '*ksql.Value'
+          data: H4sIAAAAAAAA/+L6387KyPS/i4GBged/NxMj0/8eBkYBBobQ/x0MgdFKTple/lFVBpae6ba2SjogbliwW1RVpIGfc5CRW0RIllNGWFWOIULaL8y92DAk29UyINgTKhQQGAI1IBYQAAD//3ETDaZuAAAA
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-1-8
+spec:
+    metadata:
+        name: SQL
+        operation: QueryContext.Next
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=
+        - type: '*ksql.Value'
+          data: H4sIAAAAAAAA/+L6387KyPS/i4GBged/NxMj0/8eBkYBBobY/x0MkdFKTple/ilVBpae6ba2SjogbphvtmlZZFiyYaKRl0dYXo63r4FhXphrSnFqbpBTQIhBJkSZX5h7sWFIRLJlQLAnVGdAYAjUoFhAAAAA///VDYJSdgAAAA==
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-1-9
+spec:
+    metadata:
+        name: SQL
+        operation: QueryContext.Next
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=
+        - type: '*ksql.Value'
+          data: H4sIAAAAAAAA/+L6387KyPS/i4GBged/NxMj0/8eBkYBBobS/x0MhdFKTpleAYEhBpae6ba2SjogbniQUUZxcGhYdkquZ2VohJ9XsJtXWXiOn3OgYU5EaHhKVFhVWFFwaEZwkmFBSGBOVKJvXrohQrtfmHtxZUhusmVAsCdUCGFBLCAAAP//nraIHo4AAAA=
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-1-10
+spec:
+    metadata:
+        name: SQL
+        operation: QueryContext.Next
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=
+        - type: '*ksql.Value'
+          data: H4sIAAAAAAAA/+L6387KyPS/i4GBged/NxMj0/8eBkYBBob/s/53MPyfGq3klOkVEBpiYOmZbmurpAPihgcZZRQHh4aZpOT6lYSGp2T65uTkRbmm5Ce55rgH5zllJoUHmYUY5TiHhbt5hIWnBCeFRVVFZieb+hr5ViZ6OGUFGngZhefmOPu6g+XDksIrDMPzki0Dgj2hVvglZrsZh4S5Ign5R1VBHRELCAAA//+kNwTLtAAAAA==
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-1-11
+spec:
+    metadata:
+        name: SQL
+        operation: QueryContext.Next
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=
+        - type: '*ksql.Value'
+          data: H4sIAAAAAAAA/+L6387KyPS/i4GBged/NxMj0/8eBkYBBob/bf87GP43Ris5ZXr5hbm6Wnqm29oq6YC44UFGGcXBoWEmKbl+JaHhKZm+OTl5Ua4p+UmuOe7BeU6ZSeFBZiFGOc5h4W4eYeEp4cHuQUbBoVHBKbmBlWF5OVkpVQZIxvklZrsZh4QnWwYEe0KF/KNgKmIBAQAA//96uU1voAAAAA==
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-1-12
+spec:
+    metadata:
+        name: SQL
+        operation: QueryContext.Next
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=
+        - type: '*ksql.Value'
+          data: H4sIAAAAAAAA/+L6387KyPS/i4GBged/NxMj0/8eBkYBBobQ/x0MgdFKTplefmGuoZae6ba2SjogbnBSeEVpZGhGUJSha2Wqi1tUVJUBkrRfmHuxYYihq2VAsCdUKCAwBKoiFhAAAP//2Fs/1W4AAAA=
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-1-13
+spec:
+    metadata:
+        name: SQL
+        operation: QueryContext.Next
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=
+        - type: '*ksql.Value'
+          data: H4sIAAAAAAAA/+L6387KyPS/i4GBged/NxMj0/8eBkYBBobQ/x0MgdFKTplefmGu2Zae6ba2SjogbniQUUZxcGhoRaJ7kGdwnlNOYIgBkrRfmHuxYYihq2VAsCdUKACuIhYQAAD//8KogGduAAAA
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-1-14
+spec:
+    metadata:
+        name: SQL
+        operation: QueryContext.Next
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=
+        - type: '*ksql.Value'
+          data: H4sIAAAAAAAA/+L6387KyPS/i4GBged/NxMj0/8eBkYBBobQ/x0MgdFKTplefmGuBpae6ba2SjogbnBSSI5ppJFheGpukEtgdkZ2WJWbMULaL8y92DAk29UyINgTKhQQGAI1IBYQAAD//9mBFhRuAAAA
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-1-15
+spec:
+    metadata:
+        name: SQL
+        operation: QueryContext.Next
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=
+        - type: '*ksql.Value'
+          data: H4sIAAAAAAAA/+L6387KyPS/i4GBged/NxMj0/8eBkYBBgbf/x0MntFKTplefmFurpae6ba2SjogbkhYVVhheE6Gs6+7W4R/RGgmRNgvMdvNJCTU1TIg2BOqMiAwxACiMRYQAAD//6r11UNmAAAA
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-1-16
+spec:
+    metadata:
+        name: SQL
+        operation: QueryContext.Next
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=
+        - type: '*ksql.Value'
+          data: H4sIAAAAAAAA/+L6387KyPS/i4GBged/NxMj0/8eBkYBBobU/x0MidFKTplefmFuoZae6ba2SjogbniQUUZxcGhYcKK7X0myUUqIb1ZYeXiWV76va457cJ5Tlm9OlBlCuV9itptJSHiyZUCwJ1TIP6XKAGJgLCAAAP//5T1WMH4AAAA=
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-1-17
+spec:
+    metadata:
+        name: SQL
+        operation: QueryContext.Next
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgeN/EwMLo6u/GyAAAP//44mLRBQAAAA=
+        - type: '*ksql.Value'
+          data: H4sIAAAAAAAA/+L6387KyPS/i4GBged/NxMj0/8eBkYBBobU/x0MidFKTplefmFuoZae6ba2SjogbniQUUZxcGhYcKK7X0myUUqIb1ZYeXiWV76va457cJ5Tlm9OlBlCuV9itptJSHiyZUCwJ1TIP6XKAGJgLCAAAP//5T1WMH4AAAA=
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-1-18
+spec:
+    metadata:
+        name: SQL
+        operation: QueryContext.Close
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=

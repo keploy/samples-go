@@ -1,0 +1,68 @@
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-3-0
+spec:
+    metadata:
+        arguments: '[{ 1 Everything Everywhere All At Once} { 2 2022} { 3 10}]'
+        name: SQL
+        operation: ExecContext
+        query: INSERT INTO movies (title, year, rating) VALUES (?, ?, ?)
+        type: SQL_DB
+    objects:
+        - type: '*ksql.Result'
+          data: H4sIAAAAAAAA/3L/38vMyMgWlFpcmlPC+L+PgZGFkccnsbjEM684tagkNYWRhYGRzce1qCi/iJGHgZE9KL+82DEtDSwcBBNmYGD+38cACAAA///N7/azTAAAAA==
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBwfJ/E4MpY0pRZllqkZVCcXZmgUJaYnGJbkFiSYa1QnJ+XklmXmmqQmKxQmaaQmleZm5BTmpual5JagogAAD//9R+44VFAAAA
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-3-1
+spec:
+    metadata:
+        name: SQL
+        operation: PrepareContext
+        query: INSERT INTO movies (title, year, rating) VALUES (?, ?, ?)
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-3-2
+spec:
+    metadata:
+        name: SQL
+        operation: PrepareContext.NumInput
+        type: SQL_DB
+    objects:
+        - type: '*int'
+          data: H4sIAAAAAAAA/2JmYWADBAAA//8bfZvdBAAAAA==
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-3-3
+spec:
+    metadata:
+        arguments: '[Everything Everywhere All At Once 2022 10]'
+        name: SQL
+        operation: PrepareContext.Exec
+        query: INSERT INTO movies (title, year, rating) VALUES (?, ?, ?)
+        type: SQL_DB
+    objects:
+        - type: '*ksql.Result'
+          data: H4sIAAAAAAAA/3L/38vMyMgWlFpcmlPC+L+PgZGFkccnsbjEM684tagkNYWRhYGRzce1qCi/iJGHgZE9KL+82DEtDSwcBBNmYGD/38eowMTEAAgAAP//z+T5P1AAAAA=
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-3-4
+spec:
+    metadata:
+        name: SQL
+        operation: PrepareContext.Close
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=

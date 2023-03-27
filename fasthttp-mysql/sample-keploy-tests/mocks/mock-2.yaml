@@ -1,0 +1,154 @@
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-2-0
+spec:
+    metadata:
+        arguments: '[]'
+        name: SQL
+        operation: QueryContext
+        query: SELECT COUNT(ID) FROM movies;
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-2-1
+spec:
+    metadata:
+        name: SQL
+        operation: QueryContext.Columns
+        type: SQL_DB
+    objects:
+        - type: '*[]string'
+          data: H4sIAAAAAAAA/+L538rEyPS/jYGRh4GBD0RzOvuH+oVoeLpoAgIAAP//S6AB7BwAAAA=
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-2-2
+spec:
+    metadata:
+        name: SQL
+        operation: QueryContext.Next
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=
+        - type: '*ksql.Value'
+          data: H4sIAAAAAAAA/+L6387KyPS/i4GBged/NxMj0/8eBkYBBgaR/x0MAtFKTplefmFuoZae6ba2SrGAAAAA///4kOMuLQAAAA==
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-2-3
+spec:
+    metadata:
+        name: SQL
+        operation: QueryContext.Close
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-2-4
+spec:
+    metadata:
+        arguments: '[{ 1 15}]'
+        name: SQL
+        operation: QueryContext
+        query: SELECT * FROM movies WHERE id = ?
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBwfJ/E4MpY0pRZllqkZVCcXZmgUJaYnGJbkFiSYa1QnJ+XklmXmmqQmKxQmaaQmleZm5BTmpual5JagogAAD//9R+44VFAAAA
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-2-5
+spec:
+    metadata:
+        name: SQL
+        operation: PrepareContext
+        query: SELECT * FROM movies WHERE id = ?
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-2-6
+spec:
+    metadata:
+        name: SQL
+        operation: PrepareContext.NumInput
+        type: SQL_DB
+    objects:
+        - type: '*int'
+          data: H4sIAAAAAAAA/2JmYWACBAAA//8CufbaBAAAAA==
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-2-7
+spec:
+    metadata:
+        arguments: '[15]'
+        name: SQL
+        operation: PrepareContext.Query
+        query: SELECT * FROM movies WHERE id = ?
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-2-8
+spec:
+    metadata:
+        name: SQL
+        operation: QueryContext.Columns
+        type: SQL_DB
+    objects:
+        - type: '*[]string'
+          data: H4sIAAAAAAAA/+L538rEyPS/jYGRh4FB8n8bAwtTZgprSWZJTipLZWpiEVtRYklmXjogAAD//xce9EInAAAA
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-2-9
+spec:
+    metadata:
+        name: SQL
+        operation: QueryContext.Next
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=
+        - type: '*ksql.Value'
+          data: H4sIAAAAAAAA/+L6387KyPS/i4GBged/NxMj0/8eBkYBBgbf/x0MntFKjlmuhko6Sk6ZXuFBRhnFwaFhwYnufiXJRikhvllh5eFZXvm+rjnuwXlOWb45UWae6ba2SjpKjlme5b4hnhBmsq1SLCAAAP//K06LG2YAAAA=
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-2-10
+spec:
+    metadata:
+        name: SQL
+        operation: QueryContext.Close
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-2-11
+spec:
+    metadata:
+        name: SQL
+        operation: PrepareContext.Close
+        type: SQL_DB
+    objects:
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638jKyPS/hYGBgfV/EwMjIyAAAP//ngbw8hEAAAA=
