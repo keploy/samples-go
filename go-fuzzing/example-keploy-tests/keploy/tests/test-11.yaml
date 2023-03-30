@@ -9,21 +9,17 @@ spec:
         proto_minor: 1
         url: /books
         header:
-            Accept: '*/*'
+            Accept-Encoding: gzip
             Content-Length: "71"
             Content-Type: application/json
-            User-Agent: curl/7.88.1
-        body: |-
-            {"id":"1",
-                "title": "Let Us C",
-                "author": "Yashwant Kanetkar"
-            }
+            User-Agent: Go-http-client/1.1
+        body: '{"id":"5118991178208641749","title":"ToFgoilA0U","author":"1WxNeW1gdg"}'
         body_type: utf-8
     resp:
         status_code: 201
         header:
             Content-Type: application/json; charset=utf-8
-        body: '{"id":"1","title":"Let Us C","author":"Yashwant Kanetkar"}'
+        body: '{"id":"5118991178208641749","title":"ToFgoilA0U","author":"1WxNeW1gdg"}'
         body_type: utf-8
         status_message: ""
         proto_major: 1
@@ -33,4 +29,4 @@ spec:
           data: H4sIAAAAAAAA/wEAAP//AAAAAAAAAAA=
     assertions:
         noise: []
-    created: 1680060377
+    created: 1680145965

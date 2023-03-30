@@ -1,0 +1,32 @@
+version: api.keploy.io/v1beta2
+kind: Http
+name: test-1059
+spec:
+    metadata: {}
+    req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: /books
+        header:
+            Accept-Encoding: gzip
+            Content-Length: "71"
+            Content-Type: application/json
+            User-Agent: Go-http-client/1.1
+        body: '{"id":"6398422308802311431","title":"68kewNYXAu","author":"T4VVSPId06"}'
+        body_type: utf-8
+    resp:
+        status_code: 201
+        header:
+            Content-Type: application/json; charset=utf-8
+        body: '{"id":"6398422308802311431","title":"68kewNYXAu","author":"T4VVSPId06"}'
+        body_type: utf-8
+        status_message: ""
+        proto_major: 1
+        proto_minor: 1
+    objects:
+        - type: error
+          data: H4sIAAAAAAAA/wEAAP//AAAAAAAAAAA=
+    assertions:
+        noise: []
+    created: 1680145966

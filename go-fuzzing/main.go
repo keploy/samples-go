@@ -1,8 +1,12 @@
 package main
 
 import (
+	"bytes"
+	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/keploy/go-sdk/integrations/kgin/v1"
@@ -45,6 +49,20 @@ func CreateBookHandler(c *gin.Context) {
 	c.JSON(http.StatusCreated, book)
 }
 
+// Create random strings of specified length
+func randomString(length int) string {
+	var result strings.Builder
+	var charSet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+
+	for i := 0; i < length; i++ {
+		randomIndex := rand.Intn(len(charSet))
+		randomChar := string(charSet[randomIndex])
+		result.WriteString(randomChar)
+	}
+
+	return result.String()
+}
+
 func main() {
 	port := "8080"
 
@@ -67,6 +85,36 @@ func main() {
 	router.GET("/books", GetBooksHandler)
 	router.GET("/books/:id", GetBookHandler)
 	router.POST("/books", CreateBookHandler)
+
+	// Fuzzing function
+	go func() {
+		for {
+			// Generate random input data
+			id := rand.Int()
+			title := randomString(10)
+			author := randomString(10)
+			requestBody := fmt.Sprintf(`{"id":"%d","title":"%s","author":"%s"}`, id, title, author)
+
+			// Create request with random data
+			req, err := http.NewRequest(http.MethodPost, "http://localhost:"+port+"/books", bytes.NewBuffer([]byte(requestBody)))
+			if err != nil {
+				log.Fatal(err)
+			}
+			req.Header.Set("Content-Type", "application/json")
+
+			// Make request
+			resp, err := http.DefaultClient.Do(req)
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer resp.Body.Close()
+
+			// Log response status code if it's 400
+			if resp.StatusCode == http.StatusBadRequest {
+				log.Printf("fuzzing: status code = %d with data %s\n", resp.StatusCode, requestBody)
+			}
+		}
+	}()
 
 	log.Fatal(http.ListenAndServe(":"+port, router))
 }

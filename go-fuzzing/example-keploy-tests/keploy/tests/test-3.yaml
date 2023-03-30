@@ -9,21 +9,17 @@ spec:
         proto_minor: 1
         url: /books
         header:
-            Accept: '*/*'
-            Content-Length: "85"
+            Accept-Encoding: gzip
+            Content-Length: "71"
             Content-Type: application/json
-            User-Agent: curl/7.88.1
-        body: |-
-            {
-                "title": "The Hitchhikers Guide to the Galaxy",
-                "author": "Douglas Adams"
-            }
+            User-Agent: Go-http-client/1.1
+        body: '{"id":"5018949295715050020","title":"9jZ8uVbhV3","author":"vC5AWX39IV"}'
         body_type: utf-8
     resp:
         status_code: 201
         header:
             Content-Type: application/json; charset=utf-8
-        body: '{"title":"The Hitchhikers Guide to the Galaxy","author":"Douglas Adams"}'
+        body: '{"id":"5018949295715050020","title":"9jZ8uVbhV3","author":"vC5AWX39IV"}'
         body_type: utf-8
         status_message: ""
         proto_major: 1
@@ -33,4 +29,4 @@ spec:
           data: H4sIAAAAAAAA/wEAAP//AAAAAAAAAAA=
     assertions:
         noise: []
-    created: 1680060239
+    created: 1680145965
