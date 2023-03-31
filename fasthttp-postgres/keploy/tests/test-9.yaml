@@ -1,0 +1,42 @@
+version: api.keploy.io/v1beta2
+kind: Http
+name: test-9
+spec:
+    metadata: {}
+    req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: /books/1
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Connection: keep-alive
+            Content-Length: "10"
+            Content-Type: application/json
+            Host: localhost:8080
+            Postman-Token: b1da86cd-d38f-42e5-8040-b59ca6808d20
+            User-Agent: PostmanRuntime/7.31.3
+        body: |-
+            {
+                ""
+            }
+        body_type: utf-8
+    resp:
+        status_code: 200
+        header:
+            Content-Type: text/plain; charset=utf-8
+            Server: Server
+        body: '{"id":1,"title":"Oliver Twist","year":1837,"author":{"id":1,"first_name":"Charles","last_name":"Dickens"}}'
+        body_type: utf-8
+        status_message: ""
+        proto_major: 1
+        proto_minor: 1
+    objects:
+        - type: error
+          data: H4sIAAAAAAAA/wEAAP//AAAAAAAAAAA=
+    mocks:
+        - mock-9-0
+    assertions:
+        noise: []
+    created: 1680290475

@@ -1,0 +1,14 @@
+version: api.keploy.io/v1beta2
+kind: SQL
+name: mock-14-0
+spec:
+    metadata:
+        arguments: '[{ 1 book} { 2 1958} { 3 0}]'
+        name: SQL
+        operation: ExecContext
+        query: '"INSERT INTO books(title, year, author_id) VALUES ($1, $2, $3);"'
+        type: SQL_DB
+    type: error
+    int: 0
+    error:
+        - 'pq: insert or update on table "books" violates foreign key constraint "fk_author"'
