@@ -165,6 +165,7 @@ github.com/k0kubun/pp/v3 v3.1.0 h1:ifxtqJkRZhw3h554/z/8zm6AAbyO4LLKDlA5eV+9O8Q=
 github.com/k0kubun/pp/v3 v3.1.0/go.mod h1:vIrP5CF0n78pKHm2Ku6GVerpZBJvscg48WepUYEk2gw=
 github.com/keploy/go-sdk v0.7.10 h1:7emdUmmSOEjY+kKH415MOKysu1+b2Tkax+TCbeVXgSw=
 github.com/keploy/go-sdk v0.7.10/go.mod h1:Q3h6kaOm+mIDk+lEtld0ungdQDoCCyEkpSFfkeU3LAY=
+github.com/keploy/go-sdk v0.8.2/go.mod h1:uJubewtbp3uOsbmKv7L77dVTGRgQigqknIsoQyDJ1pk=
 github.com/kevinmbeaulieu/eq-go v1.0.0/go.mod h1:G3S8ajA56gKBZm4UB9AOyoOS37JO3roToPzKNM8dtdM=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
 github.com/klauspost/compress v1.13.6/go.mod h1:/3/Vjq9QcHkK5uEr5lBEmyoZ1iFhe47etQ6QUkpK6sk=
@@ -244,6 +245,7 @@ github.com/yuin/goldmark v1.1.32/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9de
 github.com/yuin/goldmark v1.3.5/go.mod h1:mwnBkeHKe2W/ZEtQ+71ViKU8L12m81fl3OWwC1Zlc8k=
 go.keploy.io/server v0.7.21 h1:Cjn6Eob1ZOSD3xedvqD1X7RdQnWTGNl3B/PWauF5efw=
 go.keploy.io/server v0.7.21/go.mod h1:8rOT9hrWC0xqKm0L8XqjskMEnSwGq3D2tFoAeBBRgA0=
+go.keploy.io/server v0.8.2/go.mod h1:NdVsySEK6BCZdqeqY5eCIMJL01VmfvPIvjxBpBUcsQE=
 go.mongodb.org/mongo-driver v1.8.3 h1:TDKlTkGDKm9kkJVUOAXDK5/fkqKHJVwYQSpoRfB43R4=
 go.mongodb.org/mongo-driver v1.8.3/go.mod h1:0sQWfOeY63QTntERDJJ/0SuKK0T1uVSgKCuAROlKEPY=
 go.opencensus.io v0.21.0/go.mod h1:mSImk1erAIZhrmZN+AvHh14ztQfjbGwt4TtuofqLduU=
