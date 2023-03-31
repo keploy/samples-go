@@ -1,0 +1,43 @@
+version: api.keploy.io/v1beta2
+kind: Http
+name: test-6
+spec:
+    metadata: {}
+    req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: /authors
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Connection: keep-alive
+            Content-Length: "10"
+            Content-Type: application/json
+            Host: localhost:8080
+            Postman-Token: 5bb71b72-692e-437a-b9b5-4c924babd1d1
+            User-Agent: PostmanRuntime/7.31.3
+        body: |-
+            {
+                ""
+            }
+        body_type: utf-8
+    resp:
+        status_code: 200
+        header:
+            Content-Type: text/plain; charset=utf-8
+            Server: Server
+        body: '[{"id":1,"first_name":"Charles","last_name":"Dickens"},{"id":2,"first_name":"Alexandre","last_name":"Dumas"},{"id":3,"first_name":"Jane","last_name":"Austin"},{"id":4,"first_name":"Franz","last_name":"Kafka"},{"id":5,"first_name":"Mark","last_name":"Twain"},{"id":6,"first_name":"Leo","last_name":"Tolsoy"},{"id":7,"first_name":"Alexander","last_name":"Pushkin"}]'
+        body_type: utf-8
+        status_message: ""
+        proto_major: 1
+        proto_minor: 1
+    objects:
+        - type: error
+          data: H4sIAAAAAAAA/wEAAP//AAAAAAAAAAA=
+    mocks:
+        - mock-6-0
+        - mock-6-1
+    assertions:
+        noise: []
+    created: 1680290260
