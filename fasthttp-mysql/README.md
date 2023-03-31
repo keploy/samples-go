@@ -66,9 +66,6 @@ go run .
 - POST /movie - Add a movie
 - GET /movie - Get last added movie
 - GET /movies - Get all movies
-<!-- - GET /movies?year={value} - Get all movies of year {value}
-- GET /movies?rating={value} - Get all movies of rating {value}
-- GET /movies?year={value}&rating={value2} - Get all movies of year {value} and rating {value2} -->
 
 ## Generate Test Cases
 
@@ -117,12 +114,6 @@ To generate Test Runs, close the application and run the below command:
 export KEPLOY_MODE="test"
 go test -v -coverpkg=./... -covermode=atomic  ./...
 ```
-
-Once done, you can see the Test Runs on the Keploy server, like this:
-
-<!-- 
-Add Test Runs image here
- -->
 
 ## Check the MySQL database
 
