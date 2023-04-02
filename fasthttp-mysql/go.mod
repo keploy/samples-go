@@ -37,7 +37,7 @@ require (
 
 require (
 	github.com/andybalholm/brotli v1.0.5 // indirect
-	github.com/keploy/go-sdk v0.8.3
+	github.com/keploy/go-sdk v0.8.4
 	github.com/klauspost/compress v1.16.3 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 )
