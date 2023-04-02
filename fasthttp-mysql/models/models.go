@@ -4,6 +4,7 @@ import (
 	"database/sql"
 
 	"github.com/go-sql-driver/mysql"
+	// _ "github.com/go-sql-driver/mysql"
 	"github.com/keploy/go-sdk/integrations/ksql/v1"
 )
 
@@ -21,20 +22,26 @@ type Movie struct {
 	Rating int    `json:"rating" db:"rating"`
 }
 
+var db *sql.DB
+
 func init() {
+	// Registering the keploy driver to the database/sql package.
 	// Register keploy sql driver to database/sql package. This should only be done once.
 	driver := ksql.Driver{Driver: new(mysql.MySQLDriver)}
 	sql.Register("keploy", &driver)
-	db := Connect()
+	db = Connect()
+
+	// https://stackoverflow.com/questions/39980902/golang-mysql-error-packets-go33-unexpected-eof
+	// TL;DR connection timeout of server should be larger than client timeout
 	db.SetMaxIdleConns(0)
 }
 
 // Connect returns a MySQL database connection object.
 // Connect to the database and return a pointer to the database connection.
 func Connect() *sql.DB {
-	db, err := sql.Open("keploy", "root:root@/moviedb")
+	newConnection, err := sql.Open("keploy", "root:root@/moviedb")
 	if err != nil {
 		panic(err)
 	}
-	return db
+	return newConnection
 }

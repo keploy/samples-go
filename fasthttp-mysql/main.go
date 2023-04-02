@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fasthttp-sql/models"
 	"log"
 
 	"github.com/gookit/color"
@@ -24,26 +23,23 @@ func main() {
 	})
 
 	kMiddleware := kfasthttp.FastHttpMiddleware(kConfig)
-	db := models.Connect()
-	defer db.Close()
-	db.SetConnMaxIdleTime(0)
-
+	
 	routes := func(ctx *fasthttp.RequestCtx) {
 		switch string(ctx.Path()) {
 		case "/":
 			color.Info.Tips("GET /")
-			GETindex(ctx, db)
+			GETindex(ctx)
 		case "/movie":
 			if ctx.IsPost() {
 				color.Info.Tips("POST /movie")
-				POSTMovie(ctx, db)
+				POSTMovie(ctx)
 			} else {
 				color.Info.Tips("GET /movie")
-				GETmovie(ctx, db)
+				GETmovie(ctx)
 			}
 		case "/movies":
 			color.Info.Tips("GET /movies")
-			GETAllMovies(ctx, db)
+			GETAllMovies(ctx)
 		default:
 			ctx.Error("Unsupported path", fasthttp.StatusNotFound)
 		}
