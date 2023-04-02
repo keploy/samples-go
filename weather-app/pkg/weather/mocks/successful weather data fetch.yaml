@@ -1,0 +1,36 @@
+version: api.keploy.io/v1beta2
+kind: Http
+name: successful weather data fetch
+spec:
+    metadata:
+        name: Http
+        operation: GET
+        type: HTTP_CLIENT
+    req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://api.openweathermap.org/data/2.5/weather?q=New York&appid=56bd01265a70326b2712ed64cf1a3c5e
+        header: {}
+        body: ""
+        body_type: utf-8
+    resp:
+        status_code: 200
+        header:
+            Access-Control-Allow-Credentials: "true"
+            Access-Control-Allow-Methods: GET, POST
+            Access-Control-Allow-Origin: '*'
+            Connection: keep-alive
+            Content-Length: "487"
+            Content-Type: application/json; charset=utf-8
+            Date: Sun, 02 Apr 2023 14:53:10 GMT
+            Server: openresty
+            X-Cache-Key: /data/2.5/weather?q=new york
+        body: '{"coord":{"lon":-74.006,"lat":40.7143},"weather":[{"id":800,"main":"Clear","description":"clear sky","icon":"01d"}],"base":"stations","main":{"temp":279.67,"feels_like":274.81,"temp_min":278.12,"temp_max":281.12,"pressure":1012,"humidity":41},"visibility":10000,"wind":{"speed":9.77,"deg":320,"gust":15.95},"clouds":{"all":0},"dt":1680446703,"sys":{"type":2,"id":2039034,"country":"US","sunrise":1680431891,"sunset":1680477647},"timezone":-14400,"id":5128581,"name":"New York","cod":200}'
+        body_type: utf-8
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+    objects:
+        - type: error
+          data: H4sIAAAAAAAA/wEAAP//AAAAAAAAAAA=

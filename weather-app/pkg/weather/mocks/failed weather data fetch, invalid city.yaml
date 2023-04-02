@@ -1,0 +1,36 @@
+version: api.keploy.io/v1beta2
+kind: Http
+name: failed weather data fetch, invalid city
+spec:
+    metadata:
+        name: Http
+        operation: GET
+        type: HTTP_CLIENT
+    req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://api.openweathermap.org/data/2.5/weather?q=InvalidCity&appid=56bd01265a70326b2712ed64cf1a3c5e
+        header: {}
+        body: ""
+        body_type: utf-8
+    resp:
+        status_code: 404
+        header:
+            Access-Control-Allow-Credentials: "true"
+            Access-Control-Allow-Methods: GET, POST
+            Access-Control-Allow-Origin: '*'
+            Connection: keep-alive
+            Content-Length: "40"
+            Content-Type: application/json; charset=utf-8
+            Date: Sun, 02 Apr 2023 14:53:10 GMT
+            Server: openresty
+            X-Cache-Key: /data/2.5/weather?q=invalidcity
+        body: '{"cod":"404","message":"city not found"}'
+        body_type: utf-8
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+    objects:
+        - type: error
+          data: H4sIAAAAAAAA/wEAAP//AAAAAAAAAAA=
