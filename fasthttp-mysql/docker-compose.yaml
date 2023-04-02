@@ -1,0 +1,9 @@
+version: '3.7'
+services:
+    mysql:
+        build:
+          context: .
+          target: mysql
+        restart: always
+        ports:
+          - '3306:3306'
