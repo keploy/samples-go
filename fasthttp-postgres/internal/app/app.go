@@ -1,7 +1,6 @@
 package app
 
 import (
-	"context"
 	"database/sql"
 	"fasthttp-postgres/internal/handlers"
 	"fasthttp-postgres/internal/repository"
@@ -24,9 +23,6 @@ func InitApp() {
 	db, err := sql.Open("keploy", uri)
 	if err != nil {
 		log.Fatal("Error connecting to database")
-	}
-	if err = db.PingContext(context.Background()); err != nil {
-		log.Fatal("Ping doesn't work")
 	}
 	repo := repository.NewRepository(db)
 	ctrl := handlers.NewHandler(repo)
