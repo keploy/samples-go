@@ -62,6 +62,18 @@ go run .
 
 > export KEPLOY_MODE="record" changes the env to record test cases
 
+## Object template
+```
+you can copy paste this object template and enter your own values:
+{
+ "username":  
+ "name": "",
+ "nationality": "",
+ "title":"",
+ "hobbies": "",
+ "linkedin": "",
+ "twitter": ""
+};
 
 
 ## Routes
