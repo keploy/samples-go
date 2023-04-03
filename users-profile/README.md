@@ -74,7 +74,7 @@ you can copy paste this object template and enter your own values:
  "linkedin": "",
  "twitter": ""
 };
-
+```
 
 ## Routes
 > Sample Application Port: http://localhost:8080
