@@ -62,19 +62,8 @@ go run .
 
 > export KEPLOY_MODE="record" changes the env to record test cases
 
-## Object template
-```
-you can copy paste this object template and enter your own values:
-{
- "username":  
- "name": "",
- "nationality": "",
- "title":"",
- "hobbies": "",
- "linkedin": "",
- "twitter": ""
-};
-```
+
+
 
 ## Routes
 > Sample Application Port: http://localhost:8080
@@ -89,6 +78,19 @@ you can copy paste this object template and enter your own values:
 > Keploy Port: http://localhost:6789/testlist
 
 To generate Test Cases, you need to make some API calls. It could be using Thunder Client, Postman Desktop Agent, or your preferred API testing tool.
+here you can use this object template below for testing:
+```shell
+you can copy paste this object template:
+{
+ "username": "CurlyParadox" 
+ "name": "Nishant Mishra",
+ "nationality": "Indian",
+ "title":"Developer Advocate at Keploy",
+ "hobbies": "Drumming",
+ "linkedin": "@curlyparadox",
+ "twitter": "@curlyParadox"
+};
+```
 
 **Post Request**
 ![POST-request](assets/POST-request.png)
