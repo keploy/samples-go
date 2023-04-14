@@ -22,7 +22,7 @@ jobs:
           PERSONAL_ACCESS_TOKEN: "${{ secrets.PRO_ACCESS_TOKEN }}"
         with:
           remote-organization-name: "keploy"
-          remote-repository-name: "website"
+          remote-repository-name: "samples-go"
           path-to-signatures: "etc/cla-signatures/signatures.json"
           path-to-document: "https://github.com/ItsRoy69/samples-go/tree/main/.github/CLA.md"
           branch: "cla-signatures"
