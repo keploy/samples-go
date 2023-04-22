@@ -112,6 +112,7 @@ func main() {
 			// Log response status code if it's 400
 			if resp.StatusCode == http.StatusBadRequest {
 				log.Printf("fuzzing: status code = %d with data %s\n", resp.StatusCode, requestBody)
+				break
 			}
 		}
 	}()
