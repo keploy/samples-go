@@ -81,15 +81,15 @@ To generate Test Cases, you need to make some API calls. It could be using Thund
 here you can use this object template below for testing:
 ```shell
 you can copy paste this object template:
-{
- "username": "CurlyParadox" 
- "name": "Nishant Mishra",
- "nationality": "Indian",
- "title":"Developer Advocate at Keploy",
- "hobbies": "Drumming",
- "linkedin": "@curlyparadox",
- "twitter": "@curlyParadox"
-};
+curl -X POST -H "Content-Type: application/json" -d '{
+  "username": "CurlyParadox",
+  "name": "Nishant Mishra",
+  "nationality": "Indian",
+  "title": "Developer Advocate at Keploy",
+  "hobbies": "Drumming",
+  "linkedin": "@curlyparadox",
+  "twitter": "@curlyParadox"
+}' "http://localhost:6789/testlist"
 ```
 
 **Post Request**
