@@ -68,7 +68,7 @@ export KEPLOY_MODE=record && go run handler.go main.go
 
 To genereate testcases we just need to make some API calls. You can use [Postman](https://www.postman.com/), [Hoppscotch](https://hoppscotch.io/), or simply `curl`
 
-###1. Create an index
+### 1. Create an index
 
 ```bash
 curl --request POST \
@@ -86,7 +86,7 @@ this will create an index named "es-test" in elastic-search. The ts would automa
 }
 ```
 
-###2. Get the movie name from elastic-search
+### 2. Get the movie name from elastic-search
 ```bash
 curl --request GET \
   --url http://localhost:8080/param \
@@ -97,7 +97,7 @@ curl --request GET \
 }'
 ```
 
-###3. Delete a document from elastic-search
+### 3. Delete a document from elastic-search
 ```bash
 curl --request DELETE \
   --url http://localhost:8080/param \
