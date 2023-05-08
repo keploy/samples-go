@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"net/http"
 	"os"
 
 	"github.com/labstack/echo/v4"
@@ -44,6 +45,7 @@ func main() {
 
 	// kecho.EchoV4(k, r) // Tie echo router in with Keploy
 
+	r.GET("/ritik", Get)
 	r.GET("/:param", GetURL)
 	r.POST("/url", PutURL)
 	r.DELETE("/:param", DeleteURL)
@@ -53,4 +55,11 @@ func main() {
 		panic(err)
 	}
 
+}
+
+func Get(c echo.Context) error {
+	c.JSON(http.StatusOK, map[string]string{
+		"message": "ok",
+	})
+	return nil
 }

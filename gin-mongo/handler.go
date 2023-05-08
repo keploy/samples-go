@@ -4,6 +4,12 @@ import (
 	"context"
 	"crypto/sha256"
 	"fmt"
+	"io/ioutil"
+	"log"
+	"math/big"
+	"net/http"
+	"time"
+
 	"math/big"
 	"net/http"
 	"time"
@@ -26,7 +32,23 @@ type url struct {
 func Get(ctx context.Context, id string) (*url, error) {
 	filter := bson.M{"_id": id}
 	var u url
-	err := col.FindOne(ctx, filter).Decode(&u)
+	clientOptions := options.Client()
+
+	clientOptions.ApplyURI("mongodb://" + "localhost:27017" + "/" + "keploy" + "?retryWrites=true&w=majority")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	client, err := mongo.Connect(ctx, clientOptions)
+	if err != nil {
+		log.Fatal("failed to create mgo db client", zap.Error(err))
+	}
+	dbName, collection := "keploy", "url-shortener"
+	db := client.Database(dbName)
+
+	// integrate keploy with mongo
+	// col = kmongo.NewCollection(db.Collection(collection))
+	col := db.Collection(collection)
+	err = col.FindOne(ctx, filter).Decode(&u)
 	if err != nil {
 		return nil, err
 	}
@@ -48,12 +70,36 @@ func Upsert(ctx context.Context, u url) error {
 	return nil
 }
 
+func get(c *gin.Context) {
+	resp, err := http.Get("http://localhost:8082/ritik")
+	if err != nil {
+		log.Println("failed to make http call from handler. error: ", err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": `failed to make http call from handler. error: ` + err.Error()})
+	}
+
+	respBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Println("failed to read http response. error: ", err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": `failed to read http response. error: ` + err.Error()})
+	}
+
+	log.Println("the response body: ", string(respBody))
+
+	// Get(c.Request.Context(), "ritik")
+
+	c.JSON(http.StatusOK, gin.H{
+		"ts":  time.Now().UnixNano(),
+		"url": "http://localhost:8080/",
+	})
+}
+
 func getURL(c *gin.Context) {
 	hash := c.Param("param")
 	if hash == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "please append url hash"})
 		return
 	}
+	log.Printf("recieved param: %v\n", hash)
 
 	u, err := Get(c.Request.Context(), hash)
 	if err != nil {
@@ -101,8 +147,9 @@ func putURL(c *gin.Context) {
 func New(host, db string) (*mongo.Client, error) {
 	clientOptions := options.Client()
 
-	clientOptions.ApplyURI("mongodb://" + host + "/" + db + "?retryWrites=true&w=majority")
+	clientOptions = clientOptions.ApplyURI("mongodb://" + host + "/" + db + "?retryWrites=true&w=majority")
 
+	clientOptions = clientOptions.SetHeartbeatInterval(4 * time.Second)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	return mongo.Connect(ctx, clientOptions)
