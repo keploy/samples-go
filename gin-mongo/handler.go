@@ -34,7 +34,9 @@ func Get(ctx context.Context, id string) (*url, error) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
+	clientOptions = clientOptions.SetHeartbeatInterval(40 * time.Second)
 	client, err := mongo.Connect(ctx, clientOptions)
+	// defer client.Disconnect(ctx)
 	if err != nil {
 		log.Fatal("failed to create mgo db client", zap.Error(err))
 	}
@@ -59,7 +61,26 @@ func Upsert(ctx context.Context, u url) error {
 	filter := bson.M{"_id": u.ID}
 	update := bson.D{{"$set", u}}
 
-	_, err := col.UpdateOne(ctx, filter, update, opt)
+	clientOptions := options.Client()
+
+	clientOptions.ApplyURI("mongodb://" + "localhost:27017" + "/" + "keploy" + "?retryWrites=true&w=majority")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	clientOptions = clientOptions.SetHeartbeatInterval(40 * time.Second)
+	defer cancel()
+	client, err := mongo.Connect(ctx, clientOptions)
+	// defer client.Disconnect(ctx)
+	if err != nil {
+		log.Fatal("failed to create mgo db client", zap.Error(err))
+	}
+	dbName, collection := "keploy", "url-shortener"
+	db := client.Database(dbName)
+
+	// integrate keploy with mongo
+	// col = kmongo.NewCollection(db.Collection(collection))
+	col := db.Collection(collection)
+
+	_, err = col.UpdateOne(ctx, filter, update, opt)
 	if err != nil {
 		return err
 	}
