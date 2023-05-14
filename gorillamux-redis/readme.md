@@ -201,7 +201,7 @@ output should look like
 ok  	sample-app	5.032s	coverage: 71.4% of statements in ./...
 ```
 
-> **We got 55.1% without writing any e2e testcases or mocks for Redis!**
+> **We got 71.4% without writing any e2e testcases or mocks for Redis!**
 
 So no need to setup fake database/apis like Redis or write mocks for them. Keploy automatically mocks them and, **The application thinks it's talking to Redis 😄**
 
