@@ -28,23 +28,29 @@ type url struct {
 func Get(ctx context.Context, id string) (*url, error) {
 	filter := bson.M{"_id": id}
 	var u url
-	clientOptions := options.Client()
+	// clientOptions := options.Client()
 
-	clientOptions.ApplyURI("mongodb://" + "localhost:27017" + "/" + "keploy" + "?retryWrites=true&w=majority")
+	// clientOptions.ApplyURI("mongodb://" + "localhost:27017" + "/" + "keploy" + "?retryWrites=true&w=majority")
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	client, err := mongo.Connect(ctx, clientOptions)
-	if err != nil {
-		log.Fatal("failed to create mgo db client", zap.Error(err))
-	}
-	dbName, collection := "keploy", "url-shortener"
-	db := client.Database(dbName)
+	// ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	// defer cancel()F
+	// client, err := mongo.Connect(ctx, clientOptions)
+	// if err != nil {
+	// 	log.Fatal("failed to create mgo db client", zap.Error(err))
+	// }
+	// dbName, collection := "keploy", "url-shortener"
+	// db := client.Database(dbName)
 
-	// integrate keploy with mongo
-	// col = kmongo.NewCollection(db.Collection(collection))
-	col := db.Collection(collection)
-	err = col.FindOne(ctx, filter).Decode(&u)
+	// // integrate keploy with mongo
+	// // col = kmongo.NewCollection(db.Collection(collection))
+	// col := db.Collection(collection)
+
+	// col, err := New()
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	err := col.FindOne(ctx, filter).Decode(&u)
 	if err != nil {
 		return nil, err
 	}
@@ -59,8 +65,31 @@ func Upsert(ctx context.Context, u url) error {
 	filter := bson.M{"_id": u.ID}
 	update := bson.D{{"$set", u}}
 
+	// clientOptions := options.Client()
+
+	// clientOptions.ApplyURI("mongodb://" + "localhost:27017" + "/" + "keploy" + "?retryWrites=true&w=majority")
+
+	// ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	// defer cancel()
+	// client, err := mongo.Connect(ctx, clientOptions)
+	// if err != nil {
+	// 	log.Fatal("failed to create mgo db client", zap.Error(err))
+	// }
+	// dbName, collection := "keploy", "url-shortener"
+	// db := client.Database(dbName)
+
+	// // integrate keploy with mongo
+	// // col = kmongo.NewCollection(db.Collection(collection))
+	// col := db.Collection(collection)
+
+	// col, err := New()
+	// if err != nil {
+	// 	return err
+	// }
+
 	_, err := col.UpdateOne(ctx, filter, update, opt)
 	if err != nil {
+		log.Panic("failed to upsert the url ",err)
 		return err
 	}
 	return nil
@@ -68,6 +97,7 @@ func Upsert(ctx context.Context, u url) error {
 
 func get(c *gin.Context) {
 	resp, err := http.Get("http://localhost:8082/ritik")
+	// resp, err := http.Get("https://catfact.ninja/fact")
 	if err != nil {
 		log.Println("failed to make http call from handler. error: ", err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": `failed to make http call from handler. error: ` + err.Error()})
@@ -141,13 +171,34 @@ func putURL(c *gin.Context) {
 }
 
 func New(host, db string) (*mongo.Client, error) {
+// func New() (*mongo.Collection, error) {
+
 	clientOptions := options.Client()
 
-	clientOptions = clientOptions.ApplyURI("mongodb://" + host + "/" + db + "?retryWrites=true&w=majority")
-
-	clientOptions = clientOptions.SetHeartbeatInterval(4 * time.Second)
+	// clientOptions.ApplyURI("mongodb://" + "localhost:27017" + "/" + "keploy" + "?retryWrites=true&w=majority")
+	// clientOptions = clientOptions.SetHeartbeatInterval(30 * time.Second)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
+	// client, err := mongo.Connect(ctx, clientOptions)
+	// if err != nil {
+	// 	log.Fatal("failed to create mgo db client", zap.Error(err))
+	// }
+	// dbName, collection := "keploy", "url-shortener"
+	// db := client.Database(dbName)
+
+	// integrate keploy with mongo
+	// col = kmongo.NewCollection(db.Collection(collection))
+	// col = db.Collection(collection)
+	// return col, nil
+
+	// clientOptions := options.Client()
+
+	// clientOptions = clientOptions.ApplyURI("mongodb://" + host + "/" + db + "?retryWrites=true&w=majority")
+	clientOptions = clientOptions.ApplyURI("mongodb+srv://" + "ritik:ritik@cluster0.9kavrbr.mongodb.net/" + db+ "?retryWrites=true&w=majority")
+
+	clientOptions = clientOptions.SetHeartbeatInterval(120 * time.Hour)
+	// ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	// defer cancel()
 	return mongo.Connect(ctx, clientOptions)
 }
 

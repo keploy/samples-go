@@ -3,10 +3,10 @@ module echo-psql-url-shortener
 go 1.17
 
 require (
+	github.com/go-sql-driver/mysql v1.7.1
 	github.com/itchyny/base58-go v0.2.0
 	github.com/keploy/go-sdk v0.8.2
 	github.com/labstack/echo/v4 v4.9.0
-	github.com/lib/pq v1.10.4
 	go.uber.org/zap v1.22.0
 )
 

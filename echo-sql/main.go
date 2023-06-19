@@ -9,8 +9,9 @@ import (
 
 	"github.com/keploy/go-sdk/keploy"
 	"github.com/labstack/echo/v4"
-	_ "github.com/lib/pq"
+	// _ "github.com/lib/pq"
 	"go.uber.org/zap"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 var port = "8082"
@@ -29,9 +30,9 @@ func main() {
 
 	Database, err = NewConnection(ConnectionDetails{
 		host:     "localhost",
-		port:     "5438",
-		user:     "postgres",
-		password: "postgres",
+		port:     "3306",
+		user:     "root",
+		password: "my-secret-pw",
 		db_name:  "postgres",
 	})
 
@@ -67,6 +68,7 @@ func main() {
 }
 
 func Get(c echo.Context) error {
+	println("got ingress request\n ")
 	c.JSON(http.StatusOK, map[string]string{
 		"message": "ok",
 	})

@@ -10,11 +10,29 @@ import (
 	"time"
 
 	"github.com/itchyny/base58-go"
-	"github.com/keploy/go-sdk/integrations/ksql/v2"
+	// "github.com/keploy/go-sdk/integrations/ksql/v2"
 	"github.com/labstack/echo/v4"
-	"github.com/lib/pq"
+	// "github.com/lib/pq"
+	_ "github.com/go-sql-driver/mysql"
 )
 
+func NewConnection(conn_details ConnectionDetails) (*sql.DB, error) {
+	// Connect to PostgreSQL database
+	// db_info := fmt.Sprintf("host=%s port=%s user=%s "+
+	// 	"password=%s dbname=%s sslmode=disable",
+	// 	conn_details.host, conn_details.port, conn_details.user, conn_details.password, conn_details.db_name)
+	db_info := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v", conn_details.user, conn_details.password, conn_details.host, conn_details.port, conn_details.db_name)
+	// driver := ksql.Driver{Driver: pq.Driver{}}
+
+	// sql.Register("keploy", &driver)
+
+	db, err := sql.Open("mysql", db_info)
+	if err != nil {
+		return nil, err
+	}
+
+	return db, nil
+}
 type ConnectionDetails struct {
 	host     string // The hostname (default "localhost")
 	port     string // The port to connect on (default "5438")
@@ -42,23 +60,6 @@ type successResponse struct {
 /*
 	Establishes a connection with the PostgreSQL instance.
 */
-func NewConnection(conn_details ConnectionDetails) (*sql.DB, error) {
-	// Connect to PostgreSQL database
-	db_info := fmt.Sprintf("host=%s port=%s user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		conn_details.host, conn_details.port, conn_details.user, conn_details.password, conn_details.db_name)
-
-	driver := ksql.Driver{Driver: pq.Driver{}}
-
-	sql.Register("keploy", &driver)
-
-	db, err := sql.Open("keploy", db_info)
-	if err != nil {
-		return nil, err
-	}
-
-	return db, nil
-}
 
 func InsertURL(c context.Context, entry URLEntry) error {
 	insert_query := `

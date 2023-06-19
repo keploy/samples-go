@@ -22,9 +22,11 @@ func main() {
 	logger, _ = zap.NewProduction()
 	defer logger.Sync() // flushes buffer, if any
 
-	dbName, collection := "keploy", "url-shortener"
+	dbName := "keploy"
+	collection := "url-shortener"
 
 	port := "8081"
+	
 	// initialize keploy
 	// k := keploy.New(keploy.Config{
 	// 	App: keploy.AppConfig{
@@ -47,9 +49,10 @@ func main() {
 	r.GET("/", get)
 	go func() {
 		log.Printf("Please wait. dont make api call now for mongo deps")
-		time.Sleep(30 * time.Second)
+		time.Sleep(35 * time.Second)
 		log.Printf("you can make api call now for mongo deps")
 		client, err := New("localhost:27017", dbName)
+		// _, err := New()
 		if err != nil {
 			logger.Fatal("failed to create mgo db client", zap.Error(err))
 		}
