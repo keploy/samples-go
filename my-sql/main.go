@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"os"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -38,6 +39,15 @@ func main() {
 	defer Database.Close()
 
 	r := echo.New()
+	r.HideBanner = true //Hide the banner
+
+	fmt.Println(`
+	__  __   __   __    ____    _____    _ 
+	|  \/  |  \ \ / /   / ___|  /     \  | |
+	| |\/| |   \ V /   \___ \  |       | | |
+	| |  | |    | |     ___) | |   (__\| | |___ 
+	|_|  |_|    |_|    |____/   \______\ |_____| 
+	`)
 
 	r.GET("/:param", GetURL)
 	r.POST("/url", PutURL)

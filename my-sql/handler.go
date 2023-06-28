@@ -70,6 +70,19 @@ func InsertURL(db *sql.DB, c context.Context, entry URLEntry) error {
 			SET updated_at = ?
 			WHERE id = ?
 	`
+
+	createRes, err := db.ExecContext(c, `CREATE TABLE IF NOT EXISTS url_map (
+		id char(8) NOT NULL,
+		redirect_url varchar(150) NOT NULL UNIQUE,
+		created_at timestamp NOT NULL,
+		updated_at timestamp NOT NULL,
+		PRIMARY KEY(id)
+	);`)
+	if err != nil {
+		return err
+	}
+	fmt.Println("result of create table: ", createRes)
+
 	res, err := db.QueryContext(c, select_query, entry.ID) // See if the URL already exists
 	if err != nil {
 		return err
@@ -115,6 +128,7 @@ func GetURL(c echo.Context) error {
 		password: "password",
 		db_name:  "shorturl_db",
 	})
+	defer Database.Close()
 	err := Database.PingContext(c.Request().Context())
 	if err != nil {
 		Logger.Error(err.Error())
@@ -154,6 +168,7 @@ func GetURL(c echo.Context) error {
 		return err
 	}
 
+	fmt.Println("Redirecting to URL: ", entry) // Will Print the URL if GET call is successful
 	c.Redirect(http.StatusPermanentRedirect, entry.Redirect_URL)
 	return nil
 }
@@ -166,17 +181,28 @@ func UpdateURL(c echo.Context) error {
 		password: "password",
 		db_name:  "shorturl_db",
 	})
-	err := Database.PingContext(c.Request().Context())
+	defer Database.Close()
+
+	req_body := new(urlRequestBody)
+
+	err := c.Bind(req_body)
 	if err != nil {
 		Logger.Error(err.Error())
-		return echo.NewHTTPError(http.StatusInternalServerError, "Could not connect to MySQL.")
+		return echo.NewHTTPError(http.StatusBadRequest, "Failed to decode request.")
 	}
+
+	u := req_body.URL
+
+	if u == "" {
+		return echo.NewHTTPError(http.StatusBadRequest, "Missing URL parameter")
+	}
+
 	id := c.Param("param")
-	var entry URLEntry
-	if err := c.Bind(&entry); err != nil {
-		return err
+	entry := URLEntry{
+		ID:           id,
+		Updated_At:   time.Now(),
+		Redirect_URL: u,
 	}
-	entry.ID = id
 
 	update_query := `
 		UPDATE url_map
@@ -184,43 +210,13 @@ func UpdateURL(c echo.Context) error {
 		WHERE id = ?
 	`
 
-	select_query := `
-		SELECT * 
-		FROM url_map
-		WHERE id = ?
-	`
-	res, err := Database.QueryContext(c.Request().Context(), select_query, entry.ID) // See if the URL already exists
-
+	_, err = Database.ExecContext(c.Request().Context(), update_query, entry.Redirect_URL, entry.Updated_At, entry.ID)
 	if err != nil {
 		Logger.Error(err.Error())
-		return echo.NewHTTPError(http.StatusInternalServerError, "Error encountered while attempting to lookup URL.")
+		return echo.NewHTTPError(http.StatusInternalServerError, "Could not update URL.")
 	}
-	defer res.Close()
-	if res.Next() {
-		var createdAt, updatedAt []uint8
-		err := res.Scan(&entry.ID, &entry.Redirect_URL, &createdAt, &updatedAt)
-		if err != nil {
-			Logger.Fatal(err.Error())
-			return echo.NewHTTPError(http.StatusInternalServerError, "Could not successfully scan retrieved DB entry.")
-		}
-		entry.Created_At, err = time.Parse("2006-01-02 15:04:05", string(createdAt))
-		if err != nil {
-			return err
-		}
-		entry.Updated_At, err = time.Parse("2006-01-02 15:04:05", string(updatedAt))
-		if err != nil {
-			return err
-		}
 
-		_, err = Database.ExecContext(c.Request().Context(), update_query, entry.Redirect_URL, entry.Updated_At, entry.ID)
-		if err != nil {
-			Logger.Error(err.Error())
-			return echo.NewHTTPError(http.StatusInternalServerError, "Could not update URL.")
-		}
-
-		return c.NoContent(http.StatusOK)
-	}
-	return echo.NewHTTPError(http.StatusNotFound, "Invalid URL ID.")
+	return c.NoContent(http.StatusOK)
 }
 
 func DeleteURL(c echo.Context) error {
@@ -231,6 +227,7 @@ func DeleteURL(c echo.Context) error {
 		password: "password",
 		db_name:  "shorturl_db",
 	})
+	defer Database.Close()
 	err := Database.PingContext(c.Request().Context())
 	if err != nil {
 		Logger.Error(err.Error())
@@ -258,7 +255,7 @@ func DeleteURL(c echo.Context) error {
 // GenerateShortLink, sha256Of, and base58Encoded functions remain the same.
 func PutURL(c echo.Context) error {
 
-	Database, _ := NewConnection(ConnectionDetails{
+	Database, _ = NewConnection(ConnectionDetails{
 		host:     "localhost",
 		port:     "3306",
 		user:     "user",
@@ -267,15 +264,17 @@ func PutURL(c echo.Context) error {
 	})
 
 	fmt.Println("connection established")
-	err := Database.PingContext(c.Request().Context())
-	if err != nil {
-		Logger.Error(err.Error())
-		return echo.NewHTTPError(http.StatusInternalServerError, "Could not connect to MySQL.")
-	}
+	// err := Database.PingContext(c.Request().Context())
+	// if err != nil {
+	// 	Logger.Error(err.Error())
+	// 	return echo.NewHTTPError(http.StatusInternalServerError, "Could not connect to MySQL.")
+	// }
+
+	// Database.
 
 	req_body := new(urlRequestBody)
 
-	err = c.Bind(req_body)
+	err := c.Bind(req_body)
 	if err != nil {
 		fmt.Println(req_body)
 		Logger.Error(err.Error())
