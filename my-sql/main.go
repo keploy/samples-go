@@ -49,9 +49,9 @@ func main() {
 	|_|  |_|    |_|    |____/   \______\ |_____| 
 	`)
 
-	r.GET("/:param", GetURL)
+	r.GET("url/:param", GetURL)
 	r.POST("/url", PutURL)
-	r.DELETE("/:param", DeleteURL)
+	r.DELETE("url/:param", DeleteURL)
 	r.PUT("/:param", UpdateURL)
 	err = r.Start(":" + port)
 	if err != nil {
