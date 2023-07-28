@@ -1,0 +1,16 @@
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mock-1-0
+spec:
+    metadata:
+        UpdateOptions: '[{<nil> <nil> <nil> <nil> 0xc00009a678}]'
+        filter: map[_id:Lhr4BWAi]
+        name: mongodb
+        operation: UpdateOne
+        type: NO_SQL_DB
+        update: '[{$set {Lhr4BWAi 2023-03-29 11:03:40.570143549 +0000 UTC m=+6.365212841 2023-03-29 11:03:40.570143549 +0000 UTC m=+6.365212841 https://google.com}}]'
+    objects:
+        - type: '*mongo.UpdateResult'
+          data: H4sIAAAAAAAA/4r738jMyMgTWpCSWJIalFpcmlPC+L+JgZGFkcc3sSQ5IzXFOb80r4SRhYGR1zc/JTMtE1kktKA4tagESYQLJuLpwijAwMDA/r+JkYmRiQEQAAD//4pyI9BnAAAA
+        - type: '*keploy.KError'
+          data: H4sIAAAAAAAA/+L638zKyPS/jYGBgfV/CwMjIyAAAP//7jjoexEAAAA=

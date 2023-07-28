@@ -128,6 +128,26 @@ func getURL(c *gin.Context) {
 	return
 }
 
+//Create a handler that makes a call to a wikipedia page and returns the response
+
+func getWiki(c *gin.Context) {
+	resp, err := http.Get("https://catfact.ninja/fact")
+	if err != nil {
+		log.Println("failed to make http call from handler. error: ", err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": `failed to make http call from handler. error: ` + err.Error()})
+	}
+	//Send the response back to the client
+	respBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Println("failed to read http response. error: ", err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": `failed to read http response. error: ` + err.Error()})
+	}
+	c.JSON(http.StatusOK, gin.H{ //Send the response back to the client in JSON format with the status code 200
+		"ts":  time.Now().UnixNano(),
+		"url": string(respBody),
+	})
+}
+
 func putURL(c *gin.Context) {
 	var m map[string]string
 

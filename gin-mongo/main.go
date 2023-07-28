@@ -43,7 +43,7 @@ func main() {
 
 	r.GET("/:param", getURL)
 	r.POST("/url", putURL)
-
+	r.GET("/wiki", getWiki)
 	r.GET("/", get)
 	// go func() {
 	// 	log.Printf("Please wait. dont make api call now for mongo deps")
