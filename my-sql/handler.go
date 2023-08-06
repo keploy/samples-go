@@ -71,7 +71,7 @@ func InsertURL(db *sql.DB, c context.Context, entry URLEntry) error {
 			WHERE id = ?
 	`
 
-	createRes, err := db.ExecContext(c, `CREATE TABLE IF NOT EXISTS url_map (
+	_, err := db.ExecContext(c, `CREATE TABLE IF NOT EXISTS url_map (
 		id char(8) NOT NULL,
 		redirect_url varchar(150) NOT NULL UNIQUE,
 		created_at timestamp NOT NULL,
@@ -81,7 +81,6 @@ func InsertURL(db *sql.DB, c context.Context, entry URLEntry) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println("result of create table: ", createRes)
 
 	res, err := db.QueryContext(c, select_query, entry.ID) // See if the URL already exists
 	if err != nil {
@@ -89,7 +88,7 @@ func InsertURL(db *sql.DB, c context.Context, entry URLEntry) error {
 	}
 	defer res.Close()
 	if res.Next() { // If we get rows back, that means we have a duplicate URL
-		var createdAt, updatedAt []uint8
+		var createdAt, updatedAt []byte
 		err := res.Scan(&entry.ID, &entry.Redirect_URL, &createdAt, &updatedAt)
 		if err != nil {
 			return err
@@ -104,7 +103,7 @@ func InsertURL(db *sql.DB, c context.Context, entry URLEntry) error {
 			return err
 		}
 
-		_, err = db.ExecContext(c, update_timestamp, entry.Updated_At, entry.ID)
+		_, err = db.ExecContext(c, update_timestamp, time.Now(), entry.ID)
 		if err != nil {
 			return err
 		}
@@ -121,14 +120,6 @@ func InsertURL(db *sql.DB, c context.Context, entry URLEntry) error {
 }
 
 func GetURL(c echo.Context) error {
-	Database, _ := NewConnection(ConnectionDetails{
-		host:     "localhost",
-		port:     "3306",
-		user:     "user",
-		password: "password",
-		db_name:  "shorturl_db",
-	})
-	defer Database.Close()
 	err := Database.PingContext(c.Request().Context())
 	if err != nil {
 		Logger.Error(err.Error())
@@ -174,14 +165,6 @@ func GetURL(c echo.Context) error {
 }
 
 func UpdateURL(c echo.Context) error {
-	Database, _ := NewConnection(ConnectionDetails{
-		host:     "localhost",
-		port:     "3306",
-		user:     "user",
-		password: "password",
-		db_name:  "shorturl_db",
-	})
-	defer Database.Close()
 
 	req_body := new(urlRequestBody)
 
@@ -220,14 +203,6 @@ func UpdateURL(c echo.Context) error {
 }
 
 func DeleteURL(c echo.Context) error {
-	Database, _ := NewConnection(ConnectionDetails{
-		host:     "localhost",
-		port:     "3306",
-		user:     "user",
-		password: "password",
-		db_name:  "shorturl_db",
-	})
-	defer Database.Close()
 	err := Database.PingContext(c.Request().Context())
 	if err != nil {
 		Logger.Error(err.Error())
@@ -254,14 +229,6 @@ func DeleteURL(c echo.Context) error {
 
 // GenerateShortLink, sha256Of, and base58Encoded functions remain the same.
 func PutURL(c echo.Context) error {
-
-	Database, _ = NewConnection(ConnectionDetails{
-		host:     "localhost",
-		port:     "3306",
-		user:     "user",
-		password: "password",
-		db_name:  "shorturl_db",
-	})
 
 	fmt.Println("connection established")
 	// err := Database.PingContext(c.Request().Context())

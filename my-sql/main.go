@@ -24,13 +24,13 @@ func main() {
 	Logger, _ = zap.NewProduction()
 	defer Logger.Sync()
 
-	//	Database, err = NewConnection(ConnectionDetails{
-	//		host:     "localhost",
-	//		port:     "3306",
-	//		user:     "user",
-	//		password: "password",
-	//		db_name:  "shorturl_db",
-	//	})
+	Database, err = NewConnection(ConnectionDetails{
+		host:     "localhost",
+		port:     "3306",
+		user:     "user",
+		password: "password",
+		db_name:  "shorturl_db",
+	})
 
 	if err != nil {
 		Logger.Fatal("Failed to establish connection to local MySQL instance:", zap.Error(err))
