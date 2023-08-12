@@ -120,6 +120,14 @@ func InsertURL(db *sql.DB, c context.Context, entry URLEntry) error {
 }
 
 func GetURL(c echo.Context) error {
+	Database, _ := NewConnection(ConnectionDetails{
+		host:     "localhost",
+		port:     "3306",
+		user:     "user",
+		password: "password",
+		db_name:  "shorturl_db",
+	})
+	defer Database.Close()
 	err := Database.PingContext(c.Request().Context())
 	if err != nil {
 		Logger.Error(err.Error())
@@ -165,6 +173,14 @@ func GetURL(c echo.Context) error {
 }
 
 func UpdateURL(c echo.Context) error {
+	Database, _ := NewConnection(ConnectionDetails{
+		host:     "localhost",
+		port:     "3306",
+		user:     "user",
+		password: "password",
+		db_name:  "shorturl_db",
+	})
+	defer Database.Close()
 
 	req_body := new(urlRequestBody)
 
@@ -203,6 +219,14 @@ func UpdateURL(c echo.Context) error {
 }
 
 func DeleteURL(c echo.Context) error {
+	Database, _ := NewConnection(ConnectionDetails{
+		host:     "localhost",
+		port:     "3306",
+		user:     "user",
+		password: "password",
+		db_name:  "shorturl_db",
+	})
+	defer Database.Close()
 	err := Database.PingContext(c.Request().Context())
 	if err != nil {
 		Logger.Error(err.Error())
@@ -229,6 +253,14 @@ func DeleteURL(c echo.Context) error {
 
 // GenerateShortLink, sha256Of, and base58Encoded functions remain the same.
 func PutURL(c echo.Context) error {
+
+	Database, _ = NewConnection(ConnectionDetails{
+		host:     "localhost",
+		port:     "3306",
+		user:     "user",
+		password: "password",
+		db_name:  "shorturl_db",
+	})
 
 	fmt.Println("connection established")
 	// err := Database.PingContext(c.Request().Context())
