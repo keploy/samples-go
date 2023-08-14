@@ -82,10 +82,12 @@ func Upsert(ctx context.Context, u url) error {
 	// col = kmongo.NewCollection(db.Collection(collection))
 	col := db.Collection(collection)
 
-	_, err = col.UpdateOne(ctx, filter, update, opt)
+	mesg, err := col.UpdateOne(ctx, filter, update, opt)
 	if err != nil {
 		return err
 	}
+	fmt.Println(mesg)
+
 	return nil
 }
 
