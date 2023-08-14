@@ -4,6 +4,8 @@ import (
 	// "log"
 	// "time"
 
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
 
@@ -45,6 +47,7 @@ func main() {
 	r.POST("/url", putURL)
 
 	r.GET("/", get)
+	fmt.Println("Dsd")
 	// go func() {
 	// 	log.Printf("Please wait. dont make api call now for mongo deps")
 	// time.Sleep(30 * time.Second)
