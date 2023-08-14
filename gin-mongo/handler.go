@@ -86,7 +86,7 @@ func Upsert(ctx context.Context, u url) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println(mesg)
+	fmt.Println(mesg.UpsertedID,"what is this")
 
 	return nil
 }
