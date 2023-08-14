@@ -23,8 +23,7 @@ jobs:
         run: |
             uname -a
             host localhost
-            sudo -E env "PATH=$PATH" ./server test -c /home/runner/work/samples-go/samples-go/gin-mongo/test-app-url-shortener --delay 2
-            sudo cat /sys/kernel/debug/tracing/trace_pipe
+            sudo -E env "PATH=$PATH" ./server test -c /home/runner/work/samples-go/samples-go/gin-mongo/test-app-url-shortener --delay 2 && sudo cat /sys/kernel/debug/tracing/trace_pipe
         env:
           ENABLE_DEDUP: true
           ENABLE_TELEMETRY: true
