@@ -30,7 +30,7 @@ func Get(ctx context.Context, id string) (*url, error) {
 	var u url
 	clientOptions := options.Client()
 
-	clientOptions.ApplyURI("mongodb://" + "localhost:27017" + "/" + "keploy" + "?retryWrites=true&w=majority")
+	clientOptions.ApplyURI("mongodb://" + "127.0.0.1:27017" + "/" + "keploy" + "?retryWrites=true&w=majority")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -65,7 +65,7 @@ func Upsert(ctx context.Context, u url) error {
 
 	clientOptions := options.Client()
 
-	clientOptions.ApplyURI("mongodb://" + "localhost:27017" + "/" + "keploy" + "?retryWrites=true&w=majority")
+	clientOptions.ApplyURI("mongodb://" + "127.0.0.1:27017" + "/" + "keploy" + "?retryWrites=true&w=majority")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	clientOptions = clientOptions.SetHeartbeatInterval(40 * time.Second)
