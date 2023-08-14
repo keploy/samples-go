@@ -77,7 +77,7 @@ func Upsert(ctx context.Context, u url) error {
 	}
 	dbName, collection := "keploy", "url-shortener"
 	db := client.Database(dbName)
-
+	fmt.Println("it is coming in application")
 	// integrate keploy with mongo
 	// col = kmongo.NewCollection(db.Collection(collection))
 	col := db.Collection(collection)
