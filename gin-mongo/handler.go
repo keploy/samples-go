@@ -84,9 +84,10 @@ func Upsert(ctx context.Context, u url) error {
 
 	mesg, err := col.UpdateOne(ctx, filter, update, opt)
 	if err != nil {
+		fmt.Println(err.Error(),"this is error")
 		return err
 	}
-	fmt.Println(mesg.UpsertedID,"what is this")
+	fmt.Println(mesg.UpsertedID, "what is this")
 
 	return nil
 }
