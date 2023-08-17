@@ -1,0 +1,32 @@
+version: api.keploy.io/v1beta2
+kind: Mongo
+name: mocks
+spec:
+    metadata:
+        operation: '{ OpMsg flags: 0, sections: [{ SectionSingle msg: {"update":"url-shortener","ordered":true,"writeConcern":{"w":"majority"},"lsid":{"id":{"$binary":{"base64":"Gcyk39i6QoyesvoM3rOFjg==","subType":"04"}}},"$db":"keploy"} }, { SectionSingle identifier: updates , msgs: [ {"q":{"_id":"4KepjkTT"},"u":{"$set":{"_id":"4KepjkTT","created":{"$date":{"$numberLong":"1691952979135"}},"updated":{"$date":{"$numberLong":"1691952979135"}},"url":"https://github.com"}},"upsert":true} ] }], checksum: 0 }'
+    requests:
+        - header:
+            length: 301
+            requestId: 5
+            responseTo: 0
+            Opcode: 2013
+          message:
+            flagBits: 0
+            sections:
+                - '{ SectionSingle msg: {"update":"url-shortener","ordered":true,"writeConcern":{"w":"majority"},"lsid":{"id":{"$binary":{"base64":"Gcyk39i6QoyesvoM3rOFjg==","subType":"04"}}},"$db":"keploy"} }'
+                - '{ SectionSingle identifier: updates , msgs: [ {"q":{"_id":"4KepjkTT"},"u":{"$set":{"_id":"4KepjkTT","created":{"$date":{"$numberLong":"1691952979135"}},"updated":{"$date":{"$numberLong":"1691952979135"}},"url":"https://github.com"}},"upsert":true} ] }'
+            checksum: 0
+          read_delay: 9116429
+    responses:
+        - header:
+            length: 60
+            requestId: 18
+            responseTo: 5
+            Opcode: 2013
+          message:
+            flagBits: 0
+            sections:
+                - '{ SectionSingle msg: {"n":{"$numberInt":"1"},"nModified":{"$numberInt":"1"},"ok":{"$numberDouble":"1.0"}} }'
+            checksum: 0
+          read_delay: 1286238
+    created: 1691952979
