@@ -64,6 +64,7 @@ go run .
 
 
 
+
 ## Routes
 > Sample Application Port: http://localhost:8080
 - `/user` : POST - Create a new user in the database
@@ -77,6 +78,19 @@ go run .
 > Keploy Port: http://localhost:6789/testlist
 
 To generate Test Cases, you need to make some API calls. It could be using Thunder Client, Postman Desktop Agent, or your preferred API testing tool.
+here you can use this object template below for testing:
+```shell
+you can copy paste this object template:
+curl -X POST -H "Content-Type: application/json" -d '{
+  "username": "CurlyParadox",
+  "name": "Nishant Mishra",
+  "nationality": "Indian",
+  "title": "Developer Advocate at Keploy",
+  "hobbies": "Drumming",
+  "linkedin": "@curlyparadox",
+  "twitter": "@curlyParadox"
+}' "http://localhost:6789/testlist"
+```
 
 **Post Request**
 ![POST-request](assets/POST-request.png)
