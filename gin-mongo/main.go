@@ -18,8 +18,7 @@ func main() {
 
 	dbName, collection := "keploy", "url-shortener"
 
-	
-	client, err := New("localhost:27017", dbName)
+	client, err := New("mongoDb:27017", dbName)
 	if err != nil {
 		logger.Fatal("failed to create mgo db client", zap.Error(err))
 	}
@@ -29,7 +28,7 @@ func main() {
 
 	port := "8080"
 
-	println("PID:",os.Getpid())
+	println("PID:", os.Getpid())
 
 	r := gin.Default()
 

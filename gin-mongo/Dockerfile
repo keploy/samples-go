@@ -1,5 +1,5 @@
 # Use the Go 1.19 base image with the bullseye tag
-FROM golang:1.19-bullseye
+FROM golang:1.20-bookworm
 
 
 RUN apt-get update && \

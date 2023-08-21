@@ -1,23 +1,38 @@
 # Example URL Shortener
 A sample url shortener app to test Keploy integration capabilities
 
-## Installation
-### Start keploy server
-```shell
-git clone https://github.com/keploy/keploy.git && cd keploy
-docker-compose up
-```
+## Installation Using Docker
 
 ### Setup URL shortener
+
+Clone the repository and navigate to the `Gin-Mongo` folder.
 ```bash
-git clone https://github.com/keploy/example-url-shortener && cd example-url-shortener
+git clone https://github.com/keploy/samples-go && cd gin-mongo
+
 go mod download
 ```
 
-### Run the application
-```shell
-go run handler.go main.go
+### Create Keploy Alias
 
+```bash
+alias keploy='sudo docker run --name keploy-v2 -p 16789:16789 --privileged --pid=host -it -v "$(pwd)":/files -v /sys/fs/cgroup:/sys/fs/cgroup -v /sys/kernel/debug:/sys/kernel/debug -v /sys/fs/bpf:/sys/fs/bpf -v /var/run/docker.sock:/var/run/docker.sock --rm ghcr.io/keploy/keploy'
+```
+
+### Let's start the MongoDB Instance
+Using the docker-compose file we will start our mongodb instance:-
+```bash
+docker compose up -d
+```
+
+Now, we will create the docker image of our application:-
+
+```bash
+docker build -t gin-app:1.0 .
+```
+### Capture the Testcases
+
+```shell
+keploy record -c "docker run -p 8080:8080 --name MongoApp --network keploy-network gin-app:1.0" --containerName "MongoApp" --delay 10
 ```
 
 ## Generate testcases
@@ -50,16 +65,11 @@ curl --request GET \
 
 or by querying through the browser `http://localhost:8080/Lhr4BWAi`
 
-
-Now both these API calls were captured as a testcase and should be visible on the [Keploy console](http://localhost:6789/testlist).
-If you're using Keploy cloud, open [this](https://app.keploy.io/testlist).
-
-You should be seeing an app named `sample-url-shortener` with the test cases we just captured.
-
-![testcases](testcases.png?raw=true "Web console testcases")
-
-
 Now, let's see the magic! 🪄💫
+
+Now both these API calls were captured as a testcase and should be visible on the Keploy CLI. 
+
+You should be seeing an app named `keploy folder` with the test cases we just captured and data mocks created.
 
 
 ## Test mode
