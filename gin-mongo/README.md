@@ -32,7 +32,7 @@ docker build -t gin-app:1.0 .
 ### Capture the Testcases
 
 ```shell
-keploy record -c "docker run -p 8080:8080 --name MongoApp --network keploy-network gin-app:1.0" --containerName "MongoApp" --delay 10
+keploy record -c "docker run -p 8080:8080 --name MongoApp --network keploy-network gin-app:1.0"
 ```
 
 ## Generate testcases
