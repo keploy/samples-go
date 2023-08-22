@@ -39,7 +39,7 @@ keploy record -c "docker run -p 8080:8080 --name MongoApp --network keploy-netwo
 
 To genereate testcases we just need to make some API calls. You can use [Postman](https://www.postman.com/), [Hoppscotch](https://hoppscotch.io/), or simply `curl`
 
-###1. Generate shortned url
+### 1. Generate shortned url
 
 ```bash
 curl --request POST \
@@ -49,7 +49,7 @@ curl --request POST \
   "url": "https://google.com"
 }'
 ```
-this will return the shortened url. The ts would automatically be ignored during testing because it'll always be different. 
+this will return the shortened url. 
 ```
 {
   "ts": 1645540022,
@@ -76,41 +76,30 @@ You should be seeing an app named `keploy folder` with the test cases we just ca
 
 Now that we have our testcase captured, run the test file.
 ```shell
- go test -coverpkg=./... -covermode=atomic  ./...
+keploy test -c "sudo docker run -p 8010:8010 --rm --net keploy-network --name MongoApp gin-app:1.0" --delay 10
 ```
-output should look like
-```shell
-ok      test-app-url-shortener  6.268s  coverage: 80.3% of statements in ./...
-```
-
-**We got 80.3% without writing any testcases or mocks for mongo db!!**
-
 So no need to setup dependencies like mongoDB, web-go locally or write mocks for your testing.
 
 **The application thinks it's talking to
 mongoDB 😄**
 
-Go to the Keploy Console/testruns to get deeper insights on what testcases ran, what failed.
+We will get output something like this:
 
-![testruns](testrun1.png?raw=true "Recent testruns")
-![testruns](testrun2.png?raw=true "Summary")
-![testruns](testrun3.png?raw=true "Detail")
+![TestRun](./img/testrun-fail-1.png)
+![TestRun](./img/testrun-fail-2.png)
 
-### Make a code change
-Now try changing something like renaming `url` to `urls` in [handlers.go](./handler.go) on line 96 and running ` go test -coverpkg=./... -covermode=atomic  ./...` again
-```shell
-{"msg":"result","testcase id":"05a576e1-c03a-4c25-a469-4bea0307cd08","passed":false}
-{"msg":"result","testcase id":"cad6d926-b531-477c-935c-dd7314c4357a","passed":true}
-{"msg":"test run completed","run id":"19d4cba1-b77c-4301-884a-5b3f08dc6248","passed overall":false}
---- FAIL: TestKeploy (5.72s)
-    keploy.go:42: Keploy test suite failed
-FAIL
-coverage: 80.3% of statements in ./...
-FAIL    test-app-url-shortener  6.213s
-FAIL
+Go to the Keploy log to get deeper insights on what testcases ran, what failed. 
+
+The `ts` is causing be failure during testing because it'll always be different. 
+
+### Let's add Timestamp to Noisy field:
+In `test-1.yml` and `test-2.yml`, go the noisefield and under `-header.Data` add the `-body.ts`. Now, it's the time to run the test cases again.
+
+```bash
+keploy test -c "sudo docker run -p 8010:8010 --rm --net keploy-network --name MongoApp gin-app:1.0" --delay 10
 ```
 
-To deep dive the problem go to [test runs](http://localhost:6789/testruns)
+This time all the test cases will pass.
 
-![testruns](testrun4.png?raw=true "Recent testruns")
-![testruns](testrun5.png?raw=true "Detail")
+![testruns](./img/testrun.png?raw=true "Recent testruns")
+
