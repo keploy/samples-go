@@ -150,7 +150,7 @@ func getWiki(c *gin.Context) {
 	}
 
 	// Simulating a POST request
-	postResp, postErr := http.Post("https://reqres.in/api/users/2", "application/json", strings.NewReader(`{"data": "new data"}`))
+	postResp, postErr := http.Post("https://reqres.in/api/users", "application/json", strings.NewReader(`{"data": "new data"}`))
 	if postErr != nil {
 		log.Println("failed to make http POST call. error: ", postErr.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to create resource"})
@@ -160,7 +160,7 @@ func getWiki(c *gin.Context) {
 	defer postResp.Body.Close()
 
 	// Simulating an UPDATE request
-	updateReq, updateErr := http.NewRequest("DELETE", "https://reqres.in/api/users/3", strings.NewReader(`{"data": "updated data"}`))
+	updateReq, updateErr := http.NewRequest("DELETE", "https://reqres.in/api/users/2", strings.NewReader(`{"data": "updated data"}`))
 	if updateErr != nil {
 		log.Println("failed to create PUT request. error: ", updateErr.Error())
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create update request"})
