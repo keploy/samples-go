@@ -1,64 +1,53 @@
-# URL Shortener
+# Example URL Shortener
 A sample url shortener app to test Keploy integration capabilities
 
-## Installation
-### Start keploy server
-> Note that Testcases are exported as files in the repo by default
-
-<details>
-<summary>Mac</summary>
-
-```shell
-curl --silent --location "https://github.com/keploy/keploy/releases/latest/download/keploy_darwin_all.tar.gz" | tar xz -C /tmp
-
-sudo mv /tmp/keploy /usr/local/bin
-
-# start keploy with default settings
-keploy
-```
-
-</details>
-
-<details>
-<summary>Linux</summary>
-
-```shell
-curl --silent --location "https://github.com/keploy/keploy/releases/latest/download/keploy_linux_amd64.tar.gz" | tar xz -C /tmp
-
-sudo mv /tmp/keploy /usr/local/bin 
-
-# start keploy with default settings
-keploy
-```
-
-</details>
-
+## Installation Using Docker
 
 ### Setup URL shortener
+
+Clone the repository and navigate to the `Gin-Mongo` folder.
 ```bash
-git clone https://github.com/keploy/example-url-shortener && cd gin-mongo
+git clone https://github.com/keploy/samples-go && cd gin-mongo
 
 go mod download
 ```
 
-### Run the application
+### Create Keploy Alias
+
+We will create the docker network to work with our application and Keploy
+
+```bash
+docker network create keploy-network
+```
+
+Create an alias for Keploy CLI. 
+
+```bash
+alias keploy='sudo docker run --name keploy-v2 -p 16789:16789 --network keploy-network --privileged --pid=host -it -v "$(pwd)":/files -v /sys/fs/cgroup:/sys/fs/cgroup -v /sys/kernel/debug:/sys/kernel/debug -v /sys/fs/bpf:/sys/fs/bpf -v /var/run/docker.sock:/var/run/docker.sock --rm ghcr.io/keploy/keploy'
+```
+
+### Let's start the MongoDB Instance
+Using the docker-compose file we will start our mongodb instance:-
+```bash
+sudo docker run -p 27017:27017 -d --network keploy-network --name mongoDb mongo
+```
+
+Now, we will create the docker image of our application:-
+
+```bash
+docker build -t gin-app:1.0 .
+```
+### Capture the Testcases
+
 ```shell
-# Start mongo server on localhost:27017
-docker-compose up -d
-
-# run the sample app
-go run handler.go main.go
-
-# run the sample app in record mode
-export KEPLOY_MODE=record && go run handler.go main.go
-
+keploy record -c "docker run -p 8080:8080 --name MongoApp --network keploy-network gin-app:1.0"
 ```
 
 ## Generate testcases
 
 To genereate testcases we just need to make some API calls. You can use [Postman](https://www.postman.com/), [Hoppscotch](https://hoppscotch.io/), or simply `curl`
 
-###1. Generate shortned url
+### 1. Generate shortned url
 
 ```bash
 curl --request POST \
@@ -68,7 +57,7 @@ curl --request POST \
   "url": "https://google.com"
 }'
 ```
-this will return the shortened url. The ts would automatically be ignored during testing because it'll always be different. 
+this will return the shortened url. 
 ```
 {
   "ts": 1645540022,
@@ -76,63 +65,46 @@ this will return the shortened url. The ts would automatically be ignored during
 }
 ```
 
-### Redirect to original url from shortened url
-1. By using Curl Command
+###2. Redirect to original url from shortened url
 ```bash
 curl --request GET \
   --url http://localhost:8080/Lhr4BWAi
 ```
 
-2. By querying through the browser `http://localhost:8080/Lhr4BWAi`
-
-Now both these API calls were captured as editable testcases and written to keploy/tests folder. The keploy directory would also have mocks folder that contains all the outputs of postgres operations. Here's what the folder structure look like:
-
-```
-.
-├── README.md
-├── docker-compose.yml
-├── go.mod
-├── go.sum
-├── handler.go
-├── keploy
-│   ├── tests
-│       ├── test-1.yaml
-│       ├── test-2.yaml
-│       ├── test-3.yaml
-│   └── mocks
-│       ├── mock-1.yaml
-│       └── mock-2.yaml
-│       └── mock-3.yaml
-
-```
-
-![testcases](https://imgur.com/bcEvNED)
-
+or by querying through the browser `http://localhost:8080/Lhr4BWAi`
 
 Now, let's see the magic! 🪄💫
 
-## Generate Test Runs
+Now both these API calls were captured as a testcase and should be visible on the Keploy CLI. 
 
-To generate Test Runs, close the application and run the below command:
-```
-export KEPLOY_MODE="test"
-go test -v -coverpkg=./... -covermode=atomic  ./...
-```
+You should be seeing an app named `keploy folder` with the test cases we just captured and data mocks created.
 
 
-Once done, you can see the Test Runs on the Keploy server, like this:
-![test-runs](https://imgur.com/77bd1Oi)
+## Test mode
 
-### Make a code change
-Now try changing something like renaming `url` to `urls` in [handlers.go](./handler.go) on line 96 and running ` go test -coverpkg=./... -covermode=atomic  ./...` again
+Now that we have our testcase captured, run the test file.
 ```shell
-{"msg":"result","testcase id": "test-3", "passed": false}
-{"msg":"result","testcase id": "test-2", "passed": false}
-{"msg":"result","testcase id": "test-1", "passed": false}
-{"msg":"test run completed","run id": "97d0870c-737d-414d-80af-c56802f974e8", "passed overall": false}
---- FAIL: TestKeploy (5.77s)
-FAIL
-coverage: 64.8% of statements in ./...
-FAIL    test-app-url-shortener  6.787s
-FAIL
+keploy test -c "sudo docker run -p 8010:8010 --rm --net keploy-network --name MongoApp gin-app:1.0" --delay 10
 ```
+So no need to setup dependencies like mongoDB, web-go locally or write mocks for your testing.
+
+**The application thinks it's talking to
+mongoDB 😄**
+
+We will get output something like this:
+
+![TestRun](./img/testrun-fail-1.png)
+![TestRun](./img/testrun-fail-2.png)
+
+Go to the Keploy log to get deeper insights on what testcases ran, what failed. The `ts` is causing be failure during testing because it'll always be different. 
+
+### Let's add Timestamp to Noisy field:
+In `test-1.yml` and `test-2.yml`, go the noisefield and under `-header.Data` add the `-body.ts`. Now, it's the time to run the test cases again.
+
+```bash
+keploy test -c "sudo docker run -p 8010:8010 --rm --net keploy-network --name MongoApp gin-app:1.0" --delay 10
+```
+
+This time all the test cases will pass.
+
+![testruns](./img/testrun.png?raw=true "Recent testruns")
