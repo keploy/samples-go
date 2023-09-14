@@ -2,6 +2,8 @@ package main
 
 import (
 	"os"
+	
+	"github.com/joho/godotenv"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -15,7 +17,10 @@ var logger *zap.Logger
 func main() {
 	logger, _ = zap.NewProduction()
 	defer logger.Sync() // flushes buffer, if any
-	os.Setenv("MONGO_URL", "mongoDb:27017") //sets mongo_url as ENV
+	errENV := godotenv.Load(".env")
+	if errENV != nil {
+		logger.Fatal("faild to load ENV Variable")
+	}
 
 	dbName, collection := "keploy", "url-shortener"
 
