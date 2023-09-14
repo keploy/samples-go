@@ -15,10 +15,11 @@ var logger *zap.Logger
 func main() {
 	logger, _ = zap.NewProduction()
 	defer logger.Sync() // flushes buffer, if any
+	os.Setenv("MONGO_URL", "mongoDb:27017") //sets mongo_url as ENV
 
 	dbName, collection := "keploy", "url-shortener"
 
-	client, err := New("mongoDb:27017", dbName)
+	client, err := New(os.Getenv("MONGO_URL"), dbName)
 	if err != nil {
 		logger.Fatal("failed to create mgo db client", zap.Error(err))
 	}
