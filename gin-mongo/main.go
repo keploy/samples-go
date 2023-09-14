@@ -19,7 +19,7 @@ func main() {
 	defer logger.Sync() // flushes buffer, if any
 	errENV := godotenv.Load(".env")
 	if errENV != nil {
-		logger.Fatal("faild to load ENV Variable")
+		logger.Fatal("failed to load ENV Variable",zap.Error(errENV))
 	}
 
 	dbName, collection := "keploy", "url-shortener"
