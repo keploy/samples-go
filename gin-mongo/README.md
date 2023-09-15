@@ -18,54 +18,45 @@ There are two methods to run the sample application using Keploy :-
 
 ## Running app using Docker
 
-Keploy can be used on Linux & Windows through [Docker](https://docs.docker.com/engine/install/), and on MacOS by the help of [Colima](https://github.com/abiosoft/colima#installation)
+Keploy can be used on Linux & Windows through [Docker](https://docs.docker.com/engine/install/), and on MacOS by the help of [Colima](https://docs.keploy/io/server/macos/installation)
+
 
 ### Create Keploy Alias
 
-To establish a network for your application using Keploy on Docker, follow these steps.
+We will create the docker network to work with our application and Keploy
 
-If you're using a docker-compose network, replace keploy-network with your app's docker_compose_network_name below.
-
-```shell
+```bash
 docker network create keploy-network
 ```
 
-Then, create an alias for Keploy:
+Create an alias for Keploy CLI. 
+
 ```bash
-alias keploy='sudo docker run --pull always --name --network keploy-network keploy-v2 -p 16789:16789 --network keploy-network --privileged --pid=host -it -v "$(pwd)":/files -v /sys/fs/cgroup:/sys/fs/cgroup -v /sys/kernel/debug:/sys/kernel/debug -v /sys/fs/bpf:/sys/fs/bpf -v /var/run/docker.sock:/var/run/docker.sock --rm ghcr.io/keploy/keploy''
+alias keploy='sudo docker run --name keploy-v2 -p 16789:16789 --network keploy-network --privileged --pid=host -it -v "$(pwd)":/files -v /sys/fs/cgroup:/sys/fs/cgroup -v /sys/kernel/debug:/sys/kernel/debug -v /sys/fs/bpf:/sys/fs/bpf -v /var/run/docker.sock:/var/run/docker.sock --rm ghcr.io/keploy/keploy'
 ```
 
 ### Let's start the MongoDB Instance
-
 Using the docker-compose file we will start our mongodb instance:-
-
-```shell
-docker-compose up -d
-```
-
-Alternatively, we can run docker run command to start our MongoDB Instance by using: -
-
-```shell
-sudo docker run --rm -p27017:27017 -d --network keploy-network --name mongoDb mongo
+```bash
+sudo docker run -p 27017:27017 -d --network keploy-network --name mongoDb mongo
 ```
 
 Now, we will create the docker image of our application:-
 
-```shell
+
+```bash
 docker build -t gin-app:1.0 .
 ```
 
 ### Capture the Testcases
 
 ```shell
-keploy record -c "docker run -p 8080:8080 --name ginMongoApp --network keploy-network gin-app:1.0 --rm ginMongoApp"
+keploy record -c "docker run -p 8080:8080 --name MongoApp --network keploy-network gin-app:1.0"
 ```
-
-#### Generate testcases
 
 To genereate testcases we just need to make some API calls. You can use [Postman](https://www.postman.com/), [Hoppscotch](https://hoppscotch.io/), or simply `curl`
 
-**1. Generate shortned url**
+### 1. Generate shortned url
 
 ```bash
 curl --request POST \
@@ -76,8 +67,7 @@ curl --request POST \
 }'
 ```
 
-this will return the shortened url.
-
+this will return the shortened url. 
 ```
 {
   "ts": 1645540022,
