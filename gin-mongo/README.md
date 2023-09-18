@@ -18,7 +18,8 @@ There are two methods to run the sample application using Keploy :-
 
 ## Running app using Docker
 
-Keploy can be used on Linux & Windows through [Docker](https://docs.docker.com/engine/install/), and on MacOS by the help of [Colima](https://github.com/abiosoft/colima#installation)
+Keploy can be used on Linux & Windows through [Docker](https://docs.docker.com/engine/install/), and on MacOS by the help of [Colima](https://docs.keploy/io/server/macos/installation)
+
 
 ### Create Keploy Alias
 
@@ -28,36 +29,27 @@ alias keploy='sudo docker run --pull always --name keploy-v2 -p 16789:16789 --pr
 ```
 
 ### Let's start the MongoDB Instance
-
 Using the docker-compose file we will start our mongodb instance:-
-
-```shell
-docker-compose up -d
-```
-
-Alternatively, we can run docker run command to start our MongoDB Instance by using: -
-
-```shell
-sudo docker run --rm -p27017:27017 -d --network keploy-network --name mongoDb mongo
+```bash
+sudo docker run -p 27017:27017 -d --network keploy-network --name mongoDb mongo
 ```
 
 Now, we will create the docker image of our application:-
 
-```shell
+
+```bash
 docker build -t gin-app:1.0 .
 ```
 
 ### Capture the Testcases
 
 ```shell
-keploy record -c "docker run -p 8080:8080 --name ginMongoApp --network keploy-network gin-app:1.0 --rm ginMongoApp"
+keploy record -c "docker run -p 8080:8080 --name MongoApp --network keploy-network gin-app:1.0"
 ```
-
-#### Generate testcases
 
 To genereate testcases we just need to make some API calls. You can use [Postman](https://www.postman.com/), [Hoppscotch](https://hoppscotch.io/), or simply `curl`
 
-**1. Generate shortned url**
+### 1. Generate shortned url
 
 ```bash
 curl --request POST \
@@ -68,8 +60,7 @@ curl --request POST \
 }'
 ```
 
-this will return the shortened url.
-
+this will return the shortened url. 
 ```
 {
   "ts": 1645540022,
