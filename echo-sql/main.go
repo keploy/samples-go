@@ -4,9 +4,6 @@ import (
 	"database/sql"
 	"os"
 
-	"github.com/keploy/go-sdk/integrations/kecho/v4"
-
-	"github.com/keploy/go-sdk/keploy"
 	"github.com/labstack/echo/v4"
 	_ "github.com/lib/pq"
 	"go.uber.org/zap"
@@ -27,10 +24,11 @@ func main() {
 	defer Logger.Sync() // flushes buffer
 
 	Database, err = NewConnection(ConnectionDetails{
-		host:     "localhost",
-		port:     "5438",
+		// host:     "localhost",
+		host:     "echo-sql-postgres-1",
+		port:     "5432",
 		user:     "postgres",
-		password: "postgres",
+		password: "password",
 		db_name:  "postgres",
 	})
 
@@ -41,17 +39,10 @@ func main() {
 	defer Database.Close()
 
 	// init Keploy
-	k := keploy.New(keploy.Config{
-		App: keploy.AppConfig{
-			Name: "sample-url-shortener",
-			Port: port,
-		},
-	})
 
 	r := echo.New() // Init echo
 
 	// kecho.EchoV4(k, r) // Tie echo router in with Keploy
-	r.Use(kecho.EchoMiddlewareV4(k))
 
 	r.GET("/:param", GetURL)
 	r.POST("/url", PutURL)
