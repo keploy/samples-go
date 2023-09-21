@@ -14,8 +14,8 @@ import (
 )
 
 const (
-	DB_HOST = "graphql-sql-postgres-1"
-	//DB_HOST     = "localhost"
+	//DB_HOST = "graphql-sql-postgres-1"
+	DB_HOST     = "localhost"
 	DB_PORT     = "5432"
 	DB_USER     = "postgres"
 	DB_PASSWORD = "password"
