@@ -4,22 +4,21 @@ import (
 	"database/sql"
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/go-chi/chi"
 	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/handler"
-	"github.com/keploy/go-sdk/integrations/kchi"
-	"github.com/keploy/go-sdk/integrations/ksql/v1"
-	"github.com/keploy/go-sdk/keploy"
-	"github.com/lib/pq"
+	_ "github.com/lib/pq"
 )
 
 const (
+	//DB_HOST = "graphql-sql-postgres-1"
 	DB_HOST     = "localhost"
-	DB_PORT     = "5438"
+	DB_PORT     = "5432"
 	DB_USER     = "postgres"
-	DB_PASSWORD = "postgres"
+	DB_PASSWORD = "password"
 	DB_NAME     = "postgres"
 )
 
@@ -45,19 +44,15 @@ func checkErr(err error) {
 }
 
 func main() {
-	dbinfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+	db_info := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
-	fmt.Println("the connection url: ", dbinfo)
 
-	//Adding Keploy KSQL Driver
-	driver := ksql.Driver{Driver: pq.Driver{}}
-	sql.Register("keploy", &driver)
-	db, err := sql.Open("keploy", dbinfo)
-	checkErr(err)
-
-	//DB Ping
-	//err = db.Ping()
-	//checkErr(err)
+	var err error
+	db, err := sql.Open("postgres", db_info)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
+		os.Exit(1)
+	}
 
 	defer db.Close()
 
@@ -459,24 +454,8 @@ func main() {
 	})
 	r := chi.NewRouter()
 	port := "8080"
-	k := keploy.New(keploy.Config{
-		App: keploy.AppConfig{
-			Name: "gql_app",
-			Port: port,
-		},
-		Server: keploy.ServerConfig{
-			URL: "http://localhost:6789/api",
-		},
-	})
-	r.Use(kchi.ChiMiddlewareV5(k))
 	r.Handle("/graphql", h)
+	fmt.Println("app started on https://localhost:" + port)
 	http.ListenAndServe(":"+port, r)
 	checkErr(err)
-
 }
-
-// func Routes(h *handler.Handler) *chi.Mux {
-// 	router := chi.NewRouter()
-// 	router.Handle("/query", h)
-// 	return router
-// }
