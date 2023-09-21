@@ -118,3 +118,81 @@ output should look like
 ![Testrun](./img/testrun.png?raw=true)
 
 So no need to setup fake database/apis like Postgres or write mocks for them. Keploy automatically mocks them and, **The application thinks it's talking to Postgres 😄**
+
+# Using Docker
+
+Keploy can be used on Linux & Windows through Docker, and on MacOS by the help of [Colima](https://docs.keploy.io/docs/server/macos/installation/#using-colima)
+
+## Create Keploy Alias
+To establish a network for your application using Keploy on Docker, follow these steps.
+
+If you're using a docker-compose network, replace keploy-network with your app's `docker_compose_network_name` below.
+
+```shell
+alias keploy='sudo docker run --pull always --name keploy-v2 -p 16789:16789 --privileged --pid=host -it -v "$(pwd)":/files -v /sys/fs/cgroup:/sys/fs/cgroup -v /sys/kernel/debug:/sys/kernel/debug -v /sys/fs/bpf:/sys/fs/bpf -v /var/run/docker.sock:/var/run/docker.sock --rm ghcr.io/keploy/keploy'
+```
+## Let's start the MongoDB Instance
+Using the docker-compose file we will start our mongodb instance:-
+
+```zsh
+docker-compose up -d
+```
+> Since we are using docker to run the application, we need to update the `postgres` host on line 28 in `main.go`, update the host to `echo-sql-postgres-1`.
+
+Now, we will create the docker image of our application:-
+
+```zsh
+docker build -t echo-app:1.0 .
+```
+
+## Capture the Testcases
+
+```zsh
+keploy record -c "docker run -p 8082:8082 --rm --name echoSqlApp --network keploy-network echo-app:1.0"
+```
+
+![Testcase](./img/testcases.png?raw=true)
+
+### Generate testcases
+To genereate testcases we just need to make some API calls. You can use Postman, Hoppscotch, or simply curl
+
+1. Generate shortned url
+
+```zsh
+curl --request POST \
+  --url http://localhost:8082/url \
+  --header 'content-type: application/json' \
+  --data '{
+  "url": "https://google.com"
+}'
+```
+this will return the shortened url.
+```json
+{
+  "ts": 1645540022,
+  "url": "http://localhost:8082/Lhr4BWAi"
+}
+```
+2. Redirect to original url from shòrtened url
+
+```bash
+curl --request GET \
+  --url http://localhost:8082/Lhr4BWAi
+or by querying through the browser http://localhost:8082/Lhr4BWAi 
+```
+Now, let's see the magic! 🪄💫
+
+Now both these API calls were captured as a testcase and should be visible on the Keploy CLI. You should be seeing an app named keploy folder with the test cases we just captured and data mocks created.
+
+## Run the captured testcases
+Now that we have our testcase captured, run the test file.
+
+```zsh
+keploy test -c "sudo docker run -p 8082:8082 --rm --net keploy-network --name echoSqlApp echo-app:1.0 --rm echoSqlApp" --delay 10
+```
+So no need to setup dependencies like mongoDB, web-go locally or write mocks for your testing.
+
+The application thinks it's talking to mongoDB 😄
+
+We will get output something like this:
+![Testrun](./img/testrun.png?raw=true)
