@@ -24,9 +24,8 @@ func main() {
 	defer Logger.Sync() // flushes buffer
 
 	Database, err = NewConnection(ConnectionDetails{
-		host: "localhost",
-		//host:     "echo-sql-postgres-1",
-		port:     "5432",
+		host:     "0.0.0.0",
+		port:     "5438",
 		user:     "postgres",
 		password: "password",
 		db_name:  "postgres",
