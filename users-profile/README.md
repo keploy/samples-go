@@ -89,7 +89,7 @@ curl -X POST -H "Content-Type: application/json" -d '{
   "hobbies": "Drumming",
   "linkedin": "@curlyparadox",
   "twitter": "@curlyParadox"
-}' "http://localhost:6789/testlist"
+}' "http://localhost:8080/user"
 ```
 
 **Post Request**
