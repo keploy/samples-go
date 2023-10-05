@@ -11,5 +11,5 @@ jobs:
     - name: Test-Report
       uses: alphasians/test-reportql@main
       env:
-        GITHUB_WORKSPACE: ./gin-mongo
-        DELAY: 20
+        workdir: ./gin-mongo
+        delay: 20
