@@ -7,11 +7,11 @@ jobs:
   e2e-test:
     runs-on: ubuntu-latest
     env:
-      working-directory: ./gin-mongo
+      GITHUB_WORKSPACE: ${{github.workspace}}/gin-mongo
 
     steps:
     - name: Test-Report
       uses: alphasians/test-reportql@main
       with:
-        working-directory: ${{env.working-directory}}
+        working-directory: ${{env.GITHUB_WORKSPACE}}
         delay: 20
