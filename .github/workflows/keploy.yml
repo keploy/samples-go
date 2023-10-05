@@ -12,6 +12,6 @@ jobs:
     steps:
     - name: Test-Report
       uses: alphasians/test-reportql@main
-      env:
+      with:
         working-directory: ${{env.working-directory}}
         delay: 20
