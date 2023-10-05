@@ -6,10 +6,12 @@ on:
 jobs:
   e2e-test:
     runs-on: ubuntu-latest
+    env:
+      working-directory: ./gin-mongo
 
     steps:
     - name: Test-Report
       uses: alphasians/test-reportql@main
       env:
-        workdir: ./gin-mongo
+        working-directory: ${{env.working-directory}}
         delay: 20
