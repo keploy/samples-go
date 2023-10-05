@@ -5,3 +5,9 @@ services:
     container_name: mongoDB
     ports:
     - "27017:27017"
+    networks:
+      - keploy-network
+
+networks:
+  keploy-network:
+    external: true
