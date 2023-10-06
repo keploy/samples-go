@@ -1,0 +1,14 @@
+name: e2e Tests
+on:
+  push:
+    branches:
+      - main
+jobs:
+  e2e-test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Test-Report
+      uses: alphasians/test-reportql@main
+      with:
+        working-directory: "./gin-mongo"
+        delay: 20
