@@ -1,0 +1,209 @@
+version: api.keploy.io/v1beta2
+kind: Http
+name: mocks
+spec:
+    metadata:
+        name: Http
+        operation: POST
+        type: HTTP_CLIENT
+    req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: /
+        header:
+            Accept-Encoding: identity
+            Authorization: AWS4-HMAC-SHA256 Credential=dummy/20231006/us-west-2/dynamodb/aws4_request, SignedHeaders=accept-encoding;content-length;content-type;host;x-amz-date;x-amz-security-token;x-amz-target, Signature=7ffb757ab5b142ba0f22fba7b1e156e50120938a751ca2db205e8b6b777c2c4d
+            Content-Length: "119"
+            Content-Type: application/x-amz-json-1.0
+            User-Agent: aws-sdk-go/1.44.200 (go1.20.9; linux; arm64)
+            X-Amz-Date: 20231006T083451Z
+            X-Amz-Security-Token: dummy
+            X-Amz-Target: DynamoDB_20120810.GetItem
+        body: '{"Key":{"creationSource":{"S":"usersdsImmds"},"creationSourceType":{"S":"userIsmmdsds"}},"TableName":"user-onboarding"}'
+        body_type: ""
+    resp:
+        status_code: 200
+        header:
+            Content-Length: 2,2
+            Content-Type: application/x-amz-json-1.0
+            Date: Fri, 06 Oct 2023 08:34:51 GMT
+            Server: Jetty(11.0.11)
+            X-Amz-Crc32: "2745614147"
+            X-Amzn-Requestid: 9e7d02d0-c1b2-4f44-aa9c-26b4c3964065
+        body: '{}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+    objects: []
+    created: 1696581291
+curl: ""
+---
+version: api.keploy.io/v1beta2
+kind: Http
+name: mocks
+spec:
+    metadata:
+        name: Http
+        operation: POST
+        type: HTTP_CLIENT
+    req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: /
+        header:
+            Accept-Encoding: identity
+            Authorization: AWS4-HMAC-SHA256 Credential=dummy/20231006/us-west-2/dynamodb/aws4_request, SignedHeaders=accept-encoding;content-length;content-type;host;x-amz-date;x-amz-security-token;x-amz-target, Signature=f232fe11f0f1a02338ec71e87d30418e4f4cacc218b461c332fbb2f52a04c994
+            Content-Length: "118"
+            Content-Type: application/x-amz-json-1.0
+            User-Agent: aws-sdk-go/1.44.200 (go1.20.9; linux; arm64)
+            X-Amz-Date: 20231006T083453Z
+            X-Amz-Security-Token: dummy
+            X-Amz-Target: DynamoDB_20120810.GetItem
+        body: '{"Key":{"creationSource":{"S":"userIdssmmds"},"creationSourceType":{"S":"userdsImmds"}},"TableName":"user-onboarding"}'
+        body_type: ""
+    resp:
+        status_code: 200
+        header:
+            Content-Length: 2,2
+            Content-Type: application/x-amz-json-1.0
+            Date: Fri, 06 Oct 2023 08:34:53 GMT
+            Server: Jetty(11.0.11)
+            X-Amz-Crc32: "2745614147"
+            X-Amzn-Requestid: 09c29ccd-4a0a-4d4e-8caf-7ea50166867c
+        body: '{}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+    objects: []
+    created: 1696581293
+curl: ""
+---
+version: api.keploy.io/v1beta2
+kind: Http
+name: mocks
+spec:
+    metadata:
+        name: Http
+        operation: POST
+        type: HTTP_CLIENT
+    req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: /
+        header:
+            Accept-Encoding: identity
+            Authorization: AWS4-HMAC-SHA256 Credential=dummy/20231006/us-west-2/dynamodb/aws4_request, SignedHeaders=accept-encoding;content-length;content-type;host;x-amz-date;x-amz-security-token;x-amz-target, Signature=19ae1730902573a8ca870adce44f97e526b45d8a20dede7aeea7bfc6212b34cd
+            Content-Length: "225"
+            Content-Type: application/x-amz-json-1.0
+            User-Agent: aws-sdk-go/1.44.200 (go1.20.9; linux; arm64)
+            X-Amz-Date: 20231006T083453Z
+            X-Amz-Security-Token: dummy
+            X-Amz-Target: DynamoDB_20120810.PutItem
+        body: '{"Item":{"creationSource":{"S":"userIdssmmds"},"creationSourceType":{"S":"userdsImmds"},"email":{"S":"sdsdsdsda"},"password":{"S":"$2a$10$e33lLezOsja7Tkb15oEpzO4oKxua0IEY3VJ3goAYeAJT5PyjII2Ea"}},"TableName":"user-onboarding"}'
+        body_type: ""
+    resp:
+        status_code: 200
+        header:
+            Content-Length: 2,2
+            Content-Type: application/x-amz-json-1.0
+            Date: Fri, 06 Oct 2023 08:34:53 GMT
+            Server: Jetty(11.0.11)
+            X-Amz-Crc32: "2745614147"
+            X-Amzn-Requestid: c0ceb4ad-dd9a-41bd-b8a1-4aa3a9f8b61c
+        body: '{}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+    objects: []
+    created: 1696581293
+curl: ""
+---
+version: api.keploy.io/v1beta2
+kind: Http
+name: mocks
+spec:
+    metadata:
+        name: Http
+        operation: POST
+        type: HTTP_CLIENT
+    req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: /
+        header:
+            Accept-Encoding: identity
+            Authorization: AWS4-HMAC-SHA256 Credential=dummy/20231006/us-west-2/dynamodb/aws4_request, SignedHeaders=accept-encoding;content-length;content-type;host;x-amz-date;x-amz-security-token;x-amz-target, Signature=f960c6c3e5f2e6ef62bdb74b578801d9129f5274108eed25fa216f4ca215067b
+            Content-Length: "124"
+            Content-Type: application/x-amz-json-1.0
+            User-Agent: aws-sdk-go/1.44.200 (go1.20.9; linux; arm64)
+            X-Amz-Date: 20231006T083455Z
+            X-Amz-Security-Token: dummy
+            X-Amz-Target: DynamoDB_20120810.GetItem
+        body: '{"Key":{"creationSource":{"S":"userdssdsImmds"},"creationSourceType":{"S":"userIsmdsdmdsds"}},"TableName":"user-onboarding"}'
+        body_type: ""
+    resp:
+        status_code: 200
+        header:
+            Content-Length: 2,2
+            Content-Type: application/x-amz-json-1.0
+            Date: Fri, 06 Oct 2023 08:34:55 GMT
+            Server: Jetty(11.0.11)
+            X-Amz-Crc32: "2745614147"
+            X-Amzn-Requestid: f29dc45b-52a0-47f1-a210-032659afa782
+        body: '{}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+    objects: []
+    created: 1696581295
+curl: ""
+---
+version: api.keploy.io/v1beta2
+kind: Http
+name: mocks
+spec:
+    metadata:
+        name: Http
+        operation: POST
+        type: HTTP_CLIENT
+    req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: /
+        header:
+            Accept-Encoding: identity
+            Authorization: AWS4-HMAC-SHA256 Credential=dummy/20231006/us-west-2/dynamodb/aws4_request, SignedHeaders=accept-encoding;content-length;content-type;host;x-amz-date;x-amz-security-token;x-amz-target, Signature=c8f81a1d2ac5fd0b71225cd23d6d4f9c9501ee3e81cd13c288e002d1dda6676f
+            Content-Length: "205"
+            Content-Type: application/x-amz-json-1.0
+            User-Agent: aws-sdk-go/1.44.200 (go1.20.9; linux; arm64)
+            X-Amz-Date: 20231006T083455Z
+            X-Amz-Security-Token: dummy
+            X-Amz-Target: DynamoDB_20120810.PutItem
+        body: '{"Item":{"creationSource":{"S":"userdssdsImmds"},"creationSourceType":{"S":"userIsmdsdmdsds"},"password":{"S":"$2a$10$WsZEqxTOBkrSMJw21Dk3vO5Xvu/fQS.w82cHlKzXPcbR1kpf7CagG"}},"TableName":"user-onboarding"}'
+        body_type: ""
+    resp:
+        status_code: 200
+        header:
+            Content-Length: 2,2
+            Content-Type: application/x-amz-json-1.0
+            Date: Fri, 06 Oct 2023 08:34:55 GMT
+            Server: Jetty(11.0.11)
+            X-Amz-Crc32: "2745614147"
+            X-Amzn-Requestid: 1e704152-72fb-40ce-b82b-3d27196847ed
+        body: '{}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+    objects: []
+    created: 1696581295
+curl: ""

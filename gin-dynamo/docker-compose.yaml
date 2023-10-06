@@ -1,0 +1,26 @@
+version: "3.9"
+services:
+  go-app:
+    build:
+      context: .
+    container_name: ginDynamoApp
+    ports:
+      - "3001:3001"
+    depends_on:
+      - dynamo
+    networks:
+      - keploy-network  
+    environment:
+      - Table=user-onboarding
+      - Token=topSecretHehe
+  
+  dynamo:
+    image: "amazon/dynamodb-local"
+    container_name: dynamoDB
+    ports:
+    - "8000:8000"
+    networks:
+    - keploy-network
+
+networks:
+    keploy-network:

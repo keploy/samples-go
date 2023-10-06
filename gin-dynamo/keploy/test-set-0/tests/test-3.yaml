@@ -1,0 +1,61 @@
+version: api.keploy.io/v1beta2
+kind: Http
+name: test-3
+spec:
+    metadata: {}
+    req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:3001/api/v1/createUser
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Content-Length: "100"
+            Content-Type: application/json
+            Cookie: Cookie_1=value; jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjE4ZmIyZjAyMGYyOGU0NmZkOTFlZiIsImVtYWlsIjoic2hpdmFtLmpoYUBzbWFsbGNhc2UuY29tIiwibmFtZSI6IlNoaXZhbSBTb3VyYXYgSmhhIiwidHlwZSI6ImFkbWluIiwiaXNNYW5hZ2VyIjp0cnVlLCJzY29wZXMiOlsiTGVwcmVjaGF1biIsIkxlYWRHZW4iLCJTdXBwb3J0IiwiUHVibGlzaGVyIiwiSW50ZXJuYWxVc2VycyIsIkV4dGVybmFsIiwiR2F0ZXdheSIsIkJyb2tlciJdLCJpYXQiOjE2NzA0MTAzNjEsImV4cCI6MTY3MTAxNTE2MX0.Olvp-Fcw-etYkdCzysGfNlDW06KGY9I2-efbwdkz3Jw
+            Host: localhost:3001
+            Postman-Token: 58cd8437-78b8-480d-a0d6-b89db1d6d9b7
+            User-Agent: PostmanRuntime/7.33.0
+        body: |-
+            {
+                "email":"userIsmdsdmdsds",
+                "password":"userdsImdsmds",
+                "handleName":"userdssdsImmds"
+            }
+        body_type: ""
+    resp:
+        status_code: 200
+        header:
+            Access-Control-Allow-Credentials: "true"
+            Access-Control-Allow-Headers: Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With, trell-auth-token, trell-app-version-int, creator-space-auth-token
+            Access-Control-Allow-Methods: POST, OPTIONS, GET, PUT
+            Access-Control-Allow-Origin: '*'
+            Content-Length: "153"
+            Content-Type: application/json; charset=utf-8
+            Date: Fri, 06 Oct 2023 08:34:55 GMT
+        body: '{"status":"Success","message":"User created successfully","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.2d10dhzpHeeRk-dhoqgbFuM-fHxABUkp6fgjj7zYFFo"}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+    objects: []
+    assertions:
+        noise:
+            - header.Date
+    created: 1696581300
+curl: |-
+    curl --request POST \
+      --url http://localhost:3001/api/v1/createUser \
+      --header 'User-Agent: PostmanRuntime/7.33.0' \
+      --header 'Accept: */*' \
+      --header 'Postman-Token: 58cd8437-78b8-480d-a0d6-b89db1d6d9b7' \
+      --header 'Host: localhost:3001' \
+      --header 'Accept-Encoding: gzip, deflate, br' \
+      --header 'Content-Type: application/json' \
+      --header 'Cookie: Cookie_1=value; jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjE4ZmIyZjAyMGYyOGU0NmZkOTFlZiIsImVtYWlsIjoic2hpdmFtLmpoYUBzbWFsbGNhc2UuY29tIiwibmFtZSI6IlNoaXZhbSBTb3VyYXYgSmhhIiwidHlwZSI6ImFkbWluIiwiaXNNYW5hZ2VyIjp0cnVlLCJzY29wZXMiOlsiTGVwcmVjaGF1biIsIkxlYWRHZW4iLCJTdXBwb3J0IiwiUHVibGlzaGVyIiwiSW50ZXJuYWxVc2VycyIsIkV4dGVybmFsIiwiR2F0ZXdheSIsIkJyb2tlciJdLCJpYXQiOjE2NzA0MTAzNjEsImV4cCI6MTY3MTAxNTE2MX0.Olvp-Fcw-etYkdCzysGfNlDW06KGY9I2-efbwdkz3Jw' \
+      --data '{
+        "email":"userIsmdsdmdsds",
+        "password":"userdsImdsmds",
+        "handleName":"userdssdsImmds"
+    }'

@@ -1,0 +1,459 @@
+version: api.keploy.io/v1beta1
+name: report-1
+status: PASSED
+success: 3
+failure: 0
+total: 3
+tests:
+    - kind: Http
+      name: report-1
+      status: PASSED
+      started: 1696581619
+      completed: 1696581619
+      test_case_path: /files/keploy/test-set-0
+      mock_path: ""
+      test_case_id: test-1
+      req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://172.18.0.3:3001/api/v1/login
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Connection: keep-alive
+            Content-Length: "93"
+            Content-Type: application/json
+            Cookie: Cookie_1=value; jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjE4ZmIyZjAyMGYyOGU0NmZkOTFlZiIsImVtYWlsIjoic2hpdmFtLmpoYUBzbWFsbGNhc2UuY29tIiwibmFtZSI6IlNoaXZhbSBTb3VyYXYgSmhhIiwidHlwZSI6ImFkbWluIiwiaXNNYW5hZ2VyIjp0cnVlLCJzY29wZXMiOlsiTGVwcmVjaGF1biIsIkxlYWRHZW4iLCJTdXBwb3J0IiwiUHVibGlzaGVyIiwiSW50ZXJuYWxVc2VycyIsIkV4dGVybmFsIiwiR2F0ZXdheSIsIkJyb2tlciJdLCJpYXQiOjE2NzA0MTAzNjEsImV4cCI6MTY3MTAxNTE2MX0.Olvp-Fcw-etYkdCzysGfNlDW06KGY9I2-efbwdkz3Jw
+            Host: localhost:3001
+            Postman-Token: d5279bbf-30e4-47aa-be7f-c58a1b51a83f
+            User-Agent: PostmanRuntime/7.33.0
+        body: |-
+            {
+                "handlename":"usersdsImmds",
+                "email":"userIsmmdsds",
+                "password":"userImdsmds"
+            }
+        body_type: ""
+      resp:
+        status_code: 500
+        header:
+            Access-Control-Allow-Credentials: "true"
+            Access-Control-Allow-Headers: Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With, trell-auth-token, trell-app-version-int, creator-space-auth-token
+            Access-Control-Allow-Methods: POST, OPTIONS, GET, PUT
+            Access-Control-Allow-Origin: '*'
+            Content-Length: "49"
+            Content-Type: application/json; charset=utf-8
+            Date: Fri, 06 Oct 2023 08:34:51 GMT
+        body: '{"status":"Failed","message":"Incorred password"}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+      noise:
+        - header.Date
+      result:
+        status_code:
+            normal: true
+            expected: 500
+            actual: 500
+        headers_result:
+            - normal: true
+              expected:
+                key: Access-Control-Allow-Headers
+                value:
+                    - Content-Type
+                    - ' Content-Length'
+                    - ' Accept-Encoding'
+                    - ' X-CSRF-Token'
+                    - ' Authorization'
+                    - ' accept'
+                    - ' origin'
+                    - ' Cache-Control'
+                    - ' X-Requested-With'
+                    - ' trell-auth-token'
+                    - ' trell-app-version-int'
+                    - ' creator-space-auth-token'
+              actual:
+                key: Access-Control-Allow-Headers
+                value:
+                    - Content-Type
+                    - ' Content-Length'
+                    - ' Accept-Encoding'
+                    - ' X-CSRF-Token'
+                    - ' Authorization'
+                    - ' accept'
+                    - ' origin'
+                    - ' Cache-Control'
+                    - ' X-Requested-With'
+                    - ' trell-auth-token'
+                    - ' trell-app-version-int'
+                    - ' creator-space-auth-token'
+            - normal: true
+              expected:
+                key: Access-Control-Allow-Methods
+                value:
+                    - POST
+                    - ' OPTIONS'
+                    - ' GET'
+                    - ' PUT'
+              actual:
+                key: Access-Control-Allow-Methods
+                value:
+                    - POST
+                    - ' OPTIONS'
+                    - ' GET'
+                    - ' PUT'
+            - normal: true
+              expected:
+                key: Access-Control-Allow-Origin
+                value:
+                    - '*'
+              actual:
+                key: Access-Control-Allow-Origin
+                value:
+                    - '*'
+            - normal: true
+              expected:
+                key: Content-Length
+                value:
+                    - "49"
+              actual:
+                key: Content-Length
+                value:
+                    - "49"
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+              actual:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Fri, 06 Oct 2023 08:34:51 GMT
+              actual:
+                key: Date
+                value:
+                    - Fri, 06 Oct 2023 08:40:19 GMT
+            - normal: true
+              expected:
+                key: Access-Control-Allow-Credentials
+                value:
+                    - "true"
+              actual:
+                key: Access-Control-Allow-Credentials
+                value:
+                    - "true"
+        body_result:
+            - normal: true
+              type: JSON
+              expected: '{"status":"Failed","message":"Incorred password"}'
+              actual: '{"status":"Failed","message":"Incorred password"}'
+        dep_result: []
+    - kind: Http
+      name: report-1
+      status: PASSED
+      started: 1696581619
+      completed: 1696581619
+      test_case_path: /files/keploy/test-set-0
+      mock_path: ""
+      test_case_id: test-2
+      req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://172.18.0.3:3001/api/v1/updateUser
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Connection: keep-alive
+            Content-Length: "134"
+            Content-Type: application/json
+            Cookie: Cookie_1=value; jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjE4ZmIyZjAyMGYyOGU0NmZkOTFlZiIsImVtYWlsIjoic2hpdmFtLmpoYUBzbWFsbGNhc2UuY29tIiwibmFtZSI6IlNoaXZhbSBTb3VyYXYgSmhhIiwidHlwZSI6ImFkbWluIiwiaXNNYW5hZ2VyIjp0cnVlLCJzY29wZXMiOlsiTGVwcmVjaGF1biIsIkxlYWRHZW4iLCJTdXBwb3J0IiwiUHVibGlzaGVyIiwiSW50ZXJuYWxVc2VycyIsIkV4dGVybmFsIiwiR2F0ZXdheSIsIkJyb2tlciJdLCJpYXQiOjE2NzA0MTAzNjEsImV4cCI6MTY3MTAxNTE2MX0.Olvp-Fcw-etYkdCzysGfNlDW06KGY9I2-efbwdkz3Jw
+            Host: localhost:3001
+            Postman-Token: 6056a81a-ed23-4bda-a1c2-9d76cb4257eb
+            Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.2d10dhzpHeeRk-dhoqgbFuM-fHxABUkp6fgjj7zYFFo
+            User-Agent: PostmanRuntime/7.33.0
+        body: |-
+            {
+                "creationSource":"userIdssmmds",
+                "password":"userImmdsds",
+                "creationSourceType":"userdsImmds",
+                "email":"sdsdsdsda"
+            }
+        body_type: ""
+      resp:
+        status_code: 200
+        header:
+            Access-Control-Allow-Credentials: "true"
+            Access-Control-Allow-Headers: Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With, trell-auth-token, trell-app-version-int, creator-space-auth-token
+            Access-Control-Allow-Methods: POST, OPTIONS, GET, PUT
+            Access-Control-Allow-Origin: '*'
+            Content-Length: "66"
+            Content-Type: application/json; charset=utf-8
+            Date: Fri, 06 Oct 2023 08:34:53 GMT
+        body: '{"status":"Success","message":"User details updated successfully"}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+      noise:
+        - header.Date
+      result:
+        status_code:
+            normal: true
+            expected: 200
+            actual: 200
+        headers_result:
+            - normal: true
+              expected:
+                key: Access-Control-Allow-Headers
+                value:
+                    - Content-Type
+                    - ' Content-Length'
+                    - ' Accept-Encoding'
+                    - ' X-CSRF-Token'
+                    - ' Authorization'
+                    - ' accept'
+                    - ' origin'
+                    - ' Cache-Control'
+                    - ' X-Requested-With'
+                    - ' trell-auth-token'
+                    - ' trell-app-version-int'
+                    - ' creator-space-auth-token'
+              actual:
+                key: Access-Control-Allow-Headers
+                value:
+                    - Content-Type
+                    - ' Content-Length'
+                    - ' Accept-Encoding'
+                    - ' X-CSRF-Token'
+                    - ' Authorization'
+                    - ' accept'
+                    - ' origin'
+                    - ' Cache-Control'
+                    - ' X-Requested-With'
+                    - ' trell-auth-token'
+                    - ' trell-app-version-int'
+                    - ' creator-space-auth-token'
+            - normal: true
+              expected:
+                key: Access-Control-Allow-Methods
+                value:
+                    - POST
+                    - ' OPTIONS'
+                    - ' GET'
+                    - ' PUT'
+              actual:
+                key: Access-Control-Allow-Methods
+                value:
+                    - POST
+                    - ' OPTIONS'
+                    - ' GET'
+                    - ' PUT'
+            - normal: true
+              expected:
+                key: Access-Control-Allow-Origin
+                value:
+                    - '*'
+              actual:
+                key: Access-Control-Allow-Origin
+                value:
+                    - '*'
+            - normal: true
+              expected:
+                key: Content-Length
+                value:
+                    - "66"
+              actual:
+                key: Content-Length
+                value:
+                    - "66"
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+              actual:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Fri, 06 Oct 2023 08:34:53 GMT
+              actual:
+                key: Date
+                value:
+                    - Fri, 06 Oct 2023 08:40:19 GMT
+            - normal: true
+              expected:
+                key: Access-Control-Allow-Credentials
+                value:
+                    - "true"
+              actual:
+                key: Access-Control-Allow-Credentials
+                value:
+                    - "true"
+        body_result:
+            - normal: true
+              type: JSON
+              expected: '{"status":"Success","message":"User details updated successfully"}'
+              actual: '{"status":"Success","message":"User details updated successfully"}'
+        dep_result: []
+    - kind: Http
+      name: report-1
+      status: PASSED
+      started: 1696581619
+      completed: 1696581619
+      test_case_path: /files/keploy/test-set-0
+      mock_path: ""
+      test_case_id: test-3
+      req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://172.18.0.3:3001/api/v1/createUser
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Content-Length: "100"
+            Content-Type: application/json
+            Cookie: Cookie_1=value; jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjE4ZmIyZjAyMGYyOGU0NmZkOTFlZiIsImVtYWlsIjoic2hpdmFtLmpoYUBzbWFsbGNhc2UuY29tIiwibmFtZSI6IlNoaXZhbSBTb3VyYXYgSmhhIiwidHlwZSI6ImFkbWluIiwiaXNNYW5hZ2VyIjp0cnVlLCJzY29wZXMiOlsiTGVwcmVjaGF1biIsIkxlYWRHZW4iLCJTdXBwb3J0IiwiUHVibGlzaGVyIiwiSW50ZXJuYWxVc2VycyIsIkV4dGVybmFsIiwiR2F0ZXdheSIsIkJyb2tlciJdLCJpYXQiOjE2NzA0MTAzNjEsImV4cCI6MTY3MTAxNTE2MX0.Olvp-Fcw-etYkdCzysGfNlDW06KGY9I2-efbwdkz3Jw
+            Host: localhost:3001
+            Postman-Token: 58cd8437-78b8-480d-a0d6-b89db1d6d9b7
+            User-Agent: PostmanRuntime/7.33.0
+        body: |-
+            {
+                "email":"userIsmdsdmdsds",
+                "password":"userdsImdsmds",
+                "handleName":"userdssdsImmds"
+            }
+        body_type: ""
+      resp:
+        status_code: 200
+        header:
+            Access-Control-Allow-Credentials: "true"
+            Access-Control-Allow-Headers: Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With, trell-auth-token, trell-app-version-int, creator-space-auth-token
+            Access-Control-Allow-Methods: POST, OPTIONS, GET, PUT
+            Access-Control-Allow-Origin: '*'
+            Content-Length: "153"
+            Content-Type: application/json; charset=utf-8
+            Date: Fri, 06 Oct 2023 08:34:55 GMT
+        body: '{"status":"Success","message":"User created successfully","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.2d10dhzpHeeRk-dhoqgbFuM-fHxABUkp6fgjj7zYFFo"}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+      noise:
+        - header.Date
+      result:
+        status_code:
+            normal: true
+            expected: 200
+            actual: 200
+        headers_result:
+            - normal: true
+              expected:
+                key: Access-Control-Allow-Credentials
+                value:
+                    - "true"
+              actual:
+                key: Access-Control-Allow-Credentials
+                value:
+                    - "true"
+            - normal: true
+              expected:
+                key: Access-Control-Allow-Headers
+                value:
+                    - Content-Type
+                    - ' Content-Length'
+                    - ' Accept-Encoding'
+                    - ' X-CSRF-Token'
+                    - ' Authorization'
+                    - ' accept'
+                    - ' origin'
+                    - ' Cache-Control'
+                    - ' X-Requested-With'
+                    - ' trell-auth-token'
+                    - ' trell-app-version-int'
+                    - ' creator-space-auth-token'
+              actual:
+                key: Access-Control-Allow-Headers
+                value:
+                    - Content-Type
+                    - ' Content-Length'
+                    - ' Accept-Encoding'
+                    - ' X-CSRF-Token'
+                    - ' Authorization'
+                    - ' accept'
+                    - ' origin'
+                    - ' Cache-Control'
+                    - ' X-Requested-With'
+                    - ' trell-auth-token'
+                    - ' trell-app-version-int'
+                    - ' creator-space-auth-token'
+            - normal: true
+              expected:
+                key: Access-Control-Allow-Methods
+                value:
+                    - POST
+                    - ' OPTIONS'
+                    - ' GET'
+                    - ' PUT'
+              actual:
+                key: Access-Control-Allow-Methods
+                value:
+                    - POST
+                    - ' OPTIONS'
+                    - ' GET'
+                    - ' PUT'
+            - normal: true
+              expected:
+                key: Access-Control-Allow-Origin
+                value:
+                    - '*'
+              actual:
+                key: Access-Control-Allow-Origin
+                value:
+                    - '*'
+            - normal: true
+              expected:
+                key: Content-Length
+                value:
+                    - "153"
+              actual:
+                key: Content-Length
+                value:
+                    - "153"
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+              actual:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Fri, 06 Oct 2023 08:34:55 GMT
+              actual:
+                key: Date
+                value:
+                    - Fri, 06 Oct 2023 08:40:19 GMT
+        body_result:
+            - normal: true
+              type: JSON
+              expected: '{"status":"Success","message":"User created successfully","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.2d10dhzpHeeRk-dhoqgbFuM-fHxABUkp6fgjj7zYFFo"}'
+              actual: '{"status":"Success","message":"User created successfully","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.2d10dhzpHeeRk-dhoqgbFuM-fHxABUkp6fgjj7zYFFo"}'
+        dep_result: []
+test_set: test-set-0

@@ -1,0 +1,67 @@
+version: api.keploy.io/v1beta2
+kind: Http
+name: test-2
+spec:
+    metadata: {}
+    req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:3001/api/v1/updateUser
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Connection: keep-alive
+            Content-Length: "134"
+            Content-Type: application/json
+            Cookie: Cookie_1=value; jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjE4ZmIyZjAyMGYyOGU0NmZkOTFlZiIsImVtYWlsIjoic2hpdmFtLmpoYUBzbWFsbGNhc2UuY29tIiwibmFtZSI6IlNoaXZhbSBTb3VyYXYgSmhhIiwidHlwZSI6ImFkbWluIiwiaXNNYW5hZ2VyIjp0cnVlLCJzY29wZXMiOlsiTGVwcmVjaGF1biIsIkxlYWRHZW4iLCJTdXBwb3J0IiwiUHVibGlzaGVyIiwiSW50ZXJuYWxVc2VycyIsIkV4dGVybmFsIiwiR2F0ZXdheSIsIkJyb2tlciJdLCJpYXQiOjE2NzA0MTAzNjEsImV4cCI6MTY3MTAxNTE2MX0.Olvp-Fcw-etYkdCzysGfNlDW06KGY9I2-efbwdkz3Jw
+            Host: localhost:3001
+            Postman-Token: 6056a81a-ed23-4bda-a1c2-9d76cb4257eb
+            Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.2d10dhzpHeeRk-dhoqgbFuM-fHxABUkp6fgjj7zYFFo
+            User-Agent: PostmanRuntime/7.33.0
+        body: |-
+            {
+                "creationSource":"userIdssmmds",
+                "password":"userImmdsds",
+                "creationSourceType":"userdsImmds",
+                "email":"sdsdsdsda"
+            }
+        body_type: ""
+    resp:
+        status_code: 200
+        header:
+            Access-Control-Allow-Credentials: "true"
+            Access-Control-Allow-Headers: Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With, trell-auth-token, trell-app-version-int, creator-space-auth-token
+            Access-Control-Allow-Methods: POST, OPTIONS, GET, PUT
+            Access-Control-Allow-Origin: '*'
+            Content-Length: "66"
+            Content-Type: application/json; charset=utf-8
+            Date: Fri, 06 Oct 2023 08:34:53 GMT
+        body: '{"status":"Success","message":"User details updated successfully"}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+    objects: []
+    assertions:
+        noise:
+            - header.Date
+    created: 1696581296
+curl: |-
+    curl --request POST \
+      --url http://localhost:3001/api/v1/updateUser \
+      --header 'Connection: keep-alive' \
+      --header 'Host: localhost:3001' \
+      --header 'User-Agent: PostmanRuntime/7.33.0' \
+      --header 'Accept: */*' \
+      --header 'Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.2d10dhzpHeeRk-dhoqgbFuM-fHxABUkp6fgjj7zYFFo' \
+      --header 'Content-Type: application/json' \
+      --header 'Accept-Encoding: gzip, deflate, br' \
+      --header 'Cookie: Cookie_1=value; jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjE4ZmIyZjAyMGYyOGU0NmZkOTFlZiIsImVtYWlsIjoic2hpdmFtLmpoYUBzbWFsbGNhc2UuY29tIiwibmFtZSI6IlNoaXZhbSBTb3VyYXYgSmhhIiwidHlwZSI6ImFkbWluIiwiaXNNYW5hZ2VyIjp0cnVlLCJzY29wZXMiOlsiTGVwcmVjaGF1biIsIkxlYWRHZW4iLCJTdXBwb3J0IiwiUHVibGlzaGVyIiwiSW50ZXJuYWxVc2VycyIsIkV4dGVybmFsIiwiR2F0ZXdheSIsIkJyb2tlciJdLCJpYXQiOjE2NzA0MTAzNjEsImV4cCI6MTY3MTAxNTE2MX0.Olvp-Fcw-etYkdCzysGfNlDW06KGY9I2-efbwdkz3Jw' \
+      --header 'Postman-Token: 6056a81a-ed23-4bda-a1c2-9d76cb4257eb' \
+      --data '{
+        "creationSource":"userIdssmmds",
+        "password":"userImmdsds",
+        "creationSourceType":"userdsImmds",
+        "email":"sdsdsdsda"
+    }'

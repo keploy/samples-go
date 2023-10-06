@@ -1,0 +1,19 @@
+package constants
+
+const SENTRY_ERROR = "ERROR"
+
+const SENTRY_DEBUG = "DEBUG"
+
+const SENTRY_DEFAULT = "DEFAULT"
+
+const SENTRY_NAVIGATION = "NAVIGATION"
+
+const SENTRY_HTTP = "HTTP"
+
+const SENTRY_INFO = "INFO"
+
+const SENTRY_QUERY = "QUERY"
+
+const SENTRY_TRANSACTION = "TRANSACTION"
+
+const SENTRY_USER = "USER"
