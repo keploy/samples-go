@@ -30,8 +30,9 @@ Then, continue with [Generating Test Cases](https://github.com/keploy/samples-go
 
 1. [Echo-SQL](https://github.com/keploy/samples-go/tree/main/echo-sql)
 2. [Gin-Mongo](https://github.com/keploy/samples-go/tree/main/gin-mongo)
-3. [Users-Profile](https://github.com/keploy/samples-go/tree/main/users-profile)
-4. [Gin-Elastic](https://github.com/keploy/samples-go/tree/main/gin-elastic)
+3. [Gin-Elastic](https://github.com/keploy/samples-go/tree/main/gin-elastic)
+
+[//]: # (3. [Users-Profile]&#40;https://github.com/keploy/samples-go/tree/main/users-profile&#41;)
 
 ## Community Support ❤️
 
