@@ -166,13 +166,13 @@ sudo docker run -p 8000:8000 -d --network keploy-network --name dynamoDB amazon/
 Now, we will create the binary of our application:-
 
 ```zsh
-go build -o user-onboarding
+go build -o gin-dynamo
 ```
 
 Once we have our binary file ready,this command will start the recording of API calls using ebpf:-
 
 ```shell
-sudo -E keploy record -c "./user-onboarding"
+sudo -E keploy record -c "./gin-dynamo"
 ```
 
 Make API Calls using Hoppscotch, Postman or cURL command. Keploy with capture those calls to generate the test-suites containing testcases and data mocks.
@@ -224,7 +224,7 @@ You'll be able to see new test file and mock file generated in your project code
 Run this command on your terminal to run the testcases and generate the test coverage report:-
 
 ```shell
-sudo -E keploy test -c "./user-onboarding" --delay 10
+sudo -E keploy test -c "./gin-dynamo" --delay 10
 ```
 
 > Note: If delay value is not defined, by default it would be `5`.

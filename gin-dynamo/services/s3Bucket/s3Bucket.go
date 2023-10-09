@@ -17,7 +17,7 @@ func Init() {
 	sess := session.Must(session.NewSession(&aws.Config{
 		Region:      aws.String("us-west-2"), // You can use any valid region.
 		Credentials: credentials.NewStaticCredentials("dummy", "dummy", "dummy"),
-		Endpoint:    aws.String("http://dynamoDB:8000/"),
+		Endpoint:    aws.String("http://127.0.0.1:8000/"),
 	}))
 
 	s3 := s3.New(sess, &aws.Config{
