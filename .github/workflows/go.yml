@@ -21,7 +21,7 @@ jobs:
         
       - name: Test
         run: |
-            echo $GITHUB_ACTIONS
+            source /home/runner/work/samples-go/samples-go/keploy.sh -isCI
         env:
           ENABLE_DEDUP: true
           ENABLE_TELEMETRY: true
