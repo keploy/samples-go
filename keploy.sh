@@ -79,16 +79,14 @@ if [ "$IS_CI" = false ]; then
     fi
 else
     echo $IS_CI
-    if [ "$user_input" = "linux" ]; then
-        if [ "$ARCH" = "x86_64" ]; then
-            install_keploy_amd
-            echo $IS_CI "AMD"
-        elif [ "$ARCH" = "aarch64" ]; then
-            install_keploy_arm
-            echo $IS_CI "ARM"
-        else
-            echo "Unsupported architecture: $ARCH"
-            exit 1
-        fi
+    if [ "$ARCH" = "x86_64" ]; then
+        install_keploy_amd
+        echo $IS_CI "AMD"
+    elif [ "$ARCH" = "aarch64" ]; then
+        install_keploy_arm
+        echo $IS_CI "ARM"
+    else
+        echo "Unsupported architecture: $ARCH"
+        exit 1
     fi
 fi
