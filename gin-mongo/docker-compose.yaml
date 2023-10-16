@@ -1,5 +1,16 @@
 version: "3.9"
 services:
+  go-app:
+    build:
+      context: .
+    container_name: ginMongoApp
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+    networks:
+      - keploy-network  
+  
   mongo:
     image: "mongo"
     container_name: mongoDB
