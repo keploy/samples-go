@@ -10,7 +10,9 @@
   <a href="https://opensource.org/licenses/Apache-2.0" alt="License">
     <img src=".github/License-Apache_2.0-blue.svg" /></a>
 
-This repo contains the sample for [Keploy's](https://keploy.io) Go SDK. Please feel free to contribute if you'd like submit a sample for another use-case or library.
+This repo contains the sample for [Keploy's](https://keploy.io) Go SDK. Please feel free to contribute if you'd like submit a sample for another use-case or library. 
+
+**Note** :- Issue Creation is disabled on this Repository, please visit [here](https://github.com/keploy/keploy/issues/new/choose) to submit Issue.
 
 # Keploy Go SDK Samples
 This repo contains the sample for [Keploy's](https://keploy.io) Go SDK. Please feel free to contribute if you'd like submit a sample for another use-case or library.
@@ -28,8 +30,9 @@ Then, continue with [Generating Test Cases](https://github.com/keploy/samples-go
 
 1. [Echo-SQL](https://github.com/keploy/samples-go/tree/main/echo-sql)
 2. [Gin-Mongo](https://github.com/keploy/samples-go/tree/main/gin-mongo)
-3. [Users-Profile](https://github.com/keploy/samples-go/tree/main/users-profile)
-4. [Gin-Elastic](https://github.com/keploy/samples-go/tree/main/gin-elastic)
+3. [Gin-Elastic](https://github.com/keploy/samples-go/tree/main/gin-elastic)
+
+[//]: # (3. [Users-Profile]&#40;https://github.com/keploy/samples-go/tree/main/users-profile&#41;)
 
 ## Community Support ❤️
 

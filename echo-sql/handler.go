@@ -7,12 +7,12 @@ import (
 	"fmt"
 	"math/big"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/itchyny/base58-go"
-	"github.com/keploy/go-sdk/integrations/ksql/v2"
 	"github.com/labstack/echo/v4"
-	"github.com/lib/pq"
+	_ "github.com/lib/pq"
 )
 
 type ConnectionDetails struct {
@@ -40,7 +40,7 @@ type successResponse struct {
 }
 
 /*
-	Establishes a connection with the PostgreSQL instance.
+Establishes a connection with the PostgreSQL instance.
 */
 func NewConnection(conn_details ConnectionDetails) (*sql.DB, error) {
 	// Connect to PostgreSQL database
@@ -48,11 +48,12 @@ func NewConnection(conn_details ConnectionDetails) (*sql.DB, error) {
 		"password=%s dbname=%s sslmode=disable",
 		conn_details.host, conn_details.port, conn_details.user, conn_details.password, conn_details.db_name)
 
-	driver := ksql.Driver{Driver: pq.Driver{}}
-
-	sql.Register("keploy", &driver)
-
-	db, err := sql.Open("keploy", db_info)
+	var err error
+	db, err := sql.Open("postgres", db_info)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
+		os.Exit(1)
+	}
 	if err != nil {
 		return nil, err
 	}

@@ -13,11 +13,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/keploy/go-sdk/integrations/ksql/v2"
-
 	// tom: go get required
 	"github.com/gorilla/mux"
-	"github.com/lib/pq"
+	_ "github.com/lib/pq"
 )
 
 type App struct {
@@ -29,18 +27,14 @@ type App struct {
 // func (a *App) Initialize(user, password, dbname string) { }
 
 // tom: added "sslmode=disable" to connection string
-func (a *App) Initialize(user, password, dbname string) error {
+func (a *App) Initialize(host, user, password, dbname string) error {
 
 	connectionString := fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s sslmode=disable",
-		"localhost", "5438", user, password, dbname)
+		host, "5432", user, password, dbname)
 	// connectionString := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable", user, password, dbname)
-	driver := ksql.Driver{Driver: pq.Driver{}}
-
-	sql.Register("keploy", &driver)
-
 	var err error
-	a.DB, err = sql.Open("keploy", connectionString)
+	a.DB, err = sql.Open("postgres", connectionString)
 	if err != nil {
 		log.Fatal(err)
 	}
