@@ -1,6 +1,8 @@
 const mysql = require('mysql2/promise');
 const crypto = require('crypto');
-const base58 = require('base58');
+const BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+
+const base58 = require('base-x')(BASE58);
 
 // Database connection details
 const connectionDetails = {
@@ -20,6 +22,7 @@ const generateShortLink = (initialLink) => {
     const encoded = base58.encode(urlHashBytes);
     return encoded.slice(0, 8);
 };
+
 
 module.exports = {
     // PUT request to create a new shortened URL
