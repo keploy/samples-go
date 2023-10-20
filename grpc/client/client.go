@@ -54,6 +54,7 @@ func (app *application) grpcHandler(c echo.Context) error {
 		}
 	}()
 	wg.Wait()
+	fmt.Println(fmt.Sprintln(goR1+"\n"+goR2))
 	return c.String(http.StatusOK, fmt.Sprintln(goR1+"\n"+goR2))
 
 }

@@ -27,6 +27,8 @@ import (
 	"log"
 	"net"
 	"time"
+	"math/rand"
+	"strconv"
 
 	"golang.org/x/net/http2"
 	"google.golang.org/grpc"
@@ -114,7 +116,8 @@ func (f fakeListener) Close() error {
 
 // SayHello implements helloworld.GreeterServer
 func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
-	return &pb.HelloReply{Message: "Hello " + in.GetName()}, nil
+	randomInt := rand.Intn(2)
+	return &pb.HelloReply{Message: "Hello " + in.GetName() + " randomINT: " + strconv.Itoa(randomInt)}, nil
 }
 
 func main() {
