@@ -1,0 +1,15 @@
+version: '3.7'
+services:
+    mysql:
+        image: mysql:latest
+        restart: always
+        environment:
+          - MYSQL_ROOT_PASSWORD=root
+          - MYSQL_DATABASE=shorturl_db
+          - MYSQL_USER=user
+          - MYSQL_PASSWORD=password
+        ports:
+          - '3306:3306'
+        volumes:
+          # - ./mysql-data:/var/lib/mysql  # Uncomment this line if you want to persist data across container restarts
+          - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
