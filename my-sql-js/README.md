@@ -25,6 +25,10 @@ docker-compose up -d
 npm install
 node app.js
 
+## To build binary
+```bash
+npx pkg app.js
+```
 
 ## API Usage
 

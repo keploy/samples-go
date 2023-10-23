@@ -25,6 +25,10 @@ docker-compose up -d
 go mod tidy
 go run main.go handler
 
+## To create binary
+```bash
+go build
+```
 
 ## API Usage
 
