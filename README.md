@@ -1,4 +1,4 @@
-<h1 align="center"> Keploy Go SDK Samples </h1>
+<h1 align="center"> Keploy Go Samples Apps </h1>
 <p align="center">
 
   <a href="CODE_OF_CONDUCT.md" alt="Contributions welcome">
@@ -14,33 +14,31 @@ This repo contains the sample for [Keploy's](https://keploy.io) Go SDK. Please f
 
 **Note** :- Issue Creation is disabled on this Repository, please visit [here](https://github.com/keploy/keploy/issues/new/choose) to submit Issue.
 
-# Keploy Go SDK Samples
-This repo contains the sample for [Keploy's](https://keploy.io) Go SDK. Please feel free to contribute if you'd like submit a sample for another use-case or library.
+# Keploy Go Samples
+This repo contains the sample for [Keploy's](https://keploy.io)🐰 with Golang. Please feel free to contribute if you'd like submit a sample for another use-case or library.
 
-## Quick Start
-The fastest way to start with Keploy is the Gitpod-hosted version. When you're ready, you can install locally or host yourself.
 
-One-click deploy sample URL Shortener application sample with Keploy using Gitpod 
+## Go Sample Apps with Keploy
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/from-referrer)
-
-Then, continue with [Generating Test Cases](https://github.com/keploy/samples-go/tree/main/echo-sql#generate-shortned-url)
-
-## Sample Apps with Keploy GO SDK
-
-1. [Echo-SQL](https://github.com/keploy/samples-go/tree/main/echo-sql)
-2. [Gin-Mongo](https://github.com/keploy/samples-go/tree/main/gin-mongo)
-3. [Gin-Elastic](https://github.com/keploy/samples-go/tree/main/gin-elastic)
-
-[//]: # (3. [Users-Profile]&#40;https://github.com/keploy/samples-go/tree/main/users-profile&#41;)
+1. [Echo-SQL](https://github.com/keploy/samples-go/tree/main/echo-sql) 🚀
+2. [Gin-Mongo](https://github.com/keploy/samples-go/tree/main/gin-mongo) 🌟
+3. [GraphQL-SQL](https://github.com/keploy/samples-go/tree/main/graphql-sql) 💻
+4. [Mux-SQL](https://github.com/keploy/samples-go/tree/main/mux-sql) 🛠️
+5. [Users-Profile](https://github.com/keploy/samples-go/tree/main/users-profile) 👨‍💻
 
 ## Community Support ❤️
 
-We'd love to collaborate with you to make Keploy great. To get started:
-* [Slack](https://join.slack.com/t/keploy/shared_invite/zt-12rfbvc01-o54cOG0X1G6eVJTuI_orSA) - Discussions with the community and the team.
-* [GitHub](https://github.com/keploy/keploy/issues) - For bug reports and feature requests.
+### 🤔 Questions?
+Reach out to us. We're here to help!
 
-[![Generic badge](https://img.shields.io/badge/Slack-teal.svg?style=for-the-badge)](https://join.slack.com/t/keploy/shared_invite/zt-12rfbvc01-o54cOG0X1G6eVJTuI_orSA)
-[![Generic badge](https://img.shields.io/badge/LinkedIn-blue.svg?style=for-the-badge)](https://www.linkedin.com/company/keploy/)
-[![Generic badge](https://img.shields.io/badge/Youtube-teal.svg?style=for-the-badge)](https://www.youtube.com/channel/UC6OTg7F4o0WkmNtSoob34lg)
-[![Generic badge](https://img.shields.io/badge/Twitter-blue.svg?style=for-the-badge)](https://twitter.com/Keployio)
+[![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)](https://join.slack.com/t/keploy/shared_invite/zt-12rfbvc01-o54cOG0X1G6eVJTuI_orSA)
+[![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/company/keploy/)
+[![YouTube](https://img.shields.io/badge/YouTube-%23FF0000.svg?style=for-the-badge&logo=YouTube&logoColor=white)](https://www.youtube.com/channel/UC6OTg7F4o0WkmNtSoob34lg)
+[![Twitter](https://img.shields.io/badge/Twitter-%231DA1F2.svg?style=for-the-badge&logo=Twitter&logoColor=white)](https://twitter.com/Keployio)
+
+### 💖 Let's Build Together!
+Whether you're a newbie coder or a wizard 🧙‍♀️, your perspective is golden. Take a peek at our:
+
+📜 [Contribution Guidelines](https://github.com/keploy/keploy/blob/main/CONTRIBUTING.md)
+
+❤️ [Code of Conduct](https://github.com/keploy/keploy/blob/main/CODE_OF_CONDUCT.md)

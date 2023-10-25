@@ -3,7 +3,7 @@ services:
   go-app:
     build:
       context: .
-    container_name: ginMongoApp
+    container_name: userProfileApp
     ports:
       - "8080:8080"
     depends_on:
@@ -13,7 +13,7 @@ services:
   
   mongo:
     image: "mongo"
-    container_name: mongoDB
+    container_name: mongoDb
     ports:
     - "27017:27017"
     networks:
