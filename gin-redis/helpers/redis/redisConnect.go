@@ -15,7 +15,7 @@ func RedisSession() *redis.Client {
 func RedisInit() {
 	// Connect to the Redis server
 	RedisClient = redis.NewClient(&redis.Options{
-		Addr:     "myredis:6379", // Redis server address
+		Addr:     "localhost:6379", // Redis server address
 		Password: "",             // No password for local Redis, set it if needed
 		DB:       0,              // Default DB
 	})
