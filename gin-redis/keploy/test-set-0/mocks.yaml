@@ -1,0 +1,111 @@
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mocks
+spec:
+    metadata: {}
+    genericrequests:
+        - origin: client
+          message:
+            - type: string
+              data: "*1\r\n$4\r\nping\r\n"
+    genericresponses:
+        - origin: server
+          message:
+            - type: string
+              data: "+PONG\r\n"
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mocks
+spec:
+    metadata: {}
+    genericrequests:
+        - origin: client
+          message:
+            - type: string
+              data: "*5\r\n$3\r\nset\r\n$25\r\nshivamsouravjha@gmail.com\r\n$4\r\n4203\r\n$2\r\nex\r\n$5\r\n14400\r\n"
+    genericresponses:
+        - origin: server
+          message:
+            - type: string
+              data: "+OK\r\n"
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mocks
+spec:
+    metadata: {}
+    genericrequests:
+        - origin: client
+          message:
+            - type: string
+              data: "*5\r\n$3\r\nset\r\n$25\r\nshivamsouravjha@gmail.com\r\n$4\r\n9831\r\n$2\r\nex\r\n$5\r\n14400\r\n"
+    genericresponses:
+        - origin: server
+          message:
+            - type: string
+              data: "+OK\r\n"
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mocks
+spec:
+    metadata: {}
+    genericrequests:
+        - origin: client
+          message:
+            - type: string
+              data: "*5\r\n$3\r\nset\r\n$25\r\nshivamsouravjha@gmail.com\r\n$4\r\n1918\r\n$2\r\nex\r\n$5\r\n14400\r\n"
+    genericresponses:
+        - origin: server
+          message:
+            - type: string
+              data: "+OK\r\n"
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mocks
+spec:
+    metadata: {}
+    genericrequests:
+        - origin: client
+          message:
+            - type: string
+              data: "*5\r\n$3\r\nset\r\n$25\r\nshivamsouravjha@gmail.com\r\n$4\r\n7607\r\n$2\r\nex\r\n$5\r\n14400\r\n"
+    genericresponses:
+        - origin: server
+          message:
+            - type: string
+              data: "+OK\r\n"
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mocks
+spec:
+    metadata: {}
+    genericrequests:
+        - origin: client
+          message:
+            - type: string
+              data: "*5\r\n$3\r\nset\r\n$25\r\nshivamsouravjha@gmail.com\r\n$4\r\n9568\r\n$2\r\nex\r\n$5\r\n14400\r\n"
+    genericresponses:
+        - origin: server
+          message:
+            - type: string
+              data: "+OK\r\n"
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mocks
+spec:
+    metadata: {}
+    genericrequests:
+        - origin: client
+          message:
+            - type: string
+              data: "*5\r\n$3\r\nset\r\n$25\r\nshivamsouravjha@gmail.com\r\n$4\r\n5948\r\n$2\r\nex\r\n$5\r\n14400\r\n"
+    genericresponses:
+        - origin: server
+          message:
+            - type: string
+              data: "+OK\r\n"

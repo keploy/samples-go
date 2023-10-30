@@ -1,0 +1,254 @@
+version: api.keploy.io/v1beta1
+name: report-4
+status: PASSED
+success: 3
+failure: 0
+total: 3
+tests:
+    - kind: Http
+      name: report-4
+      status: PASSED
+      started: 1698651214
+      completed: 1698651214
+      test_case_path: /files/keploy/test-set-1
+      mock_path: ""
+      test_case_id: test-1
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://172.18.0.4:3001/api/getVerificationCode?email=shivamsouravjha@gmail.com
+        url_params:
+            email: shivamsouravjha@gmail.com
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Content-Length: "61"
+            Content-Type: application/json
+            Host: localhost:3001
+            Postman-Token: 7f2abe2a-6e10-42fd-ac8a-1c1d2db7d551
+            User-Agent: PostmanRuntime/7.33.0
+        body: |-
+            {
+                "otp":"2121",
+                "email":"shivamsouravjha@gmail.com"
+            }
+        body_type: ""
+      resp:
+        status_code: 200
+        header:
+            Content-Length: "34"
+            Content-Type: application/json; charset=utf-8
+            Date: Mon, 30 Oct 2023 07:32:35 GMT
+        body: '{"status":"true","message":"8547"}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+      noise:
+        - header.Date
+        - body.message
+      result:
+        status_code:
+            normal: true
+            expected: 200
+            actual: 200
+        headers_result:
+            - normal: true
+              expected:
+                key: Content-Length
+                value:
+                    - "34"
+              actual:
+                key: Content-Length
+                value:
+                    - "34"
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+              actual:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Mon, 30 Oct 2023 07:32:35 GMT
+              actual:
+                key: Date
+                value:
+                    - Mon, 30 Oct 2023 07:33:34 GMT
+        body_result:
+            - normal: true
+              type: JSON
+              expected: '{"status":"true","message":"8547"}'
+              actual: '{"status":"true","message":"3056"}'
+        dep_result: []
+    - kind: Http
+      name: report-4
+      status: PASSED
+      started: 1698651214
+      completed: 1698651214
+      test_case_path: /files/keploy/test-set-1
+      mock_path: ""
+      test_case_id: test-2
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://172.18.0.4:3001/api/getVerificationCode?email=shivamsouravjha@gmail.com
+        url_params:
+            email: shivamsouravjha@gmail.com
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Content-Length: "61"
+            Content-Type: application/json
+            Host: localhost:3001
+            Postman-Token: 3022ef71-4c0e-4d3a-972e-56663e317586
+            User-Agent: PostmanRuntime/7.33.0
+        body: |-
+            {
+                "otp":"2121",
+                "email":"shivamsouravjha@gmail.com"
+            }
+        body_type: ""
+      resp:
+        status_code: 200
+        header:
+            Content-Length: "34"
+            Content-Type: application/json; charset=utf-8
+            Date: Mon, 30 Oct 2023 07:32:36 GMT
+        body: '{"status":"true","message":"9101"}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+      noise:
+        - header.Date
+        - body.message
+      result:
+        status_code:
+            normal: true
+            expected: 200
+            actual: 200
+        headers_result:
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Mon, 30 Oct 2023 07:32:36 GMT
+              actual:
+                key: Date
+                value:
+                    - Mon, 30 Oct 2023 07:33:34 GMT
+            - normal: true
+              expected:
+                key: Content-Length
+                value:
+                    - "34"
+              actual:
+                key: Content-Length
+                value:
+                    - "34"
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+              actual:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+        body_result:
+            - normal: true
+              type: JSON
+              expected: '{"status":"true","message":"9101"}'
+              actual: '{"status":"true","message":"3118"}'
+        dep_result: []
+    - kind: Http
+      name: report-4
+      status: PASSED
+      started: 1698651214
+      completed: 1698651214
+      test_case_path: /files/keploy/test-set-1
+      mock_path: ""
+      test_case_id: test-3
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://172.18.0.4:3001/api/getVerificationCode?email=shivamsouravjha@gmail.com
+        url_params:
+            email: shivamsouravjha@gmail.com
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Content-Length: "61"
+            Content-Type: application/json
+            Host: localhost:3001
+            Postman-Token: 51d3944e-4747-40c2-bf70-1c428edcb3ab
+            User-Agent: PostmanRuntime/7.33.0
+        body: |-
+            {
+                "otp":"2121",
+                "email":"shivamsouravjha@gmail.com"
+            }
+        body_type: ""
+      resp:
+        status_code: 200
+        header:
+            Content-Length: "34"
+            Content-Type: application/json; charset=utf-8
+            Date: Mon, 30 Oct 2023 07:32:37 GMT
+        body: '{"status":"true","message":"6298"}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+      noise:
+        - header.Date
+        - body.message
+      result:
+        status_code:
+            normal: true
+            expected: 200
+            actual: 200
+        headers_result:
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Mon, 30 Oct 2023 07:32:37 GMT
+              actual:
+                key: Date
+                value:
+                    - Mon, 30 Oct 2023 07:33:34 GMT
+            - normal: true
+              expected:
+                key: Content-Length
+                value:
+                    - "34"
+              actual:
+                key: Content-Length
+                value:
+                    - "34"
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+              actual:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+        body_result:
+            - normal: true
+              type: JSON
+              expected: '{"status":"true","message":"6298"}'
+              actual: '{"status":"true","message":"9383"}'
+        dep_result: []
+test_set: test-set-1
