@@ -30,6 +30,11 @@ alias keploy='sudo docker run --pull always --name keploy-v2 -p 16789:16789 --pr
 
 > **Since, we are on the docker image the Redis URL will be `myredis:6379`. This needs to be updated on the on line 18 in `redisConnect.go` file**
 
+### Create keploy-network 
+```
+sudo docker network create keploy-network
+```
+
 ### Let's start the Redis Instance
 Using the docker-compose file we will start our Redis instance:-
 ```bash
@@ -123,7 +128,7 @@ sudo mkdir -p /usr/local/bin && sudo mv /tmp/keploy /usr/local/bin && keploy
 Spin up your Redis container using
 
 ```shell
-sudo docker run -p 6379:6379 -d --network keploy-network --name myredis redis
+sudo docker run -p 6379:6379 -d --name myredis redis
 ```
 
 ### Capture the testcases

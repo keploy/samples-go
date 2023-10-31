@@ -1,11 +1,8 @@
 package config
 
 import (
-	"fmt"
 	"os"
 	"strconv"
-
-	"github.com/joho/godotenv"
 )
 
 type Config struct {
@@ -44,18 +41,6 @@ func init() {
 	appEnv := os.Getenv("APP_ENV")
 	if len(appEnv) == 0 {
 		appEnv = "dev"
-	}
-
-	configFilePath := "./config/.env"
-	if os.Getenv("APP_ENV") == "test" {
-		configFilePath = "../config/.env"
-	}
-	fmt.Println("reading env from: ", configFilePath)
-
-	e := godotenv.Load(configFilePath)
-	if e != nil {
-		fmt.Println("error loading env: ", e)
-		panic(e.Error())
 	}
 	config.AppName = os.Getenv("SERVICE_NAME")
 	config.AppEnv = appEnv
