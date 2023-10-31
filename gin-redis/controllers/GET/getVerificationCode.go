@@ -12,7 +12,8 @@ import (
 
 func VerificationCode(c *gin.Context) {
 	requestEmail := c.Query("email")
-	otp, err := email.SendEmail(requestEmail, constants.VerifyYourself)
+	userName := c.Query("username")
+	otp, err := email.SendEmail(requestEmail, userName, constants.VerifyYourself)
 
 	if err != nil {
 		resp := responseStruct.SuccessResponse{}
@@ -23,7 +24,8 @@ func VerificationCode(c *gin.Context) {
 	}
 
 	resp := responseStruct.SuccessResponse{}
-	resp.Message = fmt.Sprint(otp)
+	resp.OTP = fmt.Sprint(otp)
 	resp.Status = "true"
+	resp.Message = "OTP Generated successfully"
 	c.JSON(http.StatusOK, resp)
 }

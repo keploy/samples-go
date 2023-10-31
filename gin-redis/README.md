@@ -55,15 +55,15 @@ To genereate testcases we just need to make some API calls. You can use [Postman
 ### 1. Request OTP
 
 ```bash
-
-curl --location 'localhost:3001/api/getVerificationCode?email=something@gmail.com'
+curl --location 'localhost:3001/api/getVerificationCode?email=something@gmail.com&username=shivamsourav'
 ```
 
 this will return the OTP response. 
 ```
 {
     "status": "true",
-    "message": "5430"
+    "message": "OTP Generated successfully",
+    "otp": "5486"
 }
 ```
 
@@ -81,7 +81,9 @@ this will return the OTP verification response.
 ```
 {
     "status": "true",
-    "message": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2YWx1ZSI6ImdtYWlsLmNvbSIsImV4cCI6MTY5ODc1MTA2OX0.qah44e1KWIO4NSHCv3VoSdi12_JzfgOG9jq4neZeW2E"
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2YWx1ZSI6ImdtYWlsLmNvbSIsImV4cCI6MTY5ODc1ODIyNn0.eVrNACUY93g-5tu8fxb2BEOs1wn2iCe8wVpUYU6OLSE",
+    "username": "shivamsourav",
+    "message": "OTP authenticated successfully"
 }
 ```
 
@@ -103,11 +105,11 @@ So no need to setup dependencies like Redis, web-go locally or write mocks for y
 
 We will get output something like this:
 
-![TestRun](./img/testrunFail.png)
+![TestRun](./img/testRunFail.png)
 
 #### Let's add OTP to Noisy field:
 
-In `test-1.yml` go the noisefield and `-body.message` on line number _36_. Now, it's the time to run the test cases again.
+In `test-2.yml` go the noisefield and `-body.token` on line number _41_. Now, it's the time to run the test cases again.
 
 ```bash
 keploy test -c "sudo docker run -p 3001:3001 --rm --net <networkName> --name ginRedisApp gin-app:1.0" --delay 10
@@ -170,7 +172,7 @@ To generate testcases we just need to **make some API calls.** You can use [Post
 **1. Request OTP**
 
 ```bash
-curl --location 'localhost:3001/api/getVerificationCode?email=something@gmail.com'
+curl --location 'localhost:3001/api/getVerificationCode?email=something@gmail.com&username=shivamsourav'
 ```
 
 this will return the OTP response. 
@@ -178,8 +180,8 @@ this will return the OTP response.
 ```
 {
     "status": "true",
-    "message": "5430",
-    "time": "2023-10-31T08:15:20.225959287Z"
+    "message": "OTP Generated successfully",
+    "otp": "5486"
 }
 ```
 
@@ -199,7 +201,9 @@ this will return the OTP verification response.
 ```
 {
     "status": "true",
-    "message": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2YWx1ZSI6ImdtYWlsLmNvbSIsImV4cCI6MTY5ODc1MTA2OX0.qah44e1KWIO4NSHCv3VoSdi12_JzfgOG9jq4neZeW2E"
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2YWx1ZSI6ImdtYWlsLmNvbSIsImV4cCI6MTY5ODc1ODIyNn0.eVrNACUY93g-5tu8fxb2BEOs1wn2iCe8wVpUYU6OLSE",
+    "username": "shivamsourav",
+    "message": "OTP authenticated successfully"
 }
 ```
 
@@ -225,7 +229,7 @@ We will get output something like this:
 
 #### Let's add OTP to Noisy field:
 
-In `test-1.yml` go the noisefield and `body.message` on line number _36_. Now, it's the time to run the test cases again.
+In `test-2.yml` go the noisefield and `-body.token` on line number _41_. Now, it's the time to run the test cases again.
 
 ```bash
 sudo -E keploy test -c "./gin-redis" --delay 10

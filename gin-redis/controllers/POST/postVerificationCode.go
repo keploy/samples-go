@@ -20,7 +20,7 @@ func VerifyCode(c *gin.Context) {
 		return
 	}
 
-	err := services.Verifycode(verifyRequest)
+	username, err := services.Verifycode(verifyRequest)
 
 	if err != nil {
 		resp := responseStruct.SuccessResponse{}
@@ -32,7 +32,7 @@ func VerifyCode(c *gin.Context) {
 	resp := responseStruct.SuccessResponse{}
 
 	requesterEmail := strings.Split(verifyRequest.Email, "@")
-	resp.Message, err = token.GenerateToken(requesterEmail[1], config.Get().JWT)
+	resp.Token, err = token.GenerateToken(requesterEmail[1], config.Get().JWT)
 	if err != nil {
 		resp := responseStruct.SuccessResponse{}
 		resp.Message = err.Error()
@@ -40,7 +40,8 @@ func VerifyCode(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, resp)
 		return
 	}
-
+	resp.Username = username
 	resp.Status = "true"
+	resp.Message = "OTP authenticated successfully"
 	c.JSON(http.StatusOK, resp)
 }

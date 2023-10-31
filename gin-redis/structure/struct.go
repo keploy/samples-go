@@ -22,3 +22,8 @@ type InfluencerFeedback struct {
 	Influencer interface{}
 	ImageLink  string
 }
+
+type OTPData struct {
+	OTP      int    `json:"otp"`
+	UserName string `json:"username"`
+}

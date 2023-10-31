@@ -1,0 +1,57 @@
+version: api.keploy.io/v1beta2
+kind: Http
+name: test-2
+spec:
+    metadata: {}
+    req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:3001/api/verifyCode
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Connection: keep-alive
+            Content-Length: "53"
+            Content-Type: application/json
+            Host: localhost:3001
+            Postman-Token: f1933e81-8c0b-43e5-bb75-735f007a56c9
+            User-Agent: PostmanRuntime/7.33.0
+        body: |-
+            {
+                "otp":5486,
+                "email":"something@gmail.com"
+            }
+        body_type: ""
+    resp:
+        status_code: 200
+        header:
+            Content-Length: "229"
+            Content-Type: application/json; charset=utf-8
+            Date: Tue, 31 Oct 2023 09:17:06 GMT
+        body: '{"status":"true","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2YWx1ZSI6ImdtYWlsLmNvbSIsImV4cCI6MTY5ODc1ODIyNn0.eVrNACUY93g-5tu8fxb2BEOs1wn2iCe8wVpUYU6OLSE","username":"shivamsourav","message":"OTP authenticated successfully"}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+    objects: []
+    assertions:
+        noise:
+            - header.Date
+            - body.token
+
+    created: 1698743828
+curl: |-
+    curl --request POST \
+      --url http://localhost:3001/api/verifyCode \
+      --header 'Postman-Token: f1933e81-8c0b-43e5-bb75-735f007a56c9' \
+      --header 'Host: localhost:3001' \
+      --header 'Accept-Encoding: gzip, deflate, br' \
+      --header 'Connection: keep-alive' \
+      --header 'Content-Type: application/json' \
+      --header 'User-Agent: PostmanRuntime/7.33.0' \
+      --header 'Accept: */*' \
+      --data '{
+        "otp":5486,
+        "email":"something@gmail.com"
+    }'
