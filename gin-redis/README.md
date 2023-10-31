@@ -63,7 +63,7 @@ this will return the OTP response.
 ```
 {
     "status": "true",
-    "message": "2121"
+    "message": "5430"
 }
 ```
 
@@ -103,8 +103,18 @@ So no need to setup dependencies like Redis, web-go locally or write mocks for y
 
 We will get output something like this:
 
-![TestRun](./img/testrun.png)
+![TestRun](./img/testrunFail.png)
 
+#### Let's add OTP to Noisy field:
+
+In `test-1.yml` go the noisefield and `-body.message` on line number _36_. Now, it's the time to run the test cases again.
+
+```bash
+keploy test -c "sudo docker run -p 3001:3001 --rm --net <networkName> --name ginRedisApp gin-app:1.0" --delay 10
+```
+
+This time all the test cases will pass.
+![testruns](./img/testRunPass.png?raw=true "Recent testruns")
 
 ## Run app Natively on local machine
 
@@ -157,7 +167,7 @@ Make API Calls using Hoppscotch, Postman or cURL command. Keploy with capture th
 
 To generate testcases we just need to **make some API calls.** You can use [Postman](https://www.postman.com/), [Hoppscotch](https://hoppscotch.io/), or simply `curl`
 
-**1. Request an OTP**
+**1. Request OTP**
 
 ```bash
 curl --location 'localhost:3001/api/getVerificationCode?email=something@gmail.com'
@@ -168,7 +178,8 @@ this will return the OTP response.
 ```
 {
     "status": "true",
-    "message": "2121"
+    "message": "5430",
+    "time": "2023-10-31T08:15:20.225959287Z"
 }
 ```
 
@@ -210,4 +221,16 @@ So no need to setup dependencies like Redis, web-go locally or write mocks for y
 
 We will get output something like this:
 
-![TestRun](./img/testRunPass.png)
+![TestRun](./img/testRunFail.png)
+
+#### Let's add OTP to Noisy field:
+
+In `test-1.yml` go the noisefield and `body.message` on line number _36_. Now, it's the time to run the test cases again.
+
+```bash
+sudo -E keploy test -c "./gin-redis" --delay 10
+```
+
+This time all the test cases will pass.
+
+![testruns](./img/testRunPass.png?raw=true "Recent testruns")
