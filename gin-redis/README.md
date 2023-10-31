@@ -59,7 +59,7 @@ To genereate testcases we just need to make some API calls. You can use [Postman
 curl --location 'localhost:3001/api/getVerificationCode?email=something%40gmail.com'
 ```
 
-this will return the signup response. 
+this will return the OTP response. 
 ```
 {
     "status": "true",
@@ -70,13 +70,19 @@ this will return the signup response.
 **2. Verify OTP**
 
 ```bash
-curl --location 'localhost:3001/api/getVerificationCode?email=something%40gmail.com' \
+curl --location 'localhost:3001/api/verifyCode' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "otp":"2121",
+    "otp":2121,
     "email":"shivamsouravjha@gmail.com"
 }'
-
+```
+this will return the OTP verification response. 
+```
+{
+    "status": "true",
+    "message": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2YWx1ZSI6ImdtYWlsLmNvbSIsImV4cCI6MTY5ODc1MTA2OX0.qah44e1KWIO4NSHCv3VoSdi12_JzfgOG9jq4neZeW2E"
+}
 ```
 
 _Now, let's see the magic! 🪄💫_
@@ -151,40 +157,39 @@ Make API Calls using Hoppscotch, Postman or cURL command. Keploy with capture th
 
 To generate testcases we just need to **make some API calls.** You can use [Postman](https://www.postman.com/), [Hoppscotch](https://hoppscotch.io/), or simply `curl`
 
-**1. Signup a user**
+**1. Request an OTP**
 
 ```bash
-curl --location 'localhost:3001/api/v1/createUser' \
---header 'Content-Type: application/json' \
---header 'Cookie: Cookie_1=value; jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjE4ZmIyZjAyMGYyOGU0NmZkOTFlZiIsImVtYWlsIjoic2hpdmFtLmpoYUBzbWFsbGNhc2UuY29tIiwibmFtZSI6IlNoaXZhbSBTb3VyYXYgSmhhIiwidHlwZSI6ImFkbWluIiwiaXNNYW5hZ2VyIjp0cnVlLCJzY29wZXMiOlsiTGVwcmVjaGF1biIsIkxlYWRHZW4iLCJTdXBwb3J0IiwiUHVibGlzaGVyIiwiSW50ZXJuYWxVc2VycyIsIkV4dGVybmFsIiwiR2F0ZXdheSIsIkJyb2tlciJdLCJpYXQiOjE2NzA0MTAzNjEsImV4cCI6MTY3MTAxNTE2MX0.Olvp-Fcw-etYkdCzysGfNlDW06KGY9I2-efbwdkz3Jw' \
---data '{
-    "email":"userIsmmdsds",
-    "password":"userImdsmds",
-    "handleName":"usersdsImmds"
-}'
+curl --location 'localhost:3001/api/getVerificationCode?email=something%40gmail.com'
 ```
 
-this will return the signup response.
+this will return the OTP response. 
 
-```json
+```
 {
-    "status": "Success",
-    "message": "User created successfully",
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.2d10dhzpHeeRk-dhoqgbFuM-fHxABUkp6fgjj7zYFFo"
+    "status": "true",
+    "message": "2121"
 }
 ```
 
-**2.Login the user**
+**2. Verify OTP**
 
 ```bash
-curl --location 'localhost:3001/api/v1/login' \
+curl --location 'localhost:3001/api/verifyCode' \
 --header 'Content-Type: application/json' \
---header 'Cookie: Cookie_1=value; jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjE4ZmIyZjAyMGYyOGU0NmZkOTFlZiIsImVtYWlsIjoic2hpdmFtLmpoYUBzbWFsbGNhc2UuY29tIiwibmFtZSI6IlNoaXZhbSBTb3VyYXYgSmhhIiwidHlwZSI6ImFkbWluIiwiaXNNYW5hZ2VyIjp0cnVlLCJzY29wZXMiOlsiTGVwcmVjaGF1biIsIkxlYWRHZW4iLCJTdXBwb3J0IiwiUHVibGlzaGVyIiwiSW50ZXJuYWxVc2VycyIsIkV4dGVybmFsIiwiR2F0ZXdheSIsIkJyb2tlciJdLCJpYXQiOjE2NzA0MTAzNjEsImV4cCI6MTY3MTAxNTE2MX0.Olvp-Fcw-etYkdCzysGfNlDW06KGY9I2-efbwdkz3Jw' \
---data '{
-    "handlename":"usersdsImmds",
-    "email":"userIsmmdsds",
-    "password":"userImdsmds"
+--data-raw '{
+    "otp":2121,
+    "email":"shivamsouravjha@gmail.com"
 }'
+
+```
+
+this will return the OTP verification response. 
+```
+{
+    "status": "true",
+    "message": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2YWx1ZSI6ImdtYWlsLmNvbSIsImV4cCI6MTY5ODc1MTA2OX0.qah44e1KWIO4NSHCv3VoSdi12_JzfgOG9jq4neZeW2E"
+}
 ```
 
 You'll be able to see new test file and mock file generated in your project codebase locally.
