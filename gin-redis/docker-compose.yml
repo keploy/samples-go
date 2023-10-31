@@ -7,15 +7,9 @@ services:
     ports:
       - "3001:3001"
     depends_on:
-      - redis
-    networks:
-      - keploy-network  
+      - redis 
   redis:
     image: redis
     container_name: myredis
     ports:
       - "6379:6379"
-    networks:
-      - keploy-network
-networks:
-  keploy-network:
