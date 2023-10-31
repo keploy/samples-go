@@ -199,7 +199,7 @@ You'll be able to see new test file and mock file generated in your project code
 Run this command on your terminal to run the testcases and generate the test coverage report:-
 
 ```shell
-sudo -E keploy test -c "./user-onboarding" --delay 10
+sudo -E keploy test -c "./gin-redis" --delay 10
 ```
 
 > Note: If delay value is not defined, by default it would be `5`.
