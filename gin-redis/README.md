@@ -107,7 +107,7 @@ We will get output something like this:
 
 ![TestRun](./img/testRunFail.png)
 
-#### Let's add OTP to Noisy field:
+#### Let's add token to Noisy field:
 
 In `test-2.yml` go the noisefield and `-body.token` on line number _41_. Now, it's the time to run the test cases again.
 
@@ -227,7 +227,7 @@ We will get output something like this:
 
 ![TestRun](./img/testRunFail.png)
 
-#### Let's add OTP to Noisy field:
+#### Let's add token to Noisy field:
 
 In `test-2.yml` go the noisefield and `-body.token` on line number _41_. Now, it's the time to run the test cases again.
 
