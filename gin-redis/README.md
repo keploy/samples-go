@@ -56,7 +56,7 @@ To genereate testcases we just need to make some API calls. You can use [Postman
 
 ```bash
 
-curl --location 'localhost:3001/api/getVerificationCode?email=something%40gmail.com'
+curl --location 'localhost:3001/api/getVerificationCode?email=something@gmail.com'
 ```
 
 this will return the OTP response. 
@@ -74,7 +74,7 @@ curl --location 'localhost:3001/api/verifyCode' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "otp":2121,
-    "email":"shivamsouravjha@gmail.com"
+    "email":"something@gmail.com"
 }'
 ```
 this will return the OTP verification response. 
@@ -160,7 +160,7 @@ To generate testcases we just need to **make some API calls.** You can use [Post
 **1. Request an OTP**
 
 ```bash
-curl --location 'localhost:3001/api/getVerificationCode?email=something%40gmail.com'
+curl --location 'localhost:3001/api/getVerificationCode?email=something@gmail.com'
 ```
 
 this will return the OTP response. 
@@ -179,7 +179,7 @@ curl --location 'localhost:3001/api/verifyCode' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "otp":2121,
-    "email":"shivamsouravjha@gmail.com"
+    "email":"something@gmail.com"
 }'
 
 ```
