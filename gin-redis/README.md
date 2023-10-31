@@ -28,7 +28,7 @@ We need create an alias for Keploy:
 alias keploy='sudo docker run --pull always --name keploy-v2 -p 16789:16789 --privileged --pid=host -it -v "$(pwd)":/files -v /sys/fs/cgroup:/sys/fs/cgroup -v /sys/kernel/debug:/sys/kernel/debug -v /sys/fs/bpf:/sys/fs/bpf -v /var/run/docker.sock:/var/run/docker.sock -v '"$HOME"'/.keploy-config:/root/.keploy-config -v '"$HOME"'/keploy-config:/root/keploy-config --rm ghcr.io/keploy/keploy'
 ```
 
-> **Since, we are on the docker image the Redis URL will be `myredis:6379`. This needs to be updated on the on line 18 in `redisConnect.go` file**
+> **Since, we are on the docker image the Redis URL will be myredis:6379 instead of localhost:6379. This needs to be updated in `helpers/redis/redisConnect.go` file**
 
 ### Create a Docker network
 ```
@@ -47,7 +47,7 @@ docker build -t gin-app:1.0 .
 ### Capture the Testcases
 
 ```shell
-keploy record -c "docker run -p 3001:3001 --name RediApp --network <networkName> gin-app:1.0"
+keploy record -c "docker run -p 3001:3001 --name RediApp --network <networkName> --name ginRedisApp gin-app:1.0"
 ```
 
 To genereate testcases we just need to make some API calls. You can use [Postman](https://www.postman.com/), [Hoppscotch](https://hoppscotch.io/), or simply `curl`
@@ -96,7 +96,7 @@ Now both these API calls were captured as a testcase and should be visible on th
 Now that we have our testcase captured, run the test file.
 
 ```shell
-keploy test -c "sudo docker run -p 3001:3001 --rm --net <networkName> --name ginRedisApp gin-app:1.0" --delay 10
+keploy test -c "sudo docker run -p 3001:3001 --rm --network <networkName> --name ginRedisApp gin-app:1.0" --delay 10
 ```
 
 So no need to setup dependencies like Redis, web-go locally or write mocks for your testing.
@@ -109,10 +109,10 @@ We will get output something like this:
 
 #### Let's add token to Noisy field:
 
-In `test-2.yml` go the noisefield and `-body.token` on line number _41_. Now, it's the time to run the test cases again.
+In `test-2.yml` go to the noisefield and `-body.token` in noise. Now, it's the time to run the test cases again.
 
 ```bash
-keploy test -c "sudo docker run -p 3001:3001 --rm --net <networkName> --name ginRedisApp gin-app:1.0" --delay 10
+keploy test -c "sudo docker run -p 3001:3001 --rm --network <networkName> --name ginRedisApp gin-app:1.0" --delay 10
 ```
 
 This time all the test cases will pass.
@@ -229,7 +229,7 @@ We will get output something like this:
 
 #### Let's add token to Noisy field:
 
-In `test-2.yml` go the noisefield and `-body.token` on line number _41_. Now, it's the time to run the test cases again.
+In `test-2.yml` go to the noisefield and `-body.token` in noise. Now, it's the time to run the test cases again.
 
 ```bash
 sudo -E keploy test -c "./gin-redis" --delay 10
