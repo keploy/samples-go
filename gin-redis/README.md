@@ -30,15 +30,15 @@ alias keploy='sudo docker run --pull always --name keploy-v2 -p 16789:16789 --pr
 
 > **Since, we are on the docker image the Redis URL will be `myredis:6379`. This needs to be updated on the on line 18 in `redisConnect.go` file**
 
-### Create keploy-network 
+### Create a Docker network
 ```
-sudo docker network create keploy-network
+sudo docker network create <networkName>
 ```
 
 ### Let's start the Redis Instance
 Using the docker-compose file we will start our Redis instance:-
 ```bash
-sudo docker run -p 6379:6379 -d --network keploy-network --name myredis redis
+sudo docker run -p 6379:6379 -d --network <networkName> --name myredis redis
 ```
 ```bash
 docker build -t gin-app:1.0 .
@@ -47,7 +47,7 @@ docker build -t gin-app:1.0 .
 ### Capture the Testcases
 
 ```shell
-keploy record -c "docker run -p 3001:3001 --name RediApp --network keploy-network gin-app:1.0"
+keploy record -c "docker run -p 3001:3001 --name RediApp --network <networkName> gin-app:1.0"
 ```
 
 To genereate testcases we just need to make some API calls. You can use [Postman](https://www.postman.com/), [Hoppscotch](https://hoppscotch.io/), or simply `curl`
@@ -88,7 +88,7 @@ Now both these API calls were captured as a testcase and should be visible on th
 Now that we have our testcase captured, run the test file.
 
 ```shell
-keploy test -c "sudo docker run -p 3001:3001 --rm --net keploy-network --name ginRedisApp gin-app:1.0" --delay 10
+keploy test -c "sudo docker run -p 3001:3001 --rm --net <networkName> --name ginRedisApp gin-app:1.0" --delay 10
 ```
 
 So no need to setup dependencies like Redis, web-go locally or write mocks for your testing.
