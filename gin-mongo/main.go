@@ -1,9 +1,14 @@
 package main
 
 import (
+	"context"
+	"fmt"
+	"net/http"
 	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/keploy/go-sdk/v2/keploy"
 	"go.mongodb.org/mongo-driver/mongo"
 
 	"go.uber.org/zap"
@@ -18,7 +23,7 @@ func main() {
 
 	dbName, collection := "keploy", "url-shortener"
 
-	client, err := New("mongoDb:27017", dbName)
+	client, err := New("localhost:27017", dbName)
 	if err != nil {
 		logger.Fatal("failed to create mgo db client", zap.Error(err))
 	}
@@ -34,6 +39,30 @@ func main() {
 
 	r.GET("/:param", getURL)
 	r.POST("/url", putURL)
+	srv := &http.Server{
+		Addr:    ":" + port,
+		Handler: r,
+	}
+	keploy.AddShutdownListener(func() {
+		// fmt.Println("Shutting down server...")
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+		//stop/shutdown the server and its routines.
+		srv.Shutdown(ctx)
+	})
+	// go func() {
+		if err := srv.ListenAndServe(); err == nil  {
+			fmt.Printf("listen: %s\n", err)
+		}
+		fmt.Printf("listen: %s\n", err)
 
-	r.Run(":" + port)
+	// }()
+
+	// Listen for system signals
+	// quit := make(chan os.Signal)
+	// signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	// <-quit
+	// srv.Shutdown(ctx)
+
+
 }

@@ -2,7 +2,7 @@ module test-app-url-shortener
 
 go 1.17
 
-// replace github.com/keploy/go-sdk/v2 => ./../../go-sdk
+replace github.com/keploy/go-sdk/v2 => ./../../go-sdk
 require (
 	go.mongodb.org/mongo-driver v1.8.1
 	go.uber.org/zap v1.22.0
@@ -22,6 +22,7 @@ require (
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/golang/protobuf v1.4.3 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
+	github.com/json-iterator/go v1.1.9 // indirect
 	github.com/klauspost/compress v1.13.6 // indirect
 	github.com/leodido/go-urn v1.2.0 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect

@@ -1,0 +1,307 @@
+🐰 Keploy: 2023-11-03T06:24:41Z 	[34mINFO[0m	cmd/serve.go:58		{"keploy test and mock path": "/home/pranshu.linux/samples-go/gin-mongo/keploy", "keploy testReport path": "/home/pranshu.linux/samples-go/gin-mongo/keploy/testReports"}
+🐰 Keploy: 2023-11-03T06:24:45Z 	[34mINFO[0m	hooks/loader.go:748	keploy initialized and probes added to the kernel.
+🐰 Keploy: 2023-11-03T06:24:45Z 	[34mINFO[0m	proxy/proxy.go:276	Java detected and CA already exists	{"path": "/usr/lib/jvm/java-17-openjdk-arm64/lib/security/cacerts"}
+🐰 Keploy: 2023-11-03T06:24:45Z 	[34mINFO[0m	proxy/proxy.go:276	Java detected and CA already exists	{"path": "/usr/lib/jvm/java-17-openjdk-arm64/lib/security/cacerts"}
+🐰 Keploy: 2023-11-03T06:24:46Z 	[34mINFO[0m	proxy/proxy.go:407	Keploy has hijacked the DNS resolution mechanism, your application may misbehave in keploy test mode if you have provided wrong domain name in your application code.
+🐰 Keploy: 2023-11-03T06:24:46Z 	[34mINFO[0m	proxy/proxy.go:421	Proxy started at port:16789
+🐰 Keploy: 2023-11-03T06:24:46Z 	[34mINFO[0m	proxy/proxy.go:578	starting DNS server at addr :16789
+🐰 Keploy: 2023-11-03T06:24:51Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:24:51Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:24:51Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:24:51Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:24:51Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:24:51Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:24:51Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:24:51Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:24:51Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:24:51Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:24:51Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:24:51Z 	[34mINFO[0m	test/test.go:274		{"no of test cases": 4, "test-set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:25:01Z 	[34mINFO[0m	test/test.go:440		{"no of test cases": 4, "test-set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:25:02Z 	[31mERROR[0m	genericParser/genericParser.go:49	failed to read the request message in proxy for generic dependency	{"Client IP Address": "192.168.5.15:35590", "Client ConnectionID": 1, "Destination IP Address": "127.0.0.1:27017", "Destination ConnectionID": 3, "error": "EOF"}
+🐰 Keploy: 2023-11-03T06:25:02Z 	[31mERROR[0m	genericParser/genericParser.go:49	failed to read the request message in proxy for generic dependency	{"Client IP Address": "192.168.5.15:35584", "Client ConnectionID": 0, "Destination IP Address": "127.0.0.1:27017", "Destination ConnectionID": 2, "error": "EOF"}
+🐰 Keploy: 2023-11-03T06:25:11Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-1
+🐰 Keploy: 2023-11-03T06:25:11Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-1", "test set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:25:12Z 	[31mERROR[0m	genericParser/genericParser.go:49	failed to read the request message in proxy for generic dependency	{"Client IP Address": "192.168.5.15:40068", "Client ConnectionID": 5, "Destination IP Address": "127.0.0.1:27017", "Destination ConnectionID": 7, "error": "EOF"}
+🐰 Keploy: 2023-11-03T06:25:12Z 	[31mERROR[0m	genericParser/genericParser.go:49	failed to read the request message in proxy for generic dependency	{"Client IP Address": "192.168.5.15:40054", "Client ConnectionID": 4, "Destination IP Address": "127.0.0.1:27017", "Destination ConnectionID": 6, "error": "EOF"}
+🐰 Keploy: 2023-11-03T06:25:16Z 	[31mERROR[0m	pkg/util.go:117	failed sending testcase request to app	{"error": "Post \"http://localhost:8080/url\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)"}
+🐰 Keploy: 2023-11-03T06:25:16Z 	[34mINFO[0m	test/test.go:300	result	{"testcase id": "test-1", "testset id": "test-set-0", "passed": "false"}
+🐰 Keploy: 2023-11-03T06:25:16Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-2
+🐰 Keploy: 2023-11-03T06:25:16Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-2", "test set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:25:21Z 	[31mERROR[0m	pkg/util.go:117	failed sending testcase request to app	{"error": "Post \"http://localhost:8080/url\": EOF"}
+🐰 Keploy: 2023-11-03T06:25:21Z 	[34mINFO[0m	test/test.go:300	result	{"testcase id": "test-2", "testset id": "test-set-0", "passed": "false"}
+🐰 Keploy: 2023-11-03T06:25:21Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-3
+🐰 Keploy: 2023-11-03T06:25:21Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-3", "test set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:25:21Z 	[31mERROR[0m	pkg/util.go:117	failed sending testcase request to app	{"error": "Post \"http://localhost:8080/url\": dial tcp 127.0.0.1:8080: connect: connection refused"}
+🐰 Keploy: 2023-11-03T06:25:21Z 	[34mINFO[0m	test/test.go:300	result	{"testcase id": "test-3", "testset id": "test-set-0", "passed": "false"}
+🐰 Keploy: 2023-11-03T06:25:21Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-4
+🐰 Keploy: 2023-11-03T06:25:21Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-4", "test set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:25:21Z 	[31mERROR[0m	pkg/util.go:117	failed sending testcase request to app	{"error": "Get \"http://localhost:8080/CJBKJd92\": dial tcp 127.0.0.1:8080: connect: connection refused"}
+🐰 Keploy: 2023-11-03T06:25:21Z 	[34mINFO[0m	test/test.go:300	result	{"testcase id": "test-4", "testset id": "test-set-0", "passed": "false"}
+🐰 Keploy: 2023-11-03T06:25:21Z 	[31mERROR[0m	test/test.go:364	failed to fetch test results	{"error": "🐰 Keploy:%!(EXTRA string=found no test results for test report with id: %v, string=report-32)"}
+🐰 Keploy: 2023-11-03T06:25:22Z 	[31mERROR[0m	genericParser/genericParser.go:49	failed to read the request message in proxy for generic dependency	{"Client IP Address": "192.168.5.15:56026", "Client ConnectionID": 8, "Destination IP Address": "127.0.0.1:27017", "Destination ConnectionID": 11, "error": "EOF"}
+🐰 Keploy: 2023-11-03T06:25:22Z 	[31mERROR[0m	genericParser/genericParser.go:49	failed to read the request message in proxy for generic dependency	{"Client IP Address": "192.168.5.15:56040", "Client ConnectionID": 9, "Destination IP Address": "127.0.0.1:27017", "Destination ConnectionID": 10, "error": "EOF"}
+🐰 Keploy: 2023-11-03T06:38:52Z 	[34mINFO[0m	cmd/serve.go:58		{"keploy test and mock path": "/home/pranshu.linux/samples-go/gin-mongo/keploy", "keploy testReport path": "/home/pranshu.linux/samples-go/gin-mongo/keploy/testReports"}
+🐰 Keploy: 2023-11-03T06:38:55Z 	[34mINFO[0m	hooks/loader.go:748	keploy initialized and probes added to the kernel.
+🐰 Keploy: 2023-11-03T06:38:55Z 	[34mINFO[0m	proxy/proxy.go:276	Java detected and CA already exists	{"path": "/usr/lib/jvm/java-17-openjdk-arm64/lib/security/cacerts"}
+🐰 Keploy: 2023-11-03T06:38:55Z 	[34mINFO[0m	proxy/proxy.go:276	Java detected and CA already exists	{"path": "/usr/lib/jvm/java-17-openjdk-arm64/lib/security/cacerts"}
+🐰 Keploy: 2023-11-03T06:39:09Z 	[34mINFO[0m	cmd/serve.go:58		{"keploy test and mock path": "/home/pranshu.linux/samples-go/gin-mongo/keploy", "keploy testReport path": "/home/pranshu.linux/samples-go/gin-mongo/keploy/testReports"}
+🐰 Keploy: 2023-11-03T06:39:12Z 	[34mINFO[0m	hooks/loader.go:748	keploy initialized and probes added to the kernel.
+🐰 Keploy: 2023-11-03T06:39:12Z 	[34mINFO[0m	proxy/proxy.go:276	Java detected and CA already exists	{"path": "/usr/lib/jvm/java-17-openjdk-arm64/lib/security/cacerts"}
+🐰 Keploy: 2023-11-03T06:39:12Z 	[34mINFO[0m	proxy/proxy.go:276	Java detected and CA already exists	{"path": "/usr/lib/jvm/java-17-openjdk-arm64/lib/security/cacerts"}
+🐰 Keploy: 2023-11-03T06:39:13Z 	[34mINFO[0m	proxy/proxy.go:407	Keploy has hijacked the DNS resolution mechanism, your application may misbehave in keploy test mode if you have provided wrong domain name in your application code.
+🐰 Keploy: 2023-11-03T06:39:13Z 	[34mINFO[0m	proxy/proxy.go:421	Proxy started at port:16789
+🐰 Keploy: 2023-11-03T06:39:13Z 	[34mINFO[0m	proxy/proxy.go:578	starting DNS server at addr :16789
+🐰 Keploy: 2023-11-03T06:39:19Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:39:19Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:39:19Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:39:19Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:39:19Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:39:19Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:39:19Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:39:19Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:39:19Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:39:19Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:39:19Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:39:19Z 	[34mINFO[0m	test/test.go:274		{"no of test cases": 4, "test-set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:39:29Z 	[34mINFO[0m	test/test.go:440		{"no of test cases": 4, "test-set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:39:39Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-1
+🐰 Keploy: 2023-11-03T06:39:39Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-1", "test set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:39:39Z 	[34mINFO[0m	test/test.go:306	result	{"testcase id": "test-1", "testset id": "test-set-0", "passed": "false"}
+🐰 Keploy: 2023-11-03T06:39:39Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-2
+🐰 Keploy: 2023-11-03T06:39:39Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-2", "test set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:39:39Z 	[34mINFO[0m	test/test.go:306	result	{"testcase id": "test-2", "testset id": "test-set-0", "passed": "false"}
+🐰 Keploy: 2023-11-03T06:39:39Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-3
+🐰 Keploy: 2023-11-03T06:39:39Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-3", "test set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:39:39Z 	[34mINFO[0m	test/test.go:306	result	{"testcase id": "test-3", "testset id": "test-set-0", "passed": "false"}
+🐰 Keploy: 2023-11-03T06:39:39Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-4
+🐰 Keploy: 2023-11-03T06:39:39Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-4", "test set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:39:39Z 	[34mINFO[0m	test/test.go:308	result	{"testcase id": "test-4", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2023-11-03T06:39:39Z 	[34mINFO[0m	test/test.go:383	test report for test-set-0: 	{"name: ": "report-33", "path: ": "/home/pranshu.linux/samples-go/gin-mongo/keploy/report-33"}
+🐰 Keploy: 2023-11-03T06:39:41Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:39:41Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:39:41Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:39:41Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:39:41Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:39:41Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:39:41Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:39:41Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:39:41Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:39:41Z 	[34mINFO[0m	test/test.go:274		{"no of test cases": 3, "test-set": "test-set-1"}
+🐰 Keploy: 2023-11-03T06:39:49Z 	[31mERROR[0m	genericParser/genericParser.go:49	failed to read the request message in proxy for generic dependency	{"Client IP Address": "192.168.5.15:36044", "Client ConnectionID": 0, "Destination IP Address": "127.0.0.1:27017", "Destination ConnectionID": 3, "error": "EOF"}
+🐰 Keploy: 2023-11-03T06:39:49Z 	[31mERROR[0m	genericParser/genericParser.go:49	failed to read the request message in proxy for generic dependency	{"Client IP Address": "192.168.5.15:36028", "Client ConnectionID": 1, "Destination IP Address": "127.0.0.1:27017", "Destination ConnectionID": 2, "error": "EOF"}
+🐰 Keploy: 2023-11-03T06:39:49Z 	[31mERROR[0m	genericParser/genericParser.go:49	failed to read the request message in proxy for generic dependency	{"Client IP Address": "192.168.5.15:50258", "Client ConnectionID": 6, "Destination IP Address": "127.0.0.1:27017", "Destination ConnectionID": 7, "error": "EOF"}
+🐰 Keploy: 2023-11-03T06:39:49Z 	[31mERROR[0m	genericParser/genericParser.go:49	failed to read the request message in proxy for generic dependency	{"Client IP Address": "192.168.5.15:50250", "Client ConnectionID": 4, "Destination IP Address": "127.0.0.1:27017", "Destination ConnectionID": 5, "error": "EOF"}
+🐰 Keploy: 2023-11-03T06:39:51Z 	[34mINFO[0m	test/test.go:440		{"no of test cases": 3, "test-set": "test-set-1"}
+🐰 Keploy: 2023-11-03T06:39:52Z 	[31mERROR[0m	genericParser/genericParser.go:49	failed to read the request message in proxy for generic dependency	{"Client IP Address": "192.168.5.15:50260", "Client ConnectionID": 8, "Destination IP Address": "127.0.0.1:27017", "Destination ConnectionID": 9, "error": "EOF"}
+🐰 Keploy: 2023-11-03T06:43:26Z 	[34mINFO[0m	cmd/serve.go:58		{"keploy test and mock path": "/home/pranshu.linux/samples-go/gin-mongo/keploy", "keploy testReport path": "/home/pranshu.linux/samples-go/gin-mongo/keploy/testReports"}
+🐰 Keploy: 2023-11-03T06:43:29Z 	[34mINFO[0m	hooks/loader.go:748	keploy initialized and probes added to the kernel.
+🐰 Keploy: 2023-11-03T06:43:29Z 	[34mINFO[0m	proxy/proxy.go:276	Java detected and CA already exists	{"path": "/usr/lib/jvm/java-17-openjdk-arm64/lib/security/cacerts"}
+🐰 Keploy: 2023-11-03T06:43:29Z 	[34mINFO[0m	proxy/proxy.go:276	Java detected and CA already exists	{"path": "/usr/lib/jvm/java-17-openjdk-arm64/lib/security/cacerts"}
+🐰 Keploy: 2023-11-03T06:43:30Z 	[34mINFO[0m	proxy/proxy.go:407	Keploy has hijacked the DNS resolution mechanism, your application may misbehave in keploy test mode if you have provided wrong domain name in your application code.
+🐰 Keploy: 2023-11-03T06:43:30Z 	[34mINFO[0m	proxy/proxy.go:421	Proxy started at port:16789
+🐰 Keploy: 2023-11-03T06:43:30Z 	[34mINFO[0m	proxy/proxy.go:578	starting DNS server at addr :16789
+🐰 Keploy: 2023-11-03T06:43:54Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:43:54Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:43:54Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:43:54Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:43:54Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:43:54Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:43:54Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:43:54Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:43:54Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:43:54Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:43:54Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:43:54Z 	[34mINFO[0m	test/test.go:274		{"no of test cases": 4, "test-set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:44:04Z 	[34mINFO[0m	test/test.go:440		{"no of test cases": 4, "test-set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:44:14Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-1
+🐰 Keploy: 2023-11-03T06:44:14Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-1", "test set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:44:14Z 	[31mERROR[0m	pkg/util.go:117	failed sending testcase request to app	{"error": "Post \"http://localhost:8080/url\": dial tcp 127.0.0.1:8080: connect: connection refused"}
+🐰 Keploy: 2023-11-03T06:44:14Z 	[34mINFO[0m	test/test.go:300	result	{"testcase id": "test-1", "testset id": "test-set-0", "passed": "false"}
+🐰 Keploy: 2023-11-03T06:44:14Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-2
+🐰 Keploy: 2023-11-03T06:44:14Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-2", "test set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:44:14Z 	[31mERROR[0m	pkg/util.go:117	failed sending testcase request to app	{"error": "Post \"http://localhost:8080/url\": dial tcp 127.0.0.1:8080: connect: connection refused"}
+🐰 Keploy: 2023-11-03T06:44:14Z 	[34mINFO[0m	test/test.go:300	result	{"testcase id": "test-2", "testset id": "test-set-0", "passed": "false"}
+🐰 Keploy: 2023-11-03T06:44:14Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-3
+🐰 Keploy: 2023-11-03T06:44:14Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-3", "test set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:44:14Z 	[31mERROR[0m	pkg/util.go:117	failed sending testcase request to app	{"error": "Post \"http://localhost:8080/url\": dial tcp 127.0.0.1:8080: connect: connection refused"}
+🐰 Keploy: 2023-11-03T06:44:14Z 	[34mINFO[0m	test/test.go:300	result	{"testcase id": "test-3", "testset id": "test-set-0", "passed": "false"}
+🐰 Keploy: 2023-11-03T06:44:14Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-4
+🐰 Keploy: 2023-11-03T06:44:14Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-4", "test set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:44:14Z 	[31mERROR[0m	pkg/util.go:117	failed sending testcase request to app	{"error": "Get \"http://localhost:8080/CJBKJd92\": dial tcp 127.0.0.1:8080: connect: connection refused"}
+🐰 Keploy: 2023-11-03T06:44:14Z 	[34mINFO[0m	test/test.go:300	result	{"testcase id": "test-4", "testset id": "test-set-0", "passed": "false"}
+🐰 Keploy: 2023-11-03T06:44:14Z 	[31mERROR[0m	test/test.go:364	failed to fetch test results	{"error": "🐰 Keploy:%!(EXTRA string=found no test results for test report with id: %v, string=report-35)"}
+🐰 Keploy: 2023-11-03T06:44:31Z 	[31mERROR[0m	genericParser/genericParser.go:49	failed to read the request message in proxy for generic dependency	{"Client IP Address": "192.168.5.15:42120", "Client ConnectionID": 0, "Destination IP Address": "127.0.0.1:27017", "Destination ConnectionID": 1, "error": "read tcp 192.168.5.15:16789->192.168.5.15:42120: read: connection reset by peer"}
+🐰 Keploy: 2023-11-03T06:45:42Z 	[31mERROR[0m	genericParser/genericParser.go:49	failed to read the request message in proxy for generic dependency	{"Client IP Address": "192.168.5.15:37166", "Client ConnectionID": 5, "Destination IP Address": "127.0.0.1:27017", "Destination ConnectionID": 6, "error": "read tcp 192.168.5.15:16789->192.168.5.15:37166: read: connection reset by peer"}
+🐰 Keploy: 2023-11-03T06:45:42Z 	[31mERROR[0m	genericParser/genericParser.go:49	failed to read the request message in proxy for generic dependency	{"Client IP Address": "192.168.5.15:37164", "Client ConnectionID": 3, "Destination IP Address": "127.0.0.1:27017", "Destination ConnectionID": 4, "error": "EOF"}
+🐰 Keploy: 2023-11-03T06:45:44Z 	[34mINFO[0m	cmd/serve.go:58		{"keploy test and mock path": "/home/pranshu.linux/samples-go/gin-mongo/keploy", "keploy testReport path": "/home/pranshu.linux/samples-go/gin-mongo/keploy/testReports"}
+🐰 Keploy: 2023-11-03T06:45:47Z 	[34mINFO[0m	hooks/loader.go:748	keploy initialized and probes added to the kernel.
+🐰 Keploy: 2023-11-03T06:45:47Z 	[34mINFO[0m	proxy/proxy.go:276	Java detected and CA already exists	{"path": "/usr/lib/jvm/java-17-openjdk-arm64/lib/security/cacerts"}
+🐰 Keploy: 2023-11-03T06:45:47Z 	[34mINFO[0m	proxy/proxy.go:276	Java detected and CA already exists	{"path": "/usr/lib/jvm/java-17-openjdk-arm64/lib/security/cacerts"}
+🐰 Keploy: 2023-11-03T06:46:04Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:46:04Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:46:04Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:46:04Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:46:04Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:46:04Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:46:04Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:46:04Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:46:04Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:46:04Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:46:04Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:46:04Z 	[34mINFO[0m	test/test.go:274		{"no of test cases": 4, "test-set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:46:14Z 	[34mINFO[0m	test/test.go:440		{"no of test cases": 4, "test-set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:46:24Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-1
+🐰 Keploy: 2023-11-03T06:46:24Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-1", "test set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:46:24Z 	[34mINFO[0m	test/test.go:306	result	{"testcase id": "test-1", "testset id": "test-set-0", "passed": "false"}
+🐰 Keploy: 2023-11-03T06:46:24Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-2
+🐰 Keploy: 2023-11-03T06:46:24Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-2", "test set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:46:24Z 	[34mINFO[0m	test/test.go:306	result	{"testcase id": "test-2", "testset id": "test-set-0", "passed": "false"}
+🐰 Keploy: 2023-11-03T06:46:24Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-3
+🐰 Keploy: 2023-11-03T06:46:24Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-3", "test set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:46:24Z 	[34mINFO[0m	test/test.go:306	result	{"testcase id": "test-3", "testset id": "test-set-0", "passed": "false"}
+🐰 Keploy: 2023-11-03T06:46:24Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-4
+🐰 Keploy: 2023-11-03T06:46:24Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-4", "test set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:46:24Z 	[34mINFO[0m	test/test.go:308	result	{"testcase id": "test-4", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2023-11-03T06:46:24Z 	[34mINFO[0m	test/test.go:383	test report for test-set-0: 	{"name: ": "report-36", "path: ": "/home/pranshu.linux/samples-go/gin-mongo/keploy/report-36"}
+🐰 Keploy: 2023-11-03T06:46:37Z 	[34mINFO[0m	cmd/serve.go:58		{"keploy test and mock path": "/home/pranshu.linux/samples-go/gin-mongo/keploy", "keploy testReport path": "/home/pranshu.linux/samples-go/gin-mongo/keploy/testReports"}
+🐰 Keploy: 2023-11-03T06:46:40Z 	[34mINFO[0m	hooks/loader.go:748	keploy initialized and probes added to the kernel.
+🐰 Keploy: 2023-11-03T06:46:40Z 	[34mINFO[0m	proxy/proxy.go:276	Java detected and CA already exists	{"path": "/usr/lib/jvm/java-17-openjdk-arm64/lib/security/cacerts"}
+🐰 Keploy: 2023-11-03T06:46:40Z 	[34mINFO[0m	proxy/proxy.go:276	Java detected and CA already exists	{"path": "/usr/lib/jvm/java-17-openjdk-arm64/lib/security/cacerts"}
+🐰 Keploy: 2023-11-03T06:46:50Z 	[34mINFO[0m	cmd/serve.go:58		{"keploy test and mock path": "/home/pranshu.linux/samples-go/gin-mongo/keploy", "keploy testReport path": "/home/pranshu.linux/samples-go/gin-mongo/keploy/testReports"}
+🐰 Keploy: 2023-11-03T06:46:53Z 	[34mINFO[0m	hooks/loader.go:748	keploy initialized and probes added to the kernel.
+🐰 Keploy: 2023-11-03T06:46:54Z 	[34mINFO[0m	proxy/proxy.go:276	Java detected and CA already exists	{"path": "/usr/lib/jvm/java-17-openjdk-arm64/lib/security/cacerts"}
+🐰 Keploy: 2023-11-03T06:46:54Z 	[34mINFO[0m	proxy/proxy.go:276	Java detected and CA already exists	{"path": "/usr/lib/jvm/java-17-openjdk-arm64/lib/security/cacerts"}
+🐰 Keploy: 2023-11-03T06:46:57Z 	[34mINFO[0m	cmd/serve.go:58		{"keploy test and mock path": "/home/pranshu.linux/samples-go/gin-mongo/keploy", "keploy testReport path": "/home/pranshu.linux/samples-go/gin-mongo/keploy/testReports"}
+🐰 Keploy: 2023-11-03T06:47:00Z 	[34mINFO[0m	hooks/loader.go:748	keploy initialized and probes added to the kernel.
+🐰 Keploy: 2023-11-03T06:47:00Z 	[34mINFO[0m	proxy/proxy.go:276	Java detected and CA already exists	{"path": "/usr/lib/jvm/java-17-openjdk-arm64/lib/security/cacerts"}
+🐰 Keploy: 2023-11-03T06:47:00Z 	[34mINFO[0m	proxy/proxy.go:276	Java detected and CA already exists	{"path": "/usr/lib/jvm/java-17-openjdk-arm64/lib/security/cacerts"}
+🐰 Keploy: 2023-11-03T06:47:24Z 	[34mINFO[0m	cmd/serve.go:58		{"keploy test and mock path": "/home/pranshu.linux/samples-go/gin-mongo/keploy", "keploy testReport path": "/home/pranshu.linux/samples-go/gin-mongo/keploy/testReports"}
+🐰 Keploy: 2023-11-03T06:47:27Z 	[34mINFO[0m	hooks/loader.go:748	keploy initialized and probes added to the kernel.
+🐰 Keploy: 2023-11-03T06:47:27Z 	[34mINFO[0m	proxy/proxy.go:276	Java detected and CA already exists	{"path": "/usr/lib/jvm/java-17-openjdk-arm64/lib/security/cacerts"}
+🐰 Keploy: 2023-11-03T06:47:27Z 	[34mINFO[0m	proxy/proxy.go:276	Java detected and CA already exists	{"path": "/usr/lib/jvm/java-17-openjdk-arm64/lib/security/cacerts"}
+🐰 Keploy: 2023-11-03T06:47:57Z 	[34mINFO[0m	cmd/serve.go:58		{"keploy test and mock path": "/home/pranshu.linux/samples-go/gin-mongo/keploy", "keploy testReport path": "/home/pranshu.linux/samples-go/gin-mongo/keploy/testReports"}
+🐰 Keploy: 2023-11-03T06:48:00Z 	[34mINFO[0m	hooks/loader.go:748	keploy initialized and probes added to the kernel.
+🐰 Keploy: 2023-11-03T06:48:00Z 	[34mINFO[0m	proxy/proxy.go:276	Java detected and CA already exists	{"path": "/usr/lib/jvm/java-17-openjdk-arm64/lib/security/cacerts"}
+🐰 Keploy: 2023-11-03T06:48:00Z 	[34mINFO[0m	proxy/proxy.go:276	Java detected and CA already exists	{"path": "/usr/lib/jvm/java-17-openjdk-arm64/lib/security/cacerts"}
+🐰 Keploy: 2023-11-03T06:48:01Z 	[34mINFO[0m	proxy/proxy.go:407	Keploy has hijacked the DNS resolution mechanism, your application may misbehave in keploy test mode if you have provided wrong domain name in your application code.
+🐰 Keploy: 2023-11-03T06:48:01Z 	[34mINFO[0m	proxy/proxy.go:421	Proxy started at port:16789
+🐰 Keploy: 2023-11-03T06:48:01Z 	[34mINFO[0m	proxy/proxy.go:578	starting DNS server at addr :16789
+🐰 Keploy: 2023-11-03T06:48:35Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:48:35Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:48:35Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:48:35Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:48:35Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:48:35Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:48:35Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:48:35Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:48:35Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:48:35Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:48:35Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:48:35Z 	[34mINFO[0m	test/test.go:274		{"no of test cases": 4, "test-set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:48:45Z 	[34mINFO[0m	test/test.go:440		{"no of test cases": 4, "test-set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:48:55Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-1
+🐰 Keploy: 2023-11-03T06:48:55Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-1", "test set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:48:55Z 	[34mINFO[0m	test/test.go:306	result	{"testcase id": "test-1", "testset id": "test-set-0", "passed": "false"}
+🐰 Keploy: 2023-11-03T06:48:55Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-2
+🐰 Keploy: 2023-11-03T06:48:55Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-2", "test set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:48:55Z 	[34mINFO[0m	test/test.go:306	result	{"testcase id": "test-2", "testset id": "test-set-0", "passed": "false"}
+🐰 Keploy: 2023-11-03T06:48:55Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-3
+🐰 Keploy: 2023-11-03T06:48:55Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-3", "test set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:48:55Z 	[34mINFO[0m	test/test.go:306	result	{"testcase id": "test-3", "testset id": "test-set-0", "passed": "false"}
+🐰 Keploy: 2023-11-03T06:48:55Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-4
+🐰 Keploy: 2023-11-03T06:48:55Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-4", "test set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:48:55Z 	[34mINFO[0m	test/test.go:308	result	{"testcase id": "test-4", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2023-11-03T06:48:55Z 	[34mINFO[0m	test/test.go:383	test report for test-set-0: 	{"name: ": "report-37", "path: ": "/home/pranshu.linux/samples-go/gin-mongo/keploy/report-37"}
+🐰 Keploy: 2023-11-03T06:49:01Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:49:01Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:49:01Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:49:01Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:49:01Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:49:01Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:49:01Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:49:01Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:49:01Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:49:01Z 	[34mINFO[0m	test/test.go:274		{"no of test cases": 3, "test-set": "test-set-1"}
+🐰 Keploy: 2023-11-03T06:49:06Z 	[31mERROR[0m	genericParser/genericParser.go:49	failed to read the request message in proxy for generic dependency	{"Client IP Address": "192.168.5.15:34056", "Client ConnectionID": 0, "Destination IP Address": "127.0.0.1:27017", "Destination ConnectionID": 2, "error": "EOF"}
+🐰 Keploy: 2023-11-03T06:49:11Z 	[34mINFO[0m	test/test.go:440		{"no of test cases": 3, "test-set": "test-set-1"}
+🐰 Keploy: 2023-11-03T06:49:15Z 	[31mERROR[0m	genericParser/genericParser.go:49	failed to read the request message in proxy for generic dependency	{"Client IP Address": "192.168.5.15:34502", "Client ConnectionID": 4, "Destination IP Address": "127.0.0.1:27017", "Destination ConnectionID": 5, "error": "EOF"}
+🐰 Keploy: 2023-11-03T06:49:21Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-1
+🐰 Keploy: 2023-11-03T06:49:21Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-1", "test set": "test-set-1"}
+🐰 Keploy: 2023-11-03T06:49:21Z 	[34mINFO[0m	test/test.go:308	result	{"testcase id": "test-1", "testset id": "test-set-1", "passed": "true"}
+🐰 Keploy: 2023-11-03T06:49:21Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-2
+🐰 Keploy: 2023-11-03T06:49:21Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-2", "test set": "test-set-1"}
+🐰 Keploy: 2023-11-03T06:49:21Z 	[34mINFO[0m	test/test.go:306	result	{"testcase id": "test-2", "testset id": "test-set-1", "passed": "false"}
+🐰 Keploy: 2023-11-03T06:49:21Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-3
+🐰 Keploy: 2023-11-03T06:49:21Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-3", "test set": "test-set-1"}
+🐰 Keploy: 2023-11-03T06:49:21Z 	[34mINFO[0m	test/test.go:306	result	{"testcase id": "test-3", "testset id": "test-set-1", "passed": "false"}
+🐰 Keploy: 2023-11-03T06:49:21Z 	[34mINFO[0m	test/test.go:383	test report for test-set-1: 	{"name: ": "report-38", "path: ": "/home/pranshu.linux/samples-go/gin-mongo/keploy/report-38"}
+🐰 Keploy: 2023-11-03T06:50:11Z 	[31mERROR[0m	genericParser/genericParser.go:49	failed to read the request message in proxy for generic dependency	{"Client IP Address": "192.168.5.15:34518", "Client ConnectionID": 6, "Destination IP Address": "127.0.0.1:27017", "Destination ConnectionID": 7, "error": "EOF"}
+🐰 Keploy: 2023-11-03T06:50:11Z 	[31mERROR[0m	genericParser/genericParser.go:49	failed to read the request message in proxy for generic dependency	{"Client IP Address": "192.168.5.15:34046", "Client ConnectionID": 1, "Destination IP Address": "127.0.0.1:27017", "Destination ConnectionID": 3, "error": "EOF"}
+🐰 Keploy: 2023-11-03T06:50:11Z 	[31mERROR[0m	genericParser/genericParser.go:49	failed to read the request message in proxy for generic dependency	{"Client IP Address": "192.168.5.15:34508", "Client ConnectionID": 8, "Destination IP Address": "127.0.0.1:27017", "Destination ConnectionID": 9, "error": "EOF"}
+🐰 Keploy: 2023-11-03T06:50:11Z 	[31mERROR[0m	genericParser/genericParser.go:49	failed to read the request message in proxy for generic dependency	{"Client IP Address": "192.168.5.15:58134", "Client ConnectionID": 12, "Destination IP Address": "127.0.0.1:27017", "Destination ConnectionID": 13, "error": "EOF"}
+🐰 Keploy: 2023-11-03T06:50:11Z 	[31mERROR[0m	genericParser/genericParser.go:49	failed to read the request message in proxy for generic dependency	{"Client IP Address": "192.168.5.15:53212", "Client ConnectionID": 10, "Destination IP Address": "127.0.0.1:27017", "Destination ConnectionID": 11, "error": "EOF"}
+🐰 Keploy: 2023-11-03T06:50:12Z 	[34mINFO[0m	cmd/serve.go:58		{"keploy test and mock path": "/home/pranshu.linux/samples-go/gin-mongo/keploy", "keploy testReport path": "/home/pranshu.linux/samples-go/gin-mongo/keploy/testReports"}
+🐰 Keploy: 2023-11-03T06:50:14Z 	[34mINFO[0m	hooks/loader.go:748	keploy initialized and probes added to the kernel.
+🐰 Keploy: 2023-11-03T06:50:15Z 	[34mINFO[0m	proxy/proxy.go:276	Java detected and CA already exists	{"path": "/usr/lib/jvm/java-17-openjdk-arm64/lib/security/cacerts"}
+🐰 Keploy: 2023-11-03T06:50:15Z 	[34mINFO[0m	proxy/proxy.go:276	Java detected and CA already exists	{"path": "/usr/lib/jvm/java-17-openjdk-arm64/lib/security/cacerts"}
+🐰 Keploy: 2023-11-03T06:50:43Z 	[34mINFO[0m	cmd/serve.go:58		{"keploy test and mock path": "/home/pranshu.linux/samples-go/gin-mongo/keploy", "keploy testReport path": "/home/pranshu.linux/samples-go/gin-mongo/keploy/testReports"}
+🐰 Keploy: 2023-11-03T06:50:45Z 	[34mINFO[0m	hooks/loader.go:748	keploy initialized and probes added to the kernel.
+🐰 Keploy: 2023-11-03T06:50:46Z 	[34mINFO[0m	proxy/proxy.go:276	Java detected and CA already exists	{"path": "/usr/lib/jvm/java-17-openjdk-arm64/lib/security/cacerts"}
+🐰 Keploy: 2023-11-03T06:50:46Z 	[34mINFO[0m	proxy/proxy.go:276	Java detected and CA already exists	{"path": "/usr/lib/jvm/java-17-openjdk-arm64/lib/security/cacerts"}
+🐰 Keploy: 2023-11-03T06:50:47Z 	[34mINFO[0m	proxy/proxy.go:407	Keploy has hijacked the DNS resolution mechanism, your application may misbehave in keploy test mode if you have provided wrong domain name in your application code.
+🐰 Keploy: 2023-11-03T06:50:47Z 	[34mINFO[0m	proxy/proxy.go:421	Proxy started at port:16789
+🐰 Keploy: 2023-11-03T06:50:47Z 	[34mINFO[0m	proxy/proxy.go:578	starting DNS server at addr :16789
+🐰 Keploy: 2023-11-03T06:50:57Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:50:57Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:50:57Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:50:57Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:50:57Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:50:57Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:50:57Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:50:57Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:50:57Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:50:57Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:50:57Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:50:57Z 	[34mINFO[0m	test/test.go:274		{"no of test cases": 4, "test-set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:51:07Z 	[34mINFO[0m	test/test.go:440		{"no of test cases": 4, "test-set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:51:17Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-1
+🐰 Keploy: 2023-11-03T06:51:17Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-1", "test set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:51:17Z 	[34mINFO[0m	test/test.go:306	result	{"testcase id": "test-1", "testset id": "test-set-0", "passed": "false"}
+🐰 Keploy: 2023-11-03T06:51:17Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-2
+🐰 Keploy: 2023-11-03T06:51:17Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-2", "test set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:51:17Z 	[34mINFO[0m	test/test.go:306	result	{"testcase id": "test-2", "testset id": "test-set-0", "passed": "false"}
+🐰 Keploy: 2023-11-03T06:51:17Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-3
+🐰 Keploy: 2023-11-03T06:51:17Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-3", "test set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:51:17Z 	[34mINFO[0m	test/test.go:306	result	{"testcase id": "test-3", "testset id": "test-set-0", "passed": "false"}
+🐰 Keploy: 2023-11-03T06:51:17Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-4
+🐰 Keploy: 2023-11-03T06:51:17Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-4", "test set": "test-set-0"}
+🐰 Keploy: 2023-11-03T06:51:17Z 	[34mINFO[0m	test/test.go:308	result	{"testcase id": "test-4", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2023-11-03T06:51:17Z 	[34mINFO[0m	test/test.go:383	test report for test-set-0: 	{"name: ": "report-39", "path: ": "/home/pranshu.linux/samples-go/gin-mongo/keploy/report-39"}
+🐰 Keploy: 2023-11-03T06:51:35Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:51:35Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:51:35Z 	[34mINFO[0m	yaml/model.go:236	This testcase was not recorded using Keploy, may not work properly.	{"tc version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:51:35Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:51:35Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:51:35Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:51:35Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:51:35Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:51:35Z 	[34mINFO[0m	yaml/model.go:279	This mock was not recorded using Keploy, may not work properly.	{"mock version:": "api.keploy.io/v1beta2"}
+🐰 Keploy: 2023-11-03T06:51:35Z 	[34mINFO[0m	test/test.go:274		{"no of test cases": 3, "test-set": "test-set-1"}
+🐰 Keploy: 2023-11-03T06:51:36Z 	[31mERROR[0m	genericParser/genericParser.go:49	failed to read the request message in proxy for generic dependency	{"Client IP Address": "192.168.5.15:39566", "Client ConnectionID": 0, "Destination IP Address": "127.0.0.1:27017", "Destination ConnectionID": 3, "error": "EOF"}
+🐰 Keploy: 2023-11-03T06:51:36Z 	[31mERROR[0m	genericParser/genericParser.go:49	failed to read the request message in proxy for generic dependency	{"Client IP Address": "192.168.5.15:55910", "Client ConnectionID": 4, "Destination IP Address": "127.0.0.1:27017", "Destination ConnectionID": 5, "error": "EOF"}
+🐰 Keploy: 2023-11-03T06:51:45Z 	[34mINFO[0m	test/test.go:440		{"no of test cases": 3, "test-set": "test-set-1"}
+🐰 Keploy: 2023-11-03T06:51:55Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-1
+🐰 Keploy: 2023-11-03T06:51:55Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-1", "test set": "test-set-1"}
+🐰 Keploy: 2023-11-03T06:51:58Z 	[31mERROR[0m	pkg/util.go:117	failed sending testcase request to app	{"error": "Get \"http://localhost:8080/CJBKJd92\": read tcp 127.0.0.1:59812->127.0.0.1:8080: read: connection reset by peer"}
+🐰 Keploy: 2023-11-03T06:51:58Z 	[34mINFO[0m	test/test.go:300	result	{"testcase id": "test-1", "testset id": "test-set-1", "passed": "false"}
+🐰 Keploy: 2023-11-03T06:51:58Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-2
+🐰 Keploy: 2023-11-03T06:51:58Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-2", "test set": "test-set-1"}
+🐰 Keploy: 2023-11-03T06:51:58Z 	[31mERROR[0m	pkg/util.go:117	failed sending testcase request to app	{"error": "Post \"http://localhost:8080/url\": dial tcp 127.0.0.1:8080: connect: connection refused"}
+🐰 Keploy: 2023-11-03T06:51:58Z 	[34mINFO[0m	test/test.go:300	result	{"testcase id": "test-2", "testset id": "test-set-1", "passed": "false"}
+🐰 Keploy: 2023-11-03T06:51:58Z 	[33mWARN[0m	test/util.go:291	request timestamp is missing for test-3
+🐰 Keploy: 2023-11-03T06:51:58Z 	[34mINFO[0m	pkg/util.go:65	starting test for of	{"test case": "test-3", "test set": "test-set-1"}
+🐰 Keploy: 2023-11-03T06:51:58Z 	[31mERROR[0m	pkg/util.go:117	failed sending testcase request to app	{"error": "Post \"http://localhost:8080/url\": dial tcp 127.0.0.1:8080: connect: connection refused"}
+🐰 Keploy: 2023-11-03T06:51:58Z 	[34mINFO[0m	test/test.go:300	result	{"testcase id": "test-3", "testset id": "test-set-1", "passed": "false"}
+🐰 Keploy: 2023-11-03T06:51:58Z 	[31mERROR[0m	test/test.go:364	failed to fetch test results	{"error": "🐰 Keploy:%!(EXTRA string=found no test results for test report with id: %v, string=report-40)"}
+🐰 Keploy: 2023-11-03T06:51:58Z 	[31mERROR[0m	genericParser/genericParser.go:49	failed to read the request message in proxy for generic dependency	{"Client IP Address": "192.168.5.15:39574", "Client ConnectionID": 1, "Destination IP Address": "127.0.0.1:27017", "Destination ConnectionID": 2, "error": "EOF"}

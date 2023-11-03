@@ -1,77 +1,80 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
+	// "bytes"
+	// "encoding/json"
 	"fmt"
-	"net/http"
-	"net/http/httptest"
+	// "net/http"
+	// "net/http/httptest"
 	"testing"
+	"time"
+	"log"
+	"os"
 
-	"github.com/gin-gonic/gin"
+	// "github.com/gin-gonic/gin"
 	"github.com/keploy/go-sdk/v2/keploy"
 )
 
-func setup(t *testing.T) {
-	err := keploy.New(keploy.Config{
-		Name:             "TestPutURL",
-		Mode:             keploy.MODE_RECORD,
-		Path:             "/home/pranshu.linux/samples-go/gin-mongo",
-		Delay:            10,
-	})
+// main_test.go file
+func TestMain(m *testing.M) {
+	// Start the keploy GraphQL server
+	err := keploy.RunKeployServer(int64(os.Getpid()), 10, "./", 6789)
 	if err != nil {
-		t.Fatalf("error while running keploy: %v", err)
+		log.Fatal("failed to start the keploy server", err)
 	}
-	dbName, collection := "keploy", "url-shortener"
-	client, err := New("localhost:27017", dbName)
-	if err != nil {
-		panic("Failed to initialize MongoDB: " + err.Error())
-	}
-	db := client.Database(dbName)
-	col = db.Collection(collection)
+
+	code := m.Run()  // Run all tests
+
+        // Stop the keploy server
+	keploy.StopKeployServer()
+        os.Exit(code)
 }
 
-
-
-func TestPutURL(t *testing.T) {
-
-	defer keploy.KillProcessOnPort()
-	setup(t)
-
-	r := gin.Default()
-	r.GET("/:param", getURL)
-	r.POST("/url", putURL)
-
-	data := map[string]string{
-		"url": "https://www.example.com",
-	}
-	payload, err := json.Marshal(data)
+func TestKeploy(t *testing.T) {
+        // Fetch the keploy recorded test-sets
+	testSets, err := keploy.FetchTestSets()
 	if err != nil {
-		t.Fatalf("rfe: %v\n", err)
+		t.Log(err)
 	}
 
-	req, err := http.NewRequest(http.MethodPost, "/url", bytes.NewBuffer(payload))
-	if err != nil {
-		t.Fatalf("Couldn't create request: %v\n", err)
-	}
-	req.Header.Set("Content-Type", "application/json")
+	fmt.Println("TestSets:", testSets)
+	fmt.Println("starting user application")
 
-	w := httptest.NewRecorder()
-	r.ServeHTTP(w, req)
+	result := true
+	for _, v := range testSets {
+		// Run the test-set sequentially
+		testRunId, err := keploy.RunTestSet(v)
+		go main()
+		if err != nil {
+			t.Log(err)
+		}
+		var testRunStatus keploy.TestRunStatus
+		for {
 
-	// Checking if the URL was successfully shortened and stored
-	if w.Code != http.StatusOK {
-		t.Fatalf("Exect HTTP 200 OK, but got %v", w.Code)
+			//check status every 2 sec
+			time.Sleep(2 * time.Second);
+			testRunStatus, err = keploy.FetchTestSetStatus(testRunId)
+			if err != nil {
+				t.Log(err)
+			}
+			if (testRunStatus == keploy.Running) {
+				fmt.Println("testRun still in progress");
+				continue;
+			}
+			break;
+		}
+		if (testRunStatus == keploy.Failed) {
+			fmt.Println("testrun failed for", v);
+			result = false;
+		} else if (testRunStatus == keploy.Passed) {
+			fmt.Println("testrun passed for", v);
+		}
+		// trigger shutdown event
+		keploy.LaunchShutdown()
 	}
 
-	var response map[string]interface{}
-	err = json.Unmarshal(w.Body.Bytes(), &response)
-	if err != nil {
-		t.Fatalf("Failed to unmarshal response: %v\n", err)
+	if !result {
+		t.Error("the testrun failed")
 	}
-	fmt.Println("response-url" + response["url"].(string))
-
-	if response["url"] == nil || response["ts"] == nil {
-		t.Fatalf("Response did not contain expected fields")
-	}
+	t.Log("the overall result:", result)
 }
