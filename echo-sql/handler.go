@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"math/big"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/itchyny/base58-go"
@@ -42,23 +41,41 @@ type successResponse struct {
 /*
 Establishes a connection with the PostgreSQL instance.
 */
-func NewConnection(conn_details ConnectionDetails) (*sql.DB, error) {
-	// Connect to PostgreSQL database
-	db_info := fmt.Sprintf("host=%s port=%s user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		conn_details.host, conn_details.port, conn_details.user, conn_details.password, conn_details.db_name)
+func NewConnection(connDetails ConnectionDetails) (*sql.DB, error) {
+	dbInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		connDetails.host, connDetails.port, connDetails.user, connDetails.password, connDetails.db_name)
 
-	var err error
-	db, err := sql.Open("postgres", db_info)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
-		os.Exit(1)
-	}
+	db, err := sql.Open("postgres", dbInfo)
 	if err != nil {
 		return nil, err
 	}
 
+	// Ping the database to ensure a connection can be established
+	err = db.Ping()
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if the "url_map" table exists, create it if not
+	if err := createURLMapTable(db); err != nil {
+		return nil, err
+	}
+
 	return db, nil
+}
+
+func createURLMapTable(db *sql.DB) error {
+	query := `
+		CREATE TABLE IF NOT EXISTS url_map (
+			id           VARCHAR(255) PRIMARY KEY,
+			redirect_url VARCHAR(255) NOT NULL,
+			created_at   TIMESTAMP NOT NULL,
+			updated_at   TIMESTAMP NOT NULL
+		);
+	`
+
+	_, err := db.Exec(query)
+	return err
 }
 
 func InsertURL(c context.Context, entry URLEntry) error {
