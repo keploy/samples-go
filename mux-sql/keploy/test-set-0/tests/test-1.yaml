@@ -1,0 +1,40 @@
+version: api.keploy.io/v1beta2
+kind: Http
+name: test-1
+spec:
+    metadata: {}
+    req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8010/product
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Cache-Control: no-cache
+            Content-Length: "45"
+            Content-Type: application/json
+            Host: localhost:8010
+            Postman-Token: c1731d51-a87c-44cc-82a1-de6173f2c17f
+            User-Agent: PostmanRuntime/7.32.1
+        body: "{\r\n    \"name\":\"A Pencil\", \r\n    \"price\": 1\r\n}"
+        body_type: ""
+        timestamp: 2023-11-10T11:39:51.511849536Z
+    resp:
+        status_code: 500
+        header:
+            Content-Length: "15"
+            Content-Type: application/json
+            Date: Fri, 10 Nov 2023 11:39:51 GMT
+        body: '{"error":"EOF"}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2023-11-10T11:39:54.160618704Z
+    objects: []
+    assertions:
+        noise:
+            - header.Date
+    created: 1699616394
+curl: "curl --request POST \\\n  --url http://localhost:8010/product \\\n  --header 'Accept-Encoding: gzip, deflate, br' \\\n  --header 'Content-Type: application/json' \\\n  --header 'User-Agent: PostmanRuntime/7.32.1' \\\n  --header 'Accept: */*' \\\n  --header 'Cache-Control: no-cache' \\\n  --header 'Postman-Token: c1731d51-a87c-44cc-82a1-de6173f2c17f' \\\n  --header 'Host: localhost:8010' \\\n  --data '{\r\n    \"name\":\"A Pencil\", \r\n    \"price\": 1\r\n}'"
