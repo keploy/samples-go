@@ -1,0 +1,271 @@
+version: api.keploy.io/v1beta1
+kind: Generic
+name: mocks
+spec:
+    metadata: {}
+    genericrequests:
+        - origin: client
+          message:
+            - type: binary
+              data: 5gAAAAIAAAAAAAAA1AcAAAQAAABhZG1pbi4kY21kAAAAAAD/////vwAAABBpc01hc3RlcgABAAAACGhlbGxvT2sAAQRjb21wcmVzc2lvbgAFAAAAAANjbGllbnQAiAAAAANkcml2ZXIAMwAAAAJuYW1lABAAAABtb25nby1nby1kcml2ZXIAAnZlcnNpb24ABwAAAHYxLjguMQAAA29zAC0AAAACdHlwZQAGAAAAbGludXgAAmFyY2hpdGVjdHVyZQAGAAAAYXJtNjQAAAJwbGF0Zm9ybQAJAAAAZ28xLjIxLjMAAAA=
+    genericresponses:
+        - origin: server
+          message:
+            - type: binary
+              data: SQEAAAsBAAACAAAAAQAAAAgAAAAAAAAAAAAAAAAAAAABAAAAJQEAAAhoZWxsb09rAAEIaXNtYXN0ZXIAAQN0b3BvbG9neVZlcnNpb24ALQAAAAdwcm9jZXNzSWQAZUSVTxsM3Pv7hMZbEmNvdW50ZXIAAAAAAAAAAAAAEG1heEJzb25PYmplY3RTaXplAAAAAAEQbWF4TWVzc2FnZVNpemVCeXRlcwAAbNwCEG1heFdyaXRlQmF0Y2hTaXplAKCGAQAJbG9jYWxUaW1lADU9IJSLAQAAEGxvZ2ljYWxTZXNzaW9uVGltZW91dE1pbnV0ZXMAHgAAABBjb25uZWN0aW9uSWQAMQAAABBtaW5XaXJlVmVyc2lvbgAAAAAAEG1heFdpcmVWZXJzaW9uABEAAAAIcmVhZE9ubHkAAAFvawAAAAAAAADwPwA=
+    reqtimestampmock: 2023-11-03T07:40:22.708945824Z
+    restimestampmock: 2023-11-03T07:40:22.709649518Z
+---
+version: api.keploy.io/v1beta1
+kind: Generic
+name: mocks
+spec:
+    metadata: {}
+    genericrequests:
+        - origin: client
+          message:
+            - type: binary
+              data: 5gAAAAEAAAAAAAAA1AcAAAQAAABhZG1pbi4kY21kAAAAAAD/////vwAAABBpc01hc3RlcgABAAAACGhlbGxvT2sAAQRjb21wcmVzc2lvbgAFAAAAAANjbGllbnQAiAAAAANkcml2ZXIAMwAAAAJuYW1lABAAAABtb25nby1nby1kcml2ZXIAAnZlcnNpb24ABwAAAHYxLjguMQAAA29zAC0AAAACdHlwZQAGAAAAbGludXgAAmFyY2hpdGVjdHVyZQAGAAAAYXJtNjQAAAJwbGF0Zm9ybQAJAAAAZ28xLjIxLjMAAAA=
+    genericresponses:
+        - origin: server
+          message:
+            - type: binary
+              data: SQEAAAoBAAABAAAAAQAAAAgAAAAAAAAAAAAAAAAAAAABAAAAJQEAAAhoZWxsb09rAAEIaXNtYXN0ZXIAAQN0b3BvbG9neVZlcnNpb24ALQAAAAdwcm9jZXNzSWQAZUSVTxsM3Pv7hMZbEmNvdW50ZXIAAAAAAAAAAAAAEG1heEJzb25PYmplY3RTaXplAAAAAAEQbWF4TWVzc2FnZVNpemVCeXRlcwAAbNwCEG1heFdyaXRlQmF0Y2hTaXplAKCGAQAJbG9jYWxUaW1lADU9IJSLAQAAEGxvZ2ljYWxTZXNzaW9uVGltZW91dE1pbnV0ZXMAHgAAABBjb25uZWN0aW9uSWQAMgAAABBtaW5XaXJlVmVyc2lvbgAAAAAAEG1heFdpcmVWZXJzaW9uABEAAAAIcmVhZE9ubHkAAAFvawAAAAAAAADwPwA=
+    reqtimestampmock: 2023-11-03T07:40:22.7089639Z
+    restimestampmock: 2023-11-03T07:40:22.709623861Z
+---
+version: api.keploy.io/v1beta1
+kind: Generic
+name: mocks
+spec:
+    metadata: {}
+    genericrequests:
+        - origin: client
+          message:
+            - type: binary
+              data: PgAAAAQAAAAAAAAA3QcAAAAAAAAAKQAAABBoZWxsbwABAAAACGhlbGxvT2sAAQIkZGIABgAAAGFkbWluAAA=
+    genericresponses:
+        - origin: server
+          message:
+            - type: binary
+              data: QwEAAAwBAAAEAAAA3QcAAAAAAAAALgEAAAhoZWxsb09rAAEIaXNXcml0YWJsZVByaW1hcnkAAQN0b3BvbG9neVZlcnNpb24ALQAAAAdwcm9jZXNzSWQAZUSVTxsM3Pv7hMZbEmNvdW50ZXIAAAAAAAAAAAAAEG1heEJzb25PYmplY3RTaXplAAAAAAEQbWF4TWVzc2FnZVNpemVCeXRlcwAAbNwCEG1heFdyaXRlQmF0Y2hTaXplAKCGAQAJbG9jYWxUaW1lAEZkIJSLAQAAEGxvZ2ljYWxTZXNzaW9uVGltZW91dE1pbnV0ZXMAHgAAABBjb25uZWN0aW9uSWQAMgAAABBtaW5XaXJlVmVyc2lvbgAAAAAAEG1heFdpcmVWZXJzaW9uABEAAAAIcmVhZE9ubHkAAAFvawAAAAAAAADwPwA=
+    reqtimestampmock: 2023-11-03T07:40:32.711384278Z
+    restimestampmock: 2023-11-03T07:40:32.711549011Z
+---
+version: api.keploy.io/v1beta1
+kind: Generic
+name: mocks
+spec:
+    metadata: {}
+    genericrequests:
+        - origin: client
+          message:
+            - type: binary
+              data: PgAAAAUAAAAAAAAA3QcAAAAAAAAAKQAAABBoZWxsbwABAAAACGhlbGxvT2sAAQIkZGIABgAAAGFkbWluAAA=
+    genericresponses:
+        - origin: server
+          message:
+            - type: binary
+              data: QwEAAA4BAAAFAAAA3QcAAAAAAAAALgEAAAhoZWxsb09rAAEIaXNXcml0YWJsZVByaW1hcnkAAQN0b3BvbG9neVZlcnNpb24ALQAAAAdwcm9jZXNzSWQAZUSVTxsM3Pv7hMZbEmNvdW50ZXIAAAAAAAAAAAAAEG1heEJzb25PYmplY3RTaXplAAAAAAEQbWF4TWVzc2FnZVNpemVCeXRlcwAAbNwCEG1heFdyaXRlQmF0Y2hTaXplAKCGAQAJbG9jYWxUaW1lAFaLIJSLAQAAEGxvZ2ljYWxTZXNzaW9uVGltZW91dE1pbnV0ZXMAHgAAABBjb25uZWN0aW9uSWQAMgAAABBtaW5XaXJlVmVyc2lvbgAAAAAAEG1heFdpcmVWZXJzaW9uABEAAAAIcmVhZE9ubHkAAAFvawAAAAAAAADwPwA=
+    reqtimestampmock: 2023-11-03T07:40:42.71128006Z
+    restimestampmock: 2023-11-03T07:40:42.711383317Z
+---
+version: api.keploy.io/v1beta1
+kind: Generic
+name: mocks
+spec:
+    metadata: {}
+    genericrequests:
+        - origin: client
+          message:
+            - type: binary
+              data: PgAAAAYAAAAAAAAA3QcAAAAAAAAAKQAAABBoZWxsbwABAAAACGhlbGxvT2sAAQIkZGIABgAAAGFkbWluAAA=
+    genericresponses:
+        - origin: server
+          message:
+            - type: binary
+              data: QwEAABABAAAGAAAA3QcAAAAAAAAALgEAAAhoZWxsb09rAAEIaXNXcml0YWJsZVByaW1hcnkAAQN0b3BvbG9neVZlcnNpb24ALQAAAAdwcm9jZXNzSWQAZUSVTxsM3Pv7hMZbEmNvdW50ZXIAAAAAAAAAAAAAEG1heEJzb25PYmplY3RTaXplAAAAAAEQbWF4TWVzc2FnZVNpemVCeXRlcwAAbNwCEG1heFdyaXRlQmF0Y2hTaXplAKCGAQAJbG9jYWxUaW1lAGqyIJSLAQAAEGxvZ2ljYWxTZXNzaW9uVGltZW91dE1pbnV0ZXMAHgAAABBjb25uZWN0aW9uSWQAMgAAABBtaW5XaXJlVmVyc2lvbgAAAAAAEG1heFdpcmVWZXJzaW9uABEAAAAIcmVhZE9ubHkAAAFvawAAAAAAAADwPwA=
+    reqtimestampmock: 2023-11-03T07:40:52.715420098Z
+    restimestampmock: 2023-11-03T07:40:52.71553427Z
+---
+version: api.keploy.io/v1beta1
+kind: Generic
+name: mocks
+spec:
+    metadata: {}
+    genericrequests:
+        - origin: client
+          message:
+            - type: binary
+              data: PgAAAAcAAAAAAAAA3QcAAAAAAAAAKQAAABBoZWxsbwABAAAACGhlbGxvT2sAAQIkZGIABgAAAGFkbWluAAA=
+    genericresponses:
+        - origin: server
+          message:
+            - type: binary
+              data: QwEAABIBAAAHAAAA3QcAAAAAAAAALgEAAAhoZWxsb09rAAEIaXNXcml0YWJsZVByaW1hcnkAAQN0b3BvbG9neVZlcnNpb24ALQAAAAdwcm9jZXNzSWQAZUSVTxsM3Pv7hMZbEmNvdW50ZXIAAAAAAAAAAAAAEG1heEJzb25PYmplY3RTaXplAAAAAAEQbWF4TWVzc2FnZVNpemVCeXRlcwAAbNwCEG1heFdyaXRlQmF0Y2hTaXplAKCGAQAJbG9jYWxUaW1lAHbZIJSLAQAAEGxvZ2ljYWxTZXNzaW9uVGltZW91dE1pbnV0ZXMAHgAAABBjb25uZWN0aW9uSWQAMgAAABBtaW5XaXJlVmVyc2lvbgAAAAAAEG1heFdpcmVWZXJzaW9uABEAAAAIcmVhZE9ubHkAAAFvawAAAAAAAADwPwA=
+    reqtimestampmock: 2023-11-03T07:41:02.71143217Z
+    restimestampmock: 2023-11-03T07:41:02.711530349Z
+---
+version: api.keploy.io/v1beta1
+kind: Generic
+name: mocks
+spec:
+    metadata: {}
+    genericrequests:
+        - origin: client
+          message:
+            - type: binary
+              data: 5gAAAAkAAAAAAAAA1AcAAAQAAABhZG1pbi4kY21kAAAAAAD/////vwAAABBpc01hc3RlcgABAAAACGhlbGxvT2sAAQRjb21wcmVzc2lvbgAFAAAAAANjbGllbnQAiAAAAANkcml2ZXIAMwAAAAJuYW1lABAAAABtb25nby1nby1kcml2ZXIAAnZlcnNpb24ABwAAAHYxLjguMQAAA29zAC0AAAACdHlwZQAGAAAAbGludXgAAmFyY2hpdGVjdHVyZQAGAAAAYXJtNjQAAAJwbGF0Zm9ybQAJAAAAZ28xLjIxLjMAAAA=
+    genericresponses:
+        - origin: server
+          message:
+            - type: binary
+              data: SQEAABYBAAAJAAAAAQAAAAgAAAAAAAAAAAAAAAAAAAABAAAAJQEAAAhoZWxsb09rAAEIaXNtYXN0ZXIAAQN0b3BvbG9neVZlcnNpb24ALQAAAAdwcm9jZXNzSWQAZUSVTxsM3Pv7hMZbEmNvdW50ZXIAAAAAAAAAAAAAEG1heEJzb25PYmplY3RTaXplAAAAAAEQbWF4TWVzc2FnZVNpemVCeXRlcwAAbNwCEG1heFdyaXRlQmF0Y2hTaXplAKCGAQAJbG9jYWxUaW1lANMJIZSLAQAAEGxvZ2ljYWxTZXNzaW9uVGltZW91dE1pbnV0ZXMAHgAAABBjb25uZWN0aW9uSWQAMwAAABBtaW5XaXJlVmVyc2lvbgAAAAAAEG1heFdpcmVWZXJzaW9uABEAAAAIcmVhZE9ubHkAAAFvawAAAAAAAADwPwA=
+    reqtimestampmock: 2023-11-03T07:41:15.088822415Z
+    restimestampmock: 2023-11-03T07:41:15.091531199Z
+---
+version: api.keploy.io/v1beta1
+kind: Generic
+name: mocks
+spec:
+    metadata: {}
+    genericrequests:
+        - origin: client
+          message:
+            - type: binary
+              data: ogAAAAoAAAAAAAAA3QcAAAAAAAAAjQAAAAJmaW5kAA4AAAB1cmwtc2hvcnRlbmVyAANmaWx0ZXIAFwAAAAJfaWQACQAAAENKQktKZDkyAAASbGltaXQAAQAAAAAAAAAIc2luZ2xlQmF0Y2gAAQNsc2lkAB4AAAAFaWQAEAAAAARbrbcieV5PyZQXSjCLlfpNAAIkZGIABwAAAGtlcGxveQAA
+    genericresponses:
+        - origin: server
+          message:
+            - type: binary
+              data: bQAAABcBAAAKAAAA3QcAAAAAAAAAWAAAAANjdXJzb3IAPwAAAARmaXJzdEJhdGNoAAUAAAAAEmlkAAAAAAAAAAAAAm5zABUAAABrZXBsb3kudXJsLXNob3J0ZW5lcgAAAW9rAAAAAAAAAPA/AA==
+    reqtimestampmock: 2023-11-03T07:41:15.093139124Z
+    restimestampmock: 2023-11-03T07:41:15.093186902Z
+---
+version: api.keploy.io/v1beta1
+kind: Generic
+name: mocks
+spec:
+    metadata: {}
+    genericrequests:
+        - origin: client
+          message:
+            - type: binary
+              data: LQEAAAsAAAAAAAAA3QcAAAAAAAAAgAAAAAJ1cGRhdGUADgAAAHVybC1zaG9ydGVuZXIACG9yZGVyZWQAAQN3cml0ZUNvbmNlcm4AFQAAAAJ3AAkAAABtYWpvcml0eQAAA2xzaWQAHgAAAAVpZAAQAAAABFuttyJ5Xk/JlBdKMIuV+k0AAiRkYgAHAAAAa2VwbG95AAABlwAAAHVwZGF0ZXMAiwAAAANxABcAAAACX2lkAAkAAABMaHI0QldBaQAAA3UAYAAAAAMkc2V0AFUAAAACX2lkAAkAAABMaHI0QldBaQAJY3JlYXRlZAD+GCGUiwEAAAl1cGRhdGVkAP4YIZSLAQAAAnVybAATAAAAaHR0cHM6Ly9nb29nbGUuY29tAAAACHVwc2VydAABAA==
+    genericresponses:
+        - origin: server
+          message:
+            - type: binary
+              data: PAAAABgBAAALAAAA3QcAAAAAAAAAJwAAABBuAAEAAAAQbk1vZGlmaWVkAAEAAAABb2sAAAAAAAAA8D8A
+    reqtimestampmock: 2023-11-03T07:41:18.97985061Z
+    restimestampmock: 2023-11-03T07:41:18.979887933Z
+---
+version: api.keploy.io/v1beta1
+kind: Generic
+name: mocks
+spec:
+    metadata: {}
+    genericrequests:
+        - origin: client
+          message:
+            - type: binary
+              data: PgAAAAgAAAAAAAAA3QcAAAAAAAAAKQAAABBoZWxsbwABAAAACGhlbGxvT2sAAQIkZGIABgAAAGFkbWluAAA=
+    genericresponses:
+        - origin: server
+          message:
+            - type: binary
+              data: QwEAABQBAAAIAAAA3QcAAAAAAAAALgEAAAhoZWxsb09rAAEIaXNXcml0YWJsZVByaW1hcnkAAQN0b3BvbG9neVZlcnNpb24ALQAAAAdwcm9jZXNzSWQAZUSVTxsM3Pv7hMZbEmNvdW50ZXIAAAAAAAAAAAAAEG1heEJzb25PYmplY3RTaXplAAAAAAEQbWF4TWVzc2FnZVNpemVCeXRlcwAAbNwCEG1heFdyaXRlQmF0Y2hTaXplAKCGAQAJbG9jYWxUaW1lAIcAIZSLAQAAEGxvZ2ljYWxTZXNzaW9uVGltZW91dE1pbnV0ZXMAHgAAABBjb25uZWN0aW9uSWQAMgAAABBtaW5XaXJlVmVyc2lvbgAAAAAAEG1heFdpcmVWZXJzaW9uABEAAAAIcmVhZE9ubHkAAAFvawAAAAAAAADwPwA=
+    reqtimestampmock: 2023-11-03T07:41:12.712740414Z
+    restimestampmock: 2023-11-03T07:41:12.712846925Z
+---
+version: api.keploy.io/v1beta1
+kind: Generic
+name: mocks
+spec:
+    metadata: {}
+    genericrequests:
+        - origin: client
+          message:
+            - type: binary
+              data: LQEAAAwAAAAAAAAA3QcAAAAAAAAAgAAAAAJ1cGRhdGUADgAAAHVybC1zaG9ydGVuZXIACG9yZGVyZWQAAQN3cml0ZUNvbmNlcm4AFQAAAAJ3AAkAAABtYWpvcml0eQAAA2xzaWQAHgAAAAVpZAAQAAAABFuttyJ5Xk/JlBdKMIuV+k0AAiRkYgAHAAAAa2VwbG95AAABlwAAAHVwZGF0ZXMAiwAAAANxABcAAAACX2lkAAkAAABMaHI0QldBaQAAA3UAYAAAAAMkc2V0AFUAAAACX2lkAAkAAABMaHI0QldBaQAJY3JlYXRlZAAAHiGUiwEAAAl1cGRhdGVkAAAeIZSLAQAAAnVybAATAAAAaHR0cHM6Ly9nb29nbGUuY29tAAAACHVwc2VydAABAA==
+    genericresponses:
+        - origin: server
+          message:
+            - type: binary
+              data: PAAAABkBAAAMAAAA3QcAAAAAAAAAJwAAABBuAAEAAAAQbk1vZGlmaWVkAAEAAAABb2sAAAAAAAAA8D8A
+    reqtimestampmock: 2023-11-03T07:41:20.261587275Z
+    restimestampmock: 2023-11-03T07:41:20.26162364Z
+---
+version: api.keploy.io/v1beta1
+kind: Generic
+name: mocks
+spec:
+    metadata: {}
+    genericrequests:
+        - origin: client
+          message:
+            - type: binary
+              data: lAAAAAMAAAAAAAAA3QcAAAAAAQAAfwAAABBoZWxsbwABAAAACGhlbGxvT2sAAQN0b3BvbG9neVZlcnNpb24ALQAAAAdwcm9jZXNzSWQAZUSVTxsM3Pv7hMZbEmNvdW50ZXIAAAAAAAAAAAAAEm1heEF3YWl0VGltZU1TABAnAAAAAAAAAiRkYgAGAAAAYWRtaW4AAA==
+    genericresponses:
+        - origin: server
+          message:
+            - type: binary
+              data: QwEAAA0BAAADAAAA3QcAAAIAAAAALgEAAAhoZWxsb09rAAEIaXNXcml0YWJsZVByaW1hcnkAAQN0b3BvbG9neVZlcnNpb24ALQAAAAdwcm9jZXNzSWQAZUSVTxsM3Pv7hMZbEmNvdW50ZXIAAAAAAAAAAAAAEG1heEJzb25PYmplY3RTaXplAAAAAAEQbWF4TWVzc2FnZVNpemVCeXRlcwAAbNwCEG1heFdyaXRlQmF0Y2hTaXplAKCGAQAJbG9jYWxUaW1lAEtkIJSLAQAAEGxvZ2ljYWxTZXNzaW9uVGltZW91dE1pbnV0ZXMAHgAAABBjb25uZWN0aW9uSWQAMQAAABBtaW5XaXJlVmVyc2lvbgAAAAAAEG1heFdpcmVWZXJzaW9uABEAAAAIcmVhZE9ubHkAAAFvawAAAAAAAADwPwA=
+        - origin: server
+          message:
+            - type: binary
+              data: QwEAAA8BAAANAQAA3QcAAAIAAAAALgEAAAhoZWxsb09rAAEIaXNXcml0YWJsZVByaW1hcnkAAQN0b3BvbG9neVZlcnNpb24ALQAAAAdwcm9jZXNzSWQAZUSVTxsM3Pv7hMZbEmNvdW50ZXIAAAAAAAAAAAAAEG1heEJzb25PYmplY3RTaXplAAAAAAEQbWF4TWVzc2FnZVNpemVCeXRlcwAAbNwCEG1heFdyaXRlQmF0Y2hTaXplAKCGAQAJbG9jYWxUaW1lAGiLIJSLAQAAEGxvZ2ljYWxTZXNzaW9uVGltZW91dE1pbnV0ZXMAHgAAABBjb25uZWN0aW9uSWQAMQAAABBtaW5XaXJlVmVyc2lvbgAAAAAAEG1heFdpcmVWZXJzaW9uABEAAAAIcmVhZE9ubHkAAAFvawAAAAAAAADwPwA=
+        - origin: server
+          message:
+            - type: binary
+              data: QwEAABEBAAAPAQAA3QcAAAIAAAAALgEAAAhoZWxsb09rAAEIaXNXcml0YWJsZVByaW1hcnkAAQN0b3BvbG9neVZlcnNpb24ALQAAAAdwcm9jZXNzSWQAZUSVTxsM3Pv7hMZbEmNvdW50ZXIAAAAAAAAAAAAAEG1heEJzb25PYmplY3RTaXplAAAAAAEQbWF4TWVzc2FnZVNpemVCeXRlcwAAbNwCEG1heFdyaXRlQmF0Y2hTaXplAKCGAQAJbG9jYWxUaW1lAIGyIJSLAQAAEGxvZ2ljYWxTZXNzaW9uVGltZW91dE1pbnV0ZXMAHgAAABBjb25uZWN0aW9uSWQAMQAAABBtaW5XaXJlVmVyc2lvbgAAAAAAEG1heFdpcmVWZXJzaW9uABEAAAAIcmVhZE9ubHkAAAFvawAAAAAAAADwPwA=
+        - origin: server
+          message:
+            - type: binary
+              data: QwEAABMBAAARAQAA3QcAAAIAAAAALgEAAAhoZWxsb09rAAEIaXNXcml0YWJsZVByaW1hcnkAAQN0b3BvbG9neVZlcnNpb24ALQAAAAdwcm9jZXNzSWQAZUSVTxsM3Pv7hMZbEmNvdW50ZXIAAAAAAAAAAAAAEG1heEJzb25PYmplY3RTaXplAAAAAAEQbWF4TWVzc2FnZVNpemVCeXRlcwAAbNwCEG1heFdyaXRlQmF0Y2hTaXplAKCGAQAJbG9jYWxUaW1lAJ/ZIJSLAQAAEGxvZ2ljYWxTZXNzaW9uVGltZW91dE1pbnV0ZXMAHgAAABBjb25uZWN0aW9uSWQAMQAAABBtaW5XaXJlVmVyc2lvbgAAAAAAEG1heFdpcmVWZXJzaW9uABEAAAAIcmVhZE9ubHkAAAFvawAAAAAAAADwPwA=
+        - origin: server
+          message:
+            - type: binary
+              data: QwEAABUBAAATAQAA3QcAAAIAAAAALgEAAAhoZWxsb09rAAEIaXNXcml0YWJsZVByaW1hcnkAAQN0b3BvbG9neVZlcnNpb24ALQAAAAdwcm9jZXNzSWQAZUSVTxsM3Pv7hMZbEmNvdW50ZXIAAAAAAAAAAAAAEG1heEJzb25PYmplY3RTaXplAAAAAAEQbWF4TWVzc2FnZVNpemVCeXRlcwAAbNwCEG1heFdyaXRlQmF0Y2hTaXplAKCGAQAJbG9jYWxUaW1lALkAIZSLAQAAEGxvZ2ljYWxTZXNzaW9uVGltZW91dE1pbnV0ZXMAHgAAABBjb25uZWN0aW9uSWQAMQAAABBtaW5XaXJlVmVyc2lvbgAAAAAAEG1heFdpcmVWZXJzaW9uABEAAAAIcmVhZE9ubHkAAAFvawAAAAAAAADwPwA=
+        - origin: server
+          message:
+            - type: binary
+              data: QwEAABsBAAAVAQAA3QcAAAIAAAAALgEAAAhoZWxsb09rAAEIaXNXcml0YWJsZVByaW1hcnkAAQN0b3BvbG9neVZlcnNpb24ALQAAAAdwcm9jZXNzSWQAZUSVTxsM3Pv7hMZbEmNvdW50ZXIAAAAAAAAAAAAAEG1heEJzb25PYmplY3RTaXplAAAAAAEQbWF4TWVzc2FnZVNpemVCeXRlcwAAbNwCEG1heFdyaXRlQmF0Y2hTaXplAKCGAQAJbG9jYWxUaW1lANQnIZSLAQAAEGxvZ2ljYWxTZXNzaW9uVGltZW91dE1pbnV0ZXMAHgAAABBjb25uZWN0aW9uSWQAMQAAABBtaW5XaXJlVmVyc2lvbgAAAAAAEG1heFdpcmVWZXJzaW9uABEAAAAIcmVhZE9ubHkAAAFvawAAAAAAAADwPwA=
+    reqtimestampmock: 2023-11-03T07:40:32.716024846Z
+    restimestampmock: 2023-11-03T07:41:22.773519299Z
+---
+version: api.keploy.io/v1beta1
+kind: Generic
+name: mocks
+spec:
+    metadata: {}
+    genericrequests:
+        - origin: client
+          message:
+            - type: binary
+              data: PgAAAA0AAAAAAAAA3QcAAAAAAAAAKQAAABBoZWxsbwABAAAACGhlbGxvT2sAAQIkZGIABgAAAGFkbWluAAA=
+    genericresponses:
+        - origin: server
+          message:
+            - type: binary
+              data: QwEAABoBAAANAAAA3QcAAAAAAAAALgEAAAhoZWxsb09rAAEIaXNXcml0YWJsZVByaW1hcnkAAQN0b3BvbG9neVZlcnNpb24ALQAAAAdwcm9jZXNzSWQAZUSVTxsM3Pv7hMZbEmNvdW50ZXIAAAAAAAAAAAAAEG1heEJzb25PYmplY3RTaXplAAAAAAEQbWF4TWVzc2FnZVNpemVCeXRlcwAAbNwCEG1heFdyaXRlQmF0Y2hTaXplAKCGAQAJbG9jYWxUaW1lAJYnIZSLAQAAEGxvZ2ljYWxTZXNzaW9uVGltZW91dE1pbnV0ZXMAHgAAABBjb25uZWN0aW9uSWQAMgAAABBtaW5XaXJlVmVyc2lvbgAAAAAAEG1heFdpcmVWZXJzaW9uABEAAAAIcmVhZE9ubHkAAAFvawAAAAAAAADwPwA=
+    reqtimestampmock: 2023-11-03T07:41:22.711516197Z
+    restimestampmock: 2023-11-03T07:41:22.711663574Z
+---
+version: api.keploy.io/v1beta1
+kind: Generic
+name: mocks
+spec:
+    metadata: {}
+    genericrequests:
+        - origin: client
+          message:
+            - type: binary
+              data: 5gAAAA4AAAAAAAAA1AcAAAQAAABhZG1pbi4kY21kAAAAAAD/////vwAAABBpc01hc3RlcgABAAAACGhlbGxvT2sAAQRjb21wcmVzc2lvbgAFAAAAAANjbGllbnQAiAAAAANkcml2ZXIAMwAAAAJuYW1lABAAAABtb25nby1nby1kcml2ZXIAAnZlcnNpb24ABwAAAHYxLjguMQAAA29zAC0AAAACdHlwZQAGAAAAbGludXgAAmFyY2hpdGVjdHVyZQAGAAAAYXJtNjQAAAJwbGF0Zm9ybQAJAAAAZ28xLjIxLjMAAAA=
+    genericresponses:
+        - origin: server
+          message:
+            - type: binary
+              data: SQEAAB0BAAAOAAAAAQAAAAgAAAAAAAAAAAAAAAAAAAABAAAAJQEAAAhoZWxsb09rAAEIaXNtYXN0ZXIAAQN0b3BvbG9neVZlcnNpb24ALQAAAAdwcm9jZXNzSWQAZUSVTxsM3Pv7hMZbEmNvdW50ZXIAAAAAAAAAAAAAEG1heEJzb25PYmplY3RTaXplAAAAAAEQbWF4TWVzc2FnZVNpemVCeXRlcwAAbNwCEG1heFdyaXRlQmF0Y2hTaXplAKCGAQAJbG9jYWxUaW1lABUxIZSLAQAAEGxvZ2ljYWxTZXNzaW9uVGltZW91dE1pbnV0ZXMAHgAAABBjb25uZWN0aW9uSWQANAAAABBtaW5XaXJlVmVyc2lvbgAAAAAAEG1heFdpcmVWZXJzaW9uABEAAAAIcmVhZE9ubHkAAAFvawAAAAAAAADwPwA=
+    reqtimestampmock: 2023-11-03T07:41:25.142883855Z
+    restimestampmock: 2023-11-03T07:41:25.143020694Z
