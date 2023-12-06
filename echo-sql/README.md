@@ -34,12 +34,20 @@ sudo mkdir -p /usr/local/bin && sudo mv /tmp/keploy /usr/local/bin && keploy
 
 ### Start Postgres Instance 
 
-Using the docker-compose file we will start our postgres instance:-
+Using the docker-compose file we will start our postgres instance ( use `podman-compose` if you are using RHEL based distribution ):-
 
 ```bash
 # Start Postgres
 docker-compose up -d
 ```
+
+If there is an error saying keploy-network could not be found. Use the following command to create the docker network
+
+```bash
+docker network create keploy-network
+```
+
+
 ### Capture the Testcases
 
 > **Since, we are on the local machine the Postgres Host will be `localhost`.**
@@ -105,7 +113,10 @@ Now, let's see the magic! ✨💫
 
 Now that we have our testcase captured, we will add `ts` to noise field in `test-*.yaml` files. 
 
-**1. On line 32 we will add "`- body.ts`" under the "`header.data`".**
+**1. On line 32 we will add "`body.ts: []`" under the "`header.Date: []`".**
+
+![EliminateNoise](https://github.com/aswinbennyofficial/samples-go/assets/110408942/2b50d994-3418-4f7b-9f95-5bc1acd8ecf9)
+
 
 Now let's run the test mode (in the echo-sql directory, not the Keploy directory).
 
@@ -148,7 +159,7 @@ docker build -t echo-app:1.0 .
 ## Capture the Testcases
 
 ```zsh
-keploy record -c "docker run -p 8082:8082 --rm --name echoSqlApp --network keploy-network echo-app:1.0"
+keploy record -c "docker run -p 8082:8082 --name echoSqlApp --network keploy-network echo-app:1.0"
 ```
 
 ![Testcase](./img/testcases.png?raw=true)
@@ -188,7 +199,7 @@ Now both these API calls were captured as a testcase and should be visible on th
 Now that we have our testcase captured, run the test file.
 
 ```zsh
-keploy test -c "sudo docker run -p 8082:8082 --rm --net keploy-network --name echoSqlApp echo-app:1.0 --rm echoSqlApp" --delay 10
+keploy test -c "sudo docker run -p 8082:8082 --net keploy-network --name echoSqlApp echo-app:1.0 echoSqlApp" --delay 10
 ```
 So no need to setup dependencies like mongoDB, web-go locally or write mocks for your testing.
 

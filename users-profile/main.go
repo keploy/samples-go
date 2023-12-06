@@ -7,8 +7,6 @@ import (
 	"users-profile/routes"
 
 	"github.com/gin-gonic/gin"
-	"github.com/keploy/go-sdk/integrations/kgin/v1"
-	"github.com/keploy/go-sdk/keploy"
 )
 
 func main() {
@@ -16,18 +14,6 @@ func main() {
 
 	// Run database
 	configs.ConnectDB()
-
-	// Connecting keploy
-	k := keploy.New(keploy.Config{
-		App: keploy.AppConfig{
-			Name: "users-profile",
-			Port: "8080",
-		},
-		Server: keploy.ServerConfig{
-			URL: "http://localhost:6789/api",
-		},
-	})
-	kgin.GinV1(k, router)
 
 	// Routes
 	routes.UserRoute(router)
