@@ -154,7 +154,7 @@ curl --request POST \
   --header 'content-type: application/json' \
   --data '{
     "name":"Bubbles", 
-    "price": 123
+    "price": 124
 }'
 ```
 this will return the response. 
