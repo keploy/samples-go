@@ -1,14 +1,19 @@
-name: e2e Tests
+name: Go-Sample-Test
 on:
   push:
     branches:
       - main
+  pull_request:
+    types: [opened, reopened]
 jobs:
-  e2e-test:
+  keploy-test:
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout
+      uses: actions/checkout@v2
     - name: Test-Report
-      uses: alphasians/test-reportql@main
+      uses: keploy/testgpt@main
       with:
-        working-directory: "./gin-mongo"
-        delay: 20
+        working-directory: /gin-mongo
+        delay: 10
+        command: go run main.go handler.go

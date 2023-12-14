@@ -1,0 +1,43 @@
+version: api.keploy.io/v1beta1
+kind: Http
+name: test-3
+spec:
+    metadata: {}
+    req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8080/Lhr4BWAi
+        header:
+            Accept: '*/*'
+            Host: localhost:8080
+            User-Agent: curl/8.1.2
+        body: ""
+        body_type: ""
+        timestamp: 2023-12-14T07:34:05.369272229Z
+    resp:
+        status_code: 303
+        header:
+            Content-Length: "45"
+            Content-Type: text/html; charset=utf-8
+            Date: Thu, 14 Dec 2023 07:34:05 GMT
+            Location: https://google.com
+        body: |+
+            <a href="https://google.com">See Other</a>.
+
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2023-12-14T07:34:07.373492319Z
+    objects: []
+    assertions:
+        noise:
+            header.Date: []
+    created: 1702539247
+curl: |
+    curl --request GET \
+      --url http://localhost:8080/Lhr4BWAi \
+      --header 'Accept: */*' \
+      --header 'Host: localhost:8080' \
+      --header 'User-Agent: curl/8.1.2' \
