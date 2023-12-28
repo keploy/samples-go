@@ -1,10 +1,16 @@
 package main
 
 import (
+	"context"
+	"net/http"
 	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
+
+	"os/signal"
+	"syscall"
 
 	"go.uber.org/zap"
 )
@@ -34,6 +40,27 @@ func main() {
 
 	r.GET("/:param", getURL)
 	r.POST("/url", putURL)
+	srv := &http.Server{
+		Addr:    ":" + port,
+		Handler: r,
+	}
 
-	r.Run(":" + port)
+	stopper := make(chan os.Signal, 1)
+	signal.Notify(stopper, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+	go func() {
+		select {
+		case <-stopper:
+			ctx, cancel := context.WithTimeout(context.Background(), 5 * time.Second)
+			defer cancel()
+			if err := srv.Shutdown(ctx); err != nil {
+				logger.Fatal("Server Shutdown:", zap.Error(err))
+			}
+			logger.Info("stopper called")
+		}
+	}()
+
+	if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		logger.Fatal("listen: %s\n", zap.Error(err))
+	}
+	logger.Info("server exiting")
 }
