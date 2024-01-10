@@ -24,8 +24,7 @@ There are two methods to run the sample application using Keploy :-
 
 ## Running app using Docker
 
-Keploy can be used on Linux & Windows through [Docker](https://docs.docker.com/engine/install/), and on MacOS by the help of [Colima](https://docs.keploy/io/server/macos/installation)
-
+Keploy can be used on Linux, Windows and MacOS through [Docker](https://docs.docker.com/engine/install/).
 
 ### Create Keploy Alias
 
