@@ -134,7 +134,7 @@ So no need to setup fake database/apis like Postgres or write mocks for them. Ke
 
 Keploy can be used on Linux, Windows and MacOS through Docker.
 
-Note:To run Keploy on MacOS through [Docker](https://docs.docker.com/desktop/release-notes/#4252) the version must be ```4.25.2``` or above.
+Note: To run Keploy on MacOS through [Docker](https://docs.docker.com/desktop/release-notes/#4252) the version must be ```4.25.2``` or above.
 
 ## Create Keploy Alias
 To establish a network for your application using Keploy on Docker, follow these steps.
