@@ -16,6 +16,10 @@ var test212 string
 var col *mongo.Collection
 var logger *zap.Logger
 
+func goat() string {
+	return "messi"
+}
+
 func main() {
 	logger, _ = zap.NewProduction()
 	defer logger.Sync() // flushes buffer, if any
