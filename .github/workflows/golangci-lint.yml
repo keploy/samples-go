@@ -21,6 +21,18 @@ jobs:
   golangci:
     name: lint
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        working-directory:
+          - echo-sql
+          - gin-mongo
+          - gin-redis
+          - graphql-sql
+          - mux-sql
+          - S3-Keploy
+          - sse-svelte
+          - users-profile
+          
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v4
@@ -36,15 +48,7 @@ jobs:
           version: v1.54
 
           # Optional: working directory, useful for monorepos
-          working-directory: 
-            - echo-sql
-            - gin-mongo
-            - gin-redis
-            - graphql-sql
-            - mux-sql
-            - S3-Keploy
-            - sse-svelte
-            - users-profile
+          working-directory: ${{matrix.working-directory}}
 
           # Optional: show only new issues if it's a pull request. The default value is `false`.
           only-new-issues: true
