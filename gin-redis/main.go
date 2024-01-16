@@ -4,7 +4,7 @@ import (
 	"github.com/keploy/gin-redis/server"
 )
 
-var messi int
+var messi int 
 
 func main() {
 	server.Init()

@@ -9,6 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var messi int
+
 func main() {
 	router := gin.Default()
 

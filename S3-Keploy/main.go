@@ -7,6 +7,8 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+var messi int
+
 func main() {
 	awsService := config.Configuration()
 

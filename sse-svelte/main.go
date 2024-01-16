@@ -12,6 +12,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+var messi int
+
 var msgChan chan string
 var client *mongo.Client
 

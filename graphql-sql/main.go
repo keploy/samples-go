@@ -13,6 +13,8 @@ import (
 	_ "github.com/lib/pq"
 )
 
+var messi int 
+
 const (
 	//DB_HOST = "graphql-sql-postgres-1"
 	DB_HOST     = "localhost"
