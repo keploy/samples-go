@@ -28,7 +28,7 @@ func main() {
 	if err != nil {
 		logger.Fatal("failed to create mgo db client", zap.Error(err))
 	}
-	db := client.Database(dbName)
+	db :=client.Database(dbName)
 
 	col =db.Collection(collection)
 
