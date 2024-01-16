@@ -1,0 +1,418 @@
+version: api.keploy.io/v1beta1
+name: report-5
+status: FAILED
+success: 2
+failure: 4
+total: 6
+tests:
+    - kind: Http
+      name: report-5
+      status: PASSED
+      started: 1705316191
+      completed: 1705316191
+      test_case_path: /files/keploy/test-set-7
+      mock_path: ""
+      test_case_id: test-1
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://172.18.0.3:8080/Lhr4BWAi
+        header:
+            Accept: '*/*'
+            Host: localhost:8080
+            User-Agent: curl/8.1.2
+        body: ""
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 404
+        header:
+            Content-Length: "25"
+            Content-Type: application/json; charset=utf-8
+            Date: Mon, 15 Jan 2024 10:54:34 GMT
+        body: '{"error":"url not found"}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.Date: []
+      result:
+        status_code:
+            normal: false
+            expected: 404
+            actual: 404
+        headers_result: []
+        body_result:
+            - normal: false
+              type: JSON
+              expected: '{"error":"url not found"}'
+              actual: '{"error":"url not found"}'
+        dep_result: []
+    - kind: Http
+      name: report-5
+      status: FAILED
+      started: 1705316191
+      completed: 1705316191
+      test_case_path: /files/keploy/test-set-7
+      mock_path: ""
+      test_case_id: test-2
+      req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://172.18.0.3:8080/url
+        header:
+            Accept: '*/*'
+            Content-Length: "35"
+            Content-Type: application/json
+            Host: localhost:8080
+            User-Agent: curl/8.1.2
+        body: |-
+            {
+              "url": "https://facebook.com"
+            }
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 200
+        header:
+            Content-Length: "65"
+            Content-Type: application/json; charset=utf-8
+            Date: Mon, 15 Jan 2024 10:54:46 GMT
+        body: '{"ts":1705316086578495633,"url":"http://localhost:8080/CJBKJd92"}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.Date: []
+      result:
+        status_code:
+            normal: false
+            expected: 200
+            actual: 500
+        headers_result:
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+              actual:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Mon, 15 Jan 2024 10:54:46 GMT
+              actual:
+                key: Date
+                value:
+                    - Mon, 15 Jan 2024 10:56:31 GMT
+            - normal: false
+              expected:
+                key: Content-Length
+                value:
+                    - "65"
+              actual:
+                key: Content-Length
+                value:
+                    - "216"
+        body_result:
+            - normal: false
+              type: JSON
+              expected: '{"ts":1705316086578495633,"url":"http://localhost:8080/CJBKJd92"}'
+              actual: '{"error":{"Code":0,"Message":"connection(mongodb:27017[-4]) socket was unexpectedly closed: EOF","Labels":["NetworkError","RetryableWriteError"],"Name":"","Wrapped":{"ConnectionID":"mongodb:27017[-4]","Wrapped":{}}}}'
+        dep_result: []
+    - kind: Http
+      name: report-5
+      status: FAILED
+      started: 1705316191
+      completed: 1705316191
+      test_case_path: /files/keploy/test-set-7
+      mock_path: ""
+      test_case_id: test-3
+      req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://172.18.0.3:8080/url
+        header:
+            Accept: '*/*'
+            Content-Length: "35"
+            Content-Type: application/json
+            Host: localhost:8080
+            User-Agent: curl/8.1.2
+        body: |-
+            {
+              "url": "https://facebook.com"
+            }
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 200
+        header:
+            Content-Length: "65"
+            Content-Type: application/json; charset=utf-8
+            Date: Mon, 15 Jan 2024 10:54:48 GMT
+        body: '{"ts":1705316088045036050,"url":"http://localhost:8080/CJBKJd92"}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.Date: []
+      result:
+        status_code:
+            normal: false
+            expected: 200
+            actual: 500
+        headers_result:
+            - normal: false
+              expected:
+                key: Content-Length
+                value:
+                    - "65"
+              actual:
+                key: Content-Length
+                value:
+                    - "216"
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+              actual:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Mon, 15 Jan 2024 10:54:48 GMT
+              actual:
+                key: Date
+                value:
+                    - Mon, 15 Jan 2024 10:56:31 GMT
+        body_result:
+            - normal: false
+              type: JSON
+              expected: '{"ts":1705316088045036050,"url":"http://localhost:8080/CJBKJd92"}'
+              actual: '{"error":{"Code":0,"Message":"connection(mongodb:27017[-6]) socket was unexpectedly closed: EOF","Labels":["NetworkError","RetryableWriteError"],"Name":"","Wrapped":{"ConnectionID":"mongodb:27017[-6]","Wrapped":{}}}}'
+        dep_result: []
+    - kind: Http
+      name: report-5
+      status: FAILED
+      started: 1705316191
+      completed: 1705316191
+      test_case_path: /files/keploy/test-set-7
+      mock_path: ""
+      test_case_id: test-4
+      req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://172.18.0.3:8080/url
+        header:
+            Accept: '*/*'
+            Content-Length: "35"
+            Content-Type: application/json
+            Host: localhost:8080
+            User-Agent: curl/8.1.2
+        body: |-
+            {
+              "url": "https://facebook.com"
+            }
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 200
+        header:
+            Content-Length: "65"
+            Content-Type: application/json; charset=utf-8
+            Date: Mon, 15 Jan 2024 10:54:49 GMT
+        body: '{"ts":1705316089231022592,"url":"http://localhost:8080/CJBKJd92"}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.Date: []
+      result:
+        status_code:
+            normal: false
+            expected: 200
+            actual: 500
+        headers_result:
+            - normal: false
+              expected:
+                key: Content-Length
+                value:
+                    - "65"
+              actual:
+                key: Content-Length
+                value:
+                    - "216"
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+              actual:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Mon, 15 Jan 2024 10:54:49 GMT
+              actual:
+                key: Date
+                value:
+                    - Mon, 15 Jan 2024 10:56:31 GMT
+        body_result:
+            - normal: false
+              type: JSON
+              expected: '{"ts":1705316089231022592,"url":"http://localhost:8080/CJBKJd92"}'
+              actual: '{"error":{"Code":0,"Message":"connection(mongodb:27017[-8]) socket was unexpectedly closed: EOF","Labels":["NetworkError","RetryableWriteError"],"Name":"","Wrapped":{"ConnectionID":"mongodb:27017[-8]","Wrapped":{}}}}'
+        dep_result: []
+    - kind: Http
+      name: report-5
+      status: FAILED
+      started: 1705316191
+      completed: 1705316192
+      test_case_path: /files/keploy/test-set-7
+      mock_path: ""
+      test_case_id: test-5
+      req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://172.18.0.3:8080/url
+        header:
+            Accept: '*/*'
+            Content-Length: "35"
+            Content-Type: application/json
+            Host: localhost:8080
+            User-Agent: curl/8.1.2
+        body: |-
+            {
+              "url": "https://facebook.com"
+            }
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 200
+        header:
+            Content-Length: "65"
+            Content-Type: application/json; charset=utf-8
+            Date: Mon, 15 Jan 2024 10:54:51 GMT
+        body: '{"ts":1705316091378540593,"url":"http://localhost:8080/CJBKJd92"}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.Date: []
+      result:
+        status_code:
+            normal: false
+            expected: 200
+            actual: 500
+        headers_result:
+            - normal: false
+              expected:
+                key: Content-Length
+                value:
+                    - "65"
+              actual:
+                key: Content-Length
+                value:
+                    - "218"
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+              actual:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Mon, 15 Jan 2024 10:54:51 GMT
+              actual:
+                key: Date
+                value:
+                    - Mon, 15 Jan 2024 10:56:32 GMT
+        body_result:
+            - normal: false
+              type: JSON
+              expected: '{"ts":1705316091378540593,"url":"http://localhost:8080/CJBKJd92"}'
+              actual: '{"error":{"Code":0,"Message":"connection(mongodb:27017[-10]) socket was unexpectedly closed: EOF","Labels":["NetworkError","RetryableWriteError"],"Name":"","Wrapped":{"ConnectionID":"mongodb:27017[-10]","Wrapped":{}}}}'
+        dep_result: []
+    - kind: Http
+      name: report-5
+      status: PASSED
+      started: 1705316192
+      completed: 1705316193
+      test_case_path: /files/keploy/test-set-7
+      mock_path: ""
+      test_case_id: test-6
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://172.18.0.3:8080/Lhr4BWAi
+        header:
+            Accept: '*/*'
+            Host: localhost:8080
+            User-Agent: curl/8.1.2
+        body: ""
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 404
+        header:
+            Content-Length: "25"
+            Content-Type: application/json; charset=utf-8
+            Date: Mon, 15 Jan 2024 10:54:59 GMT
+        body: '{"error":"url not found"}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.Date: []
+      result:
+        status_code:
+            normal: false
+            expected: 404
+            actual: 404
+        headers_result: []
+        body_result:
+            - normal: false
+              type: JSON
+              expected: '{"error":"url not found"}'
+              actual: '{"error":"url not found"}'
+        dep_result: []
+test_set: test-set-7

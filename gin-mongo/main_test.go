@@ -16,7 +16,7 @@ func setup(t *testing.T) {
 	err := keploy.New(keploy.Config{
 		Name:             "TestPutURL",
 		Mode:             keploy.MODE_RECORD,
-		Path:             "/home/pranshu.linux/samples-go/gin-mongo",
+		Path:             "<path for storing stubs>",
 		Delay:            10,
 	})
 	if err != nil {

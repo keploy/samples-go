@@ -1,0 +1,52 @@
+version: api.keploy.io/v1beta1
+kind: Http
+name: test-1
+spec:
+    metadata: {}
+    req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8080/url
+        header:
+            Accept: '*/*'
+            Content-Length: "35"
+            Content-Type: application/json
+            Host: localhost:8080
+            User-Agent: curl/8.1.2
+        body: |-
+            {
+              "url": "https://facebook.com"
+            }
+        body_type: ""
+        timestamp: 2024-01-09T18:20:49.236797887Z
+        host: ""
+    resp:
+        status_code: 500
+        header:
+            Content-Length: "892"
+            Content-Type: application/json; charset=utf-8
+            Date: Tue, 09 Jan 2024 18:20:51 GMT
+        body: '{"error":{"Desc":{"Servers":[{"Addr":"mongodb:27017","Arbiters":null,"AverageRTT":0,"AverageRTTSet":false,"Compression":null,"CanonicalAddr":"","ElectionID":"000000000000000000000000","HeartbeatInterval":0,"HelloOK":false,"Hosts":null,"LastError":{"ConnectionID":"","Wrapped":{"Op":"dial","Net":"tcp","Source":null,"Addr":null,"Err":{"Err":"no such host","Name":"mongodb","Server":"127.0.0.11:53","IsTimeout":false,"IsTemporary":false,"IsNotFound":true}}},"LastUpdateTime":"0001-01-01T00:00:00Z","LastWriteTime":"0001-01-01T00:00:00Z","MaxBatchCount":0,"MaxDocumentSize":0,"MaxMessageSize":0,"Members":null,"Passives":null,"Passive":false,"Primary":"","ReadOnly":false,"ServiceID":null,"SessionTimeoutMinutes":0,"SetName":"","SetVersion":0,"Tags":null,"TopologyVersion":null,"Kind":0,"WireVersion":null}],"SetName":"","Kind":0,"SessionTimeoutMinutes":0,"CompatibilityErr":null},"Wrapped":{}}}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2024-01-09T18:20:53.150973264Z
+    objects: []
+    assertions:
+        noise:
+            body.error.Desc.Servers.LastUpdateTime: []
+            body.error.Desc.Servers.LastWriteTime: []
+            header.Date: []
+    created: 1704824453
+curl: |-
+    curl --request POST \
+      --url http://localhost:8080/url \
+      --header 'Host: localhost:8080' \
+      --header 'User-Agent: curl/8.1.2' \
+      --header 'Accept: */*' \
+      --header 'Content-Type: application/json' \
+      --data '{
+      "url": "https://facebook.com"
+    }'
