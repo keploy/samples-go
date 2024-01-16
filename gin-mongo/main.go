@@ -11,6 +11,8 @@ import (
 
 var messi int
 
+var test212 string
+
 var col *mongo.Collection
 var logger *zap.Logger
 
