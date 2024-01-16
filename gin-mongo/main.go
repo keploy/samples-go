@@ -9,10 +9,10 @@ import (
 	"go.uber.org/zap"
 )
 
+var messi int
+
 var col *mongo.Collection
 var logger *zap.Logger
-
-var messi int 
 
 func main() {
 	logger, _ = zap.NewProduction()
