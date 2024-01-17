@@ -4,8 +4,6 @@ import (
 	"log"
 )
 
-var messi int
-
 func main() {
 	a := &App{}
 	err := a.Initialize(
