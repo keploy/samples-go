@@ -9,6 +9,8 @@ import (
 	"github.com/heyyakash/keploy-go-samples/db"
 )
 
+var Port = ":8080"
+
 func main() {
 	if err := db.InstatiateDB(); err != nil {
 		log.Fatal("Error Instantiating MySql Database ", err)
@@ -19,5 +21,5 @@ func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/create", controller.CreateLink).Methods("POST")
 	log.Print("Server is running")
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(Port, router))
 }

@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	"log"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -48,4 +49,19 @@ func (d *Database) IntializeTable() error {
 	)`
 	_, err := d.db.Query(query)
 	return err
+}
+
+func (d *Database) EnterWebsiteToDB(link string) (int64, error) {
+	query := `insert into list (website) values("` + link + `")`
+	resp, err := d.db.Exec(query)
+	if err != nil {
+		return 0, err
+	}
+	lastInsertID, err := resp.LastInsertId()
+	if err != nil {
+		return 0, err
+	}
+
+	log.Printf("\n inserted %+v ", resp)
+	return lastInsertID, err
 }
