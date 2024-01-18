@@ -20,7 +20,8 @@ func main() {
 	}
 	router := mux.NewRouter()
 	router.HandleFunc("/create", controller.CreateLink).Methods("POST")
-	router.HandleFunc("/{id}", controller.RedirectUser).Methods("GET")
+	router.HandleFunc("/link/{id}", controller.RedirectUser).Methods("GET")
+	router.HandleFunc("/all", controller.GetAllLinksFromWebsite).Methods("GET")
 	log.Print("Server is running")
 	log.Fatal(http.ListenAndServe(Port, router))
 }

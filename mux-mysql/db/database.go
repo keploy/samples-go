@@ -6,6 +6,7 @@ import (
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/heyyakash/keploy-go-samples/models"
 )
 
 type Database struct {
@@ -80,4 +81,24 @@ func (d *Database) GetWebsiteFromId(id string) (string, error) {
 	}
 
 	return link, nil
+}
+
+func (d *Database) GetAllLinks() ([]models.Table, error) {
+	query := `select * from list`
+	var array []models.Table
+	rows, err := d.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var link models.Table
+		if err := rows.Scan(&link.Id, &link.Website); err != nil {
+			return nil, err
+		}
+		array = append(array, link)
+
+	}
+	return array, nil
 }

@@ -45,3 +45,13 @@ func RedirectUser(w http.ResponseWriter, r *http.Request) {
 	}
 	http.Redirect(w, r, link, http.StatusTemporaryRedirect)
 }
+
+func GetAllLinksFromWebsite(w http.ResponseWriter, r *http.Request) {
+	array, err := db.Store.GetAllLinks()
+	if err != nil {
+		log.Print("Error ", err)
+		helpers.SendResponse(w, http.StatusNotFound, "Some Error Retrieving the data", "", false)
+		return
+	}
+	helpers.SendGetResponse(w, array, http.StatusOK, true)
+}
