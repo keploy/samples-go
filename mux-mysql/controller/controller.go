@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/gorilla/mux"
 	"github.com/heyyakash/keploy-go-samples/db"
 	"github.com/heyyakash/keploy-go-samples/helpers"
 	"github.com/heyyakash/keploy-go-samples/models"
@@ -20,10 +21,23 @@ func CreateLink(w http.ResponseWriter, r *http.Request) {
 	}
 	id, err := db.Store.EnterWebsiteToDB(req.Link)
 	if err != nil {
-		log.Printf("Error ", err)
+		log.Print("Error ", err)
 		helpers.SendResponse(w, http.StatusInternalServerError, "Some Error occured", "", false)
 		return
 	}
 	link := "http://localhost:8080" + "/" + strconv.FormatInt(id, 10)
 	helpers.SendResponse(w, http.StatusOK, "Converted", link, true)
+}
+
+func RedirectUser(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	log.Printf("%v", id)
+	link, err := db.Store.GetWebsiteFromId(id)
+	if err != nil {
+		log.Print("Error ", err)
+		helpers.SendResponse(w, http.StatusNotFound, "Website not found", "", false)
+		return
+	}
+	http.Redirect(w, r, link, http.StatusTemporaryRedirect)
 }
