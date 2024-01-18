@@ -19,6 +19,10 @@ func CreateLink(w http.ResponseWriter, r *http.Request) {
 		helpers.SendResponse(w, http.StatusBadRequest, "Error decoding JSON", "", false)
 		return
 	}
+	if valid := helpers.CheckValidURL(req.Link); valid == false {
+		helpers.SendResponse(w, http.StatusBadRequest, "Enter Valid url (starting with 'http:// or https://')", "", false)
+		return
+	}
 	id, err := db.Store.EnterWebsiteToDB(req.Link)
 	if err != nil {
 		log.Print("Error ", err)

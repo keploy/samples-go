@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -64,4 +65,19 @@ func (d *Database) EnterWebsiteToDB(link string) (int64, error) {
 
 	log.Printf("\n inserted %+v ", resp)
 	return lastInsertID, err
+}
+
+func (d *Database) GetWebsiteFromId(id string) (string, error) {
+	query := `select website from list where id=` + id
+	var link string
+	row := d.db.QueryRow(query)
+	err := row.Scan(&link)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return "", fmt.Errorf("Website not found")
+		}
+		return "", err
+	}
+
+	return link, nil
 }
