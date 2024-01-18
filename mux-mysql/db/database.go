@@ -16,7 +16,7 @@ type Database struct {
 var Store *Database
 
 func InstatiateDB() error {
-	connStr := "root:my-secret-pw@tcp(127.0.0.1:3306)/"
+	connStr := "root:my-secret-pw@tcp(127.0.0.1:8003)/"
 	db, err := sql.Open("mysql", connStr)
 	if err != nil {
 		return err
@@ -28,7 +28,7 @@ func InstatiateDB() error {
 	_, err = db.Exec("CREATE DATABASE IF NOT EXISTS test")
 	db.Close()
 
-	connStr = "root:my-secret-pw@tcp(127.0.0.1:3306)/test"
+	connStr = "root:my-secret-pw@tcp(127.0.0.1:8003)/test"
 
 	db, err = sql.Open("mysql", connStr)
 	if err != nil {

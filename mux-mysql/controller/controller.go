@@ -29,7 +29,7 @@ func CreateLink(w http.ResponseWriter, r *http.Request) {
 		helpers.SendResponse(w, http.StatusInternalServerError, "Some Error occured", "", false)
 		return
 	}
-	link := "http://localhost:8080" + "/" + strconv.FormatInt(id, 10)
+	link := "http://localhost:8080" + "/link/" + strconv.FormatInt(id, 10)
 	helpers.SendResponse(w, http.StatusOK, "Converted", link, true)
 }
 
