@@ -56,7 +56,7 @@ There are 2 ways to install keploy on your system :-
     export ConnectionString=root:my-secret-pw@tcp(localhost:3306)/mysql
     go build -o main
     ```
-    If you get some error like this, 
+    If you get some error like this after running `./main`, 
     
     ``` bash
     [mysql] 2024/01/19 21:28:04 packets.go:37: unexpected EOF
