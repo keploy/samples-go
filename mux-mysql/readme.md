@@ -56,6 +56,17 @@ There are 2 ways to install keploy on your system :-
     export ConnectionString=root:my-secret-pw@tcp(localhost:3306)/mysql
     go build -o main
     ```
+    If you get some error like this, 
+    
+    ``` bash
+    [mysql] 2024/01/19 21:28:04 packets.go:37: unexpected EOF
+    [mysql] 2024/01/19 21:28:04 packets.go:37: unexpected EOF
+    [mysql] 2024/01/19 21:28:04 packets.go:37: unexpected EOF
+    2024/01/19 21:28:04 Couldnt create store driver: bad connection
+    ```
+
+    This means that the mysql db is not ready yet, watch out for logs in ** Step 1 ** and wait for 20-30s
+
     
 5. To capture test cases for our application use the following command
 
