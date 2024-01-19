@@ -1,29 +1,49 @@
 package main
 
 import (
+	"database/sql"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/heyyakash/keploy-go-samples/controller"
-	"github.com/heyyakash/keploy-go-samples/db"
 )
 
 var Port = ":8080"
 
 func main() {
-	if err := db.InstatiateDB(); err != nil {
-		log.Fatal("Error Instantiating MySql Database ", err)
+	store, err := CreateStore()
+	if err != nil {
+		log.Fatal("Couldnt create store ", err)
 	}
-	if err := db.Store.IntializeTable(); err != nil {
-		log.Fatal("Couldn't create table", err)
-	}
-	store := db.Store.ReturnDB()
+
 	defer store.Close()
 	router := mux.NewRouter()
-	router.HandleFunc("/create", controller.CreateLink).Methods("POST")
-	router.HandleFunc("/link/{id}", controller.RedirectUser).Methods("GET")
-	router.HandleFunc("/all", controller.GetAllLinksFromWebsite).Methods("GET")
+	router.HandleFunc("/create", controller.CreateLink(store)).Methods("POST")
+	router.HandleFunc("/all", controller.GetAllLinksFromWebsite(store)).Methods("GET")
 	log.Print("Server is running")
 	log.Fatal(http.ListenAndServe(Port, router))
+}
+
+func CreateStore() (*sql.DB, error) {
+	connStr := "root:my-secret-pw@tcp(127.0.0.1:3306)/mysql"
+	store, err := sql.Open("mysql", connStr)
+	if err != nil {
+		return nil, err
+	}
+	if err := store.Ping(); err != nil {
+		return nil, err
+	}
+	query := `create table if not exists list(
+		id int auto_increment primary key,
+		website varchar(400)
+	)`
+	_, err = store.Exec(query)
+	if err != nil {
+		return nil, err
+	}
+	store.SetConnMaxLifetime(time.Hour)
+	log.Print("*** DB Initiated ***")
+	return store, nil
 }
