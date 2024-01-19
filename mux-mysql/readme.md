@@ -52,7 +52,8 @@ There are 2 ways to install keploy on your system :-
    
 4. Run the following command to build the executable out of our golang code
 
-    ``` go
+    ``` bash
+    export ConnectionString=root:my-secret-pw@tcp(localhost:3306)/mysql
     go build -o main
     ```
     

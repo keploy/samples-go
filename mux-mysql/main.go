@@ -4,10 +4,12 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/heyyakash/keploy-go-samples/controller"
+	"github.com/heyyakash/keploy-go-samples/helpers"
 )
 
 var Port = ":8080"
@@ -28,7 +30,8 @@ func main() {
 }
 
 func CreateStore() (*sql.DB, error) {
-	connStr := "root:my-secret-pw@tcp(localhost:3306)/mysql"
+	log.Print(os.Getenv("DOCKER_ENV"))
+	connStr := helpers.GetDBConnectionString()
 	store, err := sql.Open("mysql", connStr)
 	if err != nil {
 		return nil, err
@@ -45,6 +48,6 @@ func CreateStore() (*sql.DB, error) {
 		return nil, err
 	}
 	store.SetConnMaxLifetime(time.Hour)
-	log.Print("*** DB Initiated ***")
+	log.Print("*** DB Initiated at ***")
 	return store, nil
 }
