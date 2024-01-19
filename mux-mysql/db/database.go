@@ -16,7 +16,7 @@ type Database struct {
 var Store *Database
 
 func InstatiateDB() error {
-	connStr := "root:my-secret-pw@tcp(127.0.0.1:8003)/"
+	connStr := "root:my-secret-pw@tcp(127.0.0.1:3306)/mysql"
 	db, err := sql.Open("mysql", connStr)
 	if err != nil {
 		return err
@@ -24,23 +24,10 @@ func InstatiateDB() error {
 	if err := db.Ping(); err != nil {
 		return err
 	}
-
-	_, err = db.Exec("CREATE DATABASE IF NOT EXISTS test")
-	db.Close()
-
-	connStr = "root:my-secret-pw@tcp(127.0.0.1:8003)/test"
-
-	db, err = sql.Open("mysql", connStr)
-	if err != nil {
-		return err
-	}
-	if err := db.Ping(); err != nil {
-		return err
-	}
-
 	Store = &Database{
 		db: db,
 	}
+	log.Printf("***Db is initialized*** \n")
 	return nil
 }
 
@@ -50,7 +37,14 @@ func (d *Database) IntializeTable() error {
 		website varchar(400)
 	)`
 	_, err := d.db.Query(query)
+	if err == nil {
+		log.Printf("*** Tables created ***")
+	}
 	return err
+}
+
+func (d *Database) ReturnDB() *sql.DB {
+	return d.db
 }
 
 func (d *Database) EnterWebsiteToDB(link string) (int64, error) {

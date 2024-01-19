@@ -18,6 +18,8 @@ func main() {
 	if err := db.Store.IntializeTable(); err != nil {
 		log.Fatal("Couldn't create table", err)
 	}
+	store := db.Store.ReturnDB()
+	defer store.Close()
 	router := mux.NewRouter()
 	router.HandleFunc("/create", controller.CreateLink).Methods("POST")
 	router.HandleFunc("/link/{id}", controller.RedirectUser).Methods("GET")
