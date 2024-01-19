@@ -22,12 +22,13 @@ func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/create", controller.CreateLink(store)).Methods("POST")
 	router.HandleFunc("/all", controller.GetAllLinksFromWebsite(store)).Methods("GET")
+	router.HandleFunc("/links/{id}", controller.RedirectUser(store)).Methods("GET")
 	log.Print("Server is running")
 	log.Fatal(http.ListenAndServe(Port, router))
 }
 
 func CreateStore() (*sql.DB, error) {
-	connStr := "root:my-secret-pw@tcp(127.0.0.1:3306)/mysql"
+	connStr := "root:my-secret-pw@tcp(localhost:3306)/mysql"
 	store, err := sql.Open("mysql", connStr)
 	if err != nil {
 		return nil, err

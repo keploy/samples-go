@@ -1,0 +1,21 @@
+🐰 Keploy: 2024-01-19T20:07:05+05:30 	[34mINFO[0m	continuing without configuration file because file not found
+🐰 Keploy: 2024-01-19T20:07:05+05:30 	[33mWARN[0m	Delay is set to 5 seconds, incase your app takes more time to start use --delay to set custom delay
+🐰 Keploy: 2024-01-19T20:07:05+05:30 	[34mINFO[0m	Example usage: sudo -E env PATH=$PATH keploy test -c "/path/to/user/app" --delay 6
+🐰 Keploy: 2024-01-19T20:07:05+05:30 	[34mINFO[0m		{"keploy test and mock path": "/mnt/01D8833D6F834FF0/keploy-samples/samples-go/mux-mysql/keploy", "keploy testReport path": "/mnt/01D8833D6F834FF0/keploy-samples/samples-go/mux-mysql/keploy/testReports"}
+🐰 Keploy: 2024-01-19T20:07:10+05:30 	[34mINFO[0m	keploy initialized and probes added to the kernel.
+🐰 Keploy: 2024-01-19T20:07:11+05:30 	[34mINFO[0m	Java detected and CA already exists	{"path": "/usr/lib/jvm/java-19-openjdk-amd64/lib/security/cacerts"}
+🐰 Keploy: 2024-01-19T20:07:11+05:30 	[34mINFO[0m	Java detected and CA already exists	{"path": "/usr/lib/jvm/java-19-openjdk-amd64/lib/security/cacerts"}
+🐰 Keploy: 2024-01-19T20:07:12+05:30 	[34mINFO[0m	Keploy has hijacked the DNS resolution mechanism, your application may misbehave in keploy test mode if you have provided wrong domain name in your application code.
+🐰 Keploy: 2024-01-19T20:07:12+05:30 	[34mINFO[0m	Proxy started at port:16789
+🐰 Keploy: 2024-01-19T20:07:12+05:30 	[34mINFO[0m	starting DNS server at addr :16789
+🐰 Keploy: 2024-01-19T20:07:12+05:30 	[34mINFO[0m	running user application for	{"test-set": "[38;5;208mtest-set-0[0m"}
+🐰 Keploy: 2024-01-19T20:07:12+05:30 	[34mINFO[0m	trying to inject network:keploy-network to the keploy container
+🐰 Keploy: 2024-01-19T20:07:12+05:30 	[31mERROR[0m	Could not inspect container via the Docker API	{"error": "Error response from daemon: No such container: keploy-v2", "container_name": "keploy-v2"}
+🐰 Keploy: 2024-01-19T20:07:12+05:30 	[31mERROR[0m	could not inject application network to the keploy container
+🐰 Keploy: 2024-01-19T20:07:12+05:30 	[31mERROR[0m	failed to inject network:keploy-network to the keploy container
+🐰 Keploy: 2024-01-19T20:07:12+05:30 	[31mERROR[0m	unknown error recieved from application	{"error": "could not get existing networks for container keploy-v2"}
+🐰 Keploy: 2024-01-19T20:07:23+05:30 	[34mINFO[0m	Received signal to exit keploy program..
+🐰 Keploy: 2024-01-19T20:07:23+05:30 	[34mINFO[0m	keploy has initiated the shutdown of the user application.
+🐰 Keploy: 2024-01-19T20:07:24+05:30 	[34mINFO[0m	eBPF resources released successfully...
+🐰 Keploy: 2024-01-19T20:07:24+05:30 	[34mINFO[0m	Dns server stopped
+🐰 Keploy: 2024-01-19T20:07:24+05:30 	[34mINFO[0m	proxy stopped...
