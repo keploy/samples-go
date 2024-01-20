@@ -16,7 +16,7 @@ COPY *.go ./
 RUN CGO_ENABLED=0 go build -o /main 
 
 # === Runtime Stage ===
-FROM alpine
+FROM alpine:3.19
 
 # Add groups and user to run the app and install dumb-init package
 RUN addgroup -S keploy \ 
