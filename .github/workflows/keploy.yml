@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Test-Report
-      uses: keploy/testgtp@main
+      uses: keploy/testgpt@main
       with:
         working-directory: ./gin-mongo
         delay: 20
