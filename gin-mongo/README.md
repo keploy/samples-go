@@ -141,6 +141,8 @@ Spin up your mongo container using
 sudo docker run --rm -p27017:27017 -d --network keploy-network --name mongoDb mongo
 ```
 
+### Update the Host
+
 > **Since, we are on the local machine the MongoDB URL will be `localhost:27017`. This needs to be updated on the on line 21 in `main.go` file**
 
 ### Capture the testcases

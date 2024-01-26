@@ -28,9 +28,9 @@ func main() {
 	if err != nil {
 		logger.Fatal("failed to create mgo db client", zap.Error(err))
 	}
-	db := client.Database(dbName)
+	db :=client.Database(dbName)
 
-	col = db.Collection(collection)
+	col =db.Collection(collection)
 
 	port := "8080"
 
@@ -50,7 +50,7 @@ func main() {
 	go func() {
 		select {
 		case <-stopper:
-			ctx, cancel := context.WithTimeout(context.Background(), 5 * time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 			defer cancel()
 			if err := srv.Shutdown(ctx); err != nil {
 				logger.Fatal("Server Shutdown:", zap.Error(err))

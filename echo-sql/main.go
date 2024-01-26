@@ -25,6 +25,7 @@ func main() {
 
 	Database, err = NewConnection(ConnectionDetails{
 		host: "postgresDb",
+		// host: "localhost" when using natively
 		//host:     "echo-sql-postgres-1",
 		port:     "5432",
 		user:     "postgres",
