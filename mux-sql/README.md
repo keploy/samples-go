@@ -39,12 +39,9 @@ Using the docker-compose file we will start our postgres instance:-
 # Start Postgres
 docker-compose up -d
 ```
-
-### Update the Host
-
-> **Since we have setup our sample-app natively set the host to `localhost` on line 10.**
-
 ### Capture the Testcases
+
+> **Since, we are on the local machine the Postgres Host will be `localhost`.**
 
 Now, we will create the binary of our application:-
 

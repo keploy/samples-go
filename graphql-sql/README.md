@@ -40,10 +40,9 @@ Using the docker-compose file we will start our postgres instance:-
 # Start Postgres
 docker-compose up -d
 ```
+### Capture the Testcases
 
-### Update the Host
-
-> **Since we have setup our sample-app natively, we need to set the Postgres host on line 18, in `main.go` to `localhost`.**
+> **Since, we are on the local machine the Postgres Host will be `localhost`.**
 
 ### Capture the testcases
 

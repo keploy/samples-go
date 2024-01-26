@@ -48,9 +48,9 @@ docker network create keploy-network
 ```
 
 
-### Update the Host
+### Capture the Testcases
 
-> **Since we have setup our sample-app natively, we need to update the Postgres host on line 27, in `main.go`, from `postgresDb` to `localhost`.**
+> **Since, we are on the local machine the Postgres Host will be `localhost`.**
 
 ### Capture the testcases
 
