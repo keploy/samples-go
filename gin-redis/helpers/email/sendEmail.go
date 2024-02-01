@@ -1,3 +1,4 @@
+// Package email implements the method to notify user through email
 package email
 
 import (
@@ -9,7 +10,7 @@ import (
 	"github.com/keploy/gin-redis/structure"
 )
 
-func SendEmail(to, userName, subject string) (int, error) {
+func SendEmail(to, userName string) (int, error) {
 	otp := services.GenerateOTP()
 	data := structure.OTPData{
 		OTP:      otp,
@@ -23,6 +24,6 @@ func SendEmail(to, userName, subject string) (int, error) {
 	}
 
 	// Store the JSON string in Redis
-	err = redis.RedisSession().Set(to, jsonData, 4*time.Hour).Err()
+	err = redis.Session().Set(to, jsonData, 4*time.Hour).Err()
 	return otp, err
 }

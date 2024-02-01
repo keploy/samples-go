@@ -1,3 +1,4 @@
+// Package services implement the OTP services for verification of user
 package services
 
 import (

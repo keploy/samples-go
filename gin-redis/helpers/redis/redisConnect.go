@@ -1,3 +1,4 @@
+// Package redis contains implement redis database
 package redis
 
 import (
@@ -8,16 +9,16 @@ import (
 
 var RedisClient *redis.Client
 
-func RedisSession() *redis.Client {
+func Session() *redis.Client {
 	return RedisClient
 }
 
-func RedisInit() {
+func Init() {
 	// Connect to the Redis server
 	RedisClient = redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379", // Redis server address
-		Password: "",             // No password for local Redis, set it if needed
-		DB:       0,              // Default DB
+		Password: "",               // No password for local Redis, set it if needed
+		DB:       0,                // Default DB
 	})
 	_, err := RedisClient.Ping().Result()
 	if err != nil {

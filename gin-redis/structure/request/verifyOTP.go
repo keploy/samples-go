@@ -1,4 +1,4 @@
-package requestStruct
+package requeststruct
 
 type OTPRequest struct {
 	OTP   int    `json:"otp" binding:"required"`

@@ -1,3 +1,4 @@
+// Package constants contains the constant values
 package constants
 
 const VerificationMailTemplate = `<html>
@@ -21,14 +22,14 @@ const API_SUCCESS_STATUS = "Success"
 
 const API_FAILED_STATUS = "Failed"
 
-const ApiFailStatus = "Fail"
+const APIFailStatus = "Fail"
 
 var INVALID_TOKEN_RESPONSE = map[string]interface{}{
-	"status":  ApiFailStatus,
+	"status":  APIFailStatus,
 	"message": "Invalid or No Token",
 }
 
 var INVALID_SUPER_ADMIN = map[string]interface{}{
-	"status":  ApiFailStatus,
+	"status":  APIFailStatus,
 	"message": "Go back son",
 }
