@@ -26,7 +26,7 @@ type App struct {
 // tom: initial function is empty, it's filled afterwards
 // func (a *App) Initialize(user, password, dbname string) { }
 
-// tom: added "sslmode=disable" to connection string
+// Initialize the app
 func (a *App) Initialize(host, user, password, dbname string) error {
 
 	connectionString := fmt.Sprintf("host=%s port=%s user=%s "+
@@ -49,9 +49,10 @@ func (a *App) Initialize(host, user, password, dbname string) error {
 // tom: initial version
 // func (a *App) Run(addr string) { }
 // improved version
+
+// Run starts the app
 func (a *App) Run(addr string) {
-	log.Fatal(http.ListenAndServe(":8010", a.Router))
-	log.Printf("😃 Connected to 8010 port !!")
+	log.Fatal(http.ListenAndServe(addr, a.Router))
 }
 
 // tom: these are added later
@@ -85,7 +86,11 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
-	w.Write(response)
+
+	_, err := w.Write(response)
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 func (a *App) getProducts(w http.ResponseWriter, r *http.Request) {
@@ -115,7 +120,7 @@ func (a *App) createProduct(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		return
 	}
-	defer r.Body.Close()
+	defer handleDeferError(r.Body.Close())
 
 	if err := p.createProduct(r.Context(), a.DB); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
@@ -139,7 +144,7 @@ func (a *App) updateProduct(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, http.StatusBadRequest, "Invalid resquest payload")
 		return
 	}
-	defer r.Body.Close()
+	defer handleDeferError(r.Body.Close())
 	p.ID = id
 
 	if err := p.updateProduct(r.Context(), a.DB); err != nil {

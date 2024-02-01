@@ -1,8 +1,15 @@
+// Package main starts the application
 package main
 
 import (
 	"log"
 )
+
+func handleDeferError(err error) {
+	if err != nil {
+		log.Println(err)
+	}
+}
 
 func main() {
 	a := &App{}

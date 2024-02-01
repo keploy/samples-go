@@ -1,3 +1,4 @@
+// Package db implements the functions to use database
 package db
 
 import (
@@ -5,7 +6,6 @@ import (
 	"fmt"
 	"log"
 
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/heyyakash/keploy-go-samples/models"
 )
 
@@ -24,7 +24,7 @@ func EnterWebsiteToDB(link string, db *sql.DB) (int64, error) {
 	return lastInsertID, err
 }
 
-func GetWebsiteFromId(id string, db *sql.DB) (string, error) {
+func GetWebsiteFromID(id string, db *sql.DB) (string, error) {
 	query := `select website from list where id=` + id
 	var link string
 	row := db.QueryRow(query)
@@ -46,11 +46,17 @@ func GetAllLinks(db *sql.DB) ([]models.Table, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+
+	defer func() {
+		err = rows.Close()
+		if err != nil {
+			log.Println(err)
+		}
+	}()
 
 	for rows.Next() {
 		var link models.Table
-		if err := rows.Scan(&link.Id, &link.Website); err != nil {
+		if err := rows.Scan(&link.ID, &link.Website); err != nil {
 			return nil, err
 		}
 		array = append(array, link)

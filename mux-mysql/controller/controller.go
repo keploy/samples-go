@@ -1,3 +1,4 @@
+// Package controller contains the controller functions
 package controller
 
 import (
@@ -21,7 +22,7 @@ func CreateLink(store *sql.DB) http.HandlerFunc {
 			helpers.SendResponse(w, http.StatusBadRequest, "Error decoding JSON", "", false)
 			return
 		}
-		if valid := helpers.CheckValidURL(req.Link); valid == false {
+		if valid := helpers.CheckValidURL(req.Link); !valid {
 			helpers.SendResponse(w, http.StatusBadRequest, "Enter Valid url (starting with 'http:// or https://')", "", false)
 			return
 		}
@@ -41,7 +42,7 @@ func RedirectUser(store *sql.DB) http.HandlerFunc {
 		vars := mux.Vars(r)
 		id := vars["id"]
 		log.Printf("%v", id)
-		link, err := db.GetWebsiteFromId(id, store)
+		link, err := db.GetWebsiteFromID(id, store)
 		if err != nil {
 			log.Print("Error ", err)
 			helpers.SendResponse(w, http.StatusNotFound, "Website not found", "", false)

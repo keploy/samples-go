@@ -78,7 +78,7 @@ func getProducts(ctx context.Context, db *sql.DB, start, count int) ([]product, 
 		return nil, err
 	}
 
-	defer rows.Close()
+	defer handleDeferError(rows.Close())
 
 	products := []product{}
 

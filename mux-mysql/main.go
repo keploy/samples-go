@@ -1,3 +1,4 @@
+// Package main start the application
 package main
 
 import (
@@ -7,6 +8,7 @@ import (
 	"os"
 	"time"
 
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
 	"github.com/heyyakash/keploy-go-samples/controller"
 	"github.com/heyyakash/keploy-go-samples/helpers"
@@ -20,7 +22,13 @@ func main() {
 		log.Fatal("Couldnt create store ", err)
 	}
 
-	defer store.Close()
+	defer func() {
+		err = store.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}()
+
 	router := mux.NewRouter()
 	router.HandleFunc("/create", controller.CreateLink(store)).Methods("POST")
 	router.HandleFunc("/all", controller.GetAllLinksFromWebsite(store)).Methods("GET")
