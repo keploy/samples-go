@@ -18,14 +18,15 @@ There are two methods to run the sample application using Keploy :-
 
 ## Running app using Docker
 
-Keploy can be used on Linux & Windows through [Docker](https://docs.docker.com/engine/install/), and on MacOS by the help of [Colima](https://docs.keploy/io/server/macos/installation)
+Keploy can be used on Linux, Windows and MacOS through [Docker](https://docs.docker.com/engine/install/).
 
+Note: To run Keploy on MacOS through [Docker](https://docs.docker.com/desktop/release-notes/#4252) the version must be ```4.25.2``` or above.
 
 ### Create Keploy Alias
 
 We need create an alias for Keploy:
 ```bash
-alias keploy='sudo docker run --pull always --name keploy-v2 -p 16789:16789 --privileged --pid=host -it -v "$(pwd)":/files -v /sys/fs/cgroup:/sys/fs/cgroup -v /sys/kernel/debug:/sys/kernel/debug -v /sys/fs/bpf:/sys/fs/bpf -v /var/run/docker.sock:/var/run/docker.sock --rm ghcr.io/keploy/keploy'
+alias keploy='sudo docker run --pull always --name keploy-v2 -p 16789:16789 --privileged --pid=host -it -v $(pwd):$(pwd) -w $(pwd) -v /sys/fs/cgroup:/sys/fs/cgroup -v /sys/kernel/debug:/sys/kernel/debug -v /sys/fs/bpf:/sys/fs/bpf -v /var/run/docker.sock:/var/run/docker.sock --rm ghcr.io/keploy/keploy'
 ```
 
 ### Let's start the MongoDB Instance
@@ -139,6 +140,8 @@ Spin up your mongo container using
 ```shell
 sudo docker run --rm -p27017:27017 -d --network keploy-network --name mongoDb mongo
 ```
+
+### Update the Host
 
 > **Since, we are on the local machine the MongoDB URL will be `localhost:27017`. This needs to be updated on the on line 21 in `main.go` file**
 

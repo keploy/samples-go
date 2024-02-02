@@ -1,0 +1,167 @@
+version: api.keploy.io/v1beta1
+name: report-1
+status: PASSED
+success: 2
+failure: 0
+total: 2
+tests:
+    - kind: Http
+      name: report-1
+      status: PASSED
+      started: 1698743949
+      completed: 1698743949
+      test_case_path: /home/shivamsouravjha.linux/samples-go/gin-redis/keploy/test-set-0
+      mock_path: ""
+      test_case_id: test-1
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:3001/api/getVerificationCode?email=something@gmail.com&username=shivamsourav
+        url_params:
+            email: something@gmail.com
+            username: shivamsourav
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Connection: keep-alive
+            Host: localhost:3001
+            Postman-Token: 2db91281-a5bf-49e0-be0d-c6293c833910
+            User-Agent: PostmanRuntime/7.33.0
+        body: ""
+        body_type: ""
+      resp:
+        status_code: 200
+        header:
+            Content-Length: "69"
+            Content-Type: application/json; charset=utf-8
+            Date: Tue, 31 Oct 2023 09:17:00 GMT
+        body: '{"status":"true","message":"OTP Generated successfully","otp":"5486"}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+      noise:
+        - body.otp
+        - header.Date
+      result:
+        status_code:
+            normal: true
+            expected: 200
+            actual: 200
+        headers_result:
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+              actual:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Tue, 31 Oct 2023 09:17:00 GMT
+              actual:
+                key: Date
+                value:
+                    - Tue, 31 Oct 2023 09:19:09 GMT
+            - normal: true
+              expected:
+                key: Content-Length
+                value:
+                    - "69"
+              actual:
+                key: Content-Length
+                value:
+                    - "69"
+        body_result:
+            - normal: true
+              type: JSON
+              expected: '{"status":"true","message":"OTP Generated successfully","otp":"5486"}'
+              actual: '{"status":"true","message":"OTP Generated successfully","otp":"7100"}'
+        dep_result: []
+    - kind: Http
+      name: report-1
+      status: PASSED
+      started: 1698743949
+      completed: 1698743949
+      test_case_path: /home/shivamsouravjha.linux/samples-go/gin-redis/keploy/test-set-0
+      mock_path: ""
+      test_case_id: test-2
+      req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:3001/api/verifyCode
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Connection: keep-alive
+            Content-Length: "53"
+            Content-Type: application/json
+            Host: localhost:3001
+            Postman-Token: f1933e81-8c0b-43e5-bb75-735f007a56c9
+            User-Agent: PostmanRuntime/7.33.0
+        body: |-
+            {
+                "otp":5486,
+                "email":"something@gmail.com"
+            }
+        body_type: ""
+      resp:
+        status_code: 200
+        header:
+            Content-Length: "229"
+            Content-Type: application/json; charset=utf-8
+            Date: Tue, 31 Oct 2023 09:17:06 GMT
+        body: '{"status":"true","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2YWx1ZSI6ImdtYWlsLmNvbSIsImV4cCI6MTY5ODc1ODIyNn0.eVrNACUY93g-5tu8fxb2BEOs1wn2iCe8wVpUYU6OLSE","username":"shivamsourav","message":"OTP authenticated successfully"}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+      noise:
+        - header.Date
+        - body.token
+      result:
+        status_code:
+            normal: true
+            expected: 200
+            actual: 200
+        headers_result:
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Tue, 31 Oct 2023 09:17:06 GMT
+              actual:
+                key: Date
+                value:
+                    - Tue, 31 Oct 2023 09:19:09 GMT
+            - normal: true
+              expected:
+                key: Content-Length
+                value:
+                    - "229"
+              actual:
+                key: Content-Length
+                value:
+                    - "229"
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+              actual:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+        body_result:
+            - normal: true
+              type: JSON
+              expected: '{"status":"true","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2YWx1ZSI6ImdtYWlsLmNvbSIsImV4cCI6MTY5ODc1ODIyNn0.eVrNACUY93g-5tu8fxb2BEOs1wn2iCe8wVpUYU6OLSE","username":"shivamsourav","message":"OTP authenticated successfully"}'
+              actual: '{"status":"true","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2YWx1ZSI6ImdtYWlsLmNvbSIsImV4cCI6MTY5ODc1ODM0OX0.QAGVn581h-P-grn25Jfc4U0D3WZcKqC2NNqHJpQpn-s","username":"shivamsourav","message":"OTP authenticated successfully"}'
+        dep_result: []
+test_set: test-set-0

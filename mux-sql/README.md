@@ -39,9 +39,12 @@ Using the docker-compose file we will start our postgres instance:-
 # Start Postgres
 docker-compose up -d
 ```
-### Capture the Testcases
 
-> **Since, we are on the local machine the Postgres Host will be `localhost`.**
+### Update the Host
+
+> **Since we have setup our sample-app natively set the host to `localhost` on line 10.**
+
+### Capture the Testcases
 
 Now, we will create the binary of our application:-
 
@@ -112,7 +115,9 @@ So no need to setup fake database/apis like Postgres or write mocks for them. Ke
 
 # Using Docker
 
-Keploy can be used on Linux & Windows through Docker, and on MacOS by the help of [Colima](https://docs.keploy.io/docs/server/macos/installation/#using-colima)
+Keploy can be used on Linux, Windows and MacOS through Docker.
+
+Note: To run Keploy on MacOS through [Docker](https://docs.docker.com/desktop/release-notes/#4252) the version must be ```4.25.2``` or above.
 
 ## Create Keploy Alias
 To establish a network for your application using Keploy on Docker, follow these steps.
@@ -120,7 +125,7 @@ To establish a network for your application using Keploy on Docker, follow these
 If you're using a docker-compose network, replace keploy-network with your app's `docker_compose_network_name` below.
 
 ```shell
-alias keploy='sudo docker run --pull always --name keploy-v2 -p 16789:16789 --privileged --pid=host -it -v "$(pwd)":/files -v /sys/fs/cgroup:/sys/fs/cgroup -v /sys/kernel/debug:/sys/kernel/debug -v /sys/fs/bpf:/sys/fs/bpf -v /var/run/docker.sock:/var/run/docker.sock --rm ghcr.io/keploy/keploy'
+alias keploy='sudo docker run --pull always --name keploy-v2 -p 16789:16789 --privileged --pid=host -it -v $(pwd):$(pwd) -w $(pwd) -v /sys/fs/cgroup:/sys/fs/cgroup -v /sys/kernel/debug:/sys/kernel/debug -v /sys/fs/bpf:/sys/fs/bpf -v /var/run/docker.sock:/var/run/docker.sock --rm ghcr.io/keploy/keploy'
 ```
 ## Let's start the MongoDB Instance
 Using the docker-compose file we will start our mongodb instance:-
@@ -140,7 +145,7 @@ docker build -t mux-app:1.0 .
 ## Capture the Testcases
 
 ```zsh
-keploy record -c "docker run -p 8010:8010 --name muxSqlApp --network keploy-network mux-app:1.0"
+keploy record -c "docker run -p 8010:8010 --name muxSqlApp --network keploy-network mux-app:1.0" --buildDelay 50s
 ```
 
 ![Testcase](./img/testcase.png?raw=true)
@@ -154,7 +159,7 @@ curl --request POST \
   --header 'content-type: application/json' \
   --data '{
     "name":"Bubbles", 
-    "price": 123
+    "price": 124
 }'
 ```
 this will return the response. 
@@ -182,7 +187,7 @@ Now both these API calls were captured as editable testcases and written to ``ke
 Now that we have our testcase captured, run the test file.
 
 ```shell
-keploy test -c "sudo docker run -p 8010:8010 --net keploy-network --name muxSqlApp mux-app:1.0" --delay 10
+keploy test -c "sudo docker run -p 8010:8010 --net keploy-network --name muxSqlApp mux-app:1.0" --buildDelay 50s
 ```
 So no need to setup dependencies like mongoDB, web-go locally or write mocks for your testing.
 

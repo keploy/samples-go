@@ -1,0 +1,15 @@
+version: '3.7'
+services:
+  go-app:
+    build:
+      context: .
+    container_name: ginRedisApp
+    ports:
+      - "3001:3001"
+    depends_on:
+      - redis 
+  redis:
+    image: redis
+    container_name: myredis
+    ports:
+      - "6379:6379"

@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  go-app:
+    build:
+      context: .
+    container_name: sseMongoApp
+    ports:
+      - "3500:3500"
+    depends_on:
+      - mongo 
+  
+  mongo:
+    image: "mongo"
+    container_name: mongoDB
+    ports:
+    - "27017:27017"

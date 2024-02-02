@@ -1,0 +1,19 @@
+name: sample-tests
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, reopened, synchronize]
+jobs:
+  e2e-test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Test-Report
+      uses: keploy/testgpt@main
+      with:
+        working-directory: echo-sql
+        keploy-path: ./
+        command: go run main.go handler.go

@@ -17,7 +17,8 @@ services:
     ports:
     - "27017:27017"
     networks:
-    - keploy-network
+      - keploy-network
 
 networks:
-    keploy-network:
+  keploy-network:
+    external: true

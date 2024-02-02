@@ -3,6 +3,7 @@ services:
     postgres:
         image: postgres:10.5
         restart: always
+        container_name: graphql-sql-postgres-1
         environment:
           - POSTGRES_DB=postgres
           - POSTGRES_USER=postgres

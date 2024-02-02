@@ -34,15 +34,23 @@ sudo mkdir -p /usr/local/bin && sudo mv /tmp/keploy /usr/local/bin && keploy
 
 ### Start Postgres Instance 
 
-Using the docker-compose file we will start our postgres instance:-
+Using the docker-compose file we will start our postgres instance ( use `podman-compose` if you are using RHEL based distribution ):-
 
 ```bash
 # Start Postgres
 docker-compose up -d
 ```
-### Capture the Testcases
 
-> **Since, we are on the local machine the Postgres Host will be `localhost`.**
+If there is an error saying keploy-network could not be found. Use the following command to create the docker network
+
+```bash
+docker network create keploy-network
+```
+
+
+### Update the Host
+
+> **Since we have setup our sample-app natively, we need to update the Postgres host on line 27, in `main.go`, from `postgresDb` to `localhost`.**
 
 ### Capture the testcases
 
@@ -105,7 +113,10 @@ Now, let's see the magic! ✨💫
 
 Now that we have our testcase captured, we will add `ts` to noise field in `test-*.yaml` files. 
 
-**1. On line 32 we will add "`- body.ts`" under the "`header.data`".**
+**1. On line 32 we will add "`body.ts: []`" under the "`header.Date: []`".**
+
+![EliminateNoise](https://github.com/aswinbennyofficial/samples-go/assets/110408942/2b50d994-3418-4f7b-9f95-5bc1acd8ecf9)
+
 
 Now let's run the test mode (in the echo-sql directory, not the Keploy directory).
 
@@ -121,7 +132,9 @@ So no need to setup fake database/apis like Postgres or write mocks for them. Ke
 
 # Using Docker
 
-Keploy can be used on Linux & Windows through Docker, and on MacOS by the help of [Colima](https://docs.keploy.io/docs/server/macos/installation/#using-colima)
+Keploy can be used on Linux, Windows and MacOS through Docker.
+
+Note: To run Keploy on MacOS through [Docker](https://docs.docker.com/desktop/release-notes/#4252) the version must be ```4.25.2``` or above.
 
 ## Create Keploy Alias
 To establish a network for your application using Keploy on Docker, follow these steps.
@@ -129,7 +142,7 @@ To establish a network for your application using Keploy on Docker, follow these
 If you're using a docker-compose network, replace keploy-network with your app's `docker_compose_network_name` below.
 
 ```shell
-alias keploy='sudo docker run --pull always --name keploy-v2 -p 16789:16789 --privileged --pid=host -it -v "$(pwd)":/files -v /sys/fs/cgroup:/sys/fs/cgroup -v /sys/kernel/debug:/sys/kernel/debug -v /sys/fs/bpf:/sys/fs/bpf -v /var/run/docker.sock:/var/run/docker.sock --rm ghcr.io/keploy/keploy'
+alias keploy='sudo docker run --pull always --name keploy-v2 -p 16789:16789 --privileged --pid=host -it -v $(pwd):$(pwd) -w $(pwd) -v /sys/fs/cgroup:/sys/fs/cgroup -v /sys/kernel/debug:/sys/kernel/debug -v /sys/fs/bpf:/sys/fs/bpf -v /var/run/docker.sock:/var/run/docker.sock --rm ghcr.io/keploy/keploy'
 ```
 ## Let's start the MongoDB Instance
 Using the docker-compose file we will start our mongodb instance:-

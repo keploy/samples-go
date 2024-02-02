@@ -1,0 +1,47 @@
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mocks
+spec:
+    metadata: {}
+    genericrequests:
+        - origin: client
+          message:
+            - type: string
+              data: "*1\r\n$4\r\nping\r\n"
+    genericresponses:
+        - origin: server
+          message:
+            - type: string
+              data: "+PONG\r\n"
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mocks
+spec:
+    metadata: {}
+    genericrequests:
+        - origin: client
+          message:
+            - type: string
+              data: "*5\r\n$3\r\nset\r\n$19\r\nsomething@gmail.com\r\n$38\r\n{\"otp\":5486,\"username\":\"shivamsourav\"}\r\n$2\r\nex\r\n$5\r\n14400\r\n"
+    genericresponses:
+        - origin: server
+          message:
+            - type: string
+              data: "+OK\r\n"
+---
+version: api.keploy.io/v1beta2
+kind: Generic
+name: mocks
+spec:
+    metadata: {}
+    genericrequests:
+        - origin: client
+          message:
+            - type: string
+              data: "*2\r\n$3\r\nget\r\n$19\r\nsomething@gmail.com\r\n"
+    genericresponses:
+        - origin: server
+          message:
+            - type: string
+              data: "$38\r\n{\"otp\":5486,\"username\":\"shivamsourav\"}\r\n"

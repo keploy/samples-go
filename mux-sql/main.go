@@ -8,7 +8,7 @@ func main() {
 	a := &App{}
 	err := a.Initialize(
 		"localhost", // postgres host
-		//Change to `mux-sql-postgres-1` when using Docker to run keploy
+		//Change to `postgres` when using Docker to run keploy
 		"postgres", // username
 		"password", // password
 		"postgres") // db_name
