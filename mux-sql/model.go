@@ -1,15 +1,11 @@
 // model.go
-
 package main
 
 import (
 	"context"
 	"database/sql"
-	// tom: errors is removed once functions are implemented
-	// "errors"
 )
 
-// tom: add backticks to json
 type product struct {
 	ID    int     `json:"id"`
 	Name  string  `json:"name"`

@@ -3,17 +3,12 @@ package main
 
 import (
 	"database/sql"
-
-	// tom: for Initialize
+	"encoding/json"
 	"fmt"
 	"log"
-
-	// tom: for route handlers
-	"encoding/json"
 	"net/http"
 	"strconv"
 
-	// tom: go get required
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 )
@@ -23,16 +18,11 @@ type App struct {
 	DB     *sql.DB
 }
 
-// tom: initial function is empty, it's filled afterwards
-// func (a *App) Initialize(user, password, dbname string) { }
-
-// Initialize the app
 func (a *App) Initialize(host, user, password, dbname string) error {
 
 	connectionString := fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		host, "5432", user, password, dbname)
-	// connectionString := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable", user, password, dbname)
 	var err error
 	a.DB, err = sql.Open("postgres", connectionString)
 	if err != nil {
@@ -41,21 +31,15 @@ func (a *App) Initialize(host, user, password, dbname string) error {
 
 	a.Router = mux.NewRouter()
 
-	// tom: this line is added after initializeRoutes is created later on
 	a.initializeRoutes()
 	return err
 }
-
-// tom: initial version
-// func (a *App) Run(addr string) { }
-// improved version
 
 // Run starts the app
 func (a *App) Run(addr string) {
 	log.Fatal(http.ListenAndServe(addr, a.Router))
 }
 
-// tom: these are added later
 func (a *App) getProduct(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
