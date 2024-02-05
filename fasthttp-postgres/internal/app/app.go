@@ -8,35 +8,19 @@ import (
 	"log"
 
 	"github.com/fasthttp/router"
-	"github.com/keploy/go-sdk/integrations/kfasthttp"
-	"github.com/keploy/go-sdk/integrations/ksql/v2"
-	"github.com/keploy/go-sdk/keploy"
-	"github.com/lib/pq"
+	_ "github.com/lib/pq"
 	"github.com/valyala/fasthttp"
 )
 
 func InitApp() {
-	driver := ksql.Driver{Driver: pq.Driver{}}
-	sql.Register("keploy", &driver)
 
 	uri := "postgresql://books_user:books_password@localhost:5433/books?sslmode=disable"
-	db, err := sql.Open("keploy", uri)
+	db, err := sql.Open("postgres", uri)
 	if err != nil {
 		log.Fatal("Error connecting to database")
 	}
 	repo := repository.NewRepository(db)
 	ctrl := handlers.NewHandler(repo)
-
-	k := keploy.New(keploy.Config{
-		App: keploy.AppConfig{
-			Name: "fasthttp-postgres",
-			Port: "8080",
-		},
-		Server: keploy.ServerConfig{
-			URL: "http://localhost:6789/api",
-		},
-	})
-	mw := kfasthttp.FastHttpMiddleware(k)
 	router := router.New()
 
 	router.GET("/authors", ctrl.GetAllAuthors)
@@ -46,7 +30,7 @@ func InitApp() {
 	router.POST("/books", ctrl.CreateBook)
 	router.POST("/authors", ctrl.CreateAuthor)
 	server := &fasthttp.Server{
-		Handler: mw(router.Handler),
+		Handler: router.Handler,
 		Name:    "Server",
 	}
 	log.Println("Starting server: http://localhost:8080")
