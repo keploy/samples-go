@@ -1,3 +1,4 @@
+// Package token contains methods to implement jwt token
 package token
 
 import (

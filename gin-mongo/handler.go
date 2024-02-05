@@ -11,21 +11,22 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/itchyny/base58-go"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.uber.org/zap"
 )
 
-type url struct {
+type URL struct {
 	ID      string    `json:"id" bson:"_id"`
 	Created time.Time `json:"created" bson:"created"`
 	Updated time.Time `json:"updated" bson:"updated"`
 	URL     string    `json:"URL" bson:"url"`
 }
 
-func Get(ctx context.Context, id string) (*url, error) {
+func Get(ctx context.Context, id string) (*URL, error) {
 	filter := bson.M{"_id": id}
-	var u url
+	var u URL
 	err := col.FindOne(ctx, filter).Decode(&u)
 	if err != nil {
 		return nil, err
@@ -33,13 +34,13 @@ func Get(ctx context.Context, id string) (*url, error) {
 	return &u, nil
 }
 
-func Upsert(ctx context.Context, u url) error {
+func Upsert(ctx context.Context, u URL) error {
 	upsert := true
 	opt := &options.UpdateOptions{
 		Upsert: &upsert,
 	}
 	filter := bson.M{"_id": u.ID}
-	update := bson.D{{"$set", u}}
+	update := bson.D{primitive.E{Key: "$set", Value: u}}
 
 	_, err := col.UpdateOne(ctx, filter, update, opt)
 	if err != nil {
@@ -62,7 +63,6 @@ func getURL(c *gin.Context) {
 		return
 	}
 	c.Redirect(http.StatusSeeOther, u.URL)
-	return
 }
 
 func putURL(c *gin.Context) {
@@ -82,7 +82,7 @@ func putURL(c *gin.Context) {
 
 	t := time.Now()
 	id := GenerateShortLink(u)
-	err = Upsert(c.Request.Context(), url{
+	err = Upsert(c.Request.Context(), URL{
 		ID:      id,
 		Created: t,
 		Updated: t,

@@ -1,4 +1,4 @@
-// To connect to the MongoDB database with our application
+// Package configs implements function to connect the MongoDB database with the application
 package configs
 
 import (
@@ -39,7 +39,7 @@ func ConnectDB() *mongo.Client {
 	return client
 }
 
-// Creating a DB variable instance of the ConnectDB.
+// DB variable instance of the ConnectDB.
 // This will come in handy when creating collections.
 var DB *mongo.Client = ConnectDB()
 

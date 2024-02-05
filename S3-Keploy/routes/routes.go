@@ -1,3 +1,4 @@
+// Package routes implements the router function
 package routes
 
 import (
@@ -11,7 +12,7 @@ type Bucket struct {
 	BucketName string `json:"name"`
 }
 
-func Register(app *fiber.App, awsService bucket.BucketBasics) {
+func Register(app *fiber.App, awsService bucket.Basics) {
 	app.Get("/list", func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{
 			"buckets": awsService.ListAllBuckets(),

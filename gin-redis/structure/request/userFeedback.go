@@ -1,4 +1,5 @@
-package requestStruct
+// Package requeststruct contains structs for api request
+package requeststruct
 
 import "mime/multipart"
 

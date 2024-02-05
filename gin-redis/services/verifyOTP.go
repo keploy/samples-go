@@ -6,11 +6,11 @@ import (
 
 	"github.com/keploy/gin-redis/helpers/redis"
 	"github.com/keploy/gin-redis/structure"
-	requestStruct "github.com/keploy/gin-redis/structure/request"
+	requeststruct "github.com/keploy/gin-redis/structure/request"
 )
 
-func Verifycode(request requestStruct.OTPRequest) (string, error) {
-	jsonData, err := redis.RedisSession().Get(request.Email).Result()
+func Verifycode(request requeststruct.OTPRequest) (string, error) {
+	jsonData, err := redis.Session().Get(request.Email).Result()
 	if err != nil {
 		return "", err
 	}

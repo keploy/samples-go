@@ -1,3 +1,4 @@
+// Package main starts the application
 package main
 
 import (
@@ -15,7 +16,7 @@ import (
 var msgChan chan string
 var client *mongo.Client
 
-func getTime(w http.ResponseWriter, r *http.Request) {
+func getTime(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	if msgChan != nil {
@@ -88,7 +89,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer client.Disconnect(context.Background())
+	defer func() {
+		err = client.Disconnect(context.Background())
+		if err != nil {
+			log.Fatal(err)
+		}
+	}()
 
 	// Verify the connection
 	err = client.Ping(context.Background(), nil)
