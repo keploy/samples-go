@@ -3,8 +3,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    types: [opened, reopened, synchronize]
 jobs:
   e2e-test:
     runs-on: ubuntu-latest
@@ -15,5 +13,5 @@ jobs:
       uses: keploy/testgpt@main
       with:
         working-directory: echo-sql
-        keploy-path: ./
+        keploy-path: "./"
         command: go run main.go handler.go
