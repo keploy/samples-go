@@ -1,0 +1,43 @@
+version: api.keploy.io/v1beta1
+kind: Http
+name: test-3
+spec:
+    metadata: {}
+    req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8080/authors
+        header:
+            Accept: '*/*'
+            Host: localhost:8080
+            User-Agent: curl/8.2.1
+        body: ""
+        body_type: ""
+        timestamp: 2024-02-05T09:31:27.486047725Z
+        host: ""
+    resp:
+        status_code: 200
+        header:
+            Content-Length: "307"
+            Content-Type: application/json
+            Date: Mon, 05 Feb 2024 09:31:27 GMT
+            Server: Server
+        body: '[{"id":1,"first_name":"Charles","last_name":"Dickens"},{"id":2,"first_name":"Alexandre","last_name":"Dumas"},{"id":3,"first_name":"Jane","last_name":"Austin"},{"id":4,"first_name":"Franz","last_name":"Kafka"},{"id":5,"first_name":"Mark","last_name":"Twain"},{"id":6,"first_name":"Leo","last_name":"Tolsoy"}]'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2024-02-05T09:31:27.489913345Z
+    objects: []
+    assertions:
+        noise:
+            body.first_name: []
+            header.Date: []
+    created: 1707125489
+curl: |
+    curl --request GET \
+      --url http://localhost:8080/authors \
+      --header 'User-Agent: curl/8.2.1' \
+      --header 'Accept: */*' \
+      --header 'Host: localhost:8080' \
