@@ -9,7 +9,7 @@ services:
     depends_on:
       - postgres
     networks:
-      - babab
+      - keploy-network
 
   postgres:
         image: postgres:10.5
@@ -26,8 +26,8 @@ services:
           # copy the sql script to create tables
           - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
         networks:
-          - babab
+          - keploy-network
 
 networks:
-    babab: 
+    keploy-network: 
       external: false
