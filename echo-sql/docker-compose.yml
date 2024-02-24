@@ -30,4 +30,5 @@ services:
 
 networks:
     keploy-network: 
-      external: false
+      external: true
+      name: keploy-network
