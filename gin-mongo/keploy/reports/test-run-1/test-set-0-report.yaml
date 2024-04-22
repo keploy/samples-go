@@ -1,0 +1,397 @@
+version: api.keploy.io/v1beta1
+name: test-set-0-report
+status: PASSED
+success: 5
+failure: 0
+total: 5
+tests:
+    - kind: Http
+      name: test-set-0
+      status: PASSED
+      started: 1713800013
+      completed: 1713800013
+      test_case_path: /Users/gouravkumar/Desktop/Keploy/SampleProjects/test-go-samples/samples-go/gin-mongo/keploy/test-set-0
+      mock_path: /Users/gouravkumar/Desktop/Keploy/SampleProjects/test-go-samples/samples-go/gin-mongo/keploy/test-set-0/mocks.yaml
+      test_case_id: test-1
+      req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8080/url
+        header:
+            Accept: '*/*'
+            Content-Length: "33"
+            Content-Type: application/json
+            Host: localhost:8080
+            User-Agent: curl/7.88.1
+        body: |-
+            {
+              "url": "https://google.com"
+            }
+        timestamp: 2024-04-22T20:52:43.287852028+05:30
+      resp:
+        status_code: 200
+        header:
+            Content-Length: "65"
+            Content-Type: application/json; charset=utf-8
+            Date: Mon, 22 Apr 2024 15:22:43 GMT
+        body: '{"ts":1713799363319966476,"url":"http://localhost:8080/Lhr4BWAi"}'
+        status_message: OK
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2024-04-22T20:52:45.329902273+05:30
+      noise:
+        body.ts: []
+        header.Date: []
+      result:
+        status_code:
+            normal: true
+            expected: 200
+            actual: 200
+        headers_result:
+            - normal: true
+              expected:
+                key: Content-Length
+                value:
+                    - "65"
+              actual:
+                key: Content-Length
+                value:
+                    - "65"
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+              actual:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Mon, 22 Apr 2024 15:22:43 GMT
+              actual:
+                key: Date
+                value:
+                    - Mon, 22 Apr 2024 15:33:33 GMT
+        body_result:
+            - normal: true
+              type: JSON
+              expected: '{"ts":1713799363319966476,"url":"http://localhost:8080/Lhr4BWAi"}'
+              actual: '{"ts":1713800013401790091,"url":"http://localhost:8080/Lhr4BWAi"}'
+        dep_result: []
+    - kind: Http
+      name: test-set-0
+      status: PASSED
+      started: 1713800013
+      completed: 1713800013
+      test_case_path: /Users/gouravkumar/Desktop/Keploy/SampleProjects/test-go-samples/samples-go/gin-mongo/keploy/test-set-0
+      mock_path: /Users/gouravkumar/Desktop/Keploy/SampleProjects/test-go-samples/samples-go/gin-mongo/keploy/test-set-0/mocks.yaml
+      test_case_id: test-2
+      req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8080/url
+        header:
+            Accept: '*/*'
+            Content-Length: "32"
+            Content-Type: application/json
+            Host: localhost:8080
+            User-Agent: curl/7.88.1
+        body: |-
+            {
+              "url": "https://apple.com"
+            }
+        timestamp: 2024-04-22T20:52:56.493094845+05:30
+      resp:
+        status_code: 200
+        header:
+            Content-Length: "65"
+            Content-Type: application/json; charset=utf-8
+            Date: Mon, 22 Apr 2024 15:22:56 GMT
+        body: '{"ts":1713799376497583479,"url":"http://localhost:8080/4yEo44Zq"}'
+        status_message: OK
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2024-04-22T20:52:58.549652676+05:30
+      noise:
+        body.ts: []
+        header.Date: []
+      result:
+        status_code:
+            normal: true
+            expected: 200
+            actual: 200
+        headers_result:
+            - normal: true
+              expected:
+                key: Content-Length
+                value:
+                    - "65"
+              actual:
+                key: Content-Length
+                value:
+                    - "65"
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+              actual:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Mon, 22 Apr 2024 15:22:56 GMT
+              actual:
+                key: Date
+                value:
+                    - Mon, 22 Apr 2024 15:33:33 GMT
+        body_result:
+            - normal: true
+              type: JSON
+              expected: '{"ts":1713799376497583479,"url":"http://localhost:8080/4yEo44Zq"}'
+              actual: '{"ts":1713800013432900903,"url":"http://localhost:8080/4yEo44Zq"}'
+        dep_result: []
+    - kind: Http
+      name: test-set-0
+      status: PASSED
+      started: 1713800013
+      completed: 1713800013
+      test_case_path: /Users/gouravkumar/Desktop/Keploy/SampleProjects/test-go-samples/samples-go/gin-mongo/keploy/test-set-0
+      mock_path: /Users/gouravkumar/Desktop/Keploy/SampleProjects/test-go-samples/samples-go/gin-mongo/keploy/test-set-0/mocks.yaml
+      test_case_id: test-3
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8080/Lhr4BWAi
+        header:
+            Accept: '*/*'
+            Host: localhost:8080
+            User-Agent: curl/7.88.1
+        body: ""
+        timestamp: 2024-04-22T20:53:05.42488286+05:30
+      resp:
+        status_code: 303
+        header:
+            Content-Length: "45"
+            Content-Type: text/html; charset=utf-8
+            Date: Mon, 22 Apr 2024 15:23:05 GMT
+            Location: https://google.com
+        body: |+
+            <a href="https://google.com">See Other</a>.
+
+        status_message: See Other
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2024-04-22T20:53:07.526858614+05:30
+      noise:
+        header.Date: []
+      result:
+        status_code:
+            normal: true
+            expected: 303
+            actual: 303
+        headers_result:
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Mon, 22 Apr 2024 15:23:05 GMT
+              actual:
+                key: Date
+                value:
+                    - Mon, 22 Apr 2024 15:33:33 GMT
+            - normal: true
+              expected:
+                key: Location
+                value:
+                    - https://google.com
+              actual:
+                key: Location
+                value:
+                    - https://google.com
+            - normal: true
+              expected:
+                key: Content-Length
+                value:
+                    - "45"
+              actual:
+                key: Content-Length
+                value:
+                    - "45"
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - text/html; charset=utf-8
+              actual:
+                key: Content-Type
+                value:
+                    - text/html; charset=utf-8
+        body_result:
+            - normal: true
+              type: PLAIN
+              expected: |+
+                <a href="https://google.com">See Other</a>.
+
+              actual: |+
+                <a href="https://google.com">See Other</a>.
+
+        dep_result: []
+    - kind: Http
+      name: test-set-0
+      status: PASSED
+      started: 1713800013
+      completed: 1713800013
+      test_case_path: /Users/gouravkumar/Desktop/Keploy/SampleProjects/test-go-samples/samples-go/gin-mongo/keploy/test-set-0
+      mock_path: /Users/gouravkumar/Desktop/Keploy/SampleProjects/test-go-samples/samples-go/gin-mongo/keploy/test-set-0/mocks.yaml
+      test_case_id: test-4
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8080/Lhr4BWAii
+        header:
+            Accept: '*/*'
+            Host: localhost:8080
+            User-Agent: curl/7.88.1
+        body: ""
+        timestamp: 2024-04-22T20:53:07.842274519+05:30
+      resp:
+        status_code: 500
+        header:
+            Content-Length: "0"
+            Date: Mon, 22 Apr 2024 15:23:07 GMT
+        body: ""
+        status_message: Internal Server Error
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2024-04-22T20:53:09.943946364+05:30
+      noise:
+        header.Date: []
+      result:
+        status_code:
+            normal: true
+            expected: 500
+            actual: 500
+        headers_result:
+            - normal: true
+              expected:
+                key: Content-Length
+                value:
+                    - "0"
+              actual:
+                key: Content-Length
+                value:
+                    - "0"
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Mon, 22 Apr 2024 15:23:07 GMT
+              actual:
+                key: Date
+                value:
+                    - Mon, 22 Apr 2024 15:33:33 GMT
+        body_result:
+            - normal: true
+              type: PLAIN
+              expected: ""
+              actual: ""
+        dep_result: []
+    - kind: Http
+      name: test-set-0
+      status: PASSED
+      started: 1713800013
+      completed: 1713800013
+      test_case_path: /Users/gouravkumar/Desktop/Keploy/SampleProjects/test-go-samples/samples-go/gin-mongo/keploy/test-set-0
+      mock_path: /Users/gouravkumar/Desktop/Keploy/SampleProjects/test-go-samples/samples-go/gin-mongo/keploy/test-set-0/mocks.yaml
+      test_case_id: test-5
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8080/4yEo44Zq
+        header:
+            Accept: '*/*'
+            Host: localhost:8080
+            User-Agent: curl/7.88.1
+        body: ""
+        timestamp: 2024-04-22T20:53:34.147938526+05:30
+      resp:
+        status_code: 303
+        header:
+            Content-Length: "44"
+            Content-Type: text/html; charset=utf-8
+            Date: Mon, 22 Apr 2024 15:23:34 GMT
+            Location: https://apple.com
+        body: |+
+            <a href="https://apple.com">See Other</a>.
+
+        status_message: See Other
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2024-04-22T20:53:36.167395174+05:30
+      noise:
+        header.Date: []
+      result:
+        status_code:
+            normal: true
+            expected: 303
+            actual: 303
+        headers_result:
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - text/html; charset=utf-8
+              actual:
+                key: Content-Type
+                value:
+                    - text/html; charset=utf-8
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Mon, 22 Apr 2024 15:23:34 GMT
+              actual:
+                key: Date
+                value:
+                    - Mon, 22 Apr 2024 15:33:33 GMT
+            - normal: true
+              expected:
+                key: Location
+                value:
+                    - https://apple.com
+              actual:
+                key: Location
+                value:
+                    - https://apple.com
+            - normal: true
+              expected:
+                key: Content-Length
+                value:
+                    - "44"
+              actual:
+                key: Content-Length
+                value:
+                    - "44"
+        body_result:
+            - normal: true
+              type: PLAIN
+              expected: |+
+                <a href="https://apple.com">See Other</a>.
+
+              actual: |+
+                <a href="https://apple.com">See Other</a>.
+
+        dep_result: []
+test_set: test-set-0

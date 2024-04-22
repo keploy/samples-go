@@ -1,4 +1,5 @@
-package responseStruct
+// Package responsestruct contains struct for api response
+package responsestruct
 
 type SuccessResponse struct {
 	Status   string `json:"status,omitempty"`

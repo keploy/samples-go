@@ -1,23 +1,17 @@
-# Use the Go 1.19 base image with the bullseye tag
+# Use an official Golang runtime as a parent image
 FROM golang:1.20-bookworm
-
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends ca-certificates && \
-    rm -rf /var/lib/apt/lists/* 
 
 # Set the working directory inside the container
 WORKDIR /app
 
-COPY go.mod /app/
-COPY go.sum /app/
+# Copy the local package files to the container's workspace
+COPY . .
 
-RUN go mod download
+# Build the Go application
+RUN go build -o main .
 
-# Copy the contents from the local directory to the working directory in the container
-COPY . /app
+# Expose port 8080
+EXPOSE 8080
 
-RUN go build -o app .
-
-# Run the application server using "go run handler.go main.go"
-CMD ["./app"]
+# Command to run the Go application
+CMD ["./main"]

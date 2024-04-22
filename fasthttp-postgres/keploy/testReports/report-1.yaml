@@ -1,0 +1,156 @@
+version: api.keploy.io/v1beta1
+name: report-1
+status: PASSED
+success: 3
+failure: 0
+total: 3
+tests:
+    - kind: Http
+      name: report-1
+      status: PASSED
+      started: 1707125553
+      completed: 1707125553
+      test_case_path: /home/sonichigi.linux/test/sample-1/fasthttp-postgres/keploy/test-set-0
+      mock_path: ""
+      test_case_id: test-1
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8080/books/1
+        header:
+            Accept: '*/*'
+            Host: localhost:8080
+            User-Agent: curl/8.2.1
+        body: ""
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 200
+        header:
+            Content-Length: "106"
+            Content-Type: application/json
+            Date: Mon, 05 Feb 2024 09:30:42 GMT
+            Server: Server
+        body: '{"id":1,"title":"Oliver Twist","year":1837,"author":{"id":1,"first_name":"Charles","last_name":"Dickens"}}'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.Date: []
+      result:
+        status_code:
+            normal: false
+            expected: 200
+            actual: 200
+        headers_result: []
+        body_result:
+            - normal: false
+              type: JSON
+              expected: '{"id":1,"title":"Oliver Twist","year":1837,"author":{"id":1,"first_name":"Charles","last_name":"Dickens"}}'
+              actual: '{"id":1,"title":"Oliver Twist","year":1837,"author":{"id":1,"first_name":"Charles","last_name":"Dickens"}}'
+        dep_result: []
+    - kind: Http
+      name: report-1
+      status: PASSED
+      started: 1707125553
+      completed: 1707125553
+      test_case_path: /home/sonichigi.linux/test/sample-1/fasthttp-postgres/keploy/test-set-0
+      mock_path: ""
+      test_case_id: test-2
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8080/books
+        header:
+            Accept: '*/*'
+            Host: localhost:8080
+            User-Agent: curl/8.2.1
+        body: ""
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 200
+        header:
+            Content-Length: "1552"
+            Content-Type: application/json
+            Date: Mon, 05 Feb 2024 09:31:10 GMT
+            Server: Server
+        body: '[{"id":1,"title":"Oliver Twist","year":1837,"author":{"id":1,"first_name":"Charles","last_name":"Dickens"}},{"id":2,"title":"David Copperfield","year":1849,"author":{"id":1,"first_name":"Charles","last_name":"Dickens"}},{"id":3,"title":"Great Expectations","year":1860,"author":{"id":1,"first_name":"Charles","last_name":"Dickens"}},{"id":4,"title":"The Three Musketeers","year":1844,"author":{"id":2,"first_name":"Alexandre","last_name":"Dumas"}},{"id":5,"title":"The count of Monte Cristo","year":1844,"author":{"id":2,"first_name":"Alexandre","last_name":"Dumas"}},{"id":6,"title":"Pride and Prejudice","year":1813,"author":{"id":3,"first_name":"Jane","last_name":"Austin"}},{"id":7,"title":"Sense and Sensibility","year":1811,"author":{"id":3,"first_name":"Jane","last_name":"Austin"}},{"id":8,"title":"The castle","year":1926,"author":{"id":4,"first_name":"Franz","last_name":"Kafka"}},{"id":9,"title":"The trial","year":1925,"author":{"id":4,"first_name":"Franz","last_name":"Kafka"}},{"id":10,"title":"The metamorphosis","year":1915,"author":{"id":4,"first_name":"Franz","last_name":"Kafka"}},{"id":11,"title":"The adventures of Tom Sawyer","year":1876,"author":{"id":5,"first_name":"Mark","last_name":"Twain"}},{"id":12,"title":"The adventures of Huckleberry Finn","year":1884,"author":{"id":5,"first_name":"Mark","last_name":"Twain"}},{"id":13,"title":"War and Peace","year":1869,"author":{"id":6,"first_name":"Leo","last_name":"Tolsoy"}},{"id":14,"title":"Anna Karenina","year":1878,"author":{"id":6,"first_name":"Leo","last_name":"Tolsoy"}}]'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        body.id: []
+        body.year: []
+        header.Content-Length: []
+        header.Date: []
+      result:
+        status_code:
+            normal: false
+            expected: 200
+            actual: 200
+        headers_result: []
+        body_result:
+            - normal: false
+              type: JSON
+              expected: '[{"id":1,"title":"Oliver Twist","year":1837,"author":{"id":1,"first_name":"Charles","last_name":"Dickens"}},{"id":2,"title":"David Copperfield","year":1849,"author":{"id":1,"first_name":"Charles","last_name":"Dickens"}},{"id":3,"title":"Great Expectations","year":1860,"author":{"id":1,"first_name":"Charles","last_name":"Dickens"}},{"id":4,"title":"The Three Musketeers","year":1844,"author":{"id":2,"first_name":"Alexandre","last_name":"Dumas"}},{"id":5,"title":"The count of Monte Cristo","year":1844,"author":{"id":2,"first_name":"Alexandre","last_name":"Dumas"}},{"id":6,"title":"Pride and Prejudice","year":1813,"author":{"id":3,"first_name":"Jane","last_name":"Austin"}},{"id":7,"title":"Sense and Sensibility","year":1811,"author":{"id":3,"first_name":"Jane","last_name":"Austin"}},{"id":8,"title":"The castle","year":1926,"author":{"id":4,"first_name":"Franz","last_name":"Kafka"}},{"id":9,"title":"The trial","year":1925,"author":{"id":4,"first_name":"Franz","last_name":"Kafka"}},{"id":10,"title":"The metamorphosis","year":1915,"author":{"id":4,"first_name":"Franz","last_name":"Kafka"}},{"id":11,"title":"The adventures of Tom Sawyer","year":1876,"author":{"id":5,"first_name":"Mark","last_name":"Twain"}},{"id":12,"title":"The adventures of Huckleberry Finn","year":1884,"author":{"id":5,"first_name":"Mark","last_name":"Twain"}},{"id":13,"title":"War and Peace","year":1869,"author":{"id":6,"first_name":"Leo","last_name":"Tolsoy"}},{"id":14,"title":"Anna Karenina","year":1878,"author":{"id":6,"first_name":"Leo","last_name":"Tolsoy"}}]'
+              actual: '[{"id":1,"title":"Oliver Twist","year":1837,"author":{"id":1,"first_name":"Charles","last_name":"Dickens"}},{"id":2,"title":"David Copperfield","year":1849,"author":{"id":1,"first_name":"Charles","last_name":"Dickens"}},{"id":3,"title":"Great Expectations","year":1860,"author":{"id":1,"first_name":"Charles","last_name":"Dickens"}},{"id":4,"title":"The Three Musketeers","year":1844,"author":{"id":2,"first_name":"Alexandre","last_name":"Dumas"}},{"id":5,"title":"The count of Monte Cristo","year":1844,"author":{"id":2,"first_name":"Alexandre","last_name":"Dumas"}},{"id":6,"title":"Pride and Prejudice","year":1813,"author":{"id":3,"first_name":"Jane","last_name":"Austin"}},{"id":7,"title":"Sense and Sensibility","year":1811,"author":{"id":3,"first_name":"Jane","last_name":"Austin"}},{"id":8,"title":"The castle","year":1926,"author":{"id":4,"first_name":"Franz","last_name":"Kafka"}},{"id":9,"title":"The trial","year":1925,"author":{"id":4,"first_name":"Franz","last_name":"Kafka"}},{"id":10,"title":"The metamorphosis","year":1915,"author":{"id":4,"first_name":"Franz","last_name":"Kafka"}},{"id":11,"title":"The adventures of Tom Sawyer","year":1876,"author":{"id":5,"first_name":"Mark","last_name":"Twain"}},{"id":12,"title":"The adventures of Huckleberry Finn","year":1884,"author":{"id":5,"first_name":"Mark","last_name":"Twain"}},{"id":13,"title":"War and Peace","year":1869,"author":{"id":6,"first_name":"Leo","last_name":"Tolsoy"}},{"id":14,"title":"Anna Karenina","year":1878,"author":{"id":6,"first_name":"Leo","last_name":"Tolsoy"}}]'
+        dep_result: []
+    - kind: Http
+      name: report-1
+      status: PASSED
+      started: 1707125553
+      completed: 1707125553
+      test_case_path: /home/sonichigi.linux/test/sample-1/fasthttp-postgres/keploy/test-set-0
+      mock_path: ""
+      test_case_id: test-3
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8080/authors
+        header:
+            Accept: '*/*'
+            Host: localhost:8080
+            User-Agent: curl/8.2.1
+        body: ""
+        body_type: ""
+        timestamp: 0001-01-01T00:00:00Z
+        host: ""
+      resp:
+        status_code: 200
+        header:
+            Content-Length: "307"
+            Content-Type: application/json
+            Date: Mon, 05 Feb 2024 09:31:27 GMT
+            Server: Server
+        body: '[{"id":1,"first_name":"Charles","last_name":"Dickens"},{"id":2,"first_name":"Alexandre","last_name":"Dumas"},{"id":3,"first_name":"Jane","last_name":"Austin"},{"id":4,"first_name":"Franz","last_name":"Kafka"},{"id":5,"first_name":"Mark","last_name":"Twain"},{"id":6,"first_name":"Leo","last_name":"Tolsoy"}]'
+        body_type: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        body.first_name: []
+        header.Date: []
+      result:
+        status_code:
+            normal: false
+            expected: 200
+            actual: 200
+        headers_result: []
+        body_result:
+            - normal: false
+              type: JSON
+              expected: '[{"id":1,"first_name":"Charles","last_name":"Dickens"},{"id":2,"first_name":"Alexandre","last_name":"Dumas"},{"id":3,"first_name":"Jane","last_name":"Austin"},{"id":4,"first_name":"Franz","last_name":"Kafka"},{"id":5,"first_name":"Mark","last_name":"Twain"},{"id":6,"first_name":"Leo","last_name":"Tolsoy"}]'
+              actual: '[{"id":1,"first_name":"Charles","last_name":"Dickens"},{"id":2,"first_name":"Alexandre","last_name":"Dumas"},{"id":3,"first_name":"Jane","last_name":"Austin"},{"id":4,"first_name":"Franz","last_name":"Kafka"},{"id":5,"first_name":"Mark","last_name":"Twain"},{"id":6,"first_name":"Leo","last_name":"Tolsoy"}]'
+        dep_result: []
+test_set: test-set-0

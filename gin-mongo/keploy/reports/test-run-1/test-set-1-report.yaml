@@ -1,0 +1,172 @@
+version: api.keploy.io/v1beta1
+name: test-set-1-report
+status: PASSED
+success: 2
+failure: 0
+total: 2
+tests:
+    - kind: Http
+      name: test-set-1
+      status: PASSED
+      started: 1713800018
+      completed: 1713800018
+      test_case_path: /Users/gouravkumar/Desktop/Keploy/SampleProjects/test-go-samples/samples-go/gin-mongo/keploy/test-set-1
+      mock_path: /Users/gouravkumar/Desktop/Keploy/SampleProjects/test-go-samples/samples-go/gin-mongo/keploy/test-set-1/mocks.yaml
+      test_case_id: test-1
+      req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8080/url
+        header:
+            Accept: '*/*'
+            Content-Length: "35"
+            Content-Type: application/json
+            Host: localhost:8080
+            User-Agent: curl/7.88.1
+        body: |-
+            {
+              "url": "https://facebook.com"
+            }
+        timestamp: 2024-04-22T20:54:00.196193649+05:30
+      resp:
+        status_code: 200
+        header:
+            Content-Length: "65"
+            Content-Type: application/json; charset=utf-8
+            Date: Mon, 22 Apr 2024 15:24:00 GMT
+        body: '{"ts":1713799440210640722,"url":"http://localhost:8080/CJBKJd92"}'
+        status_message: OK
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2024-04-22T20:54:02.263804401+05:30
+      noise:
+        body.ts: []
+        header.Date: []
+      result:
+        status_code:
+            normal: true
+            expected: 200
+            actual: 200
+        headers_result:
+            - normal: true
+              expected:
+                key: Content-Length
+                value:
+                    - "65"
+              actual:
+                key: Content-Length
+                value:
+                    - "65"
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+              actual:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Mon, 22 Apr 2024 15:24:00 GMT
+              actual:
+                key: Date
+                value:
+                    - Mon, 22 Apr 2024 15:33:38 GMT
+        body_result:
+            - normal: true
+              type: JSON
+              expected: '{"ts":1713799440210640722,"url":"http://localhost:8080/CJBKJd92"}'
+              actual: '{"ts":1713800018543874794,"url":"http://localhost:8080/CJBKJd92"}'
+        dep_result: []
+    - kind: Http
+      name: test-set-1
+      status: PASSED
+      started: 1713800018
+      completed: 1713800018
+      test_case_path: /Users/gouravkumar/Desktop/Keploy/SampleProjects/test-go-samples/samples-go/gin-mongo/keploy/test-set-1
+      mock_path: /Users/gouravkumar/Desktop/Keploy/SampleProjects/test-go-samples/samples-go/gin-mongo/keploy/test-set-1/mocks.yaml
+      test_case_id: test-2
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8080/CJBKJd92
+        header:
+            Accept: '*/*'
+            Host: localhost:8080
+            User-Agent: curl/7.88.1
+        body: ""
+        timestamp: 2024-04-22T20:54:06.688869892+05:30
+      resp:
+        status_code: 303
+        header:
+            Content-Length: "47"
+            Content-Type: text/html; charset=utf-8
+            Date: Mon, 22 Apr 2024 15:24:06 GMT
+            Location: https://facebook.com
+        body: |+
+            <a href="https://facebook.com">See Other</a>.
+
+        status_message: See Other
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2024-04-22T20:54:08.713707265+05:30
+      noise:
+        header.Date: []
+      result:
+        status_code:
+            normal: true
+            expected: 303
+            actual: 303
+        headers_result:
+            - normal: true
+              expected:
+                key: Location
+                value:
+                    - https://facebook.com
+              actual:
+                key: Location
+                value:
+                    - https://facebook.com
+            - normal: true
+              expected:
+                key: Content-Length
+                value:
+                    - "47"
+              actual:
+                key: Content-Length
+                value:
+                    - "47"
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - text/html; charset=utf-8
+              actual:
+                key: Content-Type
+                value:
+                    - text/html; charset=utf-8
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Mon, 22 Apr 2024 15:24:06 GMT
+              actual:
+                key: Date
+                value:
+                    - Mon, 22 Apr 2024 15:33:38 GMT
+        body_result:
+            - normal: true
+              type: PLAIN
+              expected: |+
+                <a href="https://facebook.com">See Other</a>.
+
+              actual: |+
+                <a href="https://facebook.com">See Other</a>.
+
+        dep_result: []
+test_set: test-set-1

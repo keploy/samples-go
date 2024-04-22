@@ -1,3 +1,4 @@
+// Package middlewares implements the request middleware functions
 package middlewares
 
 import (

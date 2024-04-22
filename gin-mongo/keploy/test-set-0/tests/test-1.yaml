@@ -1,4 +1,4 @@
-version: api.keploy.io/v1beta2
+version: api.keploy.io/v1beta1
 kind: Http
 name: test-1
 spec:
@@ -13,25 +13,36 @@ spec:
             Content-Length: "33"
             Content-Type: application/json
             Host: localhost:8080
-            User-Agent: curl/8.1.2
+            User-Agent: curl/7.88.1
         body: |-
             {
               "url": "https://google.com"
             }
-        body_type: ""
+        timestamp: 2024-04-22T20:52:43.287852028+05:30
     resp:
         status_code: 200
         header:
             Content-Length: "65"
             Content-Type: application/json; charset=utf-8
-            Date: Thu, 05 Oct 2023 10:00:35 GMT
-        body: '{"ts":1696500035031769854,"url":"http://localhost:8080/Lhr4BWAi"}'
-        body_type: ""
-        status_message: ""
+            Date: Mon, 22 Apr 2024 15:22:43 GMT
+        body: '{"ts":1713799363319966476,"url":"http://localhost:8080/Lhr4BWAi"}'
+        status_message: OK
         proto_major: 0
         proto_minor: 0
+        timestamp: 2024-04-22T20:52:45.329902273+05:30
     objects: []
     assertions:
         noise:
-            - header.Date
-    created: 1696500039
+            body.ts: []
+            header.Date: []
+    created: 1713799365
+curl: |-
+    curl --request POST \
+      --url http://localhost:8080/url \
+      --header 'Host: localhost:8080' \
+      --header 'User-Agent: curl/7.88.1' \
+      --header 'Accept: */*' \
+      --header 'Content-Type: application/json' \
+      --data '{
+      "url": "https://google.com"
+    }'

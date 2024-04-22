@@ -1,3 +1,4 @@
+// Package structure contains the structs
 package structure
 
 import (

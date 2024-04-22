@@ -1,8 +1,10 @@
+// Package main starts the application
 package main
 
 import (
 	"S3-Keploy/config"
 	"S3-Keploy/routes"
+	"log"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -14,5 +16,8 @@ func main() {
 
 	routes.Register(app, awsService)
 
-	app.Listen(":3000")
+	err := app.Listen(":3000")
+	if err != nil {
+		log.Fatal(err)
+	}
 }
