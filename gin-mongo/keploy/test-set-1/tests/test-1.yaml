@@ -1,0 +1,48 @@
+version: api.keploy.io/v1beta1
+kind: Http
+name: test-1
+spec:
+    metadata: {}
+    req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8080/url
+        header:
+            Accept: '*/*'
+            Content-Length: "35"
+            Content-Type: application/json
+            Host: localhost:8080
+            User-Agent: curl/7.88.1
+        body: |-
+            {
+              "url": "https://facebook.com"
+            }
+        timestamp: 2024-04-22T20:54:00.196193649+05:30
+    resp:
+        status_code: 200
+        header:
+            Content-Length: "65"
+            Content-Type: application/json; charset=utf-8
+            Date: Mon, 22 Apr 2024 15:24:00 GMT
+        body: '{"ts":1713799440210640722,"url":"http://localhost:8080/CJBKJd92"}'
+        status_message: OK
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2024-04-22T20:54:02.263804401+05:30
+    objects: []
+    assertions:
+        noise:
+            body.ts: []
+            header.Date: []
+    created: 1713799442
+curl: |-
+    curl --request POST \
+      --url http://localhost:8080/url \
+      --header 'Host: localhost:8080' \
+      --header 'User-Agent: curl/7.88.1' \
+      --header 'Accept: */*' \
+      --header 'Content-Type: application/json' \
+      --data '{
+      "url": "https://facebook.com"
+    }'

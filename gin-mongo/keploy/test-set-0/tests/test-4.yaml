@@ -1,0 +1,37 @@
+version: api.keploy.io/v1beta1
+kind: Http
+name: test-4
+spec:
+    metadata: {}
+    req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8080/Lhr4BWAii
+        header:
+            Accept: '*/*'
+            Host: localhost:8080
+            User-Agent: curl/7.88.1
+        body: ""
+        timestamp: 2024-04-22T20:53:07.842274519+05:30
+    resp:
+        status_code: 500
+        header:
+            Content-Length: "0"
+            Date: Mon, 22 Apr 2024 15:23:07 GMT
+        body: ""
+        status_message: Internal Server Error
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2024-04-22T20:53:09.943946364+05:30
+    objects: []
+    assertions:
+        noise:
+            header.Date: []
+    created: 1713799389
+curl: |
+    curl --request GET \
+      --url http://localhost:8080/Lhr4BWAii \
+      --header 'Accept: */*' \
+      --header 'Host: localhost:8080' \
+      --header 'User-Agent: curl/7.88.1' \
