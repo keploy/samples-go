@@ -15,6 +15,6 @@ jobs:
       uses: keploy/testgpt@main
       with:
         working-directory: echo-sql
-        delay: 10
+        delay: 20
         command: go run main.go handler.go
         keploy-path: ./
