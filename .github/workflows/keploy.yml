@@ -14,7 +14,7 @@ jobs:
     - name: Keploy Report
       uses: keploy/testgpt@main
       with:
-        working-directory: /echo-sql
+        working-directory: echo-sql
         delay: 10
         command: go run main.go handler.go
         keploy-path: ./
