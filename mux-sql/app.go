@@ -2,18 +2,17 @@
 package main
 
 import (
+	"context"
 	"database/sql"
-
-	// tom: for Initialize
+	"encoding/json"
 	"fmt"
 	"log"
-
-	// tom: for route handlers
-	"encoding/json"
 	"net/http"
+	"os"
+	"os/signal"
 	"strconv"
+	"time"
 
-	// tom: go get required
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 )
@@ -21,6 +20,7 @@ import (
 type App struct {
 	Router *mux.Router
 	DB     *sql.DB
+	Server *http.Server
 }
 
 // tom: initial function is empty, it's filled afterwards
@@ -40,6 +40,10 @@ func (a *App) Initialize(host, user, password, dbname string) error {
 	}
 
 	a.Router = mux.NewRouter()
+	a.Server = &http.Server{
+		Addr:    ":8010",
+		Handler: a.Router,
+	}
 
 	// tom: this line is added after initializeRoutes is created later on
 	a.initializeRoutes()
@@ -50,8 +54,26 @@ func (a *App) Initialize(host, user, password, dbname string) error {
 // func (a *App) Run(addr string) { }
 // improved version
 func (a *App) Run(addr string) {
-	log.Fatal(http.ListenAndServe(":8010", a.Router))
-	log.Printf("😃 Connected to 8010 port !!")
+	go func() {
+		if err := a.Server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("Could not listen on %s: %v\n", addr, err)
+		}
+	}()
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt)
+	<-quit
+
+	log.Println("Server is shutting down...")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if err := a.Server.Shutdown(ctx); err != nil {
+		log.Fatalf("Server forced to shutdown: %v", err)
+	}
+
+	log.Println("Server exiting")
 }
 
 // tom: these are added later
