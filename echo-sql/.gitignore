@@ -1,3 +1,4 @@
-postgres-data/
+keploy
 echo-psql-url-shortener
-log.txt
+app
+coverage-reports

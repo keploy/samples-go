@@ -9,27 +9,11 @@ go mod download
 ```
 
 ## Installation Keploy
+Install keploy via one-click:-
 
-Keploy can be installed on Linux directly and on Windows with the help of WSL. Based on your system archieture, install the keploy latest binary release
-
-**1. AMD Architecture**
-
-```shell
-curl --silent --location "https://github.com/keploy/keploy/releases/latest/download/keploy_linux_amd64.tar.gz" | tar xz -C /tmp
-
-sudo mkdir -p /usr/local/bin && sudo mv /tmp/keploy /usr/local/bin && keploy
+```sh
+curl --silent -O -L https://keploy.io/install.sh && source install.sh
 ```
-
-<details>
-<summary> 2. ARM Architecture </summary>
-
-```shell
-curl --silent --location "https://github.com/keploy/keploy/releases/latest/download/keploy_linux_arm64.tar.gz" | tar xz -C /tmp
-
-sudo mkdir -p /usr/local/bin && sudo mv /tmp/keploy /usr/local/bin && keploy
-```
-
-</details>
 
 ### Start Postgres Instance 
 
@@ -37,7 +21,7 @@ Using the docker-compose file we will start our postgres instance:-
 
 ```bash
 # Start Postgres
-docker-compose up -d
+docker-compose up -d postgres
 ```
 
 ### Update the Host
@@ -49,7 +33,7 @@ docker-compose up -d
 Now, we will create the binary of our application:-
 
 ```zsh
-go build
+go build -cover
 ```
 
 Once we have our binary file ready,this command will start the recording of API calls using ebpf:-
@@ -84,27 +68,37 @@ this will return the response.
 }
 ```
 
-#### 2. Redirect to original url from shortened url
-1. By using Curl Command
+### 2. Fetch the Products
 ```bash
 curl --request GET \
   --url http://localhost:8010/products
 ```
 
-2. By querying through the browser `http://localhost:8010/products`
+we will get output:
 
-Now both these API calls were captured as editable testcases and written to ``keploy/tests folder``. The keploy directory would also have `mocks` files that contains all the outputs of postgres operations. 
+```json
+[{"id":1,"name":"Bubbles","price":123},{"id":2,"name":"Bubbles","price":123}]
+```
+
+### 3. Fetch a single product
+
+```sh
+curl --request GET \
+  --url http://localhost:8010/product/1
+
+we will get output:-
+```json
+{"id":1,"name":"Bubbles","price":123}
+```
+
+Now, since these API calls were captured as editable testcases and written to ``keploy/tests folder``. The keploy directory would also have `mocks` files that contains all the outputs of postgres operations. 
 
 ![Testcase](./img/testcase.png?raw=true)
-
-Now, let's see the magic! 🪄💫
-
-## Generate Test Runs
 
 Now let's run the test mode (in the mux-sql directory, not the Keploy directory).
 
 ```shell
-sudo -E keploy test -c "./test-app-product-catelog" --delay 10
+sudo -E keploy test -c "./test-app-product-catelog" --delay 10 --goCoverage
 ```
 
 Once done, you can see the Test Runs on the Keploy server, like this:
@@ -113,85 +107,6 @@ Once done, you can see the Test Runs on the Keploy server, like this:
 
 So no need to setup fake database/apis like Postgres or write mocks for them. Keploy automatically mocks them and, **The application thinks it's talking to Postgres 😄**
 
-# Using Docker
+With the three API calls that we made, we got around `55.6%` of coverage
 
-Keploy can be used on Linux, Windows and MacOS through Docker.
-
-Note: To run Keploy on MacOS through [Docker](https://docs.docker.com/desktop/release-notes/#4252) the version must be ```4.25.2``` or above.
-
-## Create Keploy Alias
-To establish a network for your application using Keploy on Docker, follow these steps.
-
-If you're using a docker-compose network, replace keploy-network with your app's `docker_compose_network_name` below.
-
-```shell
-alias keploy='sudo docker run --pull always --name keploy-v2 -p 16789:16789 --privileged --pid=host -it -v $(pwd):$(pwd) -w $(pwd) -v /sys/fs/cgroup:/sys/fs/cgroup -v /sys/kernel/debug:/sys/kernel/debug -v /sys/fs/bpf:/sys/fs/bpf -v /var/run/docker.sock:/var/run/docker.sock --rm ghcr.io/keploy/keploy'
-```
-## Let's start the MongoDB Instance
-Using the docker-compose file we will start our mongodb instance:-
-
-```shell
-docker-compose up -d
-```
-> Since we are using docker to run the application, we need to update the `postgres` host on line 10 in `main.go`, update the host to `mux-sql-postgres-1`.
-Now, we will create the docker image of our application:-
-
-Now, we will create the docker image of our application:-
-
-```shell
-docker build -t mux-app:1.0 .
-```
-
-## Capture the Testcases
-
-```zsh
-keploy record -c "docker run -p 8010:8010 --name muxSqlApp --network keploy-network mux-app:1.0" --buildDelay 50s
-```
-
-![Testcase](./img/testcase.png?raw=true)
-
-### Generate testcases
-To genereate testcases we just need to make some API calls. You can use Postman, Hoppscotch, or simply curl
-
-```bash
-curl --request POST \
-  --url http://localhost:8010/product \
-  --header 'content-type: application/json' \
-  --data '{
-    "name":"Bubbles", 
-    "price": 124
-}'
-```
-this will return the response. 
-
-```json
-{
-    "id": 1,
-    "name": "Bubbles",
-    "price": 123
-}
-```
-
-#### 2. Redirect to original url from shortened url
-1. By using Curl Command
-```bash
-curl --request GET \
-  --url http://localhost:8010/products
-```
-
-2. By querying through the browser `http://localhost:8010/products`
-
-Now both these API calls were captured as editable testcases and written to ``keploy/tests folder``. The keploy directory would also have `mocks` files that contains all the outputs of postgres operations.
-
-## Run the captured testcases
-Now that we have our testcase captured, run the test file.
-
-```shell
-keploy test -c "sudo docker run -p 8010:8010 --net keploy-network --name muxSqlApp mux-app:1.0" --buildDelay 50s
-```
-So no need to setup dependencies like mongoDB, web-go locally or write mocks for your testing.
-
-The application thinks it's talking to mongoDB 😄
-
-We will get output something like this:
-![Testrun](./img/testrun.png?raw=true)
+![test coverage](./img/coverage.png?raw=true)
