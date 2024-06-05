@@ -1,3 +1,4 @@
+// Package routes implement router function
 package routes
 
 import (
@@ -8,7 +9,7 @@ import (
 )
 
 func NewRouter() *gin.Engine {
-	redis.RedisInit()
+	redis.Init()
 	router := gin.New()
 	v1 := router.Group("/api")
 

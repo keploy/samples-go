@@ -1,8 +1,8 @@
-// To run
-// go run . / go run main.go
+// Package main starts the application. Command: go run .
 package main
 
 import (
+	"log"
 	"users-profile/configs"
 	"users-profile/routes"
 
@@ -18,5 +18,8 @@ func main() {
 	// Routes
 	routes.UserRoute(router)
 
-	router.Run()
+	err := router.Run()
+	if err != nil {
+		log.Fatal(err)
+	}
 }

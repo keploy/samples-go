@@ -1,7 +1,9 @@
+// Package controllers implements the controller functions
 package controllers
 
 import (
 	"context"
+	"log"
 	"net/http"
 	"time"
 	"users-profile/configs"
@@ -19,7 +21,7 @@ import (
 var userCollection *mongo.Collection = configs.GetCollection(configs.DB, "users")
 var validate = validator.New()
 
-// Creating a CreateUser function that returns a Gin-gonic handler.
+// CreateAUser function returns a Gin-gonic handler.
 // Inside the returned handler, we first defined a timeout of 10 seconds when inserting user into the document, validating both the request body and required field using the validator library.
 // We returned the appropriate message and status code using the UserResponse struct we created earlier.
 // Secondly, we created a newUser variable, inserted it using the userCollection.InsertOne function and check for errors if there are any.
@@ -43,7 +45,7 @@ func CreateAUser() gin.HandlerFunc {
 		}
 
 		newUser := models.User{
-			Id:          primitive.NewObjectID(),
+			ID:          primitive.NewObjectID(),
 			Username:    user.Username,
 			Name:        user.Name,
 			Nationality: user.Nationality,
@@ -63,7 +65,7 @@ func CreateAUser() gin.HandlerFunc {
 	}
 }
 
-// Creating a GetAUser function that returns a Gin-gonic handler.
+// GetAUser function returns a Gin-gonic handler.
 // Inside the returned handler, we first defined a timeout of 10 seconds when finding a user in the document, a userId variable to get the user’s id from the URL parameter and a user variable.
 // We converted the userId from a string to a primitive.ObjectID type, a BSON type MongoDB uses.
 // Secondly, we searched for the user using the userCollection.FindOne, pass the objId as a filter and use the Decode attribute method to get the corresponding object.
@@ -71,13 +73,13 @@ func CreateAUser() gin.HandlerFunc {
 func GetAUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		_, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		userId := c.Param("userId")
+		userID := c.Param("userId")
 		var user models.User
 		defer cancel()
 
-		objId, _ := primitive.ObjectIDFromHex(userId)
+		objID, _ := primitive.ObjectIDFromHex(userID)
 
-		err := userCollection.FindOne(c.Request.Context(), bson.M{"_id": objId}).Decode(&user)
+		err := userCollection.FindOne(c.Request.Context(), bson.M{"_id": objID}).Decode(&user)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, responses.UserResponse{Status: http.StatusInternalServerError, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
 			return
@@ -87,16 +89,16 @@ func GetAUser() gin.HandlerFunc {
 	}
 }
 
-// The EditAUser function does the same thing as the CreateUser function.
+// EditAUser function does the same thing as the CreateUser function.
 // However, we included an update variable to get updated fields and updated the collection using the userCollection.UpdateOne
 // Lastly, we searched for the updated user’s details and returned the decoded response.
 func EditAUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		_, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		userId := c.Param("userId")
+		userID := c.Param("userId")
 		var user models.User
 		defer cancel()
-		objId, _ := primitive.ObjectIDFromHex(userId)
+		objID, _ := primitive.ObjectIDFromHex(userID)
 
 		// Validate the request body
 		if err := c.BindJSON(&user); err != nil {
@@ -112,7 +114,7 @@ func EditAUser() gin.HandlerFunc {
 
 		// Updating the data
 		update := bson.M{"username": user.Username, "name": user.Name, "nationality": user.Nationality, "title": user.Title, "hobbies": user.Hobbies, "linkedin": user.Linkedin, "twitter": user.Twitter}
-		result, err := userCollection.UpdateOne(c.Request.Context(), bson.M{"_id": objId}, bson.M{"$set": update})
+		result, err := userCollection.UpdateOne(c.Request.Context(), bson.M{"_id": objID}, bson.M{"$set": update})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, responses.UserResponse{Status: http.StatusInternalServerError, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
 			return
@@ -121,7 +123,7 @@ func EditAUser() gin.HandlerFunc {
 		// Get updated user details
 		var updatedUser models.User
 		if result.MatchedCount == 1 {
-			err := userCollection.FindOne(c.Request.Context(), bson.M{"_id": objId}).Decode(&updatedUser)
+			err := userCollection.FindOne(c.Request.Context(), bson.M{"_id": objID}).Decode(&updatedUser)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, responses.UserResponse{Status: http.StatusInternalServerError, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
 				return
@@ -132,17 +134,17 @@ func EditAUser() gin.HandlerFunc {
 	}
 }
 
-// The DeleteAUser function follows the previous steps by deleting the matched record using the userCollection.DeleteOne.
+// DeleteAUser function follows the previous steps by deleting the matched record using the userCollection.DeleteOne.
 // We also checked if an item was successfully deleted and returned the appropriate response.
 func DeleteAUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		_, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		userId := c.Param("userId")
+		userID := c.Param("userId")
 		defer cancel()
 
-		objId, _ := primitive.ObjectIDFromHex(userId)
+		objID, _ := primitive.ObjectIDFromHex(userID)
 
-		result, err := userCollection.DeleteOne(c.Request.Context(), bson.M{"id": objId})
+		result, err := userCollection.DeleteOne(c.Request.Context(), bson.M{"id": objID})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, responses.UserResponse{Status: http.StatusInternalServerError, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
 			return
@@ -161,7 +163,7 @@ func DeleteAUser() gin.HandlerFunc {
 	}
 }
 
-// The GetAllUsers function follows the previous steps by getting the list of users using the userCollection.Find.
+// GetAllUsers function follows the previous steps by getting the list of users using the userCollection.Find.
 // We also read the retuned list optimally using the Next attribute method to loop through the returned list of users.
 func GetAllUsers() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -177,7 +179,13 @@ func GetAllUsers() gin.HandlerFunc {
 		}
 
 		// Reading from the db in an optimal way
-		defer results.Close(c.Request.Context())
+		defer func() {
+			err = results.Close(c.Request.Context())
+			if err != nil {
+				log.Println(err)
+			}
+		}()
+
 		for results.Next(c.Request.Context()) {
 			var singleUser models.User
 			if err = results.Decode(&singleUser); err != nil {

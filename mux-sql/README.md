@@ -23,9 +23,12 @@ Using the docker-compose file we will start our postgres instance:-
 # Start Postgres
 docker-compose up -d postgres
 ```
-### Capture the Testcases
 
-> **Since, we are on the local machine the Postgres Host will be `localhost`.**
+### Update the Host
+
+> **Since we have setup our sample-app natively set the host to `localhost` on line 10.**
+
+### Capture the Testcases
 
 Now, we will create the binary of our application:-
 
@@ -82,7 +85,6 @@ we will get output:
 ```sh
 curl --request GET \
   --url http://localhost:8010/product/1
-```
 
 we will get output:-
 ```json
@@ -92,10 +94,6 @@ we will get output:-
 Now, since these API calls were captured as editable testcases and written to ``keploy/tests folder``. The keploy directory would also have `mocks` files that contains all the outputs of postgres operations. 
 
 ![Testcase](./img/testcase.png?raw=true)
-
-Now, let's see the magic! 🪄💫
-
-## Generate Test Runs
 
 Now let's run the test mode (in the mux-sql directory, not the Keploy directory).
 

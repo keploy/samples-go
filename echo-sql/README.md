@@ -19,15 +19,23 @@ curl --silent -O -L https://keploy.io/install.sh && source install.sh
 
 ### Start Postgres Instance 
 
-Using the docker-compose file we will start our postgres instance:-
+Using the docker-compose file we will start our postgres instance ( use `podman-compose` if you are using RHEL based distribution ):-
 
 ```bash
 # Start Postgres
 docker-compose up -d postgres
 ```
-### Capture the Testcases
 
-> **Since, we are on the local machine the Postgres Host will be `localhost`.**
+If there is an error saying keploy-network could not be found. Use the following command to create the docker network
+
+```bash
+docker network create keploy-network
+```
+
+
+### Update the Host
+
+> **Since we have setup our sample-app natively, we need to update the Postgres host on line 27, in `main.go`, from `postgresDb` to `localhost`.**
 
 ### Capture the testcases
 
@@ -90,7 +98,10 @@ Now, let's see the magic! ✨💫
 
 Now that we have our testcase captured, we will add `ts` to noise field in `test-*.yaml` files.
 
-**1. On line 32 we will add "`- body.ts`" under the "`header.data`".**
+**1. On line 32 we will add "`body.ts: []`" under the "`header.Date: []`".**
+
+![EliminateNoise](https://github.com/aswinbennyofficial/samples-go/assets/110408942/2b50d994-3418-4f7b-9f95-5bc1acd8ecf9)
+
 
 Now let's run the test mode (in the echo-sql directory, not the Keploy directory).
 

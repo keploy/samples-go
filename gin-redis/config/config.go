@@ -1,3 +1,4 @@
+// Package config gets the configuration from environment variables
 package config
 
 import (
@@ -9,7 +10,7 @@ type Config struct {
 	AppName              string
 	DATABASE             string
 	AppEnv               string
-	SqlPrefix            string
+	SQLPrefix            string
 	DBUserName           string
 	PORT                 string
 	DBPassword           string
@@ -44,7 +45,7 @@ func init() {
 	}
 	config.AppName = os.Getenv("SERVICE_NAME")
 	config.AppEnv = appEnv
-	config.SqlPrefix = "/* " + config.AppName + " - " + config.AppEnv + "*/"
+	config.SQLPrefix = "/* " + config.AppName + " - " + config.AppEnv + "*/"
 	config.DBUserName = os.Getenv("DB_USERNAME")
 	config.JWT = os.Getenv("JWT_TOKEN")
 	config.DBHostWriter = os.Getenv("DB_HOST_WRITER")

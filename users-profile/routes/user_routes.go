@@ -1,4 +1,4 @@
-// To manage all the user-related routes in our application
+// Package routes manage the user-related routes in the application
 package routes
 
 import (

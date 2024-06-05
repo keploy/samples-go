@@ -1,5 +1,4 @@
-// Creating a helper function to load the environment variable using the github.com/joho/godotenv
-// GoDotEnv loads env vars from a .env file.
+// Package configs implements the function that loads environment variable from .env file
 package configs
 
 import (

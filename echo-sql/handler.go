@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"math/big"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/itchyny/base58-go"
@@ -20,14 +19,14 @@ type ConnectionDetails struct {
 	port     string // The port to connect on (default "5438")
 	user     string // The username (default "postgres")
 	password string // The password (default "postgres")
-	db_name  string // The database name (default "postgres")
+	dbName   string // The database name (default "postgres")
 }
 
 type URLEntry struct {
-	ID           string
-	Redirect_URL string
-	Created_At   time.Time
-	Updated_At   time.Time
+	ID          string
+	RedirectURL string
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
 
 type urlRequestBody struct {
@@ -40,58 +39,76 @@ type successResponse struct {
 }
 
 /*
-Establishes a connection with the PostgreSQL instance.
+NewConnection Establishes a connection with the PostgreSQL instance.
 */
-func NewConnection(conn_details ConnectionDetails) (*sql.DB, error) {
-	// Connect to PostgreSQL database
-	db_info := fmt.Sprintf("host=%s port=%s user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		conn_details.host, conn_details.port, conn_details.user, conn_details.password, conn_details.db_name)
+func NewConnection(connDetails ConnectionDetails) (*sql.DB, error) {
+	dbInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		connDetails.host, connDetails.port, connDetails.user, connDetails.password, connDetails.dbName)
 
-	var err error
-	db, err := sql.Open("postgres", db_info)
+	db, err := sql.Open("postgres", dbInfo)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
-		os.Exit(1)
+		return nil, err
 	}
+
+	// Ping the database to ensure a connection can be established
+	err = db.Ping()
 	if err != nil {
+		return nil, err
+	}
+
+	// Check if the "url_map" table exists, create it if not
+	if err := createURLMapTable(db); err != nil {
 		return nil, err
 	}
 
 	return db, nil
 }
 
+func createURLMapTable(db *sql.DB) error {
+	query := `
+		CREATE TABLE IF NOT EXISTS url_map (
+			id           VARCHAR(255) PRIMARY KEY,
+			redirect_url VARCHAR(255) NOT NULL,
+			created_at   TIMESTAMP NOT NULL,
+			updated_at   TIMESTAMP NOT NULL
+		);
+	`
+
+	_, err := db.Exec(query)
+	return err
+}
+
 func InsertURL(c context.Context, entry URLEntry) error {
-	insert_query := `
+	insertQuery := `
 		INSERT INTO url_map (id, redirect_url, created_at, updated_at)
 		VALUES ($1, $2, $3, $4)
 	`
 
-	select_query := `
+	selectQuery := `
 			SELECT * 
 			FROM url_map
 			WHERE id = $1
 	`
 
-	update_timestamp := `
+	updateTimestamp := `
 			UPDATE url_map
 			SET updated_at = $1
 			WHERE id = $2
 	`
 
-	res, err := Database.QueryContext(c, select_query, entry.ID) // See if the URL already exists
+	res, err := Database.QueryContext(c, selectQuery, entry.ID) // See if the URL already exists
 	if err != nil {
 		return err
 	}
-	defer res.Close()
+	defer handleDeferError(res.Close())
 	if res.Next() { // If we get rows back, that means we have a duplicate URL
-		var saved_entry URLEntry
-		err := res.Scan(&saved_entry.ID, &saved_entry.Redirect_URL, &saved_entry.Created_At, &saved_entry.Updated_At)
+		var savedEntry URLEntry
+		err := res.Scan(&savedEntry.ID, &savedEntry.RedirectURL, &savedEntry.CreatedAt, &savedEntry.UpdatedAt)
 		if err != nil {
 			return err
 		}
 
-		_, err = Database.ExecContext(c, update_timestamp, entry.Updated_At, entry.ID)
+		_, err = Database.ExecContext(c, updateTimestamp, entry.UpdatedAt, entry.ID)
 		if err != nil {
 			return err
 		}
@@ -99,7 +116,7 @@ func InsertURL(c context.Context, entry URLEntry) error {
 		return nil
 	}
 
-	_, err = Database.ExecContext(c, insert_query, entry.ID, entry.Redirect_URL, entry.Created_At, entry.Updated_At)
+	_, err = Database.ExecContext(c, insertQuery, entry.ID, entry.RedirectURL, entry.CreatedAt, entry.UpdatedAt)
 	if err != nil {
 		return err
 	}
@@ -115,30 +132,33 @@ func GetURL(c echo.Context) error {
 	}
 	id := c.Param("param")
 
-	find_url_query := `
+	findURLQuery := `
 		SELECT * 
 		FROM url_map
 		WHERE id = $1
 	`
-	res, err := Database.QueryContext(c.Request().Context(), find_url_query, id) // Attempt to find a matching URL
+	res, err := Database.QueryContext(c.Request().Context(), findURLQuery, id) // Attempt to find a matching URL
 
 	if err != nil {
 		Logger.Error(err.Error())
 		return echo.NewHTTPError(http.StatusInternalServerError, "Error encountered while attempting to lookup URL.")
 	}
-	defer res.Close()
+	defer handleDeferError(res.Close())
 	if !res.Next() {
 		return echo.NewHTTPError(http.StatusNotFound, "Invalid URL ID.")
 	}
 
 	var entry URLEntry
-	err = res.Scan(&entry.ID, &entry.Redirect_URL, &entry.Created_At, &entry.Updated_At)
+	err = res.Scan(&entry.ID, &entry.RedirectURL, &entry.CreatedAt, &entry.UpdatedAt)
 	if err != nil {
 		Logger.Fatal(err.Error())
 		return echo.NewHTTPError(http.StatusInternalServerError, "Could not successfully scan retrieved DB entry.")
 	}
 
-	c.Redirect(http.StatusPermanentRedirect, entry.Redirect_URL)
+	err = c.Redirect(http.StatusPermanentRedirect, entry.RedirectURL)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -173,44 +193,44 @@ func UpdateURL(c echo.Context) error {
 	}
 	id := c.Param("param")
 
-	req_body := new(urlRequestBody)
-	err = c.Bind(req_body)
+	reqBody := new(urlRequestBody)
+	err = c.Bind(reqBody)
 	if err != nil {
-		fmt.Println(req_body)
+		fmt.Println(reqBody)
 		Logger.Error(err.Error())
 		return echo.NewHTTPError(http.StatusBadRequest, "Failed to decode request.")
 	}
 
-	u := req_body.URL
+	u := reqBody.URL
 
 	if u == "" {
 		return echo.NewHTTPError(http.StatusBadRequest, "Missing URL parameter")
 	}
 
-	select_query := `
+	selectQuery := `
 			SELECT * 
 			FROM url_map
 			WHERE id = $1
 	`
 
-	update_timestamp := `
+	updateTimestamp := `
 			UPDATE url_map
 			SET updated_at = $1, redirect_url = $2
 			WHERE id = $3
 	`
 
-	res, err := Database.QueryContext(c.Request().Context(), select_query, id) // See if the URL already exists
+	res, err := Database.QueryContext(c.Request().Context(), selectQuery, id) // See if the URL already exists
 	if err != nil {
 		return err
 	}
-	defer res.Close()
+	defer handleDeferError(res.Close())
 	if res.Next() { // If we get rows back, that means we have a duplicate URL
-		var saved_entry URLEntry
-		err := res.Scan(&saved_entry.ID, &saved_entry.Redirect_URL, &saved_entry.Created_At, &saved_entry.Updated_At)
+		var savedEntry URLEntry
+		err := res.Scan(&savedEntry.ID, &savedEntry.RedirectURL, &savedEntry.CreatedAt, &savedEntry.UpdatedAt)
 		if err != nil {
 			return err
 		}
-		result, err := Database.ExecContext(c.Request().Context(), update_timestamp, time.Now(), u, id)
+		result, err := Database.ExecContext(c.Request().Context(), updateTimestamp, time.Now(), u, id)
 		if err != nil {
 			return err
 		}
@@ -233,15 +253,15 @@ func PutURL(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Could not connect to Postgres.")
 	}
 
-	req_body := new(urlRequestBody)
+	reqBody := new(urlRequestBody)
 
-	err = c.Bind(req_body)
+	err = c.Bind(reqBody)
 	if err != nil {
-		fmt.Println(req_body)
+		fmt.Println(reqBody)
 		Logger.Error(err.Error())
 		return echo.NewHTTPError(http.StatusBadRequest, "Failed to decode request.")
 	}
-	u := req_body.URL
+	u := reqBody.URL
 
 	if u == "" {
 		return echo.NewHTTPError(http.StatusBadRequest, "Missing URL parameter")
@@ -251,10 +271,10 @@ func PutURL(c echo.Context) error {
 	t := time.Now()
 
 	err = InsertURL(c.Request().Context(), URLEntry{
-		ID:           id,
-		Created_At:   t,
-		Updated_At:   t,
-		Redirect_URL: u,
+		ID:          id,
+		CreatedAt:   t,
+		UpdatedAt:   t,
+		RedirectURL: u,
 	})
 
 	if err != nil {

@@ -1,7 +1,19 @@
-version: '3.7'
+version: "3.9"
 services:
-    postgres:
+  go-app:
+    build:
+      context: .
+    container_name: echoApp
+    ports:
+      - "8082:8082"
+    depends_on:
+      - postgres
+    networks:
+      - babab
+
+  postgres:
         image: postgres:10.5
+        container_name: postgresDb
         restart: always
         environment:
           - POSTGRES_DB=postgres
@@ -14,8 +26,8 @@ services:
           # copy the sql script to create tables
           - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
         networks:
-          - keploy-network
+          - babab
 
 networks:
-  keploy-network:
-    external: true
+    babab: 
+      external: false

@@ -1,3 +1,4 @@
+// Package utils contains the utility functions
 package utils
 
 import "github.com/keploy/gin-redis/constants"

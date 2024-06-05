@@ -1,3 +1,4 @@
+// Package main initates the server
 package main
 
 import (

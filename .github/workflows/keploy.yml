@@ -1,14 +1,20 @@
-name: e2e Tests
+name: Run keploy-test-cases
 on:
   push:
     branches:
       - main
+  pull_request:
+    types: [opened, reopened]
+
 jobs:
-  e2e-test:
+  my_job:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Test-Report
-      uses: alphasians/test-reportql@main
+    - name: Keploy Report
+      uses: keploy/testgpt@main
       with:
-        working-directory: "./gin-mongo"
+        working-directory: echo-sql
         delay: 20
+        command: go run main.go handler.go
+        keploy-path: ./

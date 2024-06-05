@@ -1,3 +1,4 @@
+// Package main handle the routes and initiates the server
 package main
 
 import (
@@ -19,28 +20,35 @@ var Logger *zap.Logger
 
 var Database *sql.DB
 
+func handleDeferError(err error) {
+	if err != nil {
+		Logger.Fatal(err.Error())
+	}
+}
+
 func main() {
 	if os.Getenv("PORT") != "" {
 		port = os.Getenv("PORT")
 	}
 	var err error
 	Logger, _ = zap.NewProduction()
-	defer Logger.Sync() // flushes buffer
+	defer handleDeferError(Logger.Sync()) // flushes buffer
 
 	Database, err = NewConnection(ConnectionDetails{
-		host: "localhost",
+		host: "postgresDb",
+		// host: "localhost" when using natively
 		//host:     "echo-sql-postgres-1",
 		port:     "5432",
 		user:     "postgres",
 		password: "password",
-		db_name:  "postgres",
+		dbName:   "postgres",
 	})
 
 	if err != nil {
 		Logger.Fatal("Failed to establish connection to local PostgreSQL instance:", zap.Error(err))
 	}
 
-	defer Database.Close()
+	defer handleDeferError(Database.Close())
 
 	// init Keploy
 

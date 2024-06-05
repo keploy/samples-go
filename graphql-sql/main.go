@@ -1,3 +1,4 @@
+// Package main starts the application
 package main
 
 import (
@@ -14,12 +15,12 @@ import (
 )
 
 const (
-	//DB_HOST = "graphql-sql-postgres-1"
-	DB_HOST     = "localhost"
-	DB_PORT     = "5432"
-	DB_USER     = "postgres"
-	DB_PASSWORD = "password"
-	DB_NAME     = "postgres"
+	//dbHost = "graphql-sql-postgres-1"
+	dbHost     = "localhost"
+	dbPost     = "5432"
+	dbUser     = "postgres"
+	dbPassword = "password"
+	dbName     = "postgres"
 )
 
 type Author struct {
@@ -44,17 +45,22 @@ func checkErr(err error) {
 }
 
 func main() {
-	db_info := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
+	dbInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		dbHost, dbPost, dbUser, dbPassword, dbName)
 
 	var err error
-	db, err := sql.Open("postgres", db_info)
+	db, err := sql.Open("postgres", dbInfo)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 		os.Exit(1)
 	}
 
-	defer db.Close()
+	defer func() {
+		err = db.Close()
+		if err != nil {
+			panic(err)
+		}
+	}()
 
 	//Schema for
 	authorType := graphql.NewObject(graphql.ObjectConfig{
@@ -189,7 +195,9 @@ func main() {
 
 					author := &Author{}
 					rows, err := db.QueryContext(p.Context, "select id, name, email from authors where id = $1", id)
-					rows.Scan(&author.ID, &author.Name, &author.Email)
+					checkErr(err)
+
+					err = rows.Scan(&author.ID, &author.Name, &author.Email)
 					checkErr(err)
 
 					return author, nil
@@ -228,7 +236,9 @@ func main() {
 
 					post := &Post{}
 					rows, err := db.QueryContext(params.Context, "select id, title, content, author_id from posts where id = $1", id)
-					rows.Scan(&post.ID, &post.Title, &post.Content, &post.AuthorID)
+					checkErr(err)
+
+					err = rows.Scan(&post.ID, &post.Title, &post.Content, &post.AuthorID)
 					checkErr(err)
 
 					return post, nil
@@ -276,13 +286,15 @@ func main() {
 					email, _ := params.Args["email"].(string)
 					createdAt := time.Now()
 
-					var lastInsertId int64
+					var lastInsertID int64
 					rows, err := db.QueryContext(params.Context, "INSERT INTO authors(name, email, created_at) VALUES($1, $2, $3) returning id;", name, email, createdAt)
-					rows.Scan(&lastInsertId)
+					checkErr(err)
+
+					err = rows.Scan(&lastInsertID)
 					checkErr(err)
 
 					newAuthor := &Author{
-						ID:        int(lastInsertId),
+						ID:        int(lastInsertID),
 						Name:      name,
 						Email:     email,
 						CreatedAt: createdAt,
@@ -363,19 +375,21 @@ func main() {
 				Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 					title, _ := params.Args["title"].(string)
 					content, _ := params.Args["content"].(string)
-					authorId, _ := params.Args["author_id"].(int)
+					authorID, _ := params.Args["author_id"].(int)
 					createdAt := time.Now()
 
-					var lastInsertId int
-					rows, err := db.QueryContext(params.Context, "INSERT INTO posts(title, content, author_id, created_at) VALUES($1, $2, $3, $4) returning id;", title, content, authorId, createdAt)
-					rows.Scan(&lastInsertId)
+					var lastInsertID int
+					rows, err := db.QueryContext(params.Context, "INSERT INTO posts(title, content, author_id, created_at) VALUES($1, $2, $3, $4) returning id;", title, content, authorID, createdAt)
+					checkErr(err)
+
+					err = rows.Scan(&lastInsertID)
 					checkErr(err)
 
 					newPost := &Post{
-						ID:        lastInsertId,
+						ID:        lastInsertID,
 						Title:     title,
 						Content:   content,
-						AuthorID:  authorId,
+						AuthorID:  authorID,
 						CreatedAt: createdAt,
 					}
 
@@ -403,19 +417,19 @@ func main() {
 					id, _ := params.Args["id"].(int)
 					title, _ := params.Args["title"].(string)
 					content, _ := params.Args["content"].(string)
-					authorId, _ := params.Args["author_id"].(int)
+					authorID, _ := params.Args["author_id"].(int)
 
 					stmt, err := db.Prepare("UPDATE posts SET title = $1, content = $2, author_id = $3 WHERE id = $4")
 					checkErr(err)
 
-					_, err2 := stmt.Exec(title, content, authorId, id)
+					_, err2 := stmt.Exec(title, content, authorID, id)
 					checkErr(err2)
 
 					newPost := &Post{
 						ID:       id,
 						Title:    title,
 						Content:  content,
-						AuthorID: authorId,
+						AuthorID: authorID,
 					}
 
 					return newPost, nil
@@ -456,6 +470,7 @@ func main() {
 	port := "8080"
 	r.Handle("/graphql", h)
 	fmt.Println("app started on https://localhost:" + port)
-	http.ListenAndServe(":"+port, r)
+
+	err = http.ListenAndServe(":"+port, r)
 	checkErr(err)
 }

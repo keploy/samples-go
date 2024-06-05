@@ -1,0 +1,13 @@
+version: '3.7'
+services:
+    postgres:
+        image: postgres:10.5
+        restart: always
+        environment:
+          - POSTGRES_DB=books
+          - POSTGRES_USER=books_user
+          - POSTGRES_PASSWORD=books_password
+        ports:
+          - '5433:5432'
+        volumes:
+          - ./migrations:/docker-entrypoint-initdb.d
