@@ -10,8 +10,6 @@
   <a href="https://opensource.org/licenses/Apache-2.0" alt="License">
     <img src=".github/License-Apache_2.0-blue.svg" /></a>
 
-This repo contains the sample for [Keploy's](https://keploy.io) Go SDK. Please feel free to contribute if you'd like submit a sample for another use-case or library. 
-
 **Note** :- Issue Creation is disabled on this Repository, please visit [here](https://github.com/keploy/keploy/issues/new/choose) to submit Issue.
 
 # Keploy Go Samples
@@ -20,11 +18,15 @@ This repo contains the sample for [Keploy's](https://keploy.io)🐰 with Golang.
 
 ## Go Sample Apps with Keploy
 
-1. [Echo-SQL](https://github.com/keploy/samples-go/tree/main/echo-sql) 🚀
-2. [Gin-Mongo](https://github.com/keploy/samples-go/tree/main/gin-mongo) 🌟
-3. [GraphQL-SQL](https://github.com/keploy/samples-go/tree/main/graphql-sql) 💻
-4. [Mux-SQL](https://github.com/keploy/samples-go/tree/main/mux-sql) 🛠️
-5. [Users-Profile](https://github.com/keploy/samples-go/tree/main/users-profile) 👨‍💻
+1. [Echo-SQL](https://github.com/keploy/samples-go/tree/main/echo-sql) 
+2. [Fasthttp-Postgress](https://github.com/sarthaksarthak9/samples-go/tree/main/fasthttp-postgres) 
+3. [Gin-Mongo](https://github.com/keploy/samples-go/tree/main/gin-mongo) 
+4. [Gin-Redis](https://github.com/sarthaksarthak9/samples-go/tree/main/gin-redis) 
+5. [GraphQL-SQL](https://github.com/keploy/samples-go/tree/main/graphql-sql) 
+6. [Mux-SQL](https://github.com/keploy/samples-go/tree/main/mux-sql) 
+7. [S3-Keploy](https://github.com/sarthaksarthak9/samples-go/tree/main/S3-Keploy)
+8. [SSE-Svelte](https://github.com/sarthaksarthak9/samples-go/tree/main/sse-svelte)
+9. [Users-Profile](https://github.com/keploy/samples-go/tree/main/users-profile) 
 
 ## Community Support ❤️
 
