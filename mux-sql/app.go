@@ -2,12 +2,16 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
 	"strconv"
+	"time"
 
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
@@ -16,13 +20,19 @@ import (
 type App struct {
 	Router *mux.Router
 	DB     *sql.DB
+	Server *http.Server
 }
 
+// tom: initial function is empty, it's filled afterwards
+// func (a *App) Initialize(user, password, dbname string) { }
+
+// tom: added "sslmode=disable" to connection string
 func (a *App) Initialize(host, user, password, dbname string) error {
 
 	connectionString := fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		host, "5432", user, password, dbname)
+	// connectionString := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable", user, password, dbname)
 	var err error
 	a.DB, err = sql.Open("postgres", connectionString)
 	if err != nil {
@@ -30,16 +40,43 @@ func (a *App) Initialize(host, user, password, dbname string) error {
 	}
 
 	a.Router = mux.NewRouter()
+	a.Server = &http.Server{
+		Addr:    ":8010",
+		Handler: a.Router,
+	}
 
+	// tom: this line is added after initializeRoutes is created later on
 	a.initializeRoutes()
 	return err
 }
 
-// Run starts the app
+// tom: initial version
+// func (a *App) Run(addr string) { }
+// improved version
 func (a *App) Run(addr string) {
-	log.Fatal(http.ListenAndServe(addr, a.Router))
+	go func() {
+		if err := a.Server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("Could not listen on %s: %v\n", addr, err)
+		}
+	}()
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt)
+	<-quit
+
+	log.Println("Server is shutting down...")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if err := a.Server.Shutdown(ctx); err != nil {
+		log.Fatalf("Server forced to shutdown: %v", err)
+	}
+
+	log.Println("Server exiting")
 }
 
+// tom: these are added later
 func (a *App) getProduct(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
@@ -70,11 +107,7 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
-
-	_, err := w.Write(response)
-	if err != nil {
-		log.Println(err)
-	}
+	w.Write(response)
 }
 
 func (a *App) getProducts(w http.ResponseWriter, r *http.Request) {
@@ -104,7 +137,7 @@ func (a *App) createProduct(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		return
 	}
-	defer handleDeferError(r.Body.Close())
+	defer r.Body.Close()
 
 	if err := p.createProduct(r.Context(), a.DB); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
@@ -128,7 +161,7 @@ func (a *App) updateProduct(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, http.StatusBadRequest, "Invalid resquest payload")
 		return
 	}
-	defer handleDeferError(r.Body.Close())
+	defer r.Body.Close()
 	p.ID = id
 
 	if err := p.updateProduct(r.Context(), a.DB); err != nil {

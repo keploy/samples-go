@@ -1,17 +1,44 @@
-// Package server contains method to initiate the server
 package server
 
 import (
-	"log"
-
+	"time"
 	"github.com/keploy/gin-redis/routes"
+	"os"
+	"context"
+	"fmt"
+	"net/http"
+	"os/signal"
+	"syscall"
 )
 
 func Init() {
 	r := routes.NewRouter()
 	port := "3001"
-	err := r.Run(":" + port) //running the server at port
-	if err != nil {
-		log.Fatal(err)
+	srv := &http.Server{
+		Addr:   ":" + port,
+		Handler: r,
 	}
+	go func() {
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			fmt.Printf("listen: %s\n", err)
+		}
+	}()
+	GracefulShutdown(srv)
+}
+func GracefulShutdown(srv *http.Server) {
+	stopper := make(chan os.Signal, 1)
+	// listens for interrupt and SIGTERM signal
+	signal.Notify(stopper, syscall.SIGINT, syscall.SIGTERM)
+	<-stopper
+	fmt.Println("Shutting down gracefully...")
+	// Create a deadline for the graceful shutdown
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	// Attempt graceful shutdown
+	if err := srv.Shutdown(ctx); err != nil {
+		fmt.Printf("Server forced to shutdown: %v\n", err)
+	}
+
+	fmt.Println("Server exiting")
 }

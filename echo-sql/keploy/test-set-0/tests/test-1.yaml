@@ -10,41 +10,40 @@ spec:
         url: http://localhost:8082/url
         header:
             Accept: '*/*'
-            Content-Length: "33"
+            Content-Length: "41"
             Content-Type: application/json
             Host: localhost:8082
             User-Agent: curl/8.1.2
         body: |-
             {
-              "url": "https://google.com"
-            }
-        body_type: ""
-        timestamp: 2023-11-23T16:20:53.222949056Z
+                  "url": "https://google.com"
+                }
+        timestamp: 2024-05-24T15:54:01.743928985+05:30
     resp:
         status_code: 200
         header:
             Content-Length: "66"
             Content-Type: application/json; charset=UTF-8
-            Date: Thu, 23 Nov 2023 16:20:53 GMT
+            Date: Fri, 24 May 2024 10:24:01 GMT
         body: |
-            {"ts":1700756453223373424,"url":"http://localhost:8082/Lhr4BWAi"}
-        body_type: ""
-        status_message: ""
+            {"ts":1716546241744809281,"url":"http://localhost:8082/Lhr4BWAi"}
+        status_message: OK
         proto_major: 0
         proto_minor: 0
-        timestamp: 2023-11-23T16:20:56.1993347Z
+        timestamp: 2024-05-24T15:54:03.79546951+05:30
     objects: []
     assertions:
         noise:
+            body.ts: []
             header.Date: []
-    created: 1700756456
+    created: 1716546243
 curl: |-
     curl --request POST \
       --url http://localhost:8082/url \
-      --header 'Accept: */*' \
       --header 'Content-Type: application/json' \
-      --header 'Host: localhost:8082' \
       --header 'User-Agent: curl/8.1.2' \
+      --header 'Host: localhost:8082' \
+      --header 'Accept: */*' \
       --data '{
-      "url": "https://google.com"
-    }'
+          "url": "https://google.com"
+        }'
