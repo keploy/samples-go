@@ -14,19 +14,10 @@ go mod download
 ```
 
 # Installing Keploy 
-There are 2 ways to install keploy on your system :-
-1. Using cURL
-
-    ```  bash
-    curl -O https://raw.githubusercontent.com/keploy/keploy/main/keploy.sh && source keploy.sh 
-    ```
-    
-2. Using Docker
-   
-    ``` bash
-    docker network create keploy-network
-    alias keploy ='sudo docker run --pull always --name keploy-v2 -p 16789:16789 --privileged --pid=host -it -v "$(pwd)":/files -v /sys/fs/cgroup:/sys/fs/cgroup -v /sys/kernel/debug:/sys/kernel/debug -v /sys/fs/bpf:/sys/fs/bpf -v /var/run/docker.sock:/var/run/docker.sock --rm ghcr.io/keploy/keploy'
-    ```
+ 
+```  bash
+curl -O https://raw.githubusercontent.com/keploy/keploy/main/keploy.sh && source keploy.sh 
+```
 
 # Running the Application
 ### Method 1 : Using natively installed Keploy
@@ -54,8 +45,10 @@ There are 2 ways to install keploy on your system :-
 
     ``` bash
     export ConnectionString="root:my-secret-pw@tcp(localhost:3306)/mysql"
-    go build -o main
+    
+    go build -o main -cover
     ```
+    
     If you get some error like this after running `./main`, 
     
     ``` bash
@@ -115,7 +108,7 @@ There are 2 ways to install keploy on your system :-
 1. Just one simple command, run
 
    ``` bash
-    keploy test -c "./main"
+    keploy test -c "./main" --goCoverage
    ```
    
 ![Screenshot from 2024-01-19 20-21-49](https://github.com/heyyakash/samples-go/assets/85030597/8167df44-14ec-4037-a768-5e19f8a81826)
@@ -130,13 +123,13 @@ There are 2 ways to install keploy on your system :-
     docker run -p 3306:3306 --rm --name mysql --network keploy-network -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:latest
     ```
    
-3. The MySQL Database takes some time to be ready after spinning up the container, you can wait a minute or just run the following command to monitor the logs
+2. The MySQL Database takes some time to be ready after spinning up the container, you can wait a minute or just run the following command to monitor the logs
 
    ``` bash
     watch -n 1 docker logs mysql
     ```
    
-5. Once we get the following message in the logs we are ready to start our golang server
+3. Once we get the following message in the logs we are ready to start our golang server
 
     ``` bash
     2024-01-19 13:53:43+00:00 [Note] [Entrypoint]: Stopping temporary server
@@ -144,35 +137,53 @@ There are 2 ways to install keploy on your system :-
     2024-01-19T13:54:00.148602Z 0 [System] [MY-010910] [Server] /usr/sbin/mysqld: Shutdown complete (mysqld 8.2.0)  MySQL Community Server - GPL.
     ```
     
-7. Build the docker image of the application
+4. Build the docker image of the application
 
    ``` bash
     docker build -t url-short .
     ```
     
-9. First create a new alias for keploy 
-
-    ``` bash
-    alias keploy='sudo docker run --pull always --name keploy-v2 -p 16789:16789 --privileged --pid=host -it -v "$(pwd)":/files -v /sys/fs/cgroup:/sys/fs/cgroup -v /sys/kernel/debug:/sys/kernel/debug -v /sys/fs/bpf:/sys/fs/bpf -v /var/run/docker.sock:/var/run/docker.sock --rm ghcr.io/keploy/keploy'
-    ```
-    
-11. To start the server with keploy, run
+5. To start the server with keploy, run
 
     ``` bash
     keploy record -c "docker run -p 8080:8080 --name urlshort --rm --network keploy-network url-short:latest"
     ```
-    
+    There you go, keploy has started capturing incomming requests
+
     ![Running Keploy](https://github.com/heyyakash/samples-go/assets/85030597/2b4f3c04-4631-4f9a-b317-7fdb6db87879)
     
+7. Make some API Requests: - 
+    
+    ``` bash
+    curl -X POST localhost:8080/create \ 
+    -d '{"link":"https://google.com"}'
+    ```
+    
+    This should return the following output
+
+    ``` json
+    {
+        "message":"Converted",
+        "link":"http://localhost:8080/link/1",
+        "status":true
+    }
+    
+    ```
+    
+    To get all the links, run 
+
+    ``` bash
+    curl localhost:8080/all
+    ```
+
     ![Screenshot from 2024-01-19 20-36-09](https://github.com/heyyakash/samples-go/assets/85030597/eb17602d-c3cd-43e1-bf64-a55af62902f2)
 
-    
-13. There you go, keploy has started capturing incomming requests
-14. To run the tests, run
+8. To run the tests, run
 
     ```  bash
     keploy test -c "docker run -p 8080:8080 --name urlshort --rm --network keploy-network url-short:latest"
     ```
+
     ![Screenshot from 2024-01-19 20-38-08](https://github.com/heyyakash/samples-go/assets/85030597/472cab5e-9687-4fc5-bd57-3c52f56feedf)
 
 
