@@ -32,7 +32,7 @@ func CreateLink(store *sql.DB) http.HandlerFunc {
 			helpers.SendResponse(w, http.StatusInternalServerError, err.Error(), "", false)
 			return
 		}
-		link := "http://localhost:8080" + "/link/" + strconv.FormatInt(id, 10)
+		link := "http://localhost:8080" + "/links/" + strconv.FormatInt(id, 10)
 		helpers.SendResponse(w, http.StatusOK, "Converted", link, true)
 	}
 }
