@@ -29,7 +29,7 @@ test-app-url-shortener/main.go:35.16,37.3 1 0
 test-app-url-shortener/main.go:38.2,57.12 11 1
 test-app-url-shortener/main.go:57.12,62.43 4 1
 test-app-url-shortener/main.go:62.43,64.4 1 0
-test-app-url-shortener/main.go:65.3,65.32 1 1
+test-app-url-shortener/main.go:65.3,65.32 1 0
 test-app-url-shortener/main.go:68.2,68.76 1 1
 test-app-url-shortener/main.go:68.76,70.3 1 0
 test-app-url-shortener/main.go:71.2,71.31 1 1
