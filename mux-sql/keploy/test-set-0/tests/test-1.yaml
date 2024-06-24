@@ -1,0 +1,35 @@
+version: api.keploy.io/v1beta1
+kind: Http
+name: test-1
+spec:
+    metadata: {}
+    req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8010/product
+        header:
+            Accept: '*/*'
+            Content-Length: "43"
+            Content-Type: application/json
+            Host: localhost:8010
+            User-Agent: curl/7.88.1
+        body: "{\n    \"name\":\"Bubbles\", \n    \"price\": 123\n}"
+        timestamp: 2024-06-05T16:53:56.839574946+05:30
+    resp:
+        status_code: 201
+        header:
+            Content-Length: "37"
+            Content-Type: application/json
+            Date: Wed, 05 Jun 2024 11:23:56 GMT
+        body: '{"id":2,"name":"Bubbles","price":123}'
+        status_message: Created
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2024-06-05T16:53:58.94794204+05:30
+    objects: []
+    assertions:
+        noise:
+            header.Date: []
+    created: 1717586638
+curl: "curl --request POST \\\n  --url http://localhost:8010/product \\\n  --header 'Accept: */*' \\\n  --header 'Content-Type: application/json' \\\n  --header 'Host: localhost:8010' \\\n  --header 'User-Agent: curl/7.88.1' \\\n  --data '{\n    \"name\":\"Bubbles\", \n    \"price\": 123\n}'"

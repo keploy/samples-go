@@ -11,26 +11,9 @@ go mod download
 
 ## Installation Keploy
 
-Keploy can be installed on Linux directly and on Windows with the help of WSL. Based on your system archieture, install the keploy latest binary release
+```bash
 
-**1. AMD Architecture**
-
-```shell
-curl --silent --location "https://github.com/keploy/keploy/releases/latest/download/keploy_linux_amd64.tar.gz" | tar xz -C /tmp
-
-sudo mkdir -p /usr/local/bin && sudo mv /tmp/keploy /usr/local/bin && keploy
 ```
-
-<details>
-<summary> 2. ARM Architecture </summary>
-
-```shell
-curl --silent --location "https://github.com/keploy/keploy/releases/latest/download/keploy_linux_arm64.tar.gz" | tar xz -C /tmp
-
-sudo mkdir -p /usr/local/bin && sudo mv /tmp/keploy /usr/local/bin && keploy
-```
-
-</details>
 
 ### Start MongoDB Instance 
 Using the docker-compose file we will start our mongodb instance:-
@@ -44,13 +27,13 @@ docker-compose up mongo
 Now, we will create the binary of our application:-
 
 ```bash
-go build -o application .
+go build -cover
 ```
 Once we have our applicaiton binary ready, we will start the application with keploy to start capturing the testcases.
 
 ## Capture the test cases
 ```bash
-sudo -E keploy record "./application"
+sudo -E keploy record "./sse-mongo"
 ```
 
 ### Start the UI
@@ -59,15 +42,18 @@ We will capture our test from the UI written in Svelte.js
 cd svelte-app && npm install && npm run dev
 ```
 
+Now let's click on `GetTime` button to trigger the event. We would notice that keploy will capture those calls : - 
+![Testcases](./img/testcase.png?raw=true)
+
 ## Run the Testcases
 Now let's run the test mode :-
 
 ```shell
-sudo -E keploy test -c "./keploy-gql" --delay 10
+keploy test -c "./sse-mongo" --delay 10 --goCoverage
 ```
 
-output should look like
+Output should look like : - 
 
 ![Testrun](./img/testrun.png?raw=true)
 
-So no need to setup fake database/apis like Postgres or write mocks for them. Keploy automatically mocks them and, **The application thinks it's talking to MongoDb 😄**
+So no need to setup fake database/apis like Postgres or write mocks for them. Keploy automatically mocks them and, **The application thinks it's talking to MongoDb 😄**. And with just few clicks we were able to get 42% code coverage of our go backend application.

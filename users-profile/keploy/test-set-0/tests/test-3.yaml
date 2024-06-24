@@ -1,0 +1,59 @@
+version: api.keploy.io/v1beta1
+kind: Http
+name: test-3
+spec:
+    metadata: {}
+    req:
+        method: PUT
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8080/user/667532bc09403f013688f952
+        header:
+            Accept: '*/*'
+            Content-Length: "267"
+            Content-Type: application/json
+            Host: localhost:8080
+            User-Agent: curl/7.88.1
+        body: |-
+            {
+                "username": "updated_username",
+                "name": "Updated Name",
+                "nationality": "British",
+                "title": "Senior Software Engineer",
+                "hobbies": ["gardening", "cycling"],
+                "linkedin": "https://www.linkedin.com/updated_user",
+                "twitter": "@updated_user"
+            }
+        timestamp: 2024-06-21T13:35:09.525888533+05:30
+    resp:
+        status_code: 400
+        header:
+            Content-Length: "128"
+            Content-Type: text/plain; charset=utf-8
+            Date: Fri, 21 Jun 2024 08:05:09 GMT
+        body: '{"status":400,"message":"error","data":{"data":"json: cannot unmarshal array into Go struct field User.hobbies of type string"}}'
+        status_message: Bad Request
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2024-06-21T13:35:11.552428629+05:30
+    objects: []
+    assertions:
+        noise:
+            header.Date: []
+    created: 1718957111
+curl: |-
+    curl --request PUT \
+      --url http://localhost:8080/user/667532bc09403f013688f952 \
+      --header 'Content-Type: application/json' \
+      --header 'Host: localhost:8080' \
+      --header 'User-Agent: curl/7.88.1' \
+      --header 'Accept: */*' \
+      --data '{
+        "username": "updated_username",
+        "name": "Updated Name",
+        "nationality": "British",
+        "title": "Senior Software Engineer",
+        "hobbies": ["gardening", "cycling"],
+        "linkedin": "https://www.linkedin.com/updated_user",
+        "twitter": "@updated_user"
+    }'

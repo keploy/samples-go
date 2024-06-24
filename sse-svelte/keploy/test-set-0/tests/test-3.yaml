@@ -1,0 +1,60 @@
+version: api.keploy.io/v1beta1
+kind: Http
+name: test-3
+spec:
+    metadata: {}
+    req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:3500/time
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br, zstd
+            Accept-Language: en-IN,en-GB;q=0.9,en;q=0.8,en-US;q=0.7
+            Connection: keep-alive
+            Host: localhost:3500
+            Origin: http://localhost:8080
+            Referer: http://localhost:8080/
+            Sec-Ch-Ua: '"Not/A)Brand";v="8", "Chromium";v="126", "Microsoft Edge";v="126"'
+            Sec-Ch-Ua-Mobile: ?0
+            Sec-Ch-Ua-Platform: '"macOS"'
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-site
+            User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0
+        body: ""
+        timestamp: 2024-06-24T13:14:29.526254074+05:30
+    resp:
+        status_code: 200
+        header:
+            Access-Control-Allow-Origin: '*'
+            Content-Length: "0"
+            Date: Mon, 24 Jun 2024 07:44:29 GMT
+        body: ""
+        status_message: OK
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2024-06-24T13:14:31.608011461+05:30
+    objects: []
+    assertions:
+        noise:
+            header.Date: []
+    created: 1719215071
+curl: |
+    curl --request GET \
+      --url http://localhost:3500/time \
+      --header 'Accept: */*' \
+      --header 'Sec-Ch-Ua-Platform: "macOS"' \
+      --header 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0' \
+      --header 'Referer: http://localhost:8080/' \
+      --header 'Sec-Ch-Ua-Mobile: ?0' \
+      --header 'Accept-Encoding: gzip, deflate, br, zstd' \
+      --header 'Sec-Ch-Ua: "Not/A)Brand";v="8", "Chromium";v="126", "Microsoft Edge";v="126"' \
+      --header 'Sec-Fetch-Dest: empty' \
+      --header 'Connection: keep-alive' \
+      --header 'Origin: http://localhost:8080' \
+      --header 'Sec-Fetch-Site: same-site' \
+      --header 'Host: localhost:3500' \
+      --header 'Sec-Fetch-Mode: cors' \
+      --header 'Accept-Language: en-IN,en-GB;q=0.9,en;q=0.8,en-US;q=0.7' \
