@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/signal"
 	"time"
+	"syscall"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -113,7 +114,7 @@ func main() {
 
 	// Channel to listen for interrupt signals
 	stop := make(chan os.Signal, 1)
-	signal.Notify(stop, os.Interrupt, os.Kill)
+	signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
 
 	// Run the server in a goroutine
 	go func() {
