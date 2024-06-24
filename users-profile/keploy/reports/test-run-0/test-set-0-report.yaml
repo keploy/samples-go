@@ -1,0 +1,314 @@
+version: api.keploy.io/v1beta1
+name: test-set-0-report
+status: FAILED
+success: 3
+failure: 1
+total: 4
+tests:
+    - kind: Http
+      name: test-set-0
+      status: FAILED
+      started: 1718957243
+      completed: 1718957243
+      test_case_path: /home/sonichigi.linux/samples-go/users-profile/keploy/test-set-0
+      mock_path: /home/sonichigi.linux/samples-go/users-profile/keploy/test-set-0/mocks
+      test_case_id: test-1
+      req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8080/user
+        header:
+            Accept: '*/*'
+            Content-Length: "211"
+            Content-Type: application/json
+            Host: localhost:8080
+            User-Agent: curl/7.88.1
+        body: |-
+            {
+              "username": "Sonichigo",
+              "name": "Animesh Pathak",
+              "nationality": "Indian",
+              "title": "Developer Advocate at Keploy",
+              "hobbies": "Drumming",
+              "linkedin": "@sonichigo",
+              "twitter": "@sonichigo1219"
+            }
+        timestamp: 2024-06-21T13:28:52.745896841+05:30
+      resp:
+        status_code: 201
+        header:
+            Content-Length: "92"
+            Content-Type: application/json; charset=utf-8
+            Date: Fri, 21 Jun 2024 08:07:23 GMT
+        body: '{"status":201,"message":"success","data":{"data":{"InsertedID":"667534bb686240ba2857b4cc"}}}'
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.date: []
+      result:
+        status_code:
+            normal: true
+            expected: 201
+            actual: 201
+        headers_result:
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Fri, 21 Jun 2024 07:58:52 GMT
+              actual:
+                key: Date
+                value:
+                    - Fri, 21 Jun 2024 08:07:23 GMT
+            - normal: true
+              expected:
+                key: Content-Length
+                value:
+                    - "92"
+              actual:
+                key: Content-Length
+                value:
+                    - "92"
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+              actual:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+        body_result:
+            - normal: false
+              type: JSON
+              expected: '{"status":201,"message":"success","data":{"data":{"InsertedID":"667532bc09403f013688f953"}}}'
+              actual: '{"status":201,"message":"success","data":{"data":{"InsertedID":"667534bb686240ba2857b4cc"}}}'
+        dep_result: []
+    - kind: Http
+      name: test-set-0
+      status: PASSED
+      started: 1718957243
+      completed: 1718957243
+      test_case_path: /home/sonichigi.linux/samples-go/users-profile/keploy/test-set-0
+      mock_path: /home/sonichigi.linux/samples-go/users-profile/keploy/test-set-0/mocks
+      test_case_id: test-2
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8080/user/667532bc09403f013688f953
+        header:
+            Accept: '*/*'
+            Host: localhost:8080
+            User-Agent: curl/7.88.1
+        body: ""
+        timestamp: 2024-06-21T13:34:47.145560656+05:30
+      resp:
+        status_code: 200
+        header:
+            Content-Length: "265"
+            Content-Type: application/json; charset=utf-8
+            Date: Fri, 21 Jun 2024 08:07:23 GMT
+        body: '{"status":200,"message":"success","data":{"data":{"id":"667532bc09403f013688f952","username":"Sonichigo","name":"Animesh Pathak","nationality":"Indian","title":"Developer Advocate at Keploy","hobbies":"Drumming","linkedin":"@sonichigo","twitter":"@sonichigo1219"}}}'
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.date: []
+      result:
+        status_code:
+            normal: true
+            expected: 200
+            actual: 200
+        headers_result:
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+              actual:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Fri, 21 Jun 2024 08:04:47 GMT
+              actual:
+                key: Date
+                value:
+                    - Fri, 21 Jun 2024 08:07:23 GMT
+            - normal: true
+              expected:
+                key: Content-Length
+                value:
+                    - "265"
+              actual:
+                key: Content-Length
+                value:
+                    - "265"
+        body_result:
+            - normal: true
+              type: JSON
+              expected: '{"status":200,"message":"success","data":{"data":{"id":"667532bc09403f013688f952","username":"Sonichigo","name":"Animesh Pathak","nationality":"Indian","title":"Developer Advocate at Keploy","hobbies":"Drumming","linkedin":"@sonichigo","twitter":"@sonichigo1219"}}}'
+              actual: '{"status":200,"message":"success","data":{"data":{"id":"667532bc09403f013688f952","username":"Sonichigo","name":"Animesh Pathak","nationality":"Indian","title":"Developer Advocate at Keploy","hobbies":"Drumming","linkedin":"@sonichigo","twitter":"@sonichigo1219"}}}'
+        dep_result: []
+    - kind: Http
+      name: test-set-0
+      status: PASSED
+      started: 1718957243
+      completed: 1718957243
+      test_case_path: /home/sonichigi.linux/samples-go/users-profile/keploy/test-set-0
+      mock_path: /home/sonichigi.linux/samples-go/users-profile/keploy/test-set-0/mocks
+      test_case_id: test-3
+      req:
+        method: PUT
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8080/user/667532bc09403f013688f952
+        header:
+            Accept: '*/*'
+            Content-Length: "267"
+            Content-Type: application/json
+            Host: localhost:8080
+            User-Agent: curl/7.88.1
+        body: |-
+            {
+                "username": "updated_username",
+                "name": "Updated Name",
+                "nationality": "British",
+                "title": "Senior Software Engineer",
+                "hobbies": ["gardening", "cycling"],
+                "linkedin": "https://www.linkedin.com/updated_user",
+                "twitter": "@updated_user"
+            }
+        timestamp: 2024-06-21T13:35:09.525888533+05:30
+      resp:
+        status_code: 400
+        header:
+            Content-Length: "128"
+            Content-Type: text/plain; charset=utf-8
+            Date: Fri, 21 Jun 2024 08:07:23 GMT
+        body: '{"status":400,"message":"error","data":{"data":"json: cannot unmarshal array into Go struct field User.hobbies of type string"}}'
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.date: []
+      result:
+        status_code:
+            normal: true
+            expected: 400
+            actual: 400
+        headers_result:
+            - normal: true
+              expected:
+                key: Content-Length
+                value:
+                    - "128"
+              actual:
+                key: Content-Length
+                value:
+                    - "128"
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - text/plain; charset=utf-8
+              actual:
+                key: Content-Type
+                value:
+                    - text/plain; charset=utf-8
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Fri, 21 Jun 2024 08:05:09 GMT
+              actual:
+                key: Date
+                value:
+                    - Fri, 21 Jun 2024 08:07:23 GMT
+        body_result:
+            - normal: true
+              type: JSON
+              expected: '{"status":400,"message":"error","data":{"data":"json: cannot unmarshal array into Go struct field User.hobbies of type string"}}'
+              actual: '{"status":400,"message":"error","data":{"data":"json: cannot unmarshal array into Go struct field User.hobbies of type string"}}'
+        dep_result: []
+    - kind: Http
+      name: test-set-0
+      status: PASSED
+      started: 1718957243
+      completed: 1718957243
+      test_case_path: /home/sonichigi.linux/samples-go/users-profile/keploy/test-set-0
+      mock_path: /home/sonichigi.linux/samples-go/users-profile/keploy/test-set-0/mocks
+      test_case_id: test-4
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8080/users
+        header:
+            Accept: '*/*'
+            Host: localhost:8080
+            User-Agent: curl/7.88.1
+        body: ""
+        timestamp: 2024-06-21T13:35:21.887883459+05:30
+      resp:
+        status_code: 200
+        header:
+            Content-Length: "267"
+            Content-Type: application/json; charset=utf-8
+            Date: Fri, 21 Jun 2024 08:07:23 GMT
+        body: '{"status":200,"message":"success","data":{"data":[{"id":"667532bc09403f013688f952","username":"Sonichigo","name":"Animesh Pathak","nationality":"Indian","title":"Developer Advocate at Keploy","hobbies":"Drumming","linkedin":"@sonichigo","twitter":"@sonichigo1219"}]}}'
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.date: []
+      result:
+        status_code:
+            normal: true
+            expected: 200
+            actual: 200
+        headers_result:
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+              actual:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Fri, 21 Jun 2024 08:05:21 GMT
+              actual:
+                key: Date
+                value:
+                    - Fri, 21 Jun 2024 08:07:23 GMT
+            - normal: true
+              expected:
+                key: Content-Length
+                value:
+                    - "267"
+              actual:
+                key: Content-Length
+                value:
+                    - "267"
+        body_result:
+            - normal: true
+              type: JSON
+              expected: '{"status":200,"message":"success","data":{"data":[{"id":"667532bc09403f013688f952","username":"Sonichigo","name":"Animesh Pathak","nationality":"Indian","title":"Developer Advocate at Keploy","hobbies":"Drumming","linkedin":"@sonichigo","twitter":"@sonichigo1219"}]}}'
+              actual: '{"status":200,"message":"success","data":{"data":[{"id":"667532bc09403f013688f952","username":"Sonichigo","name":"Animesh Pathak","nationality":"Indian","title":"Developer Advocate at Keploy","hobbies":"Drumming","linkedin":"@sonichigo","twitter":"@sonichigo1219"}]}}'
+        dep_result: []
+test_set: test-set-0

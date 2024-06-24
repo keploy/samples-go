@@ -1,0 +1,38 @@
+version: api.keploy.io/v1beta1
+kind: Http
+name: test-4
+spec:
+    metadata: {}
+    req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8080/users
+        header:
+            Accept: '*/*'
+            Host: localhost:8080
+            User-Agent: curl/7.88.1
+        body: ""
+        timestamp: 2024-06-21T13:35:21.887883459+05:30
+    resp:
+        status_code: 200
+        header:
+            Content-Length: "267"
+            Content-Type: application/json; charset=utf-8
+            Date: Fri, 21 Jun 2024 08:05:21 GMT
+        body: '{"status":200,"message":"success","data":{"data":[{"id":"667532bc09403f013688f952","username":"Sonichigo","name":"Animesh Pathak","nationality":"Indian","title":"Developer Advocate at Keploy","hobbies":"Drumming","linkedin":"@sonichigo","twitter":"@sonichigo1219"}]}}'
+        status_message: OK
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2024-06-21T13:35:23.962300315+05:30
+    objects: []
+    assertions:
+        noise:
+            header.Date: []
+    created: 1718957123
+curl: |
+    curl --request GET \
+      --url http://localhost:8080/users \
+      --header 'User-Agent: curl/7.88.1' \
+      --header 'Accept: */*' \
+      --header 'Host: localhost:8080' \

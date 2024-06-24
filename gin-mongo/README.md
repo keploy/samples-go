@@ -11,26 +11,20 @@ go mod download
 
 ## Installation
 
-There are two methods to run the sample application using Keploy :-
-
-1. [Using Docker](#running-app-using-docker)
-2. [Natively on Ubuntu/Windows(using WSL)](#run-app-natively-on-local-machine)
+```bash
+curl --silent -O -L https://keploy.io/install.sh && source install.sh
+```
 
 ## Running app using Docker
 
 Keploy can be used on Linux, Windows and MacOS through [Docker](https://docs.docker.com/engine/install/).
 
-Note: To run Keploy on MacOS through [Docker](https://docs.docker.com/desktop/release-notes/#4252) the version must be ```4.25.2``` or above.
+> Note: To run Keploy on MacOS through [Docker](https://docs.docker.com/desktop/release-notes/#4252) the version must be ```4.25.2``` or above.
 
-### Create Keploy Alias
-
-We need create an alias for Keploy:
-```bash
-alias keploy='sudo docker run --pull always --name keploy-v2 -p 16789:16789 --privileged --pid=host -it -v $(pwd):$(pwd) -w $(pwd) -v /sys/fs/cgroup:/sys/fs/cgroup -v /sys/kernel/debug:/sys/kernel/debug -v /sys/fs/bpf:/sys/fs/bpf -v /var/run/docker.sock:/var/run/docker.sock --rm ghcr.io/keploy/keploy'
-```
 
 ### Let's start the MongoDB Instance
 Using the docker-compose file we will start our mongodb instance:-
+
 ```bash
 sudo docker run -p 27017:27017 -d --network keploy-network --name mongoDb mongo
 ```
@@ -62,7 +56,8 @@ curl --request POST \
 ```
 
 this will return the shortened url. 
-```
+
+```json
 {
   "ts": 1645540022,
   "url": "http://localhost:8080/Lhr4BWAi"
@@ -112,27 +107,6 @@ This time all the test cases will pass.
 
 ## Run app Natively on local machine
 
-Keploy can be installed on Linux directly and on Windows with the help of WSL. Based on your system archieture, install the keploy latest binary release
-
-**1. AMD Architecture**
-
-```shell
-curl --silent --location "https://github.com/keploy/keploy/releases/latest/download/keploy_linux_amd64.tar.gz" | tar xz -C /tmp
-
-sudo mkdir -p /usr/local/bin && sudo mv /tmp/keploy /usr/local/bin && keploy
-```
-
-<details>
-<summary> 2. ARM Architecture </summary>
-
-```shell
-curl --silent --location "https://github.com/keploy/keploy/releases/latest/download/keploy_linux_arm64.tar.gz" | tar xz -C /tmp
-
-sudo mkdir -p /usr/local/bin && sudo mv /tmp/keploy /usr/local/bin && keploy
-```
-
-</details>
-
 #### Let's start the MongoDB Instance
 
 Spin up your mongo container using
@@ -150,7 +124,7 @@ sudo docker run --rm -p27017:27017 -d --network keploy-network --name mongoDb mo
 Now, we will create the binary of our application:-
 
 ```zsh
-go build
+go build -cover
 ```
 
 Once we have our binary file ready,this command will start the recording of API calls using ebpf:-
@@ -221,9 +195,9 @@ Go to the Keploy log to get deeper insights on what testcases ran, what failed. 
 In `test-1.yml` and `test-2.yml`, go the noisefield and under `-header.Data` add the `-body.ts` on line number _37_. Now, it's the time to run the test cases again.
 
 ```shell
-sudo -E keploy test -c "./test-app-url-shortener" --delay 10
+sudo -E keploy test -c "./test-app-url-shortener" --goCoverage --delay 10
 ```
 
 This time all the test cases will pass.
 
-![testruns](./img/testrun.png?raw=true "Recent testruns")
+![testruns](./img/testrun-coverage.png?raw=true "Recent testruns")

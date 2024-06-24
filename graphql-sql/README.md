@@ -11,26 +11,6 @@ go mod download
 
 ## Installation Keploy
 
-Keploy can be installed on Linux directly and on Windows with the help of WSL. Based on your system archieture, install the keploy latest binary release
-
-**1. AMD Architecture**
-
-```shell
-curl --silent --location "https://github.com/keploy/keploy/releases/latest/download/keploy_linux_amd64.tar.gz" | tar xz -C /tmp
-
-sudo mkdir -p /usr/local/bin && sudo mv /tmp/keploy /usr/local/bin && keploy
-```
-
-<details>
-<summary> 2. ARM Architecture </summary>
-
-```shell
-curl --silent --location "https://github.com/keploy/keploy/releases/latest/download/keploy_linux_arm64.tar.gz" | tar xz -C /tmp
-
-sudo mkdir -p /usr/local/bin && sudo mv /tmp/keploy /usr/local/bin && keploy
-```
-
-</details>
 
 ### Start Postgres Instance 
 
@@ -50,7 +30,7 @@ docker-compose up -d
 Now, we will create the binary of our application:-
 
 ```zsh
-go build
+go build -cover
 ```
 
 Once we have our binary file ready,this command will start the recording of API calls using ebpf:-
@@ -66,26 +46,17 @@ Make API Calls using Hoppscotch, Postman or cURL command. Keploy with capture th
 
 To generate testcases we just need to make some API calls. You can use [Postman](https://www.postman.com/), [Hoppscotch](https://hoppscotch.io/), or simply `curl`
 
-### Create Author
+#### Create Author
 
 ```bash
-curl --request POST \
-  --url http://localhost:8080/graphql \
-  --header 'content-type: application/json' \
-  --data '{
-  mutation CreateAuthor {
-    createAuthor(name: "Abc xyz", email: "abc@xyz.com") {
-        created_at
-        email
-        id
-        name
-    }
-}'
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"query": "mutation { createAuthor(name: \"John Doe\", email: \"john@example.com\") { id name email } }"}' \             
+  http://localhost:8080/graphql
 ```
 
-this will return the shortened url. The ts would automatically be ignored during testing because it'll always be different.
-
-```
+this will return the response: - 
+```json
 {
     "data": {
         "createAuthor": {
@@ -98,17 +69,34 @@ this will return the shortened url. The ts would automatically be ignored during
 }
 ```
 
-### Redirect to original URL from shortened URL 
+#### Get Author
 
-1. By using Curl Command
 ```bash
-curl --request GET \
-  --url http://localhost:8080/GuwHCgoQ
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"query": "{ authors { id name email } }"}' \
+  http://localhost:8080/graphql
 ```
 
-2. Or by querying through the browser `http://localhost:8082/GuwHCgoQ`
+#### Create Posts
 
-Now both these API calls were captured as **editable** testcases and written to `keploy/tests` folder. The keploy directory would also have `mocks` file that contains all the outputs of postgres operations. Here's what the folder structure look like:
+```bash
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"query": "mutation { createPost(title: \"My First Post\", content: \"This is the content\", author_id: 1) { id title content author { name } } }"}' \
+  http://localhost:8080/graphql
+```
+
+#### Get Posts
+
+```bash
+curl -X POST \       
+  -H "Content-Type: application/json" \
+  -d '{"query": "{ posts { id title content author { name } } }"}' \ 
+  http://localhost:8080/graphql
+```
+
+Now all these API calls were captured as **editable** testcases and written to `keploy/tests` folder. The keploy directory would also have `mocks` file that contains all the outputs of postgres operations. Here's what the folder structure look like:
 
 ![Testcase](./img/testcases.png?raw=true)
 
@@ -116,16 +104,17 @@ Now, let's see the magic! ✨💫
 
 ## Run the Testcases
 
-Now that we have our testcase captured, we will add `ts` to noise field in `test-*.yaml` files. 
-
-Now let's run the test mode (in the echo-sql directory, not the Keploy directory).
+Now let's run the test mode (in the graphql-sql directory):
 
 ```shell
-sudo -E keploy test -c "./keploy-gql" --delay 10
+sudo -E keploy test -c "./keploy-gql" --goCoverage --delay 10
 ```
 
-output should look like
+we can notice that our first testcase failed due to database configration
+![Failed Test](./img/testfailed.png)
+
+Output should look like:- 
 
 ![Testrun](./img/testrun.png?raw=true)
 
-So no need to setup fake database/apis like Postgres or write mocks for them. Keploy automatically mocks them and, **The application thinks it's talking to Postgres 😄**
+With couple of API calls, we got upto 12.4% of code coverage. 🥳

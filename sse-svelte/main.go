@@ -1,4 +1,3 @@
-// Package main starts the application
 package main
 
 import (
@@ -6,6 +5,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -104,6 +106,33 @@ func main() {
 	fmt.Println("Connected to MongoDB!")
 	router.HandleFunc("/event", sseHandler)
 	router.HandleFunc("/time", getTime)
-	// fmt.Println("Server listening on :3500")
-	log.Fatal(http.ListenAndServe(":3500", router))
+
+	server := &http.Server{
+		Addr:    ":3500",
+		Handler: router,
+	}
+
+	// Channel to listen for interrupt signals
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
+
+	// Run the server in a goroutine
+	go func() {
+		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("Could not listen on :3500: %v\n", err)
+		}
+	}()
+
+	fmt.Println("Server is ready to handle requests at :3500")
+	<-stop
+	fmt.Println("\nServer is shutting down...")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if err := server.Shutdown(ctx); err != nil {
+		log.Fatalf("Could not gracefully shutdown the server: %v\n", err)
+	}
+
+	fmt.Println("Server stopped")
 }

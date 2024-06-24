@@ -1,11 +1,13 @@
-// Package main starts the application
 package main
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/go-chi/chi"
@@ -15,7 +17,6 @@ import (
 )
 
 const (
-	//dbHost = "graphql-sql-postgres-1"
 	dbHost     = "localhost"
 	dbPost     = "5432"
 	dbUser     = "postgres"
@@ -62,7 +63,6 @@ func main() {
 		}
 	}()
 
-	//Schema for
 	authorType := graphql.NewObject(graphql.ObjectConfig{
 		Name:        "Author",
 		Description: "An author",
@@ -74,7 +74,6 @@ func main() {
 					if author, ok := p.Source.(*Author); ok {
 						return author.ID, nil
 					}
-
 					return nil, nil
 				},
 			},
@@ -85,7 +84,6 @@ func main() {
 					if author, ok := p.Source.(*Author); ok {
 						return author.Name, nil
 					}
-
 					return nil, nil
 				},
 			},
@@ -96,7 +94,6 @@ func main() {
 					if author, ok := p.Source.(*Author); ok {
 						return author.Email, nil
 					}
-
 					return nil, nil
 				},
 			},
@@ -107,7 +104,6 @@ func main() {
 					if author, ok := p.Source.(*Author); ok {
 						return author.CreatedAt, nil
 					}
-
 					return nil, nil
 				},
 			},
@@ -125,7 +121,6 @@ func main() {
 					if post, ok := p.Source.(*Post); ok {
 						return post.ID, nil
 					}
-
 					return nil, nil
 				},
 			},
@@ -136,7 +131,6 @@ func main() {
 					if post, ok := p.Source.(*Post); ok {
 						return post.Title, nil
 					}
-
 					return nil, nil
 				},
 			},
@@ -147,7 +141,6 @@ func main() {
 					if post, ok := p.Source.(*Post); ok {
 						return post.Content, nil
 					}
-
 					return nil, nil
 				},
 			},
@@ -158,7 +151,6 @@ func main() {
 					if post, ok := p.Source.(*Post); ok {
 						return post.CreatedAt, nil
 					}
-
 					return nil, nil
 				},
 			},
@@ -169,10 +161,8 @@ func main() {
 						author := &Author{}
 						err = db.QueryRow("select id, name, email from authors where id = $1", post.AuthorID).Scan(&author.ID, &author.Name, &author.Email)
 						checkErr(err)
-
 						return author, nil
 					}
-
 					return nil, nil
 				},
 			},
@@ -192,14 +182,11 @@ func main() {
 				},
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 					id, _ := p.Args["id"].(int)
-
 					author := &Author{}
 					rows, err := db.QueryContext(p.Context, "select id, name, email from authors where id = $1", id)
 					checkErr(err)
-
 					err = rows.Scan(&author.ID, &author.Name, &author.Email)
 					checkErr(err)
-
 					return author, nil
 				},
 			},
@@ -207,19 +194,15 @@ func main() {
 				Type:        graphql.NewList(authorType),
 				Description: "List of authors.",
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-					// rows, err := db.Query("SELECT id, name, email FROM authors")
 					rows, err := db.QueryContext(p.Context, "SELECT id, name, email FROM authors")
 					checkErr(err)
 					var authors []*Author
-
 					for rows.Next() {
 						author := &Author{}
-
 						err = rows.Scan(&author.ID, &author.Name, &author.Email)
 						checkErr(err)
 						authors = append(authors, author)
 					}
-
 					return authors, nil
 				},
 			},
@@ -233,14 +216,11 @@ func main() {
 				},
 				Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 					id, _ := params.Args["id"].(int)
-
 					post := &Post{}
 					rows, err := db.QueryContext(params.Context, "select id, title, content, author_id from posts where id = $1", id)
 					checkErr(err)
-
 					err = rows.Scan(&post.ID, &post.Title, &post.Content, &post.AuthorID)
 					checkErr(err)
-
 					return post, nil
 				},
 			},
@@ -251,15 +231,12 @@ func main() {
 					rows, err := db.QueryContext(p.Context, "SELECT id, title, content, author_id FROM posts")
 					checkErr(err)
 					var posts []*Post
-
 					for rows.Next() {
 						post := &Post{}
-
 						err = rows.Scan(&post.ID, &post.Title, &post.Content, &post.AuthorID)
 						checkErr(err)
 						posts = append(posts, post)
 					}
-
 					return posts, nil
 				},
 			},
@@ -269,7 +246,6 @@ func main() {
 	rootMutation := graphql.NewObject(graphql.ObjectConfig{
 		Name: "RootMutation",
 		Fields: graphql.Fields{
-			// Author
 			"createAuthor": &graphql.Field{
 				Type:        authorType,
 				Description: "Create new author",
@@ -285,21 +261,17 @@ func main() {
 					name, _ := params.Args["name"].(string)
 					email, _ := params.Args["email"].(string)
 					createdAt := time.Now()
-
 					var lastInsertID int64
 					rows, err := db.QueryContext(params.Context, "INSERT INTO authors(name, email, created_at) VALUES($1, $2, $3) returning id;", name, email, createdAt)
 					checkErr(err)
-
 					err = rows.Scan(&lastInsertID)
 					checkErr(err)
-
 					newAuthor := &Author{
 						ID:        int(lastInsertID),
 						Name:      name,
 						Email:     email,
 						CreatedAt: createdAt,
 					}
-
 					return newAuthor, nil
 				},
 			},
@@ -321,19 +293,15 @@ func main() {
 					id, _ := params.Args["id"].(int)
 					name, _ := params.Args["name"].(string)
 					email, _ := params.Args["email"].(string)
-
 					stmt, err := db.PrepareContext(params.Context, "UPDATE authors SET name = $1, email = $2 WHERE id = $3")
 					checkErr(err)
-
 					_, err2 := stmt.Exec(name, email, id)
 					checkErr(err2)
-
 					newAuthor := &Author{
 						ID:    id,
 						Name:  name,
 						Email: email,
 					}
-
 					return newAuthor, nil
 				},
 			},
@@ -347,17 +315,13 @@ func main() {
 				},
 				Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 					id, _ := params.Args["id"].(int)
-
 					stmt, err := db.PrepareContext(params.Context, "DELETE FROM authors WHERE id = $1")
 					checkErr(err)
-
 					_, err2 := stmt.Exec(id)
 					checkErr(err2)
-
 					return nil, nil
 				},
 			},
-			// Post
 			"createPost": &graphql.Field{
 				Type:        postType,
 				Description: "Create new post",
@@ -377,14 +341,11 @@ func main() {
 					content, _ := params.Args["content"].(string)
 					authorID, _ := params.Args["author_id"].(int)
 					createdAt := time.Now()
-
 					var lastInsertID int
 					rows, err := db.QueryContext(params.Context, "INSERT INTO posts(title, content, author_id, created_at) VALUES($1, $2, $3, $4) returning id;", title, content, authorID, createdAt)
 					checkErr(err)
-
 					err = rows.Scan(&lastInsertID)
 					checkErr(err)
-
 					newPost := &Post{
 						ID:        lastInsertID,
 						Title:     title,
@@ -392,7 +353,6 @@ func main() {
 						AuthorID:  authorID,
 						CreatedAt: createdAt,
 					}
-
 					return newPost, nil
 				},
 			},
@@ -418,20 +378,16 @@ func main() {
 					title, _ := params.Args["title"].(string)
 					content, _ := params.Args["content"].(string)
 					authorID, _ := params.Args["author_id"].(int)
-
 					stmt, err := db.Prepare("UPDATE posts SET title = $1, content = $2, author_id = $3 WHERE id = $4")
 					checkErr(err)
-
 					_, err2 := stmt.Exec(title, content, authorID, id)
 					checkErr(err2)
-
 					newPost := &Post{
 						ID:       id,
 						Title:    title,
 						Content:  content,
 						AuthorID: authorID,
 					}
-
 					return newPost, nil
 				},
 			},
@@ -445,32 +401,61 @@ func main() {
 				},
 				Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 					id, _ := params.Args["id"].(int)
-
 					stmt, err := db.Prepare("DELETE FROM posts WHERE id = $1")
 					checkErr(err)
-
 					_, err2 := stmt.Exec(id)
 					checkErr(err2)
-
 					return nil, nil
 				},
 			},
 		},
 	})
+
 	schema, _ := graphql.NewSchema(graphql.SchemaConfig{
 		Query:    rootQuery,
 		Mutation: rootMutation,
 	})
+
 	h := handler.New(&handler.Config{
 		Schema:   &schema,
 		Pretty:   true,
 		GraphiQL: true,
 	})
+
 	r := chi.NewRouter()
 	port := "8080"
 	r.Handle("/graphql", h)
-	fmt.Println("app started on https://localhost:" + port)
 
-	err = http.ListenAndServe(":"+port, r)
-	checkErr(err)
+	server := &http.Server{
+		Addr:    ":" + port,
+		Handler: r,
+	}
+
+	go func() {
+		fmt.Println("app started on http://localhost:" + port)
+		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			fmt.Fprintf(os.Stderr, "Could not listen on port %s: %v\n", port, err)
+			os.Exit(1)
+		}
+	}()
+
+	// Graceful shutdown
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+
+	<-c
+	fmt.Println("Shutting down gracefully...")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	if err := server.Shutdown(ctx); err != nil {
+		fmt.Fprintf(os.Stderr, "Could not gracefully shutdown the server: %v\n", err)
+	}
+
+	if err := db.Close(); err != nil {
+		fmt.Fprintf(os.Stderr, "Could not close database connection: %v\n", err)
+	}
+
+	fmt.Println("Server stopped")
 }

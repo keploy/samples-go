@@ -2,10 +2,13 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -19,7 +22,7 @@ var Port = ":8080"
 func main() {
 	store, err := CreateStore()
 	if err != nil {
-		log.Fatal("Couldnt create store ", err)
+		log.Fatal("Could not create store ", err)
 	}
 
 	defer func() {
@@ -33,8 +36,39 @@ func main() {
 	router.HandleFunc("/create", controller.CreateLink(store)).Methods("POST")
 	router.HandleFunc("/all", controller.GetAllLinksFromWebsite(store)).Methods("GET")
 	router.HandleFunc("/links/{id}", controller.RedirectUser(store)).Methods("GET")
-	log.Print("Server is running")
-	log.Fatal(http.ListenAndServe(Port, router))
+
+	server := &http.Server{
+		Addr:    Port,
+		Handler: router,
+	}
+
+	// Run the server in a goroutine
+	go func() {
+		log.Print("Server is running on port", Port)
+		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("Could not listen on %s: %v\n", Port, err)
+		}
+	}()
+
+	// Graceful shutdown
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+
+	<-c
+	log.Println("Shutting down gracefully...")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	if err := server.Shutdown(ctx); err != nil {
+		log.Fatalf("Could not gracefully shutdown the server: %v\n", err)
+	}
+
+	if err := store.Close(); err != nil {
+		log.Fatalf("Could not close database connection: %v\n", err)
+	}
+
+	log.Println("Server stopped")
 }
 
 func CreateStore() (*sql.DB, error) {

@@ -17,41 +17,31 @@ go mod download
 
 ## Installation
 
-There are two methods to run the sample application using Keploy :-
-
-1. [Using Docker](#running-app-using-docker)
-2. [Natively on Ubuntu/Windows(using WSL)](#run-app-natively-on-local-machine)
-
-## Running app using Docker
+```bash
+curl --silent -O -L https://keploy.io/install.sh && source install.sh
+```
 
 Keploy can be used on Linux, Windows and MacOS through [Docker](https://docs.docker.com/engine/install/).
 
 Note: To run Keploy on MacOS through [Docker](https://docs.docker.com/desktop/release-notes/#4252) the version must be ```4.25.2``` or above.
 
-### Create Keploy Alias
-
-We need create an alias for Keploy:
-```bash
-alias keploy='sudo docker run --pull always --name keploy-v2 -p 16789:16789 --privileged --pid=host -it -v $(pwd):$(pwd) -w $(pwd) -v /sys/fs/cgroup:/sys/fs/cgroup -v /sys/kernel/debug:/sys/kernel/debug -v /sys/fs/bpf:/sys/fs/bpf -v /var/run/docker.sock:/var/run/docker.sock --rm ghcr.io/keploy/keploy'
-```
-
 ### Let's start the MongoDB Instance
 Using the docker-compose file we will start our mongodb instance:-
 ```bash
-sudo docker run -p 27017:27017 -d --network keploy-network --name mongoDb mongo
+sudo docker-compose up -d mongo
 ```
 
 Now, we will create the docker image of our application:-
 
 
 ```bash
-docker build -t user-profile:1.0 .
+go build -cover
 ```
 
 ### Capture the Testcases
 
 ```shell
-keploy record -c "docker-compose up" --containerName "userProfileApp"
+keploy record -c "./app"
 ```
 
 To genereate testcases we just need to make some API calls. You can use [Postman](https://www.postman.com/), [Hoppscotch](https://hoppscotch.io/), or simply `curl`
@@ -64,6 +54,8 @@ To genereate testcases we just need to make some API calls. You can use [Postman
 - `/user/:userId` : DELETE - Delete an existing user from the database
 - `/users` : GET - Get all users from the database
 
+
+**Post Request**
 
 here you can use this object template below for testing:
 ```shell
@@ -80,26 +72,32 @@ curl -X POST -H "Content-Type: application/json" -d '{
 }' "http://localhost:8080/user"
 ```
 
-**Post Request**
-![POST-request](assets/POST-request.png)
+![POST-request](./assets/POST-request.png)
 
 **GET Request**
-![GET-request](assets/GET-request.png)
+![GET-request](./assets/GET-request.png)
 
 Once done, you can see the Test Cases on the Keploy server, like this:
 
-![test-cases-ss](assets/keploy-test-cases.png)
+![test-cases-ss](./assets/keploy-test-cases.png)
 
 ### Generate Test Runs
 
 Now that we have our testcase captured, run the test file.
 
 ```shell
-keploy test -c "docker-compose up" --containerName "userProfileApp" --delay 10
+keploy test -c "./app" --goCoverage --delay 10
 ```
 
-Once done, you can see the Test Runs on the Keploy server, like this:
+Once done, we can see that there is a noise present in our testcase:
 
-![test-runs](assets/test-runs.png)
+![test-runs](./assets/noise.png)
 
-### If you like the sample application, Don't forget to star us ✨
+**Let's add `body.data.InsertedID: []` under noise in `test-1.yaml` on line 43**
+Now let's run the test mode once again: - 
+
+![alt text](image.png)
+
+_Voila! Our testcases have passed🥳_ . We can also notice that by capturing just few API calls we got around 87.5% of aggregated coverage with keploy generated testcases
+
+If you like the sample application, Don't forget to star us ✨
