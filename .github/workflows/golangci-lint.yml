@@ -34,7 +34,6 @@ jobs:
           - S3-Keploy
           - sse-svelte
           - users-profile
-          - go-jwt
           
     steps:
       - uses: actions/checkout@v3
