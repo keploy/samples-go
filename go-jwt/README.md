@@ -15,9 +15,6 @@ Install keploy via one-click:-
 curl --silent -O -L https://keploy.io/install.sh && source install.sh
 ```
 
-### Update the Host
-
-> **Since we have setup our sample-app natively set the host to `localhost` on line 10.**
 
 ### Capture the Testcases
 
@@ -43,7 +40,10 @@ To genereate testcases we just need to make some API calls. You can use [Postman
 
 ```bash
 curl --request GET \
-  --url http://localhost:8000/health 
+      --url http://localhost:8000/health \
+      --header 'Accept: */*' \
+      --header 'Host: localhost:8000' \
+      --header 'User-Agent: curl/7.81.0' 
 ```
 this will return the response. 
 ```
@@ -53,7 +53,10 @@ this will return the response.
 2. Fetch the Products
 ```bash
 curl --request GET \
-  --url http://localhost:8000/generate-token
+      --url http://localhost:8000/generate-token \
+      --header 'Host: localhost:8000' \
+      --header 'User-Agent: curl/7.81.0' \
+      --header 'Accept: */*' 
 ```
 
 we will get output:
@@ -66,11 +69,10 @@ we will get output:
 
 ```sh
 curl --request GET \
-  --url http://localhost:8000/check-token \
-  --header 'content-type: application/json' \
-  --data '{
-    "token":"<your_jwt_token>"
-}'
+      --url http://localhost:8000/check-token?token=<your_jwt_token> \
+      --header 'Accept: */*' \
+      --header 'Host: localhost:8000' \
+      --header 'User-Agent: curl/7.81.0' 
 ```
 
 we will get output:-
