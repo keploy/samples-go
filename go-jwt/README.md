@@ -15,6 +15,11 @@ Install keploy via one-click:-
 curl --silent -O -L https://keploy.io/install.sh && source install.sh
 ```
 
+### Start the Postgres Database
+
+```zsh
+docker compose up -d db
+```
 
 ### Capture the Testcases
 
