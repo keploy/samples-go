@@ -1,0 +1,43 @@
+version: api.keploy.io/v1beta1
+kind: Http
+name: test-2
+spec:
+    metadata: {}
+    req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8080/api/eterna-city-area
+        header:
+            Accept: '*/*'
+            Host: localhost:8080
+            User-Agent: curl/7.68.0
+        body: ""
+        timestamp: 2024-08-01T16:40:35.146957724+05:30
+    resp:
+        status_code: 404
+        header:
+            Access-Control-Allow-Headers: '*'
+            Access-Control-Allow-Methods: GET,POST,OPTIONS,PUT,DELETE
+            Access-Control-Allow-Origin: '*'
+            Content-Length: "19"
+            Content-Type: text/plain; charset=utf-8
+            Date: Thu, 01 Aug 2024 11:10:35 GMT
+            X-Content-Type-Options: nosniff
+        body: |
+            404 page not found
+        status_message: Not Found
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2024-08-01T16:40:37.170188801+05:30
+    objects: []
+    assertions:
+        noise:
+            header.Date: []
+    created: 1722510637
+curl: |
+    curl --request GET \
+      --url http://localhost:8080/api/eterna-city-area \
+      --header 'Host: localhost:8080' \
+      --header 'User-Agent: curl/7.68.0' \
+      --header 'Accept: */*' \

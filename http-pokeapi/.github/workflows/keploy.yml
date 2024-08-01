@@ -1,0 +1,19 @@
+name: Keploy
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, reopened, synchronize]
+jobs:
+  e2e-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Test-Report
+        uses: keploy/testgpt@main
+        with:
+          working-directory: ./
+          keploy-path: ./
+          command: ./http-pokeapi
