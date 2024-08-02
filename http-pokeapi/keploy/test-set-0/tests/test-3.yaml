@@ -1,0 +1,41 @@
+version: api.keploy.io/v1beta1
+kind: Http
+name: test-3
+spec:
+    metadata: {}
+    req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8080/api/pokemon/whiscash
+        header:
+            Accept: '*/*'
+            Host: localhost:8080
+            User-Agent: curl/7.68.0
+        body: ""
+        timestamp: 2024-08-01T21:15:24.62046718+05:30
+    resp:
+        status_code: 200
+        header:
+            Access-Control-Allow-Headers: '*'
+            Access-Control-Allow-Methods: GET,POST,OPTIONS,PUT,DELETE
+            Access-Control-Allow-Origin: '*'
+            Content-Length: "286"
+            Content-Type: application/json
+            Date: Thu, 01 Aug 2024 15:45:27 GMT
+        body: '{"name":"whiscash","height":9,"weight":236,"stats":[{"name":"hp","basestat":110},{"name":"attack","basestat":78},{"name":"defense","basestat":73},{"name":"special-attack","basestat":76},{"name":"special-defense","basestat":71},{"name":"speed","basestat":60}],"types":["water","ground"]}'
+        status_message: OK
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2024-08-01T21:15:29.99465429+05:30
+    objects: []
+    assertions:
+        noise:
+            header.Date: []
+    created: 1722527129
+curl: |
+    curl --request GET \
+      --url http://localhost:8080/api/pokemon/whiscash \
+      --header 'Accept: */*' \
+      --header 'Host: localhost:8080' \
+      --header 'User-Agent: curl/7.68.0' \
