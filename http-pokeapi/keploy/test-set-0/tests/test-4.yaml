@@ -1,0 +1,41 @@
+version: api.keploy.io/v1beta1
+kind: Http
+name: test-4
+spec:
+    metadata: {}
+    req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8080/api/pokemon/psyduck
+        header:
+            Accept: '*/*'
+            Host: localhost:8080
+            User-Agent: curl/7.68.0
+        body: ""
+        timestamp: 2024-08-01T16:41:08.643168751+05:30
+    resp:
+        status_code: 200
+        header:
+            Access-Control-Allow-Headers: '*'
+            Access-Control-Allow-Methods: GET,POST,OPTIONS,PUT,DELETE
+            Access-Control-Allow-Origin: '*'
+            Content-Length: "275"
+            Content-Type: application/json
+            Date: Thu, 01 Aug 2024 11:11:09 GMT
+        body: '{"name":"psyduck","height":8,"weight":196,"stats":[{"name":"hp","basestat":50},{"name":"attack","basestat":52},{"name":"defense","basestat":48},{"name":"special-attack","basestat":65},{"name":"special-defense","basestat":50},{"name":"speed","basestat":55}],"types":["water"]}'
+        status_message: OK
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2024-08-01T16:41:11.608554352+05:30
+    objects: []
+    assertions:
+        noise:
+            header.Date: []
+    created: 1722510671
+curl: |
+    curl --request GET \
+      --url http://localhost:8080/api/pokemon/psyduck \
+      --header 'User-Agent: curl/7.68.0' \
+      --header 'Accept: */*' \
+      --header 'Host: localhost:8080' \
