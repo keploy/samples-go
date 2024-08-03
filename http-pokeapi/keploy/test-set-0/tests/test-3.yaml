@@ -1,0 +1,41 @@
+version: api.keploy.io/v1beta1
+kind: Http
+name: test-3
+spec:
+    metadata: {}
+    req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8080/api/pokemon/nosepass
+        header:
+            Accept: '*/*'
+            Host: localhost:8080
+            User-Agent: curl/7.68.0
+        body: ""
+        timestamp: 2024-08-02T12:22:43.273607118+05:30
+    resp:
+        status_code: 200
+        header:
+            Access-Control-Allow-Headers: '*'
+            Access-Control-Allow-Methods: GET,POST,OPTIONS,PUT,DELETE
+            Access-Control-Allow-Origin: '*'
+            Content-Length: "277"
+            Content-Type: application/json
+            Date: Fri, 02 Aug 2024 06:52:43 GMT
+        body: '{"name":"nosepass","height":10,"weight":970,"stats":[{"name":"hp","basestat":30},{"name":"attack","basestat":45},{"name":"defense","basestat":135},{"name":"special-attack","basestat":45},{"name":"special-defense","basestat":90},{"name":"speed","basestat":30}],"types":["rock"]}'
+        status_message: OK
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2024-08-02T12:22:45.977356408+05:30
+    objects: []
+    assertions:
+        noise:
+            header.Date: []
+    created: 1722581565
+curl: |
+    curl --request GET \
+      --url http://localhost:8080/api/pokemon/nosepass \
+      --header 'Host: localhost:8080' \
+      --header 'User-Agent: curl/7.68.0' \
+      --header 'Accept: */*' \

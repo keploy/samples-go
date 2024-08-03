@@ -1,0 +1,41 @@
+version: api.keploy.io/v1beta1
+kind: Http
+name: test-2
+spec:
+    metadata: {}
+    req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8080/api/locations/mt-coronet-5f
+        header:
+            Accept: '*/*'
+            Host: localhost:8080
+            User-Agent: curl/7.68.0
+        body: ""
+        timestamp: 2024-08-02T12:22:17.199251113+05:30
+    resp:
+        status_code: 200
+        header:
+            Access-Control-Allow-Headers: '*'
+            Access-Control-Allow-Methods: GET,POST,OPTIONS,PUT,DELETE
+            Access-Control-Allow-Origin: '*'
+            Content-Length: "119"
+            Content-Type: application/json
+            Date: Fri, 02 Aug 2024 06:52:18 GMT
+        body: '["clefairy","golbat","machoke","graveler","nosepass","medicham","lunatone","solrock","chimecho","chingling","bronzong"]'
+        status_message: OK
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2024-08-02T12:22:20.317248295+05:30
+    objects: []
+    assertions:
+        noise:
+            header.Date: []
+    created: 1722581540
+curl: |
+    curl --request GET \
+      --url http://localhost:8080/api/locations/mt-coronet-5f \
+      --header 'Host: localhost:8080' \
+      --header 'User-Agent: curl/7.68.0' \
+      --header 'Accept: */*' \
