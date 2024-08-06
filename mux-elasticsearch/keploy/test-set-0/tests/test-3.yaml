@@ -1,0 +1,56 @@
+version: api.keploy.io/v1beta1
+kind: Http
+name: test-3
+spec:
+    metadata: {}
+    req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8000/documents
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Connection: keep-alive
+            Content-Length: "65"
+            Content-Type: application/json
+            Host: localhost:8000
+            Postman-Token: 77746e28-0c1e-44c1-b665-486651d226d9
+            User-Agent: PostmanRuntime/7.40.0
+        body: |-
+            {
+                "title" : "somethingTitle",
+                "content" : "something22"
+            }
+        timestamp: 2024-08-06T16:27:28.593250857+05:30
+    resp:
+        status_code: 201
+        header:
+            Content-Length: "30"
+            Content-Type: application/json
+            Date: Tue, 06 Aug 2024 10:57:28 GMT
+        body: |
+            {"id":"1L5WJ5EBIPW7ZBPsPO8T"}
+        status_message: Created
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2024-08-06T16:27:30.871417146+05:30
+    objects: []
+    assertions:
+        noise:
+            header.Date: []
+    created: 1722941850
+curl: |-
+    curl --request POST \
+      --url http://localhost:8000/documents \
+      --header 'Content-Type: application/json' \
+      --header 'User-Agent: PostmanRuntime/7.40.0' \
+      --header 'Accept: */*' \
+      --header 'Postman-Token: 77746e28-0c1e-44c1-b665-486651d226d9' \
+      --header 'Host: localhost:8000' \
+      --header 'Accept-Encoding: gzip, deflate, br' \
+      --header 'Connection: keep-alive' \
+      --data '{
+        "title" : "somethingTitle",
+        "content" : "something22"
+    }'

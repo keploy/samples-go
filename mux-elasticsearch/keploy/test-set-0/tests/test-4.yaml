@@ -1,0 +1,54 @@
+version: api.keploy.io/v1beta1
+kind: Http
+name: test-4
+spec:
+    metadata: {}
+    req:
+        method: PUT
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8000/documents/075IJ5EBIPW7ZBPs5-8y
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Connection: keep-alive
+            Content-Length: "65"
+            Content-Type: application/json
+            Host: localhost:8000
+            Postman-Token: 207b9990-8257-4576-8202-39896f1fc02b
+            User-Agent: PostmanRuntime/7.40.0
+        body: |-
+            {
+                "title" : "somethingTitle",
+                "content" : "something22"
+            }
+        timestamp: 2024-08-06T16:27:52.682428851+05:30
+    resp:
+        status_code: 200
+        header:
+            Content-Length: "0"
+            Date: Tue, 06 Aug 2024 10:57:52 GMT
+        body: ""
+        status_message: OK
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2024-08-06T16:27:54.785227838+05:30
+    objects: []
+    assertions:
+        noise:
+            header.Date: []
+    created: 1722941874
+curl: |-
+    curl --request PUT \
+      --url http://localhost:8000/documents/075IJ5EBIPW7ZBPs5-8y \
+      --header 'Host: localhost:8000' \
+      --header 'Accept-Encoding: gzip, deflate, br' \
+      --header 'Connection: keep-alive' \
+      --header 'Content-Type: application/json' \
+      --header 'User-Agent: PostmanRuntime/7.40.0' \
+      --header 'Accept: */*' \
+      --header 'Postman-Token: 207b9990-8257-4576-8202-39896f1fc02b' \
+      --data '{
+        "title" : "somethingTitle",
+        "content" : "something22"
+    }'
