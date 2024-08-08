@@ -1,0 +1,8 @@
+version: '3'
+services:
+  http-pokeapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
