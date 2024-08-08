@@ -1,0 +1,43 @@
+path: ""
+appId: 0
+appName: ""
+command: ./http-pokeapi
+port: 0
+dnsPort: 26789
+proxyPort: 16789
+debug: false
+disableTele: false
+disableANSI: false
+containerName: ""
+networkName: ""
+buildDelay: 30
+test:
+    selectedTests: {}
+    globalNoise:
+        global: {}
+        test-sets: {}
+    delay: 5
+    apiTimeout: 5
+    skipCoverage: false
+    coverageReportPath: ""
+    ignoreOrdering: true
+    mongoPassword: default@123
+    language: ""
+    removeUnusedMocks: false
+    fallBackOnMiss: false
+    jacocoAgentPath: ""
+    basePath: ""
+    mocking: true
+    ignoredTests: {}
+record:
+    filters: []
+    recordTimer: 0s
+configPath: ""
+bypassRules: []
+generateGithubActions: false
+keployContainer: keploy-v2
+keployNetwork: keploy-network
+cmdType: native
+inCi: false
+
+# Visit [https://keploy.io/docs/running-keploy/configuration-file/] to learn about using keploy through configration file.
