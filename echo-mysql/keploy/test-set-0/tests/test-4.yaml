@@ -1,0 +1,40 @@
+version: api.keploy.io/v1beta1
+kind: Http
+name: test-4
+spec:
+    metadata: {}
+    req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:9090/resolve/N8dsHbQe
+        header:
+            Accept: '*/*'
+            Host: localhost:9090
+            User-Agent: curl/7.88.1
+        body: ""
+        timestamp: 2024-08-19T16:07:09.99920215+05:30
+    resp:
+        status_code: 200
+        header:
+            Content-Length: "110"
+            Content-Type: application/json; charset=UTF-8
+            Date: Mon, 19 Aug 2024 10:37:10 GMT
+        body: |
+            {"id":7,"shortcode":"N8dsHbQe","url":"https://githubKeploy.com","updated_at":"2024-08-19T16:06:49.961+05:30"}
+        status_message: OK
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2024-08-19T16:07:12.096347713+05:30
+    objects: []
+    assertions:
+        noise:
+            body.updated_at: []
+            header.Date: []
+    created: 1724063832
+curl: |
+    curl --request GET \
+      --url http://localhost:9090/resolve/N8dsHbQe \
+      --header 'Host: localhost:9090' \
+      --header 'User-Agent: curl/7.88.1' \
+      --header 'Accept: */*' \
