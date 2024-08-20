@@ -8,7 +8,7 @@ A simple golang based url shortner
 
 
 # Setting up the project
-Run the following commands to setup the project
+Run the following commands to clone the repository and download the necessary Go modules
 
 
 ``` bash
@@ -24,6 +24,11 @@ go mod download
 ``` bash
 sudo docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=uss -p 3306:3306 --rm mysql:latest
 ```
+## Build the application 
+
+``` bash
+ go build -o go-urlshortner . 
+ ```
 
 # Capture the Testcases
 
@@ -70,9 +75,11 @@ Now that we have our testcase captured, run the test file.
 sudo -E env PATH=$PATH oss test -c "./go-urlshortner" --delay 20
 ```
 
-So no need to setup dependencies like mySql, web-go locally or write mocks for your testing.
+So no need to setup dependencies like MySQL, web-go locally or write mocks for your testing.
 
-The application thinks it's talking to mysql 😄
+oss test runs the test cases captured in the previous step. It replays the captured API calls against the application to verify its behavior. 
+
+The application thinks it's talking to MySQL 😄
 
 We will get output something like this:
 
