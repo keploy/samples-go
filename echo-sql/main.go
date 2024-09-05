@@ -4,14 +4,15 @@ package main
 import (
 	"context"
 	"database/sql"
+	"net/http"
 	"os"
 	"os/signal"
+	"syscall"
 	"time"
-	"net/http"
+
 	"github.com/labstack/echo/v4"
 	_ "github.com/lib/pq"
 	"go.uber.org/zap"
-	"syscall"
 )
 
 var port = "8082"
@@ -27,6 +28,7 @@ func handleDeferError(err error) {
 }
 
 func main() {
+	time.Sleep(2 * time.Second)
 	if os.Getenv("PORT") != "" {
 		port = os.Getenv("PORT")
 	}

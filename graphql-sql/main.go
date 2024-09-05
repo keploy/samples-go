@@ -46,6 +46,7 @@ func checkErr(err error) {
 }
 
 func main() {
+	time.Sleep(2 * time.Second)
 	dbInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		dbHost, dbPost, dbUser, dbPassword, dbName)
 

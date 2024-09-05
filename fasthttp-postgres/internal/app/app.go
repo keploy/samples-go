@@ -8,13 +8,15 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	
-	_ "github.com/lib/pq"
+	"time"
+
 	"github.com/fasthttp/router"
+	_ "github.com/lib/pq"
 	"github.com/valyala/fasthttp"
 )
 
 func InitApp() {
+	time.Sleep(2 * time.Second)
 	// Database connection initialization
 	uri := "postgresql://postgres:password@localhost:5432/db?sslmode=disable"
 	db, err := sql.Open("postgres", uri)
