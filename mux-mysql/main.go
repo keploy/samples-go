@@ -20,6 +20,7 @@ import (
 var Port = ":8080"
 
 func main() {
+	time.Sleep(1*time.Second)
 	store, err := CreateStore()
 	if err != nil {
 		log.Fatal("Could not create store ", err)
