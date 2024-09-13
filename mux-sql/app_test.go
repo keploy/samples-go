@@ -111,3 +111,20 @@ func TestCreateProduct(t *testing.T) {
 		t.Errorf("Expected product ID to be '1'. Got '%v'", m["id"])
 	}
 }
+
+func TestCreateProductInvalidJSON(t *testing.T) {
+    clearTable()
+    
+    var jsonStr = []byte(`{"name": "test product", "price": "invalid"}`)
+    req, _ := http.NewRequest("POST", "/product", bytes.NewBuffer(jsonStr))
+    req.Header.Set("Content-Type", "application/json")
+    
+    response := executeRequest(req)
+    checkResponseCode(t, http.StatusBadRequest, response.Code)
+    
+    var m map[string]string
+    json.Unmarshal(response.Body.Bytes(), &m)
+    if m["error"] != "Invalid request payload" {
+        t.Errorf("Expected the 'error' key of the response to be set to 'Invalid request payload'. Got '%s'", m["error"])
+    }
+}
