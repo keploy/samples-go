@@ -4,14 +4,14 @@ package main
 import (
 	"context"
 	"database/sql"
-	"os"
-	"os/signal"
-	"time"
-	"net/http"
 	"github.com/labstack/echo/v4"
 	_ "github.com/lib/pq"
 	"go.uber.org/zap"
+	"net/http"
+	"os"
+	"os/signal"
 	"syscall"
+	"time"
 )
 
 var port = "8082"

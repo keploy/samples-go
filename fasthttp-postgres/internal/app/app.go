@@ -8,9 +8,9 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	
-	_ "github.com/lib/pq"
+
 	"github.com/fasthttp/router"
+	_ "github.com/lib/pq"
 	"github.com/valyala/fasthttp"
 )
 

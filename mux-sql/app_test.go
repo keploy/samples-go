@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
-	"testing"
 	"test-app-product-catelog"
+	"testing"
 )
 
 var a main.App
@@ -113,18 +113,18 @@ func TestCreateProduct(t *testing.T) {
 }
 
 func TestCreateProductInvalidJSON(t *testing.T) {
-    clearTable()
-    
-    var jsonStr = []byte(`{"name": "test product", "price": "invalid"}`)
-    req, _ := http.NewRequest("POST", "/product", bytes.NewBuffer(jsonStr))
-    req.Header.Set("Content-Type", "application/json")
-    
-    response := executeRequest(req)
-    checkResponseCode(t, http.StatusBadRequest, response.Code)
-    
-    var m map[string]string
-    json.Unmarshal(response.Body.Bytes(), &m)
-    if m["error"] != "Invalid request payload" {
-        t.Errorf("Expected the 'error' key of the response to be set to 'Invalid request payload'. Got '%s'", m["error"])
-    }
+	clearTable()
+
+	var jsonStr = []byte(`{"name": "test product", "price": "invalid"}`)
+	req, _ := http.NewRequest("POST", "/product", bytes.NewBuffer(jsonStr))
+	req.Header.Set("Content-Type", "application/json")
+
+	response := executeRequest(req)
+	checkResponseCode(t, http.StatusBadRequest, response.Code)
+
+	var m map[string]string
+	json.Unmarshal(response.Body.Bytes(), &m)
+	if m["error"] != "Invalid request payload" {
+		t.Errorf("Expected the 'error' key of the response to be set to 'Invalid request payload'. Got '%s'", m["error"])
+	}
 }

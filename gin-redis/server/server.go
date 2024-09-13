@@ -1,21 +1,21 @@
 package server
 
 import (
-	"time"
-	"github.com/keploy/gin-redis/routes"
-	"os"
 	"context"
 	"fmt"
+	"github.com/keploy/gin-redis/routes"
 	"net/http"
+	"os"
 	"os/signal"
 	"syscall"
+	"time"
 )
 
 func Init() {
 	r := routes.NewRouter()
 	port := "3001"
 	srv := &http.Server{
-		Addr:   ":" + port,
+		Addr:    ":" + port,
 		Handler: r,
 	}
 	go func() {
