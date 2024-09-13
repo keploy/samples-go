@@ -50,7 +50,7 @@ func main() {
 		Logger.Fatal("Failed to establish connection to local PostgreSQL instance:", zap.Error(err))
 	}
 
-	defer handleDeferError(Database.Close())
+	defer Database.Close()
 
 	// init Keploy
 
