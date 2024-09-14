@@ -21,10 +21,10 @@ var Logger *zap.Logger
 
 var Database *sql.DB
 
-func handleDeferError(err error) {
-	if err != nil {
-		Logger.Fatal(err.Error())
-	}
+func handleDeferError(fn func()	error) {
+    if err := fn(); err != nil {
+        Logger.Error("error occurred during deferred call: %v", zap.Error(err))
+    }
 }
 
 func main() {
@@ -34,7 +34,7 @@ func main() {
 	}
 	var err error
 	Logger, _ = zap.NewProduction()
-	defer handleDeferError(Logger.Sync()) // flushes buffer
+	defer handleDeferError(Logger.Sync) // flushes buffer
 
 	Database, err = NewConnection(ConnectionDetails{
 		host: "postgresDb",
@@ -50,7 +50,7 @@ func main() {
 		Logger.Fatal("Failed to establish connection to local PostgreSQL instance:", zap.Error(err))
 	}
 
-	defer Database.Close()
+	defer handleDeferError(Database.Close)
 
 	// init Keploy
 
