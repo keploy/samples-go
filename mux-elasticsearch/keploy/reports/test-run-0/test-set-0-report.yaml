@@ -1,0 +1,325 @@
+version: api.keploy.io/v1beta1
+name: test-set-0-report
+status: PASSED
+success: 4
+failure: 0
+ignored: 0
+total: 4
+tests:
+    - kind: Http
+      name: test-set-0
+      status: PASSED
+      started: 1722941940
+      completed: 1722941940
+      test_case_path: /home/ayush/Desktop/Open-Source/samples-go/mux-elasticsearch/keploy/test-set-0
+      mock_path: /home/ayush/Desktop/Open-Source/samples-go/mux-elasticsearch/keploy/test-set-0/mocks
+      test_case_id: test-1
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8000/
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Connection: keep-alive
+            Content-Length: "61"
+            Content-Type: application/json
+            Host: localhost:8000
+            Postman-Token: df09f4f4-ccae-47c4-820c-794dd0c81985
+            User-Agent: PostmanRuntime/7.40.0
+        body: |-
+            {
+                "title" : "something123",
+                "content" : "something"
+            }
+        timestamp: 2024-08-06T16:26:37.822148815+05:30
+      resp:
+        status_code: 200
+        header:
+            Content-Length: "5"
+            Content-Type: text/plain; charset=utf-8
+            Date: Tue, 06 Aug 2024 10:59:00 GMT
+        body: Hello
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.Date: []
+      result:
+        status_code:
+            normal: true
+            expected: 200
+            actual: 200
+        headers_result:
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - text/plain; charset=utf-8
+              actual:
+                key: Content-Type
+                value:
+                    - text/plain; charset=utf-8
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Tue, 06 Aug 2024 10:56:37 GMT
+              actual:
+                key: Date
+                value:
+                    - Tue, 06 Aug 2024 10:59:00 GMT
+            - normal: true
+              expected:
+                key: Content-Length
+                value:
+                    - "5"
+              actual:
+                key: Content-Length
+                value:
+                    - "5"
+        body_result:
+            - normal: true
+              type: PLAIN
+              expected: Hello
+              actual: Hello
+        dep_result: []
+    - kind: Http
+      name: test-set-0
+      status: PASSED
+      started: 1722941940
+      completed: 1722941940
+      test_case_path: /home/ayush/Desktop/Open-Source/samples-go/mux-elasticsearch/keploy/test-set-0
+      mock_path: /home/ayush/Desktop/Open-Source/samples-go/mux-elasticsearch/keploy/test-set-0/mocks
+      test_case_id: test-2
+      req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8000/documents/075IJ5EBIPW7ZBPs5-8y
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Connection: keep-alive
+            Content-Length: "61"
+            Content-Type: application/json
+            Host: localhost:8000
+            Postman-Token: 63a32b9b-133b-4f69-9656-476b54a65040
+            User-Agent: PostmanRuntime/7.40.0
+        body: |-
+            {
+                "title" : "something123",
+                "content" : "something"
+            }
+        timestamp: 2024-08-06T16:26:50.734291385+05:30
+      resp:
+        status_code: 200
+        header:
+            Content-Length: "47"
+            Content-Type: application/json
+            Date: Tue, 06 Aug 2024 10:59:00 GMT
+        body: |
+            {"content":"something","title":"something123"}
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.Date: []
+      result:
+        status_code:
+            normal: true
+            expected: 200
+            actual: 200
+        headers_result:
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - application/json
+              actual:
+                key: Content-Type
+                value:
+                    - application/json
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Tue, 06 Aug 2024 10:56:50 GMT
+              actual:
+                key: Date
+                value:
+                    - Tue, 06 Aug 2024 10:59:00 GMT
+            - normal: true
+              expected:
+                key: Content-Length
+                value:
+                    - "47"
+              actual:
+                key: Content-Length
+                value:
+                    - "47"
+        body_result:
+            - normal: true
+              type: JSON
+              expected: |
+                {"content":"something","title":"something123"}
+              actual: |
+                {"content":"something","title":"something123"}
+        dep_result: []
+    - kind: Http
+      name: test-set-0
+      status: PASSED
+      started: 1722941940
+      completed: 1722941940
+      test_case_path: /home/ayush/Desktop/Open-Source/samples-go/mux-elasticsearch/keploy/test-set-0
+      mock_path: /home/ayush/Desktop/Open-Source/samples-go/mux-elasticsearch/keploy/test-set-0/mocks
+      test_case_id: test-3
+      req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8000/documents
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Connection: keep-alive
+            Content-Length: "65"
+            Content-Type: application/json
+            Host: localhost:8000
+            Postman-Token: 77746e28-0c1e-44c1-b665-486651d226d9
+            User-Agent: PostmanRuntime/7.40.0
+        body: |-
+            {
+                "title" : "somethingTitle",
+                "content" : "something22"
+            }
+        timestamp: 2024-08-06T16:27:28.593250857+05:30
+      resp:
+        status_code: 201
+        header:
+            Content-Length: "30"
+            Content-Type: application/json
+            Date: Tue, 06 Aug 2024 10:59:00 GMT
+        body: |
+            {"id":"1L5WJ5EBIPW7ZBPsPO8T"}
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.Date: []
+      result:
+        status_code:
+            normal: true
+            expected: 201
+            actual: 201
+        headers_result:
+            - normal: true
+              expected:
+                key: Content-Length
+                value:
+                    - "30"
+              actual:
+                key: Content-Length
+                value:
+                    - "30"
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - application/json
+              actual:
+                key: Content-Type
+                value:
+                    - application/json
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Tue, 06 Aug 2024 10:57:28 GMT
+              actual:
+                key: Date
+                value:
+                    - Tue, 06 Aug 2024 10:59:00 GMT
+        body_result:
+            - normal: true
+              type: JSON
+              expected: |
+                {"id":"1L5WJ5EBIPW7ZBPsPO8T"}
+              actual: |
+                {"id":"1L5WJ5EBIPW7ZBPsPO8T"}
+        dep_result: []
+    - kind: Http
+      name: test-set-0
+      status: PASSED
+      started: 1722941940
+      completed: 1722941940
+      test_case_path: /home/ayush/Desktop/Open-Source/samples-go/mux-elasticsearch/keploy/test-set-0
+      mock_path: /home/ayush/Desktop/Open-Source/samples-go/mux-elasticsearch/keploy/test-set-0/mocks
+      test_case_id: test-4
+      req:
+        method: PUT
+        proto_major: 1
+        proto_minor: 1
+        url: http://localhost:8000/documents/075IJ5EBIPW7ZBPs5-8y
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br
+            Connection: keep-alive
+            Content-Length: "65"
+            Content-Type: application/json
+            Host: localhost:8000
+            Postman-Token: 207b9990-8257-4576-8202-39896f1fc02b
+            User-Agent: PostmanRuntime/7.40.0
+        body: |-
+            {
+                "title" : "somethingTitle",
+                "content" : "something22"
+            }
+        timestamp: 2024-08-06T16:27:52.682428851+05:30
+      resp:
+        status_code: 200
+        header:
+            Content-Length: "0"
+            Date: Tue, 06 Aug 2024 10:59:00 GMT
+        body: ""
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.Date: []
+      result:
+        status_code:
+            normal: true
+            expected: 200
+            actual: 200
+        headers_result:
+            - normal: true
+              expected:
+                key: Content-Length
+                value:
+                    - "0"
+              actual:
+                key: Content-Length
+                value:
+                    - "0"
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Tue, 06 Aug 2024 10:57:52 GMT
+              actual:
+                key: Date
+                value:
+                    - Tue, 06 Aug 2024 10:59:00 GMT
+        body_result:
+            - normal: true
+              type: PLAIN
+              expected: ""
+              actual: ""
+        dep_result: []
+test_set: test-set-0

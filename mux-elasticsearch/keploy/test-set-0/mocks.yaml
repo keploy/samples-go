@@ -1,0 +1,112 @@
+version: api.keploy.io/v1beta1
+kind: Http
+name: mock-0
+spec:
+    metadata:
+        name: Http
+        operation: GET
+        type: HTTP_CLIENT
+    req:
+        method: GET
+        proto_major: 1
+        proto_minor: 1
+        url: /documents/_doc/075IJ5EBIPW7ZBPs5-8y
+        header:
+            Accept-Encoding: gzip
+            User-Agent: go-elasticsearch/8.14.0 (linux amd64; Go 1.22.5)
+            X-Elastic-Client-Meta: es=8.14.0,go=1.22.5,t=8.6.0,hc=1.22.5
+        body: ""
+        timestamp: 0001-01-01T00:00:00Z
+    resp:
+        status_code: 200
+        header:
+            Content-Encoding: gzip
+            Content-Length: "164"
+            Content-Type: application/json
+            X-Elastic-Product: Elasticsearch
+        body: '{"_index":"documents","_id":"075IJ5EBIPW7ZBPs5-8y","_version":2,"_seq_no":5,"_primary_term":1,"found":true,"_source":{"title":"something123","content":"something"}}'
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+    objects: []
+    created: 1722941810
+    reqTimestampMock: 2024-08-06T16:26:50.741516528+05:30
+    resTimestampMock: 2024-08-06T16:26:50.741516528+05:30
+---
+version: api.keploy.io/v1beta1
+kind: Http
+name: mock-1
+spec:
+    metadata:
+        name: Http
+        operation: POST
+        type: HTTP_CLIENT
+    req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: /documents/_doc
+        header:
+            Accept-Encoding: gzip
+            Content-Length: "50"
+            Content-Type: application/json
+            User-Agent: go-elasticsearch/8.14.0 (linux amd64; Go 1.22.5)
+            X-Elastic-Client-Meta: es=8.14.0,go=1.22.5,t=8.6.0,hc=1.22.5
+        body: '{"title":"somethingTitle","content":"something22"}'
+        timestamp: 0001-01-01T00:00:00Z
+    resp:
+        status_code: 201
+        header:
+            Content-Encoding: gzip
+            Content-Length: "161"
+            Content-Type: application/json
+            Location: /documents/_doc/1L5WJ5EBIPW7ZBPsPO8T
+            X-Elastic-Product: Elasticsearch
+        body: '{"_index":"documents","_id":"1L5WJ5EBIPW7ZBPsPO8T","_version":1,"result":"created","_shards":{"total":2,"successful":1,"failed":0},"_seq_no":6,"_primary_term":1}'
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+    objects: []
+    created: 1722941848
+    reqTimestampMock: 2024-08-06T16:27:28.815334036+05:30
+    resTimestampMock: 2024-08-06T16:27:28.815334036+05:30
+---
+version: api.keploy.io/v1beta1
+kind: Http
+name: mock-2
+spec:
+    metadata:
+        name: Http
+        operation: POST
+        type: HTTP_CLIENT
+    req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: /documents/_update/075IJ5EBIPW7ZBPs5-8y
+        header:
+            Accept-Encoding: gzip
+            Content-Length: "59"
+            Content-Type: application/json
+            User-Agent: go-elasticsearch/8.14.0 (linux amd64; Go 1.22.5)
+            X-Elastic-Client-Meta: es=8.14.0,go=1.22.5,t=8.6.0,hc=1.22.5
+        body: '{"doc": {"title":"somethingTitle","content":"something22"}}'
+        timestamp: 0001-01-01T00:00:00Z
+    resp:
+        status_code: 200
+        header:
+            Content-Encoding: gzip
+            Content-Length: "161"
+            Content-Type: application/json
+            X-Elastic-Product: Elasticsearch
+        body: '{"_index":"documents","_id":"075IJ5EBIPW7ZBPs5-8y","_version":3,"result":"updated","_shards":{"total":2,"successful":1,"failed":0},"_seq_no":7,"_primary_term":1}'
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+    objects: []
+    created: 1722941872
+    reqTimestampMock: 2024-08-06T16:27:52.778818516+05:30
+    resTimestampMock: 2024-08-06T16:27:52.778818516+05:30
