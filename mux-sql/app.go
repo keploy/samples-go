@@ -107,7 +107,10 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
-	w.Write(response)
+	_,err:=w.Write(response)
+	if err != nil {
+		log.Println("Error writing response: ", err)
+	}
 }
 
 func (a *App) getProducts(w http.ResponseWriter, r *http.Request) {
@@ -137,7 +140,12 @@ func (a *App) createProduct(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		return
 	}
-	defer r.Body.Close()
+	defer func() {
+		if err := r.Body.Close(); err != nil {
+			// Handle the error, e.g., log it
+			log.Printf("Error closing response body: %v", err)
+		}
+	}()
 
 	if err := p.createProduct(r.Context(), a.DB); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
@@ -161,7 +169,12 @@ func (a *App) updateProduct(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, http.StatusBadRequest, "Invalid resquest payload")
 		return
 	}
-	defer r.Body.Close()
+	defer func() {
+		if err := r.Body.Close(); err != nil {
+			// Handle the error, e.g., log it
+			log.Printf("Error closing response body: %v", err)
+		}
+	}()
 	p.ID = id
 
 	if err := p.updateProduct(r.Context(), a.DB); err != nil {

@@ -77,7 +77,10 @@ func TestGetNonExistentProduct(t *testing.T) {
 	checkResponseCode(t, http.StatusNotFound, response.Code)
 
 	var m map[string]string
-	json.Unmarshal(response.Body.Bytes(), &m)
+	if err := json.Unmarshal(response.Body.Bytes(), &m); err != nil {
+		// Handle the error, e.g., log it or return it
+		log.Printf("Error unmarshalling JSON: %v", err)
+	}
 	if m["error"] != "Product not found" {
 		t.Errorf("Expected the 'error' key of the response to be set to 'Product not found'. Got '%s'", m["error"])
 	}
@@ -95,7 +98,10 @@ func TestCreateProduct(t *testing.T) {
 	checkResponseCode(t, http.StatusCreated, response.Code)
 
 	var m map[string]interface{}
-	json.Unmarshal(response.Body.Bytes(), &m)
+	if err := json.Unmarshal(response.Body.Bytes(), &m); err != nil {
+		// Handle the error, e.g., log it or return it
+		log.Printf("Error unmarshalling JSON: %v", err)
+	}
 
 	if m["name"] != "test product" {
 		t.Errorf("Expected product name to be 'test product'. Got '%v'", m["name"])
@@ -123,7 +129,10 @@ func TestCreateProductInvalidJSON(t *testing.T) {
 	checkResponseCode(t, http.StatusBadRequest, response.Code)
 
 	var m map[string]string
-	json.Unmarshal(response.Body.Bytes(), &m)
+	if err := json.Unmarshal(response.Body.Bytes(), &m); err != nil {
+		// Handle the error, e.g., log it or return it
+		log.Printf("Error unmarshalling JSON: %v", err)
+	}
 	if m["error"] != "Invalid request payload" {
 		t.Errorf("Expected the 'error' key of the response to be set to 'Invalid request payload'. Got '%s'", m["error"])
 	}
