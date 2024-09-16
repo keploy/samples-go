@@ -21,10 +21,10 @@ var Logger *zap.Logger
 
 var Database *sql.DB
 
-func handleDeferError(fn func()	error) {
-    if err := fn(); err != nil {
-        Logger.Error("error occurred during deferred call: %v", zap.Error(err))
-    }
+func handleDeferError(fn func() error) {
+	if err := fn(); err != nil {
+		Logger.Error("error occurred during deferred call: %v", zap.Error(err))
+	}
 }
 
 func main() {
