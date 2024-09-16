@@ -26,6 +26,7 @@ type App struct {
 // tom: initial function is empty, it's filled afterwards
 // func (a *App) Initialize(user, password, dbname string) { }
 
+// Initialize sets up the application and configures the database connection.
 // tom: added "sslmode=disable" to connection string
 func (a *App) Initialize(host, user, password, dbname string) error {
 
@@ -50,9 +51,8 @@ func (a *App) Initialize(host, user, password, dbname string) error {
 	return err
 }
 
+// Run starts the application server
 // tom: initial version
-// func (a *App) Run(addr string) { }
-// improved version
 func (a *App) Run(addr string) {
 	go func() {
 		if err := a.Server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
