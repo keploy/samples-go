@@ -12,6 +12,7 @@ import (
 )
 
 func Init() {
+	time.Sleep(2 * time.Second)
 	r := routes.NewRouter()
 	port := "3001"
 	srv := &http.Server{

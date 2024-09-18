@@ -28,7 +28,7 @@ type App struct {
 
 // tom: added "sslmode=disable" to connection string
 func (a *App) Initialize(host, user, password, dbname string) error {
-
+	time.Sleep(2 * time.Second)
 	connectionString := fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		host, "5432", user, password, dbname)

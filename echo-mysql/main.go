@@ -4,14 +4,16 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
-	"github.com/joho/godotenv"
 	"github.com/hermione/echo-mysql/uss"
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
 
 func main() {
+	time.Sleep(2 * time.Second)
 	appConfig, err := godotenv.Read()
 	if err != nil {
 		log.Fatalf("Error reading .env file %s", err.Error())

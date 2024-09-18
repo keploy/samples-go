@@ -4,6 +4,7 @@ import (
 	"http-pokeapi/internal/pokeapi"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/go-chi/chi"
 )
@@ -13,6 +14,7 @@ type apiconfig struct {
 }
 
 func main() {
+	time.Sleep[2*time.Second]
 	cfg := &apiconfig{
 		client: pokeapi.Client{},
 	}

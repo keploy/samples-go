@@ -84,6 +84,7 @@ func storeTimeInMongoDB(msg string) error {
 }
 
 func main() {
+	time.Sleep(2 * time.Second)
 	router := http.NewServeMux()
 	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
 	var err error

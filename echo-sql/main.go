@@ -4,14 +4,15 @@ package main
 import (
 	"context"
 	"database/sql"
+	"net/http"
 	"os"
 	"os/signal"
+	"syscall"
 	"time"
-	"net/http"
+
 	"github.com/labstack/echo/v4"
 	_ "github.com/lib/pq"
 	"go.uber.org/zap"
-	"syscall"
 )
 
 var port = "8082"
@@ -20,19 +21,20 @@ var Logger *zap.Logger
 
 var Database *sql.DB
 
-func handleDeferError(err error) {
-	if err != nil {
-		Logger.Fatal(err.Error())
+func handleDeferError(fn func() error) {
+	if err := fn(); err != nil {
+		Logger.Error("error occurred during deferred call: %v", zap.Error(err))
 	}
 }
 
 func main() {
+	time.Sleep(2 * time.Second)
 	if os.Getenv("PORT") != "" {
 		port = os.Getenv("PORT")
 	}
 	var err error
 	Logger, _ = zap.NewProduction()
-	defer handleDeferError(Logger.Sync()) // flushes buffer
+	defer handleDeferError(Logger.Sync) // flushes buffer
 
 	Database, err = NewConnection(ConnectionDetails{
 		host: "postgresDb",
@@ -48,7 +50,7 @@ func main() {
 		Logger.Fatal("Failed to establish connection to local PostgreSQL instance:", zap.Error(err))
 	}
 
-	defer handleDeferError(Database.Close())
+	defer handleDeferError(Database.Close)
 
 	// init Keploy
 

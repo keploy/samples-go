@@ -85,7 +85,7 @@ func InsertURL(c context.Context, entry URLEntry) error {
 	`
 
 	selectQuery := `
-			SELECT * 
+			SELECT *
 			FROM url_map
 			WHERE id = $1
 	`
@@ -100,7 +100,7 @@ func InsertURL(c context.Context, entry URLEntry) error {
 	if err != nil {
 		return err
 	}
-	defer handleDeferError(res.Close())
+	defer handleDeferError(res.Close)
 	if res.Next() { // If we get rows back, that means we have a duplicate URL
 		var savedEntry URLEntry
 		err := res.Scan(&savedEntry.ID, &savedEntry.RedirectURL, &savedEntry.CreatedAt, &savedEntry.UpdatedAt)
@@ -133,7 +133,7 @@ func GetURL(c echo.Context) error {
 	id := c.Param("param")
 
 	findURLQuery := `
-		SELECT * 
+		SELECT *
 		FROM url_map
 		WHERE id = $1
 	`
@@ -143,7 +143,7 @@ func GetURL(c echo.Context) error {
 		Logger.Error(err.Error())
 		return echo.NewHTTPError(http.StatusInternalServerError, "Error encountered while attempting to lookup URL.")
 	}
-	defer handleDeferError(res.Close())
+	defer handleDeferError(res.Close)
 	if !res.Next() {
 		return echo.NewHTTPError(http.StatusNotFound, "Invalid URL ID.")
 	}
@@ -208,7 +208,7 @@ func UpdateURL(c echo.Context) error {
 	}
 
 	selectQuery := `
-			SELECT * 
+			SELECT *
 			FROM url_map
 			WHERE id = $1
 	`
@@ -223,7 +223,7 @@ func UpdateURL(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	defer handleDeferError(res.Close())
+	defer handleDeferError(res.Close)
 	if res.Next() { // If we get rows back, that means we have a duplicate URL
 		var savedEntry URLEntry
 		err := res.Scan(&savedEntry.ID, &savedEntry.RedirectURL, &savedEntry.CreatedAt, &savedEntry.UpdatedAt)

@@ -5,11 +5,13 @@ import (
 	"S3-Keploy/config"
 	"S3-Keploy/routes"
 	"log"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 func main() {
+	time.Sleep(2 * time.Second)
 	awsService := config.Configuration()
 
 	app := fiber.New()
