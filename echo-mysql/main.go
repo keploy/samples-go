@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
-	"github.com/joho/godotenv"
 	"github.com/hermione/echo-mysql/uss"
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
@@ -66,6 +67,7 @@ func StartHTTPServer() {
 		if err != nil {
 			return c.String(http.StatusInternalServerError, fmt.Sprintf("Failed Persisiting Entity with Error %s", err.Error()))
 		} else {
+			req.UpdatedAt = req.UpdatedAt.Truncate(time.Second)
 			return c.JSON(http.StatusOK, req)
 		}
 	})
