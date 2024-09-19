@@ -13,7 +13,7 @@ type ShortCodeInfo struct {
 	UID       uint64    `json:"id" sql:"AUTO_INCREMENT" gorm:"primary_key"`
 	ShortCode string    `json:"shortcode" gorm:"uniqueIndex"`
 	URL       string    `json:"url"`
-	UpdatedAt time.Time `json:"updated_at"`
+	UpdatedAt time.Time `json:"updated_at" gorm:"datetime(0);autoUpdateTime"`
 }
 
 type USSStore struct {
