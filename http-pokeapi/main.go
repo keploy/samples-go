@@ -14,7 +14,7 @@ type apiconfig struct {
 }
 
 func main() {
-	time.Sleep[2*time.Second]
+	time.Sleep(2 * time.Second)
 	cfg := &apiconfig{
 		client: pokeapi.Client{},
 	}
