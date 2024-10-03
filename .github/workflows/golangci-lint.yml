@@ -26,10 +26,17 @@ jobs:
       fail-fast: false
       matrix:
         working-directory:
+          - echo-mysql
           - echo-sql
+          - fasthttp-postgres
           - gin-mongo
           - gin-redis
+          - go-jwt
+          - go-twilio
           - graphql-sql
+          - http-pokeapi
+          - mux-elasticsearch
+          - mux-mysql
           - mux-sql
           - S3-Keploy
           - sse-svelte
