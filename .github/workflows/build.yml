@@ -1,0 +1,51 @@
+name: Build Go Sample Projects
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.22' 
+
+      - name: Build projects
+        run: |
+          #!/bin/bash
+          cd /home/runner/work/samples-go/samples-go
+
+          for dir in */; do
+            if [ -d "$dir" ] && [ -f "${dir}go.mod" ]; then
+              echo "Building project in $dir"
+
+              # Change to the project directory
+              cd "$dir" || continue
+
+              # Build the project
+              if go build -o app; then
+                echo "Successfully built $dir"
+              else
+                echo "Failed to build $dir" >&2
+                exit 1
+              fi
+
+              # Return to the base directory
+              cd ..
+            else
+              echo "Skipping $dir, no go.mod file found."
+            fi
+          done
+
+          echo "All projects processed."
