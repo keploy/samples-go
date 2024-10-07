@@ -3,7 +3,6 @@ name: Build Go Sample Projects
 on:
   push:
     branches:
-      - master
       - main
   pull_request:
     types: [opened, edited, synchronize, reopened]
