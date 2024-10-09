@@ -38,6 +38,11 @@ Run the HTTP server in record mode to capture the incoming HTTP calls and outgoi
 keploy record -c "httpserver"
 ```
 
+Make a curl request to the http server :
+```bash
+curl "http://localhost:8080/hello?name=Jack"
+```
+
 ### 3. Run the HTTP Server in Test Mode
 
 After recording, run the HTTP server in test mode to replay the captured calls:
