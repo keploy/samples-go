@@ -1,6 +1,7 @@
 # gRPC & HTTP Server Setup with Keploy
 
 This guide explains how to set up and run the gRPC and HTTP servers using Keploy to capture and test the HTTP calls.
+Here support grpc client (Unary rpc) has been showed, where keploy is recording incoming http calls and outgoing grpc calls. 
 
 ## Steps to Run
 
@@ -52,5 +53,3 @@ keploy test -c "httpserver"
 ```
 
 ---
-
-This `README.md` provides a clear step-by-step guide for setting up and using your gRPC and HTTP servers with Keploy. Let me know if you'd like any changes!
