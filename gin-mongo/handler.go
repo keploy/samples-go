@@ -3,9 +3,12 @@ package main
 import (
 	"context"
 	"crypto/sha256"
+	"errors"
 	"fmt"
+	"log"
 	"math/big"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -24,85 +27,93 @@ type URL struct {
 	URL     string    `json:"URL" bson:"url"`
 }
 
-func Get(ctx context.Context, id string) (*URL, error) {
+func validateURL(urlString string) error {
+	parsedURL, err := url.ParseRequestURI(urlString)
+	if err != nil {
+		return err
+	}
+	if parsedURL.Scheme == "" || parsedURL.Host == "" {
+		return errors.New("invalid URL format")
+	}
+	return nil
+}
+
+func Get(ctx context.Context, col *mongo.Collection, id string) (*URL, error) {
 	filter := bson.M{"_id": id}
 	var u URL
 	err := col.FindOne(ctx, filter).Decode(&u)
-	if err != nil {
-		return nil, err
-	}
-	return &u, nil
+	return &u, err
 }
 
-func Upsert(ctx context.Context, u URL) error {
+func Upsert(ctx context.Context, col *mongo.Collection, u URL) error {
 	upsert := true
 	opt := &options.UpdateOptions{
 		Upsert: &upsert,
 	}
 	filter := bson.M{"_id": u.ID}
 	update := bson.D{primitive.E{Key: "$set", Value: u}}
-
 	_, err := col.UpdateOne(ctx, filter, update, opt)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
-func getURL(c *gin.Context) {
+func getURL(c *gin.Context, col *mongo.Collection, logger *zap.Logger) {
 	hash := c.Param("param")
 	if hash == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "please append url hash"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing URL hash"})
 		return
 	}
-
-	u, err := Get(c.Request.Context(), hash)
+	
+	u, err := Get(c.Request.Context(), col, hash)
 	if err != nil {
-		logger.Error("failed to find url in the database", zap.Error(err), zap.String("hash", hash))
-		c.JSON(http.StatusNotFound, gin.H{"error": "url not found"})
+		logger.Error("Failed to find URL", zap.Error(err), zap.String("hash", hash))
+		c.JSON(http.StatusNotFound, gin.H{"error": "URL not found"})
 		return
 	}
 	c.Redirect(http.StatusSeeOther, u.URL)
 }
 
-func putURL(c *gin.Context) {
+func putURL(c *gin.Context, col *mongo.Collection) {
 	var m map[string]string
-
-	err := c.ShouldBindJSON(&m)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "failed to decode req"})
+	if err := c.ShouldBindJSON(&m); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
 		return
 	}
-	u := m["url"]
 
+	u := m["url"]
 	if u == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "missing url param"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing URL"})
+		return
+	}
+
+	if err := validateURL(u); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid URL format"})
 		return
 	}
 
 	t := time.Now()
 	id := GenerateShortLink(u)
-	err = Upsert(c.Request.Context(), URL{
+	urlEntry := URL{
 		ID:      id,
 		Created: t,
 		Updated: t,
 		URL:     u,
-	})
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+	}
+
+	if err := Upsert(c.Request.Context(), col, urlEntry); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save URL"})
 		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{
-		"ts":  time.Now().UnixNano(),
+		"ts":  t.UnixNano(),
 		"url": "http://localhost:8080/" + id,
 	})
 }
 
 func New(host, db string) (*mongo.Client, error) {
-	clientOptions := options.Client()
-
-	clientOptions.ApplyURI("mongodb://" + host + "/" + db + "?retryWrites=true&w=majority")
-
+	clientOptions := options.Client().ApplyURI(
+		fmt.Sprintf("mongodb://%s/%s?retryWrites=true&w=majority", host, db),
+	)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	return mongo.Connect(ctx, clientOptions)
@@ -112,6 +123,11 @@ func GenerateShortLink(initialLink string) string {
 	urlHashBytes := sha256Of(initialLink)
 	generatedNumber := new(big.Int).SetBytes(urlHashBytes).Uint64()
 	finalString := base58Encoded([]byte(fmt.Sprintf("%d", generatedNumber)))
+	
+	// Ensure consistent length and handle potential encoding issues
+	if len(finalString) < 8 {
+		finalString = finalString + "00000000"
+	}
 	return finalString[:8]
 }
 
@@ -123,6 +139,32 @@ func sha256Of(input string) []byte {
 
 func base58Encoded(bytes []byte) string {
 	encoding := base58.BitcoinEncoding
-	encoded, _ := encoding.Encode(bytes)
+	encoded, err := encoding.Encode(bytes)
+	if err != nil {
+		log.Printf("Encoding error: %v", err)
+		return ""
+	}
 	return string(encoded)
+}
+
+func main() {
+	logger, _ := zap.NewProduction()
+	defer logger.Sync()
+
+	client, err := New("localhost", "urlshortener")
+	if err != nil {
+		log.Fatalf("Failed to connect to MongoDB: %v", err)
+	}
+
+	col := client.Database("urlshortener").Collection("urls")
+	
+	r := gin.Default()
+	r.GET("/:param", func(c *gin.Context) {
+		getURL(c, col, logger)
+	})
+	r.POST("/shorten", func(c *gin.Context) {
+		putURL(c, col)
+	})
+
+	r.Run(":8080")
 }
