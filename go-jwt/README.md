@@ -1,5 +1,6 @@
 # Go-JWT
-A sample app 
+
+A sample app with CRUD operations using Go and JWT.
 
 ## Installation Setup
 
@@ -9,6 +10,7 @@ go mod download
 ```
 
 ## Installation Keploy
+
 Install keploy via one-click:-
 
 ```sh
@@ -48,26 +50,29 @@ curl --request GET \
       --url http://localhost:8000/health \
       --header 'Accept: */*' \
       --header 'Host: localhost:8000' \
-      --header 'User-Agent: curl/7.81.0' 
+      --header 'User-Agent: curl/7.81.0'
 ```
-this will return the response. 
+
+this will return the response.
+
 ```
 {"status": "healthy"}
 ```
 
 2. Fetch the Products
+
 ```bash
 curl --request GET \
       --url http://localhost:8000/generate-token \
       --header 'Host: localhost:8000' \
       --header 'User-Agent: curl/7.81.0' \
-      --header 'Accept: */*' 
+      --header 'Accept: */*'
 ```
 
 we will get output:
 
 ```json
-{"token":"<your_jwt_token>"}
+{ "token": "<your_jwt_token>" }
 ```
 
 3. Fetch a single product
@@ -77,15 +82,16 @@ curl --request GET \
       --url http://localhost:8000/check-token?token=<your_jwt_token> \
       --header 'Accept: */*' \
       --header 'Host: localhost:8000' \
-      --header 'User-Agent: curl/7.81.0' 
+      --header 'User-Agent: curl/7.81.0'
 ```
 
 we will get output:-
+
 ```json
-{"username" : "example_user"}
+{ "username": "example_user" }
 ```
 
-Now, since these API calls were captured as editable testcases and written to ``keploy/tests folder``. The keploy directory would also have `mocks` files that contains all the outputs. 
+Now, since these API calls were captured as editable testcases and written to `keploy/tests folder`. The keploy directory would also have `mocks` files that contains all the outputs.
 
 ![Testcase](./img/testcase.png?raw=true)
 
@@ -100,5 +106,3 @@ sudo -E keploy test -c "./go-jwt" --delay 10
 Once done, you can see the Test Runs on the Keploy server, like this:
 
 ![Testrun](./img/testrun.png?raw=true)
-
-
