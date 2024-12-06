@@ -1,15 +1,17 @@
 ## Introduction
 
-A sample url shortener app to test Keploy integration capabilities using [Gin](https://gin-gonic.com/) and [mongoDB](https://www.mongodb.com/).
+This is a sample URL shortener app built using Gin and MongoDB. It demonstrates Keploy's integration capabilities for automated API testing and mocking.
 
 ## Setup URL shortener
+
+### Clone the repository
 
 ```bash
 git clone https://github.com/keploy/samples-go.git && cd samples-go/gin-mongo
 go mod download
 ```
 
-## Installation
+### Install Keploy
 
 ```bash
 curl --silent -O -L https://keploy.io/install.sh && source install.sh
@@ -19,24 +21,25 @@ curl --silent -O -L https://keploy.io/install.sh && source install.sh
 
 Keploy can be used on Linux, Windows and MacOS through [Docker](https://docs.docker.com/engine/install/).
 
-> Note: To run Keploy on MacOS through [Docker](https://docs.docker.com/desktop/release-notes/#4252) the version must be ```4.25.2``` or above.
+> Note: To run Keploy on MacOS through [Docker](https://docs.docker.com/desktop/release-notes/#4252) the version must be `4.25.2` or above.
 
+## Start MongoDB Instance
 
-### Let's start the MongoDB Instance
 Using the docker-compose file we will start our mongodb instance:-
 
 ```bash
 sudo docker run -p 27017:27017 -d --network keploy-network --name mongoDb mongo
 ```
 
-Now, we will create the docker image of our application:-
+## Build and Run the App
 
+Now, we will create the docker image of our application:-
 
 ```bash
 docker build -t gin-app:1.0 .
 ```
 
-### Capture the Testcases
+## Capture the Testcases
 
 ```shell
 keploy record -c "docker run -p 8080:8080 --name MongoApp --network keploy-network gin-app:1.0"
@@ -51,11 +54,11 @@ curl --request POST \
   --url http://localhost:8080/url \
   --header 'content-type: application/json' \
   --data '{
-  "url": "https://google.com"
+  "url": "https://keploy.io"
 }'
 ```
 
-this will return the shortened url. 
+this will return the shortened url.
 
 ```json
 {
@@ -75,7 +78,7 @@ or by querying through the browser `http://localhost:8080/Lhr4BWAi` _Now, let's 
 
 Now both these API calls were captured as a testcase and should be visible on the Keploy CLI. You should be seeing an app named `keploy folder` with the test cases we just captured and data mocks created.
 
-### Run the captured testcases
+## Run the captured testcases
 
 Now that we have our testcase captured, run the test file.
 
@@ -107,7 +110,7 @@ This time all the test cases will pass.
 
 ## Run app Natively on local machine
 
-#### Let's start the MongoDB Instance
+### Let's start the MongoDB Instance
 
 Spin up your mongo container using
 
