@@ -1,7 +1,10 @@
-# Product Catelog
-A sample url shortener app to test Keploy integration capabilities
+# Product Catalog
+
+A sample URL shortener application to test Keploy's integration capabilities.
 
 ## Installation Setup
+
+Clone the repository and install dependencies:
 
 ```bash
 git clone https://github.com/keploy/samples-go.git && cd samples-go/mux-sql
@@ -9,15 +12,16 @@ go mod download
 ```
 
 ## Installation Keploy
+
 Install keploy via one-click:-
 
 ```sh
 curl --silent -O -L https://keploy.io/install.sh && source install.sh
 ```
 
-### Start Postgres Instance 
+## Start Postgres Instance
 
-Using the docker-compose file we will start our postgres instance:-
+Use the provided `docker-compose` file to start a PostgreSQL instance:
 
 ```bash
 docker-compose up -d postgres
@@ -27,15 +31,19 @@ docker-compose up -d postgres
 
 > **Since we have setup our sample-app natively set the host to `localhost` on line 10.**
 
-### Capture the Testcases
+## Capture the Testcases
 
-Now, we will create the binary of our application:-
+### Build the Application Binary
+
+Generate the binary for the application:
 
 ```zsh
 go build -cover
 ```
 
-Once we have our binary file ready,this command will start the recording of API calls using ebpf:-
+### Record API Calls
+
+Use the Keploy `record` command to start capturing API calls via `eBPF`:
 
 ```shell
 sudo -E keploy record -c "./test-app-product-catelog"
@@ -54,11 +62,13 @@ curl --request POST \
   --url http://localhost:8010/product \
   --header 'content-type: application/json' \
   --data '{
-    "name":"Bubbles", 
+    "name":"Bubbles",
     "price": 123
 }'
 ```
-this will return the response. 
+
+this will return the response.
+
 ```
 {
     "id": 1,
@@ -68,6 +78,7 @@ this will return the response.
 ```
 
 2. Fetch the Products
+
 ```bash
 curl --request GET \
   --url http://localhost:8010/products
@@ -76,21 +87,24 @@ curl --request GET \
 we will get output:
 
 ```json
-[{"id":1,"name":"Bubbles","price":123},{"id":2,"name":"Bubbles","price":123}]
+[
+  { "id": 1, "name": "Bubbles", "price": 123 },
+  { "id": 2, "name": "Bubbles", "price": 123 }
+]
 ```
 
 3. Fetch a single product
 
-```sh
+````sh
 curl --request GET \
   --url http://localhost:8010/product/1
 
 we will get output:-
 ```json
 {"id":1,"name":"Bubbles","price":123}
-```
+````
 
-Now, since these API calls were captured as editable testcases and written to ``keploy/tests folder``. The keploy directory would also have `mocks` files that contains all the outputs of postgres operations. 
+Now, since these API calls were captured as editable testcases and written to `keploy/tests folder`. The keploy directory would also have `mocks` files that contains all the outputs of postgres operations.
 
 ![Testcase](./img/testcase.png?raw=true)
 
@@ -115,18 +129,19 @@ With the three API calls that we made, we got around `55.6%` of coverage
 ## Create Unit Testcase with Keploy
 
 ### Prequiste
+
 AI model API_KEY to use:
 
 - OpenAI's GPT-4o.
 - Alternative LLMs via [litellm](https://github.com/BerriAI/litellm?tab=readme-ov-file#quick-start-proxy---cli).
 
-### Setup 
+### Setup Dependencies
 
-Download Cobertura formatted coverage report dependencies.
+Install dependencies for generating Cobertura-formatted coverage reports:
 
 ```bash
 go install github.com/axw/gocov/gocov@v1.1.0
-go install github.com/AlekSi/gocov-xml@v1.1.0 
+go install github.com/AlekSi/gocov-xml@v1.1.0
 ```
 
 Get API key from [OpenAI](https://platform.openai.com/) or API Key from other LLM
@@ -137,11 +152,12 @@ export API_KEY=<LLM_MODEL_API_KEY>
 
 ### Generate Unit tests
 
-Let's check the current code coverage of out application : - 
+Let's check the current code coverage of out application : -
 
 ```bash
 go test -v ./... -coverprofile=coverage.out && gocov convert coverage.out | gocov-xml > coverage.xml
 ```
+
 We got around 44.1% of code coverage.
 
 ![Go Test](./img/mux-utg.png?raw=true)
