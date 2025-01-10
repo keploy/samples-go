@@ -1,0 +1,26 @@
+services:
+  grpc-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.grpcserver
+    container_name: grpcServer
+    ports:
+      - "50051:50051"
+    networks:
+      - keploy-network
+  
+  grpc-client:
+    build:
+      context: .
+      dockerfile: Dockerfile.grpcclient
+    container_name: grpcClient
+    ports:
+      - "8080:8080"
+    depends_on:
+      - grpc-server
+    networks:
+      - keploy-network
+
+networks:
+  keploy-network:
+    driver: bridge

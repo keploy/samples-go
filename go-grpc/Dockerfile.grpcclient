@@ -1,0 +1,20 @@
+# Build stage
+FROM golang:1.23.4 AS builder
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy go module files and download dependencies
+COPY . .
+
+# Download dependencies
+RUN go mod tidy
+
+# Build the binary
+RUN go build -o grpc-client ./client
+
+# Expose the gRPC client port
+EXPOSE 8080
+
+# Set the entry point to run both the client
+CMD ["./grpc-client"]

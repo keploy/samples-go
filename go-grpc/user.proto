@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "./user";
+
+service UserService {
+  // Normal CRUD operations
+  rpc CreateUser (UserRequest) returns (UserResponse);
+  rpc GetUsers (Empty) returns (UsersResponse);
+  rpc UpdateUser (UserRequest) returns (UserResponse);
+  rpc DeleteUser (UserID) returns (Empty);
+
+  // Client Streaming RPCs
+  rpc CreateUsersStream (stream UserRequest) returns (UsersResponse);
+  rpc DeleteUsersStream (stream UserID) returns (Empty);
+
+  // Server Streaming RPC
+  rpc GetUsersStream (Empty) returns (stream UserResponse);
+
+  // Bi-Directional Streaming RPC
+  rpc UpdateUsersStream (stream UserRequest) returns (stream UserResponse);
+}
+
+message User {
+  int32 id = 1;
+  string name = 2;
+  string email = 3;
+  int32 age = 4;
+}
+
+// UserRequest represents the user data for create/update operations
+message UserRequest {
+  int32 id = 1;
+  string name = 2; 
+  string email = 3;
+  int32 age = 4;
+}
+
+// UserResponse contains a single User object in response to a CRUD operation
+message UserResponse {
+  User user = 1;
+}
+
+// UsersResponse contains a list of users returned in a query
+message UsersResponse {
+  repeated User users = 1;
+}
+
+// UserId represents a user ID for delete operations
+message UserID {
+  int32 id = 1;
+}
+
+// Empty is a placeholder message
+message Empty {}
