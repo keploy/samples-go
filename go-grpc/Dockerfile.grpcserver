@@ -11,7 +11,7 @@ COPY . .
 RUN go mod tidy
 
 # Build the binary
-RUN go build -o grpc-server ./server
+RUN go build -o grpc-server .
 
 # Expose the gRPC server port
 EXPOSE 50051
