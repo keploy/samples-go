@@ -19,7 +19,7 @@ Keploy can be used on Linux, Windows and MacOS through [Docker](https://docs.doc
 
 ### Let's create the binary of our application
 ```bash
-go build -o grpc-server ./server
+go build -o grpc-server .
 go build -o grpc-client ./client
 ```
 
