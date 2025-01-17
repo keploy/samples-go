@@ -17,7 +17,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
   cancel-in-progress: true
 
-
 jobs:
   golangci:
     name: lint
@@ -31,6 +30,7 @@ jobs:
           - fasthttp-postgres
           - gin-mongo
           - gin-redis
+          - go-grpc
           - go-jwt
           - go-twilio
           - graphql-sql
@@ -41,12 +41,12 @@ jobs:
           - S3-Keploy
           - sse-svelte
           - users-profile
-          
+
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v4
         with:
-          go-version: '1.21'
+          go-version: "1.21"
           cache: false
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
