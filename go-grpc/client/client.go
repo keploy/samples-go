@@ -327,5 +327,8 @@ func main() {
 	r.DELETE("/users/stream", deleteUsersStream)
 
 	// Start Gin server
-	r.Run(":8080")
+	err := r.Run(":8080")
+	if err != nil {
+		log.Fatalf("Failed to start server: %v", err)
+	}
 }

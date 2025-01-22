@@ -49,9 +49,9 @@ func (r *Repository) GetAllBooks(ctx context.Context) ([]entity.Book, error) {
 	return mm.convert(), nil
 }
 
-func (r *Repository) GetBookById(ctx context.Context, id int) ([]entity.Book, error) {
+func (r *Repository) GetBookByID(ctx context.Context, id int) ([]entity.Book, error) {
 	var mm models
-	rows, err := r.db.QueryContext(ctx, getBookById, id)
+	rows, err := r.db.QueryContext(ctx, getBookByID, id)
 	if err != nil {
 		fmt.Println("1")
 		return nil, err
@@ -67,9 +67,9 @@ func (r *Repository) GetBookById(ctx context.Context, id int) ([]entity.Book, er
 	return mm.convert(), nil
 }
 
-func (r *Repository) GetBooksByAuthorId(ctx context.Context, id int) ([]entity.Book, error) {
+func (r *Repository) GetBooksByAuthorID(ctx context.Context, id int) ([]entity.Book, error) {
 	var mm models
-	rows, err := r.db.QueryContext(ctx, getBooksByAuthorId, id)
+	rows, err := r.db.QueryContext(ctx, getBooksByAuthorID, id)
 	if err != nil {
 		return nil, err
 	}

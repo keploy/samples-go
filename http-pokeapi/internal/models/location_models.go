@@ -1,3 +1,5 @@
+// Package models defines the data structures used to represent various
+// objects in the PokeAPI, including Location, Pokelocation, and related fields.
 package models
 
 type Location struct {

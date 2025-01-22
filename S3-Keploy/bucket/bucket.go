@@ -100,13 +100,13 @@ func (basics Basics) DeleteAllObjects(bucketName string) (message string) {
 	for _, key := range result.Contents {
 		objectKeys = append(objectKeys, *key.Key)
 	}
-	var objectIds []types.ObjectIdentifier
+	var objectIDs []types.ObjectIdentifier
 	for _, key := range objectKeys {
-		objectIds = append(objectIds, types.ObjectIdentifier{Key: aws.String(key)})
+		objectIDs = append(objectIDs, types.ObjectIdentifier{Key: aws.String(key)})
 	}
 	_, err = basics.S3Client.DeleteObjects(context.TODO(), &s3.DeleteObjectsInput{
 		Bucket: aws.String(bucketName),
-		Delete: &types.Delete{Objects: objectIds},
+		Delete: &types.Delete{Objects: objectIDs},
 	})
 	if err != nil {
 		return "Couldn't delete objects from bucket " + bucketName + " . Here's why: " + err.Error() + "\n"

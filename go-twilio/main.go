@@ -1,6 +1,8 @@
+// Package main starts the application
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -67,7 +69,7 @@ func gracefulShutdown(router *gin.Engine) {
 	fmt.Println("Shutting down server...")
 
 	// The context is used to inform the server it has 5 seconds to complete the ongoing requests
-	if err := srv.Shutdown(nil); err != nil {
+	if err := srv.Shutdown(context.TODO()); err != nil {
 		log.Fatal("Server forced to shutdown:", err)
 	}
 

@@ -37,7 +37,7 @@ func (cfg *apiconfig) FetchPokemons(w http.ResponseWriter, r *http.Request) {
 		pokemon = append(pokemon, poke.Pokemon.Name)
 	}
 
-	respondWithJson(w, http.StatusOK, pokemon)
+	respondWithJSON(w, http.StatusOK, pokemon)
 
 }
 
@@ -65,7 +65,7 @@ func (cfg *apiconfig) AboutPokemon(w http.ResponseWriter, r *http.Request) {
 		restype = append(restype, t.Type.Name)
 	}
 
-	respondWithJson(w, http.StatusOK, Pokemonres{
+	respondWithJSON(w, http.StatusOK, Pokemonres{
 		Name:   res.Name,
 		Height: res.Height,
 		Weight: res.Weight,

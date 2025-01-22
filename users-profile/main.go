@@ -1,3 +1,4 @@
+// Package main starts the application.
 package main
 
 import (

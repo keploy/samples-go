@@ -1,3 +1,4 @@
+// Package handlers provides HTTP request handlers for managing authors and books.
 package handlers
 
 import (
@@ -17,8 +18,8 @@ type Handler struct {
 type Repository interface {
 	GetAllAuthors(context.Context) ([]entity.Author, error)
 	GetAllBooks(context.Context) ([]entity.Book, error)
-	GetBookById(context.Context, int) ([]entity.Book, error)
-	GetBooksByAuthorId(context.Context, int) ([]entity.Book, error)
+	GetBookByID(context.Context, int) ([]entity.Book, error)
+	GetBooksByAuthorID(context.Context, int) ([]entity.Book, error)
 	CreateBook(context.Context, entity.Book) error
 	CreateAuthor(context.Context, entity.Author) error
 }
@@ -47,14 +48,14 @@ func (h *Handler) GetAllBooks(ctx *fasthttp.RequestCtx) {
 	sendData(ctx, books)
 }
 
-func (h *Handler) GetBookById(ctx *fasthttp.RequestCtx) {
-	bookId := ctx.UserValue("id").(string)
-	id, err := strconv.Atoi(bookId)
+func (h *Handler) GetBookByID(ctx *fasthttp.RequestCtx) {
+	bookID := ctx.UserValue("id").(string)
+	id, err := strconv.Atoi(bookID)
 	if err != nil {
 		sendError(ctx, nil, http.StatusNotFound)
 		return
 	}
-	books, err := h.repository.GetBookById(ctx, id)
+	books, err := h.repository.GetBookByID(ctx, id)
 	if err != nil {
 		sendError(ctx, nil, http.StatusNotFound)
 		return
@@ -62,14 +63,14 @@ func (h *Handler) GetBookById(ctx *fasthttp.RequestCtx) {
 	sendData(ctx, books[0])
 }
 
-func (h *Handler) GetBooksByAuthorId(ctx *fasthttp.RequestCtx) {
-	authorId := ctx.UserValue("id").(string)
-	id, err := strconv.Atoi(authorId)
+func (h *Handler) GetBooksByAuthorID(ctx *fasthttp.RequestCtx) {
+	authorID := ctx.UserValue("id").(string)
+	id, err := strconv.Atoi(authorID)
 	if err != nil {
 		sendError(ctx, nil, http.StatusNotFound)
 		return
 	}
-	books, err := h.repository.GetBooksByAuthorId(ctx, id)
+	books, err := h.repository.GetBooksByAuthorID(ctx, id)
 	if err != nil {
 		sendError(ctx, nil, http.StatusNotFound)
 		return

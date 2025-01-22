@@ -1,3 +1,4 @@
+// Package main starts the application
 package main
 
 import (
@@ -96,7 +97,7 @@ func CheckTokenHandler(c *gin.Context) {
 	claims := &Claims{}
 
 	// Parse the JWT string and store the result in `claims`
-	sentTokenObj, err := jwt.ParseWithClaims(sentToken, claims, func(token *jwt.Token) (interface{}, error) {
+	sentTokenObj, err := jwt.ParseWithClaims(sentToken, claims, func(_ *jwt.Token) (interface{}, error) {
 		return jwtKey, nil
 	})
 
@@ -133,7 +134,11 @@ func CheckTokenHandler(c *gin.Context) {
 func main() {
 	time.Sleep(2 * time.Second)
 	initDB()
-	defer db.Close()
+	defer func() {
+		if err := db.Close(); err != nil {
+			log.Println("Error closing database connection:", err)
+		}
+	}()
 
 	router := gin.Default()
 
@@ -141,5 +146,8 @@ func main() {
 	router.GET("/generate-token", GenerateTokenHandler)
 	router.GET("/check-token", CheckTokenHandler)
 
-	router.Run(":8000")
+	err = router.Run(":8000")
+	if err != nil {
+		log.Fatalf("Failed to start server: %v", err)
+	}
 }

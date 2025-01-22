@@ -1,3 +1,4 @@
+// Package app initializes the application, sets up database connections, routes, and handles server startup and graceful shutdown.
 package app
 
 import (
@@ -11,7 +12,6 @@ import (
 	"time"
 
 	"github.com/fasthttp/router"
-	_ "github.com/lib/pq"
 	"github.com/valyala/fasthttp"
 )
 
@@ -23,7 +23,13 @@ func InitApp() {
 	if err != nil {
 		log.Fatal("Error connecting to database:", err)
 	}
-	defer db.Close() // Close the database connection when the application exits
+
+	defer func() {
+		// Close the database connection when the application exits
+		if closeErr := db.Close(); closeErr != nil {
+			log.Println("Error closing database connection:", closeErr)
+		}
+	}()
 
 	repo := repository.NewRepository(db)
 	ctrl := handlers.NewHandler(repo)
@@ -32,8 +38,8 @@ func InitApp() {
 	router := router.New()
 	router.GET("/authors", ctrl.GetAllAuthors)
 	router.GET("/books", ctrl.GetAllBooks)
-	router.GET("/books/{id}", ctrl.GetBookById)
-	router.GET("/authors/{id}", ctrl.GetBooksByAuthorId)
+	router.GET("/books/{id}", ctrl.GetBookByID)
+	router.GET("/authors/{id}", ctrl.GetBooksByAuthorID)
 	router.POST("/books", ctrl.CreateBook)
 	router.POST("/authors", ctrl.CreateAuthor)
 

@@ -3,6 +3,7 @@ package uss
 import (
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"gorm.io/driver/mysql"
@@ -16,11 +17,11 @@ type ShortCodeInfo struct {
 	UpdatedAt time.Time `json:"updated_at" gorm:"datetime(0);autoUpdateTime"`
 }
 
-type USSStore struct {
+type Store struct {
 	db *gorm.DB
 }
 
-func (s *USSStore) Connect(config map[string]string) error {
+func (s *Store) Connect(config map[string]string) error {
 	// Open up our database connection.
 	var err error
 	mysqlDSN := fmt.Sprintf(
@@ -49,31 +50,33 @@ func (s *USSStore) Connect(config map[string]string) error {
 	sqlDB.SetMaxOpenConns(512)
 
 	if err = s.db.AutoMigrate(&ShortCodeInfo{}); err != nil {
-		log.Fatal(fmt.Sprintf("Failed to create/update db tables with error %s", err.Error()))
+		log.Fatalf("Failed to create/update db tables with error %s", err.Error())
 	}
 
 	return nil
 }
 
-func (s *USSStore) Close() {
+func (s *Store) Close() {
 	db, _ := s.db.DB()
-	db.Close()
+	if err := db.Close(); err != nil {
+		fmt.Fprintf(os.Stderr, "Could not close database connection: %v\n", err)
+	}
 }
 
-func (s *USSStore) Persist(info *ShortCodeInfo) error {
+func (s *Store) Persist(info *ShortCodeInfo) error {
 	s.db.Save(info)
 	return nil
 }
 
-func (s *USSStore) FindByShortCode(shortCode string) *ShortCodeInfo {
+func (s *Store) FindByShortCode(shortCode string) *ShortCodeInfo {
 	var infos []ShortCodeInfo
 	s.db.Order("updated_at desc").Find(&infos, "short_code = ?", shortCode)
 	if len(infos) == 0 {
 		return nil
-	} else {
-		urlInfo := infos[0]
-		return &urlInfo
 	}
+
+	urlInfo := infos[0]
+	return &urlInfo
 }
 
-var MetaStore *USSStore
+var MetaStore *Store

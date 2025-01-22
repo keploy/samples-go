@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 )
@@ -13,12 +14,12 @@ func respondWithError(w http.ResponseWriter, code int, res string) {
 	type errresponse struct {
 		Error string `json:"error"`
 	}
-	respondWithJson(w, code, errresponse{
+	respondWithJSON(w, code, errresponse{
 		Error: res,
 	})
 }
 
-func respondWithJson(w http.ResponseWriter, code int, res interface{}) {
+func respondWithJSON(w http.ResponseWriter, code int, res interface{}) {
 	w.Header().Set("content-type", "application/json")
 	data, err := json.Marshal(res)
 	if err != nil {
@@ -28,5 +29,7 @@ func respondWithJson(w http.ResponseWriter, code int, res interface{}) {
 	}
 
 	w.WriteHeader(code)
-	w.Write(data)
+	if _, err := w.Write(data); err != nil {
+		fmt.Println("Error writing response:", err)
+	}
 }
