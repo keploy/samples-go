@@ -18,15 +18,23 @@ This repo contains the sample for [Keploy's](https://keploy.io)🐰 with Golang.
 
 ## Go Sample Apps with Keploy
 
-1. [Echo-SQL](https://github.com/keploy/samples-go/tree/main/echo-sql) 
-2. [Fasthttp-Postgress](https://github.com/sarthaksarthak9/samples-go/tree/main/fasthttp-postgres) 
-3. [Gin-Mongo](https://github.com/keploy/samples-go/tree/main/gin-mongo) 
-4. [Gin-Redis](https://github.com/sarthaksarthak9/samples-go/tree/main/gin-redis) 
-5. [GraphQL-SQL](https://github.com/keploy/samples-go/tree/main/graphql-sql) 
-6. [Mux-SQL](https://github.com/keploy/samples-go/tree/main/mux-sql) 
-7. [S3-Keploy](https://github.com/sarthaksarthak9/samples-go/tree/main/S3-Keploy)
-8. [SSE-Svelte](https://github.com/sarthaksarthak9/samples-go/tree/main/sse-svelte)
-9. [Users-Profile](https://github.com/keploy/samples-go/tree/main/users-profile) 
+1. [Echo-MySQL](https://github.com/keploy/samples-go/tree/main/echo-mysql)
+2. [Echo-SQL](https://github.com/keploy/samples-go/tree/main/echo-sql)
+3. [Fasthttp-Postgress](https://github.com/keploy/samples-go/tree/main/fasthttp-postgres)
+4. [Gin-Mongo](https://github.com/keploy/samples-go/tree/main/gin-mongo)
+5. [Gin-Redis](https://github.com/keploy/samples-go/tree/main/gin-redis)
+6. [Go-Grpc](https://github.com/keploy/samples-go/tree/main/go-grpc)
+7. [Go-Jwt](https://github.com/keploy/samples-go/tree/main/go-jwt)
+8. [Go-Twilio](https://github.com/keploy/samples-go/tree/main/go-twilio)
+9. [GraphQL-SQL](https://github.com/keploy/samples-go/tree/main/graphql-sql)
+10. [Mux-SQL](https://github.com/keploy/samples-go/tree/main/mux-sql)
+11. [Mux-Elasticsearch](https://github.com/keploy/samples-go/tree/main/mux-elasticsearch)
+12. [Mux-MySQL](https://github.com/keploy/samples-go/tree/main/mux-mysql)
+13. [S3-Keploy](https://github.com/keploy/samples-go/tree/main/S3-Keploy)
+14. [SSE-Svelte](https://github.com/keploy/samples-go/tree/main/sse-svelte)
+15. [Users-Profile](https://github.com/keploy/samples-go/tree/main/users-profile)
+16. [HTTP-PokeAPI](https://github.com/keploy/samples-go/tree/main/http-pokeapi)
+
 
 ## Community Support ❤️
 

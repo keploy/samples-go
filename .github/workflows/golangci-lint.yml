@@ -31,6 +31,7 @@ jobs:
           - fasthttp-postgres
           - gin-mongo
           - gin-redis
+          - go-grpc
           - go-jwt
           - go-twilio
           - graphql-sql
