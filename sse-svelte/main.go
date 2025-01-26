@@ -1,3 +1,6 @@
+// This package implements a simple HTTP server with two main endpoints:
+// - `/event`: Provides a Server-Sent Events (SSE) stream to clients.
+// - `/time`: Responds with the current time and stores it in a MongoDB collection called "time_collection".
 package main
 
 import (
@@ -60,7 +63,10 @@ func sseHandler(w http.ResponseWriter, r *http.Request) {
 		case message := <-msgChan:
 			fmt.Println("case message... sending message")
 			fmt.Println(message)
-			fmt.Fprintf(w, "data: %s\n\n", message)
+			_, err := fmt.Fprintf(w, "data: %s\n\n", message)
+			if err != nil {
+				log.Println(err)
+			}
 			flusher.Flush()
 		case <-r.Context().Done():
 			fmt.Println("Client closed connection")
