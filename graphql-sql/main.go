@@ -5,6 +5,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -61,7 +62,7 @@ func main() {
 	defer func() {
 		err = db.Close()
 		if err != nil {
-			panic(err)
+			log.Println(err)
 		}
 	}()
 

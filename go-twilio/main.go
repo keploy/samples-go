@@ -70,7 +70,7 @@ func gracefulShutdown(router *gin.Engine) {
 
 	// The context is used to inform the server it has 5 seconds to complete the ongoing requests
 	if err := srv.Shutdown(context.TODO()); err != nil {
-		log.Fatal("Server forced to shutdown:", err)
+		fmt.Fprintf(os.Stderr, "Server forced to shutdown: %v\n", err)
 	}
 
 	fmt.Println("Server exiting")

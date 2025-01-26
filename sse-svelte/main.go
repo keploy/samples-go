@@ -100,7 +100,7 @@ func main() {
 	defer func() {
 		err = client.Disconnect(context.Background())
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 	}()
 
@@ -137,7 +137,7 @@ func main() {
 	defer cancel()
 
 	if err := server.Shutdown(ctx); err != nil {
-		log.Fatalf("Could not gracefully shutdown the server: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Could not gracefully shutdown the server: %v\n", err)
 	}
 
 	fmt.Println("Server stopped")

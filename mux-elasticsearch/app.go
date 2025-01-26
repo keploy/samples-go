@@ -250,7 +250,7 @@ func (a *App) Run(port string) {
 	defer cancel()
 
 	if err := a.Server.Shutdown(ctx); err != nil {
-		log.Fatalf("Server forced to shutdown: %v", err)
+		fmt.Fprintf(os.Stderr, "Server forced to shutdown: %v\n", err)
 	}
 
 	log.Println("Server exiting")
