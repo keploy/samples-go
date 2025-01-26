@@ -1,3 +1,4 @@
+// This package creates and runs an HTTP server using the Gin framework.
 package main
 
 import (
