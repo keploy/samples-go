@@ -50,7 +50,8 @@ func (s *Store) Connect(config map[string]string) error {
 	sqlDB.SetMaxOpenConns(512)
 
 	if err = s.db.AutoMigrate(&ShortCodeInfo{}); err != nil {
-		log.Fatalf("Failed to create/update db tables with error %s", err.Error())
+		log.Printf("Failed to create/update db tables with error %s", err.Error())
+		return err
 	}
 
 	return nil

@@ -328,7 +328,7 @@ func main() {
 
 	// Start Gin server
 	err := r.Run(":8080")
-	if err != nil {
+	if err != nil && err != http.ErrServerClosed {
 		log.Fatalf("Failed to start server: %v", err)
 	}
 }

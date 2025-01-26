@@ -147,7 +147,7 @@ func main() {
 	router.GET("/check-token", CheckTokenHandler)
 
 	err = router.Run(":8000")
-	if err != nil {
+	if err != nil && err != http.ErrServerClosed {
 		log.Fatalf("Failed to start server: %v", err)
 	}
 }

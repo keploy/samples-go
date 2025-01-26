@@ -37,5 +37,9 @@ func main() {
 		Handler: servmux,
 	}
 	log.Printf("The server is live on port %s\n", port)
-	log.Fatal(srv.ListenAndServe())
+
+	err := srv.ListenAndServe()
+	if err != nil && err != http.ErrServerClosed {
+		log.Fatalf("Error starting server: %v", err)
+	}
 }

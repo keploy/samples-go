@@ -32,7 +32,8 @@ func (a *App) Initialize(host, user, password, dbname string) error {
 	var err error
 	a.DB, err = sql.Open("postgres", connectionString)
 	if err != nil {
-		log.Fatal(err)
+		log.Print(err)
+		return err
 	}
 
 	a.Router = mux.NewRouter()

@@ -89,7 +89,7 @@ func main() {
 
 	// Run the server and listen for graceful shutdown
 	go func() {
-		if err := router.Run(":8080"); err != nil {
+		if err := router.Run(":8080"); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("Server failed to start: %v", err)
 		}
 	}()
