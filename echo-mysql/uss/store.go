@@ -3,6 +3,7 @@ package uss
 import (
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"gorm.io/driver/mysql"
@@ -51,7 +52,8 @@ func (s *Store) Connect(config map[string]string) error {
 	sqlDB.SetMaxOpenConns(512)
 
 	if err = s.db.AutoMigrate(&ShortCodeInfo{}); err != nil {
-		log.Fatalf("%s", fmt.Sprintf("Failed to create/update db tables with error %s", err.Error()))
+		log.Printf("%s", fmt.Sprintf("Failed to create/update db tables with error %s", err.Error()))
+		os.Exit(1)
 	}
 
 	return nil
@@ -61,7 +63,8 @@ func (s *Store) Close() {
 	db, _ := s.db.DB()
 	err := db.Close()
 	if err != nil {
-		log.Fatalf("%s", err)
+		log.Printf("%s", err)
+		os.Exit(1)
 	}
 }
 

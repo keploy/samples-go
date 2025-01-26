@@ -5,6 +5,7 @@ import (
 	"http-pokeapi/internal/pokeapi"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/go-chi/chi"
@@ -38,5 +39,9 @@ func main() {
 		Handler: servmux,
 	}
 	log.Printf("The server is live on port %s\n", port)
-	log.Fatal(srv.ListenAndServe())
+	err := srv.ListenAndServe()
+	if err != nil {
+		log.Printf("%s", err)
+		os.Exit(1)
+	}
 }

@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -18,13 +19,15 @@ import (
 func ConnectDB() *mongo.Client {
 	client, err := mongo.NewClient(options.Client().ApplyURI(EnvMongoURI()))
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("%s", err)
+		os.Exit(1)
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	err = client.Connect(ctx)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("%s", err)
+		os.Exit(1)
 	}
 
 	defer cancel()
@@ -32,7 +35,8 @@ func ConnectDB() *mongo.Client {
 	// Ping the database
 	err = client.Ping(ctx, nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("%s", err)
+		os.Exit(1)
 	}
 
 	fmt.Println("Connected to MongoDB")

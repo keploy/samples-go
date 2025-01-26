@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fasthttp-postgres/internal/app"
 	"log"
+	"os"
 
 	_ "github.com/lib/pq"
 )
@@ -18,7 +19,8 @@ func init() {
 	uri := "postgresql://postgres:password@localhost:5432/db?sslmode=disable"
 	db, err = sql.Open("postgres", uri)
 	if err != nil {
-		log.Fatal("Error connecting to database:", err)
+		log.Printf("Error connecting to database: %s", err)
+		os.Exit(1)
 	}
 }
 

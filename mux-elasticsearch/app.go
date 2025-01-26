@@ -99,7 +99,8 @@ func (a *App) createDocument(w http.ResponseWriter, r *http.Request) {
 	}
 	defer func() {
 		if err = res.Body.Close(); err != nil {
-			log.Fatalf("%s", err)
+			log.Printf("%s", err)
+			os.Exit(1)
 		}
 	}()
 
@@ -138,7 +139,8 @@ func (a *App) getDocument(w http.ResponseWriter, r *http.Request) {
 
 	defer func() {
 		if err = res.Body.Close(); err != nil {
-			log.Fatalf("%s", err)
+			log.Printf("%s", err)
+			os.Exit(1)
 		}
 	}()
 
@@ -190,7 +192,8 @@ func (a *App) updateDocument(w http.ResponseWriter, r *http.Request) {
 	}
 	defer func() {
 		if err = res.Body.Close(); err != nil {
-			log.Fatalf("%s", err)
+			log.Printf("%s", err)
+			os.Exit(1)
 		}
 	}()
 
@@ -217,7 +220,8 @@ func (a *App) deleteDocument(w http.ResponseWriter, r *http.Request) {
 	}
 	defer func() {
 		if err = res.Body.Close(); err != nil {
-			log.Fatalf("%s", err)
+			log.Printf("%s", err)
+			os.Exit(1)
 		}
 	}()
 
@@ -232,7 +236,8 @@ func (a *App) deleteDocument(w http.ResponseWriter, r *http.Request) {
 func (a *App) Run(port string) {
 	go func() {
 		if err := a.Server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("Could not listen on %s: %v\n", port, err)
+			log.Printf("Could not listen on %s: %v\n", port, err)
+			os.Exit(1)
 		}
 	}()
 
@@ -246,7 +251,8 @@ func (a *App) Run(port string) {
 	defer cancel()
 
 	if err := a.Server.Shutdown(ctx); err != nil {
-		log.Fatalf("Server forced to shutdown: %v", err)
+		log.Printf("Server forced to shutdown: %v", err)
+		os.Exit(1)
 	}
 
 	log.Println("Server exiting")

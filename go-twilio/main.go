@@ -71,7 +71,8 @@ func gracefulShutdown(router *gin.Engine) {
 
 	// The context is used to inform the server it has 5 seconds to complete the ongoing requests
 	if err := srv.Shutdown(context.Background()); err != nil {
-		log.Fatal("Server forced to shutdown:", err)
+		log.Printf("Server forced to shutdown: %s", err)
+		os.Exit(1)
 	}
 
 	fmt.Println("Server exiting")
@@ -81,7 +82,8 @@ func main() {
 	// Load environment variables from a .env file
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatalf("Error loading .env file")
+		log.Printf("Error loading .env file")
+		os.Exit(1)
 	}
 
 	router := gin.Default()
@@ -91,7 +93,8 @@ func main() {
 	// Run the server and listen for graceful shutdown
 	go func() {
 		if err := router.Run(":8080"); err != nil {
-			log.Fatalf("Server failed to start: %v", err)
+			log.Printf("Server failed to start: %v", err)
+			os.Exit(1)
 		}
 	}()
 

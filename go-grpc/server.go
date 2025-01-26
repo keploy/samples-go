@@ -9,6 +9,7 @@ import (
 	"io"
 	"log"
 	"net"
+	"os"
 	"sync"
 
 	pb "github.com/keploy/samples-go/go-grpc/user"
@@ -253,7 +254,8 @@ func (s *server) UpdateUsersStream(stream pb.UserService_UpdateUsersStreamServer
 func main() {
 	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		log.Printf("failed to listen: %v", err)
+		os.Exit(1)
 	}
 
 	s := grpc.NewServer()
@@ -261,6 +263,7 @@ func main() {
 
 	log.Println("gRPC server running on port 50051")
 	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+		log.Printf("failed to serve: %v", err)
+		os.Exit(1)
 	}
 }

@@ -32,7 +32,8 @@ func (a *App) Initialize(host, user, password, dbname string) error {
 	var err error
 	a.DB, err = sql.Open("postgres", connectionString)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("%s", err)
+		os.Exit(1)
 	}
 
 	a.Router = mux.NewRouter()
@@ -48,7 +49,8 @@ func (a *App) Initialize(host, user, password, dbname string) error {
 func (a *App) Run(addr string) {
 	go func() {
 		if err := a.Server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("Could not listen on %s: %v\n", addr, err)
+			log.Printf("Could not listen on %s: %v\n", addr, err)
+			os.Exit(1)
 		}
 	}()
 
@@ -62,7 +64,8 @@ func (a *App) Run(addr string) {
 	defer cancel()
 
 	if err := a.Server.Shutdown(ctx); err != nil {
-		log.Fatalf("Server forced to shutdown: %v", err)
+		log.Printf("Server forced to shutdown: %v", err)
+		os.Exit(1)
 	}
 
 	log.Println("Server exiting")
@@ -134,7 +137,8 @@ func (a *App) createProduct(w http.ResponseWriter, r *http.Request) {
 	}
 	defer func() {
 		if err := r.Body.Close(); err != nil {
-			log.Fatalf("%s", err)
+			log.Printf("%s", err)
+			os.Exit(1)
 		}
 	}()
 
@@ -162,7 +166,8 @@ func (a *App) updateProduct(w http.ResponseWriter, r *http.Request) {
 	}
 	defer func() {
 		if err := r.Body.Close(); err != nil {
-			log.Fatalf("%s", err)
+			log.Printf("%s", err)
+			os.Exit(1)
 		}
 	}()
 	p.ID = id

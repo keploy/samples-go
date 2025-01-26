@@ -8,6 +8,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 )
 
 const baseURL = "https://pokeapi.co/api/v2"
@@ -43,7 +44,8 @@ func (client *Client) Pokemon(name string) (models.Pokemon, error) {
 
 	defer func() {
 		if err = res.Body.Close(); err != nil {
-			log.Fatalf("%s", err)
+			log.Printf("%s", err)
+			os.Exit(1)
 		}
 	}()
 
@@ -83,7 +85,8 @@ func (client *Client) LocationArearesponse() (models.Location, error) {
 
 	defer func() {
 		if err = res.Body.Close(); err != nil {
-			log.Fatalf("%s", err)
+			log.Printf("%s", err)
+			os.Exit(1)
 		}
 	}()
 
@@ -123,7 +126,8 @@ func (client *Client) Pokelocationres(arg string) (models.Pokelocation, error) {
 
 	defer func() {
 		if err = res.Body.Close(); err != nil {
-			log.Fatalf("%s", err)
+			log.Printf("%s", err)
+			os.Exit(1)
 		}
 	}()
 

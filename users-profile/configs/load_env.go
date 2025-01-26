@@ -12,7 +12,8 @@ import (
 func EnvMongoURI() string {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Println("Error loading .env file")
+		os.Exit(1)
 	}
 
 	return os.Getenv("MONGO-DB-URI")

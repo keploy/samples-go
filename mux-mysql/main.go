@@ -23,13 +23,15 @@ func main() {
 	time.Sleep(2 * time.Second)
 	store, err := CreateStore()
 	if err != nil {
-		log.Fatal("Could not create store ", err)
+		log.Printf("Could not create store %s", err)
+		os.Exit(1)
 	}
 
 	defer func() {
 		err = store.Close()
 		if err != nil {
-			log.Fatal(err)
+			log.Printf("%s", err)
+			os.Exit(1)
 		}
 	}()
 
@@ -47,7 +49,8 @@ func main() {
 	go func() {
 		log.Print("Server is running on port", Port)
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("Could not listen on %s: %v\n", Port, err)
+			log.Printf("Could not listen on %s: %v\n", Port, err)
+			os.Exit(1)
 		}
 	}()
 
@@ -62,11 +65,13 @@ func main() {
 	defer cancel()
 
 	if err := server.Shutdown(ctx); err != nil {
-		log.Fatalf("Could not gracefully shutdown the server: %v\n", err)
+		log.Printf("Could not gracefully shutdown the server: %v\n", err)
+		os.Exit(1)
 	}
 
 	if err := store.Close(); err != nil {
-		log.Fatalf("Could not close database connection: %v\n", err)
+		log.Printf("Could not close database connection: %v\n", err)
+		os.Exit(1)
 	}
 
 	log.Println("Server stopped")

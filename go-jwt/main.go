@@ -6,6 +6,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -38,7 +39,8 @@ func initDB() {
 	dsn := "postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable"
 	db, err = gorm.Open("postgres", dsn)
 	if err != nil {
-		log.Fatal("Failed to connect to database:", err)
+		log.Printf("Failed to connect to database: %s", err)
+		os.Exit(1)
 	}
 	db.AutoMigrate(&User{})
 }
@@ -138,7 +140,8 @@ func main() {
 	initDB()
 	defer func() {
 		if err := db.Close(); err != nil {
-			log.Fatalf("%s", err)
+			log.Printf("%s", err)
+			os.Exit(1)
 		}
 	}()
 

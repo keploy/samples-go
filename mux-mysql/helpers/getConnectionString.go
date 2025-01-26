@@ -8,7 +8,8 @@ import (
 func GetDBConnectionString() string {
 	value := os.Getenv("ConnectionString")
 	if value == "" {
-		log.Fatal("Connection string empty")
+		log.Println("Connection string empty")
+		os.Exit(1)
 	}
 	return value
 }

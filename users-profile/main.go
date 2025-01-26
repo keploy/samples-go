@@ -34,7 +34,8 @@ func main() {
 	// Start the server in a separate goroutine
 	go func() {
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("Failed to start server: %v", err)
+			log.Printf("Failed to start server: %v", err)
+			os.Exit(1)
 		}
 	}()
 
@@ -52,7 +53,8 @@ func main() {
 
 	// Attempt graceful shutdown by shutting down the server
 	if err := server.Shutdown(ctx); err != nil {
-		log.Fatalf("Server shutdown failed: %v", err)
+		log.Printf("Server shutdown failed: %v", err)
+		os.Exit(1)
 	}
 
 	log.Println("Server gracefully stopped")
