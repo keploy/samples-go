@@ -1,7 +1,9 @@
+// Package main starts the application.
 package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -51,7 +53,7 @@ func main() {
 
 	// Attempt graceful shutdown by shutting down the server
 	if err := server.Shutdown(ctx); err != nil {
-		log.Fatalf("Server shutdown failed: %v", err)
+		fmt.Fprintf(os.Stderr, "Server shutdown failed: %v\n", err)
 	}
 
 	log.Println("Server gracefully stopped")

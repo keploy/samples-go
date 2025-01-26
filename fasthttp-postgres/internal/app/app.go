@@ -1,3 +1,4 @@
+// Package app initializes the application, sets up database connections, routes, and handles server startup and graceful shutdown.
 package app
 
 import (
@@ -5,25 +6,32 @@ import (
 	"fasthttp-postgres/internal/handlers"
 	"fasthttp-postgres/internal/repository"
 	"log"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
 	"github.com/fasthttp/router"
-	_ "github.com/lib/pq"
 	"github.com/valyala/fasthttp"
 )
 
-func InitApp() {
+func InitApp() error {
 	time.Sleep(2 * time.Second)
 	// Database connection initialization
 	uri := "postgresql://postgres:password@localhost:5432/db?sslmode=disable"
 	db, err := sql.Open("postgres", uri)
 	if err != nil {
-		log.Fatal("Error connecting to database:", err)
+		log.Print("Error connecting to database:", err)
+		return err
 	}
-	defer db.Close() // Close the database connection when the application exits
+
+	defer func() {
+		// Close the database connection when the application exits
+		if closeErr := db.Close(); closeErr != nil {
+			log.Println("Error closing database connection:", closeErr)
+		}
+	}()
 
 	repo := repository.NewRepository(db)
 	ctrl := handlers.NewHandler(repo)
@@ -32,8 +40,8 @@ func InitApp() {
 	router := router.New()
 	router.GET("/authors", ctrl.GetAllAuthors)
 	router.GET("/books", ctrl.GetAllBooks)
-	router.GET("/books/{id}", ctrl.GetBookById)
-	router.GET("/authors/{id}", ctrl.GetBooksByAuthorId)
+	router.GET("/books/{id}", ctrl.GetBookByID)
+	router.GET("/authors/{id}", ctrl.GetBooksByAuthorID)
 	router.POST("/books", ctrl.CreateBook)
 	router.POST("/authors", ctrl.CreateAuthor)
 
@@ -46,7 +54,7 @@ func InitApp() {
 	// Start server in a goroutine
 	go func() {
 		log.Println("Starting server: http://localhost:8080")
-		if err := server.ListenAndServe(":8080"); err != nil {
+		if err := server.ListenAndServe(":8080"); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("Error starting server: %s\n", err)
 		}
 	}()
@@ -61,8 +69,10 @@ func InitApp() {
 
 	// Attempt to gracefully shut down the server
 	if err := server.Shutdown(); err != nil {
-		log.Fatalf("Error shutting down server: %s\n", err)
+		log.Printf("Error shutting down server: %s\n", err)
+		return err
 	}
 
 	log.Println("Server gracefully stopped")
+	return nil
 }

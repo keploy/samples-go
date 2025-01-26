@@ -1,3 +1,4 @@
+// Package repository provides functions for converting between entity models and database models.
 package repository
 
 import "fasthttp-postgres/internal/entity"

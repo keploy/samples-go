@@ -23,20 +23,17 @@ type App struct {
 	Server *http.Server
 }
 
-// tom: initial function is empty, it's filled afterwards
-// func (a *App) Initialize(user, password, dbname string) { }
-
-// tom: added "sslmode=disable" to connection string
 func (a *App) Initialize(host, user, password, dbname string) error {
 	time.Sleep(2 * time.Second)
 	connectionString := fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		host, "5432", user, password, dbname)
-	// connectionString := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable", user, password, dbname)
+
 	var err error
 	a.DB, err = sql.Open("postgres", connectionString)
 	if err != nil {
-		log.Fatal(err)
+		log.Print(err)
+		return err
 	}
 
 	a.Router = mux.NewRouter()
@@ -50,9 +47,6 @@ func (a *App) Initialize(host, user, password, dbname string) error {
 	return err
 }
 
-// tom: initial version
-// func (a *App) Run(addr string) { }
-// improved version
 func (a *App) Run(addr string) {
 	go func() {
 		if err := a.Server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
@@ -70,7 +64,7 @@ func (a *App) Run(addr string) {
 	defer cancel()
 
 	if err := a.Server.Shutdown(ctx); err != nil {
-		log.Fatalf("Server forced to shutdown: %v", err)
+		fmt.Fprintf(os.Stderr, "Server forced to shutdown: %v\n", err)
 	}
 
 	log.Println("Server exiting")
@@ -107,7 +101,9 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
-	w.Write(response)
+	if _, err := w.Write(response); err != nil {
+		fmt.Println("Error writing response:", err)
+	}
 }
 
 func (a *App) getProducts(w http.ResponseWriter, r *http.Request) {
@@ -137,7 +133,11 @@ func (a *App) createProduct(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		return
 	}
-	defer r.Body.Close()
+	defer func() {
+		if err := r.Body.Close(); err != nil {
+			fmt.Printf("Error closing request body: %v\n", err)
+		}
+	}()
 
 	if err := p.createProduct(r.Context(), a.DB); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
@@ -161,7 +161,12 @@ func (a *App) updateProduct(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, http.StatusBadRequest, "Invalid resquest payload")
 		return
 	}
-	defer r.Body.Close()
+
+	defer func() {
+		if err := r.Body.Close(); err != nil {
+			fmt.Printf("Error closing request body: %v\n", err)
+		}
+	}()
 	p.ID = id
 
 	if err := p.updateProduct(r.Context(), a.DB); err != nil {

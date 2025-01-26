@@ -4,6 +4,7 @@ package main
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -29,7 +30,7 @@ func main() {
 	defer func() {
 		err = store.Close()
 		if err != nil {
-			log.Fatal(err)
+			fmt.Fprintf(os.Stderr, "Could not close database connection: %v\n", err)
 		}
 	}()
 
@@ -62,11 +63,11 @@ func main() {
 	defer cancel()
 
 	if err := server.Shutdown(ctx); err != nil {
-		log.Fatalf("Could not gracefully shutdown the server: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Could not gracefully shutdown the server: %v\n", err)
 	}
 
 	if err := store.Close(); err != nil {
-		log.Fatalf("Could not close database connection: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Could not close database connection: %v\n", err)
 	}
 
 	log.Println("Server stopped")

@@ -53,7 +53,7 @@ func RedirectUser(store *sql.DB) http.HandlerFunc {
 }
 
 func GetAllLinksFromWebsite(store *sql.DB) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, _ *http.Request) {
 		array, err := db.GetAllLinks(store)
 		if err != nil {
 			log.Print("Error ", err)

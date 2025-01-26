@@ -1,3 +1,5 @@
+// Package uss generates short links using SHA-256 and Base58 encoding. Provides methods to connect to and interact with a MySQL database
+// for storing and retrieving short URLs.
 package uss
 
 import (

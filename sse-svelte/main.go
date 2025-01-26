@@ -1,3 +1,4 @@
+// Package main starts the application.
 package main
 
 import (
@@ -60,7 +61,11 @@ func sseHandler(w http.ResponseWriter, r *http.Request) {
 		case message := <-msgChan:
 			fmt.Println("case message... sending message")
 			fmt.Println(message)
-			fmt.Fprintf(w, "data: %s\n\n", message)
+			_, err := fmt.Fprintf(w, "data: %s\n\n", message)
+			if err != nil {
+				http.Error(w, fmt.Sprintf("Failed to write response: %v", err), http.StatusInternalServerError)
+				return
+			}
 			flusher.Flush()
 		case <-r.Context().Done():
 			fmt.Println("Client closed connection")
@@ -95,7 +100,7 @@ func main() {
 	defer func() {
 		err = client.Disconnect(context.Background())
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 	}()
 
@@ -132,7 +137,7 @@ func main() {
 	defer cancel()
 
 	if err := server.Shutdown(ctx); err != nil {
-		log.Fatalf("Could not gracefully shutdown the server: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Could not gracefully shutdown the server: %v\n", err)
 	}
 
 	fmt.Println("Server stopped")

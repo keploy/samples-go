@@ -1,22 +1,26 @@
-package main_test
+package main
 
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"testing"
-	"test-app-product-catelog"
 )
 
-var a main.App
+var a App
 
 func TestMain(m *testing.M) {
-	a.Initialize(
+	err := a.Initialize(
 		"localhost", "postgres", "password",
 		"postgres")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Failed to initialize application: %v\n", err)
+		os.Exit(1)
+	}
 	ensureTableExists()
 	code := m.Run()
 	clearTable()
@@ -30,8 +34,17 @@ func ensureTableExists() {
 }
 
 func clearTable() {
-	a.DB.Exec("DELETE FROM products")
-	a.DB.Exec("ALTER SEQUENCE products_id_seq RESTART WITH 1")
+	_, err := a.DB.Exec("DELETE FROM products")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Failed to execute query: %v\n", err)
+		os.Exit(1)
+	}
+
+	_, err = a.DB.Exec("ALTER SEQUENCE products_id_seq RESTART WITH 1")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Failed to execute query: %v\n", err)
+		os.Exit(1)
+	}
 }
 
 const tableCreationQuery = `CREATE TABLE IF NOT EXISTS products
@@ -77,7 +90,11 @@ func TestGetNonExistentProduct(t *testing.T) {
 	checkResponseCode(t, http.StatusNotFound, response.Code)
 
 	var m map[string]string
-	json.Unmarshal(response.Body.Bytes(), &m)
+	err := json.Unmarshal(response.Body.Bytes(), &m)
+	if err != nil {
+		t.Errorf("Failed to unmarshal JSON data: %v", err)
+	}
+
 	if m["error"] != "Product not found" {
 		t.Errorf("Expected the 'error' key of the response to be set to 'Product not found'. Got '%s'", m["error"])
 	}
@@ -95,7 +112,10 @@ func TestCreateProduct(t *testing.T) {
 	checkResponseCode(t, http.StatusCreated, response.Code)
 
 	var m map[string]interface{}
-	json.Unmarshal(response.Body.Bytes(), &m)
+	err := json.Unmarshal(response.Body.Bytes(), &m)
+	if err != nil {
+		t.Errorf("Failed to unmarshal JSON data: %v", err)
+	}
 
 	if m["name"] != "test product" {
 		t.Errorf("Expected product name to be 'test product'. Got '%v'", m["name"])

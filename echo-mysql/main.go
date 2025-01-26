@@ -1,3 +1,4 @@
+// Package main starts the application
 package main
 
 import (
@@ -19,7 +20,7 @@ func main() {
 		log.Fatalf("Error reading .env file %s", err.Error())
 	}
 
-	uss.MetaStore = &uss.USSStore{}
+	uss.MetaStore = &uss.Store{}
 	err = uss.MetaStore.Connect(appConfig)
 	if err != nil {
 		log.Fatalf("Failed to connect to db %s", err.Error())
@@ -33,10 +34,7 @@ func StartHTTPServer() {
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: `${remote_ip} [${time_rfc3339}] "${method} ${uri} HTTP/1.0" ${status} ${latency_human} ${bytes_out} ${error} "${user_agent}"` + "\n",
 		Skipper: func(c echo.Context) bool {
-			if c.Request().RequestURI == "/healthcheck" {
-				return true
-			}
-			return false
+			return c.Request().RequestURI == "/healthcheck"
 		},
 	}))
 	e.Use(middleware.Recover())
@@ -52,9 +50,9 @@ func StartHTTPServer() {
 		info := uss.MetaStore.FindByShortCode(code)
 		if info != nil {
 			return c.JSON(http.StatusOK, info)
-		} else {
-			return c.String(http.StatusNotFound, "Not Found.")
 		}
+
+		return c.String(http.StatusNotFound, "Not Found.")
 	})
 
 	e.POST("/shorten", func(c echo.Context) error {
@@ -67,10 +65,10 @@ func StartHTTPServer() {
 		err := uss.MetaStore.Persist(req)
 		if err != nil {
 			return c.String(http.StatusInternalServerError, fmt.Sprintf("Failed Persisiting Entity with Error %s", err.Error()))
-		} else {
-			req.UpdatedAt = req.UpdatedAt.Truncate(time.Second)
-			return c.JSON(http.StatusOK, req)
 		}
+
+		req.UpdatedAt = req.UpdatedAt.Truncate(time.Second)
+		return c.JSON(http.StatusOK, req)
 	})
 
 	// automatically add routers for net/http/pprof e.g. /debug/pprof, /debug/pprof/heap, etc.

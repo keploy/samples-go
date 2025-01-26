@@ -34,7 +34,7 @@ func GenerateToken(value string, secretKey string) (string, error) {
 }
 
 func VerifyToken(tokenString string, secretKey string) (*CustomClaims, error) {
-	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(_ *jwt.Token) (interface{}, error) {
 		return []byte(secretKey), nil
 	})
 
