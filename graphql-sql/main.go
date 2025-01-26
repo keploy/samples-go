@@ -1,3 +1,5 @@
+// Package main implements a simple GraphQL API with a PostgreSQL database backend.
+// It provides operations for creating, updating, retrieving, and deleting authors and posts.
 package main
 
 import (
