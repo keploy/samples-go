@@ -1,3 +1,5 @@
+// Package app initializes and runs the web server, sets up the database connection,
+// and handles graceful shutdown of the server.
 package app
 
 import (
@@ -11,19 +13,19 @@ import (
 	"time"
 
 	"github.com/fasthttp/router"
-	_ "github.com/lib/pq"
+
 	"github.com/valyala/fasthttp"
 )
 
-func InitApp() {
+func InitApp(db *sql.DB) {
 	time.Sleep(2 * time.Second)
-	// Database connection initialization
-	uri := "postgresql://postgres:password@localhost:5432/db?sslmode=disable"
-	db, err := sql.Open("postgres", uri)
-	if err != nil {
-		log.Fatal("Error connecting to database:", err)
-	}
-	defer db.Close() // Close the database connection when the application exits
+
+	// Close the database connection when the application exits
+	defer func() {
+		if err := db.Close(); err != nil {
+			log.Fatalf("%s", err)
+		}
+	}()
 
 	repo := repository.NewRepository(db)
 	ctrl := handlers.NewHandler(repo)
@@ -32,8 +34,8 @@ func InitApp() {
 	router := router.New()
 	router.GET("/authors", ctrl.GetAllAuthors)
 	router.GET("/books", ctrl.GetAllBooks)
-	router.GET("/books/{id}", ctrl.GetBookById)
-	router.GET("/authors/{id}", ctrl.GetBooksByAuthorId)
+	router.GET("/books/{id}", ctrl.GetBookByID)
+	router.GET("/authors/{id}", ctrl.GetBooksByAuthorID)
 	router.POST("/books", ctrl.CreateBook)
 	router.POST("/authors", ctrl.CreateAuthor)
 

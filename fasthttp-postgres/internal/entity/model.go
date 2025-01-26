@@ -1,3 +1,4 @@
+// Package entity defines the data structures (models) for the application,
 package entity
 
 type Author struct {
