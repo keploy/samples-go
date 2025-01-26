@@ -1,4 +1,4 @@
-// app.go
+// Package main provides a RESTful API for managing products using PostgreSQL as the database.
 package main
 
 import (
@@ -23,16 +23,12 @@ type App struct {
 	Server *http.Server
 }
 
-// tom: initial function is empty, it's filled afterwards
-// func (a *App) Initialize(user, password, dbname string) { }
-
-// tom: added "sslmode=disable" to connection string
 func (a *App) Initialize(host, user, password, dbname string) error {
 	time.Sleep(2 * time.Second)
 	connectionString := fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		host, "5432", user, password, dbname)
-	// connectionString := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable", user, password, dbname)
+
 	var err error
 	a.DB, err = sql.Open("postgres", connectionString)
 	if err != nil {
@@ -45,14 +41,10 @@ func (a *App) Initialize(host, user, password, dbname string) error {
 		Handler: a.Router,
 	}
 
-	// tom: this line is added after initializeRoutes is created later on
 	a.initializeRoutes()
 	return err
 }
 
-// tom: initial version
-// func (a *App) Run(addr string) { }
-// improved version
 func (a *App) Run(addr string) {
 	go func() {
 		if err := a.Server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
@@ -107,7 +99,10 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
-	w.Write(response)
+	_, err := w.Write(response)
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 func (a *App) getProducts(w http.ResponseWriter, r *http.Request) {
@@ -137,7 +132,11 @@ func (a *App) createProduct(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		return
 	}
-	defer r.Body.Close()
+	defer func() {
+		if err := r.Body.Close(); err != nil {
+			log.Fatalf("%s", err)
+		}
+	}()
 
 	if err := p.createProduct(r.Context(), a.DB); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
@@ -161,7 +160,11 @@ func (a *App) updateProduct(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, http.StatusBadRequest, "Invalid resquest payload")
 		return
 	}
-	defer r.Body.Close()
+	defer func() {
+		if err := r.Body.Close(); err != nil {
+			log.Fatalf("%s", err)
+		}
+	}()
 	p.ID = id
 
 	if err := p.updateProduct(r.Context(), a.DB); err != nil {
