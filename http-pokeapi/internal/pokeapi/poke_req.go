@@ -1,3 +1,4 @@
+// Package pokeapi provides a client for interacting with the Pokémon API (https://pokeapi.co/).
 package pokeapi
 
 import (
@@ -5,20 +6,21 @@ import (
 	"fmt"
 	models "http-pokeapi/internal/models"
 	"io"
+	"log"
 	"net/http"
 )
 
-const base_url = "https://pokeapi.co/api/v2"
+const baseURL = "https://pokeapi.co/api/v2"
 
 type Client struct {
 	http.Client
 }
 
 func (client *Client) Pokemon(name string) (models.Pokemon, error) {
-	end_url := "/pokemon/"
-	full_url := base_url + end_url + name
+	endURL := "/pokemon/"
+	fullURL := baseURL + endURL + name
 
-	req, err := http.NewRequest("GET", full_url, nil)
+	req, err := http.NewRequest("GET", fullURL, nil)
 
 	if err != nil {
 		return models.Pokemon{}, err
@@ -39,7 +41,11 @@ func (client *Client) Pokemon(name string) (models.Pokemon, error) {
 		return models.Pokemon{}, err
 	}
 
-	defer res.Body.Close()
+	defer func() {
+		if err = res.Body.Close(); err != nil {
+			log.Fatalf("%s", err)
+		}
+	}()
 
 	pokeinfo := models.Pokemon{}
 	err = json.Unmarshal(data, &pokeinfo)
@@ -51,10 +57,10 @@ func (client *Client) Pokemon(name string) (models.Pokemon, error) {
 }
 
 func (client *Client) LocationArearesponse() (models.Location, error) {
-	end_url := "/location-area"
-	full_url := base_url + end_url
+	endURL := "/location-area"
+	fullURL := baseURL + endURL
 
-	req, err := http.NewRequest("GET", full_url, nil)
+	req, err := http.NewRequest("GET", fullURL, nil)
 
 	if err != nil {
 		return models.Location{}, err
@@ -75,7 +81,11 @@ func (client *Client) LocationArearesponse() (models.Location, error) {
 		return models.Location{}, err
 	}
 
-	defer res.Body.Close()
+	defer func() {
+		if err = res.Body.Close(); err != nil {
+			log.Fatalf("%s", err)
+		}
+	}()
 
 	LocationAreaValues := models.Location{}
 	err = json.Unmarshal(data, &LocationAreaValues)
@@ -86,17 +96,17 @@ func (client *Client) LocationArearesponse() (models.Location, error) {
 
 }
 
-func (c *Client) Pokelocationres(arg string) (models.Pokelocation, error) {
-	end_url := "/location-area/"
-	full_url := base_url + end_url + arg
+func (client *Client) Pokelocationres(arg string) (models.Pokelocation, error) {
+	endURL := "/location-area/"
+	fullURL := baseURL + endURL + arg
 
-	req, err := http.NewRequest("GET", full_url, nil)
+	req, err := http.NewRequest("GET", fullURL, nil)
 
 	if err != nil {
 		return models.Pokelocation{}, err
 	}
 
-	res, err := c.Do(req)
+	res, err := client.Do(req)
 
 	if err != nil {
 		return models.Pokelocation{}, err
@@ -111,7 +121,11 @@ func (c *Client) Pokelocationres(arg string) (models.Pokelocation, error) {
 		return models.Pokelocation{}, err
 	}
 
-	defer res.Body.Close()
+	defer func() {
+		if err = res.Body.Close(); err != nil {
+			log.Fatalf("%s", err)
+		}
+	}()
 
 	LocationAreaValues := models.Pokelocation{}
 	err = json.Unmarshal(data, &LocationAreaValues)

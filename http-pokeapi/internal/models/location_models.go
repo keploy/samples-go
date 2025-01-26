@@ -1,3 +1,4 @@
+// Package models defines the Go structs used to represent data from the Pokémon API.
 package models
 
 type Location struct {

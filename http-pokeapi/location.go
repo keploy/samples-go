@@ -6,7 +6,7 @@ type locationres struct {
 	Location []string `json:"location"`
 }
 
-func (cfg *apiconfig) FetchLocations(w http.ResponseWriter, r *http.Request) {
+func (cfg *apiconfig) FetchLocations(w http.ResponseWriter, _ *http.Request) {
 	res, err := cfg.client.LocationArearesponse()
 
 	if err != nil {
@@ -20,7 +20,7 @@ func (cfg *apiconfig) FetchLocations(w http.ResponseWriter, r *http.Request) {
 		loc = append(loc, location.Name)
 	}
 
-	respondWithJson(w, http.StatusOK, locationres{
+	respondWithJSON(w, http.StatusOK, locationres{
 		Location: loc,
 	})
 

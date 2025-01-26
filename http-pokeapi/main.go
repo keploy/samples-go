@@ -1,3 +1,4 @@
+// // Package main sets up an HTTP server to interact with the Pokémon API via the pokeapi client.
 package main
 
 import (
