@@ -1,3 +1,4 @@
+// Package uss provides utility functions for generating short, unique URL links by hashing and encoding input URLs
 package uss
 
 import (
