@@ -1,3 +1,6 @@
+// Package main implements a gRPC server for managing users.
+// It supports various gRPC methods for creating, updating, deleting, and retrieving users,
+// including both synchronous and streaming RPCs for handling multiple users in one request.
 package main
 
 import (
@@ -35,7 +38,7 @@ func incrementID() {
 }
 
 // CreateUser RPC
-func (s *server) CreateUser(ctx context.Context, req *pb.UserRequest) (*pb.UserResponse, error) {
+func (s *server) CreateUser(_ context.Context, req *pb.UserRequest) (*pb.UserResponse, error) {
 	mu.Lock()
 	defer mu.Unlock()
 
@@ -61,7 +64,7 @@ func (s *server) CreateUser(ctx context.Context, req *pb.UserRequest) (*pb.UserR
 }
 
 // GetUsers RPC
-func (s *server) GetUsers(ctx context.Context, req *pb.Empty) (*pb.UsersResponse, error) {
+func (s *server) GetUsers(_ context.Context, _ *pb.Empty) (*pb.UsersResponse, error) {
 	mu.Lock()
 	defer mu.Unlock()
 
@@ -81,7 +84,7 @@ func (s *server) GetUsers(ctx context.Context, req *pb.Empty) (*pb.UsersResponse
 }
 
 // UpdateUser RPC
-func (s *server) UpdateUser(ctx context.Context, req *pb.UserRequest) (*pb.UserResponse, error) {
+func (s *server) UpdateUser(_ context.Context, req *pb.UserRequest) (*pb.UserResponse, error) {
 	mu.Lock()
 	defer mu.Unlock()
 
@@ -103,7 +106,7 @@ func (s *server) UpdateUser(ctx context.Context, req *pb.UserRequest) (*pb.UserR
 }
 
 // DeleteUser RPC
-func (s *server) DeleteUser(ctx context.Context, req *pb.UserID) (*pb.Empty, error) {
+func (s *server) DeleteUser(_ context.Context, req *pb.UserID) (*pb.Empty, error) {
 	mu.Lock()
 	defer mu.Unlock()
 
@@ -169,14 +172,13 @@ func (s *server) DeleteUsersStream(stream pb.UserService_DeleteUsersStreamServer
 			return err
 		}
 
-		if _, exists := userStore[int(req.GetId())]; exists {
-			delete(userStore, int(req.GetId()))
-		}
+		delete(userStore, int(req.GetId()))
+
 	}
 }
 
 // GetUsersStream RPC (Server Streaming)
-func (s *server) GetUsersStream(req *pb.Empty, stream pb.UserService_GetUsersStreamServer) error {
+func (s *server) GetUsersStream(_ *pb.Empty, stream pb.UserService_GetUsersStreamServer) error {
 	mu.Lock()
 	defer mu.Unlock()
 
