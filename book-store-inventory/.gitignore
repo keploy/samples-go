@@ -14,7 +14,7 @@
 config.yaml
 
 # Go module files (optional, but recommended for clean repo)
-/go.sum
+# /go.sum
 
 # Compiled Python files (if any scripts are used)
 __pycache__/
