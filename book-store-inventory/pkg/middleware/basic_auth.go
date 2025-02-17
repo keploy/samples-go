@@ -1,3 +1,4 @@
+// Package middleware contains basic user and pass middleware for testing private routes
 package middleware
 
 import "github.com/gin-gonic/gin"

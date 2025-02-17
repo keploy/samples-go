@@ -1,3 +1,4 @@
+// Package utils contains function to print all available routes in application
 package utils
 
 import (
@@ -8,6 +9,7 @@ import (
 
 // https://stackoverflow.com/questions/287871/how-do-i-print-colored-text-to-the-terminal
 // https://stackoverflow.com/a/26445590
+
 var Reset = "\033[0m"
 
 var Blue = "\033[34m"

@@ -1,3 +1,4 @@
+// Package database contains helper functions for initializing and managing database connections.
 package database
 
 import (

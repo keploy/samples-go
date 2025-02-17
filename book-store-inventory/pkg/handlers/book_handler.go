@@ -1,3 +1,4 @@
+// Package handlers contains the main bussiness logic of the application
 package handlers
 
 import (
@@ -24,11 +25,11 @@ func (bookHandler *BookHandler) GetBooksHandler(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, books)
 }
 
-func (bookHandler *BookHandler) GetBookByIdHandler(ctx *gin.Context) {
+func (bookHandler *BookHandler) GetBookByIDHandler(ctx *gin.Context) {
 	// getting param from the URL
 	/* http://localhost:9090/api/v1/book/id/3 --> 3 is param here */
-	book_id_param := ctx.Param("book_id")
-	book, err := bookHandler.BookModel.GetBookByID(book_id_param)
+	bookIDParam := ctx.Param("book_id")
+	book, err := bookHandler.BookModel.GetBookByID(bookIDParam)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"error":   "Failed to get book by ID",

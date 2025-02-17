@@ -1,3 +1,4 @@
+// Package models contains struct for Data
 package models
 
 import "time"

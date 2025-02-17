@@ -9,8 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/saketV8/book-store-inventory/pkg/handlers"
 	"github.com/saketV8/book-store-inventory/pkg/utils"
-
-	log "github.com/sirupsen/logrus"
 )
 
 type App struct {
@@ -18,7 +16,6 @@ type App struct {
 	Books *handlers.BookHandler
 }
 
-// func SetupRouter(DbModel *querydb.DbModel) {
 func SetupRouter(app *App) {
 	// Initializing the GIN Router
 	gin.SetMode(gin.ReleaseMode)
@@ -41,7 +38,7 @@ func SetupRouter(app *App) {
 	err := rtr.Run(utils.PORT)
 	if err != nil {
 		fmt.Println("============================================")
-		log.Fatal("ERROR: while Initializing the server")
+		fmt.Println("ERROR: while Initializing the server")
 		fmt.Println("============================================")
 	}
 }

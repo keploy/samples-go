@@ -1,3 +1,4 @@
+// Package repositories contains logic to interact with database uisng raw SQL queries
 package repositories
 
 import (
@@ -48,12 +49,12 @@ func (bookModel *BookModel) GetBooks() ([]models.Book, error) {
 	return books, nil
 }
 
-func (bookModel *BookModel) GetBookByID(book_id string) (models.Book, error) {
+func (bookModel *BookModel) GetBookByID(bookID string) (models.Book, error) {
 	statement := `SELECT book_id, title, author, price, published_date, stock_quantity FROM books WHERE book_id = ? ;`
 	// empty book model
 	book := models.Book{}
 
-	err := bookModel.DB.QueryRow(statement, book_id).Scan(
+	err := bookModel.DB.QueryRow(statement, bookID).Scan(
 		&book.BookID,
 		&book.Title,
 		&book.Author,
@@ -76,14 +77,14 @@ func (bookModel *BookModel) AddBook(book models.Book) (models.Book, error) {
 		return models.Book{}, err
 	}
 
-	lastInsertedId, err := result.LastInsertId()
+	lastInsertedID, err := result.LastInsertId()
 	if err != nil {
 		return models.Book{}, err
 	}
 
 	// adding Id to book model inserted autmatically by sqlite before returning to end user
 	// removing int gives int64 cannot covert to int :)
-	book.BookID = int(lastInsertedId)
+	book.BookID = int(lastInsertedID)
 
 	return book, nil
 }
