@@ -1,0 +1,32 @@
+# Binaries and build artifacts
+/book-store-inventory
+/tmp/
+*.exe
+*.out
+*.test
+
+# Logs and debugging files
+*.log
+*.trace
+
+# Environment and config files
+.env
+config.yaml
+
+# Go module files (optional, but recommended for clean repo)
+# /go.sum
+
+# Compiled Python files (if any scripts are used)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Editor and IDE-specific files
+.vscode/
+.idea/
+*.iml
