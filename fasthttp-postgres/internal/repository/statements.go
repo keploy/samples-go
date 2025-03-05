@@ -2,7 +2,7 @@ package repository
 
 const (
 	getAllAuthors = `SELECT * FROM authors`
-
+	// getAuthorByID = `SELECT * FROM authors WHERE id = $1`
 	getBookByID = `SELECT b.id, b.title, b.year, b.author_id, a.first_name, a.last_name
 							FROM books b
 							LEFT JOIN authors a on b.author_id=a.id

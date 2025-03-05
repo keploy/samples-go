@@ -1,3 +1,4 @@
+// Package main provides handlers for location-related API endpoints.
 package main
 
 import "net/http"

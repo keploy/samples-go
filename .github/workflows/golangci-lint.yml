@@ -31,6 +31,7 @@ jobs:
           - fasthttp-postgres
           - gin-mongo
           - gin-redis
+          - go-grpc
           - go-jwt
           - go-twilio
           - graphql-sql
@@ -41,12 +42,13 @@ jobs:
           - S3-Keploy
           - sse-svelte
           - users-profile
+          - book-store-inventory
           
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v4
         with:
-          go-version: '1.21'
+          go-version: '1.23.4'
           cache: false
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
@@ -54,13 +56,10 @@ jobs:
           # Require: The version of golangci-lint to use.
           # When `install-mode` is `binary` (default) the value can be v1.2 or v1.2.3 or `latest` to use the latest version.
           # When `install-mode` is `goinstall` the value can be v1.2.3, `latest`, or the hash of a commit.
-          version: v1.54
+          version: v1.63.4
 
           # Optional: working directory, useful for monorepos
           working-directory: ${{matrix.working-directory}}
-
-          # Optional: show only new issues if it's a pull request. The default value is `false`.
-          only-new-issues: true
 
           # Optional: The mode to install golangci-lint. It can be 'binary' or 'goinstall'.
           install-mode: "goinstall"

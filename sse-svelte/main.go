@@ -65,7 +65,8 @@ func sseHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(message)
 			_, err := fmt.Fprintf(w, "data: %s\n\n", message)
 			if err != nil {
-				log.Println(err)
+				http.Error(w, fmt.Sprintf("Failed to write response: %v", err), http.StatusInternalServerError)
+				return
 			}
 			flusher.Flush()
 		case <-r.Context().Done():

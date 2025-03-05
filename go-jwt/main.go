@@ -101,7 +101,7 @@ func CheckTokenHandler(c *gin.Context) {
 	claims := &Claims{}
 
 	// Parse the JWT string and store the result in `claims`
-	sentTokenObj, err := jwt.ParseWithClaims(sentToken, claims, func(*jwt.Token) (interface{}, error) {
+	sentTokenObj, err := jwt.ParseWithClaims(sentToken, claims, func(_ *jwt.Token) (interface{}, error) {
 		return jwtKey, nil
 	})
 
@@ -151,5 +151,9 @@ func main() {
 	router.GET("/generate-token", GenerateTokenHandler)
 	router.GET("/check-token", CheckTokenHandler)
 
-	log.Println(router.Run(":8000"))
+	err = router.Run(":8000")
+	if err != nil && err != http.ErrServerClosed {
+		log.Printf("Failed to start server: %v", err)
+		os.Exit(1)
+	}
 }

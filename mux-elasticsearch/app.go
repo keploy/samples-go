@@ -119,7 +119,8 @@ func (a *App) createDocument(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	err = json.NewEncoder(w).Encode(map[string]string{"id": createResponse.ID})
 	if err != nil {
-		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 }
 
@@ -158,8 +159,10 @@ func (a *App) getDocument(w http.ResponseWriter, r *http.Request) {
 	source := doc["_source"].(map[string]interface{})
 
 	w.Header().Set("Content-Type", "application/json")
-	if err = json.NewEncoder(w).Encode(source); err != nil {
-		log.Println(err)
+	err = json.NewEncoder(w).Encode(source)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 }
 
@@ -262,7 +265,8 @@ func (a *App) Hello(res http.ResponseWriter, _ *http.Request) {
 	var result = "Hello"
 	_, err := res.Write([]byte(result))
 	if err != nil {
-		log.Println(err)
+		http.Error(res, fmt.Sprintf("Failed to write response: %v", err), http.StatusInternalServerError)
+		return
 	}
 }
 

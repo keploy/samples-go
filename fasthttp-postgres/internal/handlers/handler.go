@@ -1,5 +1,4 @@
-// Package handlers contains the HTTP handlers for managing authors and books.
-// It communicates with the repository layer to retrieve and manipulate data for the API endpoints.
+// Package handlers provides HTTP request handlers for managing authors and books.
 package handlers
 
 import (

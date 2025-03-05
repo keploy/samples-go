@@ -61,9 +61,8 @@ func (s *Store) Connect(config map[string]string) error {
 
 func (s *Store) Close() {
 	db, _ := s.db.DB()
-	err := db.Close()
-	if err != nil {
-		log.Printf("%s", err)
+	if err := db.Close(); err != nil {
+		fmt.Fprintf(os.Stderr, "Could not close database connection: %v\n", err)
 		os.Exit(1)
 	}
 }

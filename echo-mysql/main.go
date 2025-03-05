@@ -38,7 +38,6 @@ func StartHTTPServer() {
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: `${remote_ip} [${time_rfc3339}] "${method} ${uri} HTTP/1.0" ${status} ${latency_human} ${bytes_out} ${error} "${user_agent}"` + "\n",
 		Skipper: func(c echo.Context) bool {
-
 			return c.Request().RequestURI == "/healthcheck"
 		},
 	}))
@@ -58,7 +57,6 @@ func StartHTTPServer() {
 		}
 
 		return c.String(http.StatusNotFound, "Not Found.")
-
 	})
 
 	e.POST("/shorten", func(c echo.Context) error {
@@ -75,7 +73,6 @@ func StartHTTPServer() {
 
 		req.UpdatedAt = req.UpdatedAt.Truncate(time.Second)
 		return c.JSON(http.StatusOK, req)
-
 	})
 
 	// automatically add routers for net/http/pprof e.g. /debug/pprof, /debug/pprof/heap, etc.

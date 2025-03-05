@@ -1,5 +1,4 @@
-// Package app initializes and runs the web server, sets up the database connection,
-// and handles graceful shutdown of the server.
+// Package app initializes the application, sets up database connections, routes, and handles server startup and graceful shutdown.
 package app
 
 import (
@@ -7,23 +6,30 @@ import (
 	"fasthttp-postgres/internal/handlers"
 	"fasthttp-postgres/internal/repository"
 	"log"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
 	"github.com/fasthttp/router"
-
 	"github.com/valyala/fasthttp"
 )
 
-func InitApp(db *sql.DB) {
+func InitApp() error {
 	time.Sleep(2 * time.Second)
+	// Database connection initialization
+	uri := "postgresql://postgres:password@localhost:5432/db?sslmode=disable"
+	db, err := sql.Open("postgres", uri)
+	if err != nil {
+		log.Print("Error connecting to database:", err)
+		return err
+	}
 
-	// Close the database connection when the application exits
 	defer func() {
-		if err := db.Close(); err != nil {
-			log.Fatalf("%s", err)
+		// Close the database connection when the application exits
+		if closeErr := db.Close(); closeErr != nil {
+			log.Println("Error closing database connection:", closeErr)
 		}
 	}()
 
@@ -48,7 +54,7 @@ func InitApp(db *sql.DB) {
 	// Start server in a goroutine
 	go func() {
 		log.Println("Starting server: http://localhost:8080")
-		if err := server.ListenAndServe(":8080"); err != nil {
+		if err := server.ListenAndServe(":8080"); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("Error starting server: %s\n", err)
 		}
 	}()
@@ -63,8 +69,10 @@ func InitApp(db *sql.DB) {
 
 	// Attempt to gracefully shut down the server
 	if err := server.Shutdown(); err != nil {
-		log.Fatalf("Error shutting down server: %s\n", err)
+		log.Printf("Error shutting down server: %s\n", err)
+		return err
 	}
 
 	log.Println("Server gracefully stopped")
+	return nil
 }

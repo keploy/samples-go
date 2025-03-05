@@ -174,7 +174,6 @@ func (s *server) DeleteUsersStream(stream pb.UserService_DeleteUsersStreamServer
 		}
 
 		delete(userStore, int(req.GetId()))
-
 	}
 }
 
