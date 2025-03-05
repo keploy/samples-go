@@ -1,3 +1,5 @@
+// Package repository provides functions to interact with the database for authors and books.
+// It includes methods to fetch, create, and manage data related to authors and books.
 package repository
 
 import (

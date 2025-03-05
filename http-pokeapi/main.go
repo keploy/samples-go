@@ -1,9 +1,11 @@
+// // Package main sets up an HTTP server to interact with the Pokémon API via the pokeapi client.
 package main
 
 import (
 	"http-pokeapi/internal/pokeapi"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/go-chi/chi"
@@ -37,9 +39,9 @@ func main() {
 		Handler: servmux,
 	}
 	log.Printf("The server is live on port %s\n", port)
-
 	err := srv.ListenAndServe()
-	if err != nil && err != http.ErrServerClosed {
-		log.Fatalf("Error starting server: %v", err)
+	if err != nil {
+		log.Printf("%s", err)
+		os.Exit(1)
 	}
 }

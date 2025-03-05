@@ -1,5 +1,4 @@
-// Package pokeapi provides a client to interact with the PokeAPI to fetch
-// Pokémon, location area, and Pokémon location data.
+// Package pokeapi provides a client for interacting with the Pokémon API (https://pokeapi.co/).
 package pokeapi
 
 import (
@@ -7,7 +6,9 @@ import (
 	"fmt"
 	models "http-pokeapi/internal/models"
 	"io"
+	"log"
 	"net/http"
+	"os"
 )
 
 const baseURL = "https://pokeapi.co/api/v2"
@@ -42,8 +43,9 @@ func (client *Client) Pokemon(name string) (models.Pokemon, error) {
 	}
 
 	defer func() {
-		if err := res.Body.Close(); err != nil {
-			fmt.Printf("Error closing response body: %v\n", err)
+		if err = res.Body.Close(); err != nil {
+			log.Printf("%s", err)
+			os.Exit(1)
 		}
 	}()
 
@@ -82,8 +84,9 @@ func (client *Client) LocationArearesponse() (models.Location, error) {
 	}
 
 	defer func() {
-		if err := res.Body.Close(); err != nil {
-			fmt.Printf("Error closing response body: %v\n", err)
+		if err = res.Body.Close(); err != nil {
+			log.Printf("%s", err)
+			os.Exit(1)
 		}
 	}()
 
@@ -122,8 +125,9 @@ func (client *Client) Pokelocationres(arg string) (models.Pokelocation, error) {
 	}
 
 	defer func() {
-		if err := res.Body.Close(); err != nil {
-			fmt.Printf("Error closing response body: %v\n", err)
+		if err = res.Body.Close(); err != nil {
+			log.Printf("%s", err)
+			os.Exit(1)
 		}
 	}()
 

@@ -5,6 +5,7 @@ import (
 	"S3-Keploy/config"
 	"S3-Keploy/routes"
 	"log"
+	"os"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -20,6 +21,7 @@ func main() {
 
 	err := app.Listen(":3000")
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("%s", err)
+		os.Exit(1)
 	}
 }

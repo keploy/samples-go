@@ -1,4 +1,5 @@
-// Package main starts the application
+// Package main is a simple HTTP server using the Gin framework that provides an endpoint for sending SMS messages
+// through the Twilio API. It reads environment variables for Twilio credentials and gracefully shuts down the server
 package main
 
 import (
@@ -69,8 +70,9 @@ func gracefulShutdown(router *gin.Engine) {
 	fmt.Println("Shutting down server...")
 
 	// The context is used to inform the server it has 5 seconds to complete the ongoing requests
-	if err := srv.Shutdown(context.TODO()); err != nil {
-		fmt.Fprintf(os.Stderr, "Server forced to shutdown: %v\n", err)
+	if err := srv.Shutdown(context.Background()); err != nil {
+		log.Printf("Server forced to shutdown: %s", err)
+		os.Exit(1)
 	}
 
 	fmt.Println("Server exiting")
@@ -80,7 +82,8 @@ func main() {
 	// Load environment variables from a .env file
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatalf("Error loading .env file")
+		log.Printf("Error loading .env file")
+		os.Exit(1)
 	}
 
 	router := gin.Default()
@@ -89,8 +92,9 @@ func main() {
 
 	// Run the server and listen for graceful shutdown
 	go func() {
-		if err := router.Run(":8080"); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("Server failed to start: %v", err)
+		if err := router.Run(":8080"); err != nil {
+			log.Printf("Server failed to start: %v", err)
+			os.Exit(1)
 		}
 	}()
 

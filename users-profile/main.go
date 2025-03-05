@@ -1,9 +1,8 @@
-// Package main starts the application.
+// This package creates and runs an HTTP server using the Gin framework.
 package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -35,7 +34,8 @@ func main() {
 	// Start the server in a separate goroutine
 	go func() {
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("Failed to start server: %v", err)
+			log.Printf("Failed to start server: %v", err)
+			os.Exit(1)
 		}
 	}()
 
@@ -53,7 +53,8 @@ func main() {
 
 	// Attempt graceful shutdown by shutting down the server
 	if err := server.Shutdown(ctx); err != nil {
-		fmt.Fprintf(os.Stderr, "Server shutdown failed: %v\n", err)
+		log.Printf("Server shutdown failed: %v", err)
+		os.Exit(1)
 	}
 
 	log.Println("Server gracefully stopped")

@@ -10,6 +10,8 @@ import (
 	"gorm.io/gorm"
 )
 
+var MetaStore *Store
+
 type ShortCodeInfo struct {
 	UID       uint64    `json:"id" sql:"AUTO_INCREMENT" gorm:"primary_key"`
 	ShortCode string    `json:"shortcode" gorm:"uniqueIndex"`
@@ -50,8 +52,8 @@ func (s *Store) Connect(config map[string]string) error {
 	sqlDB.SetMaxOpenConns(512)
 
 	if err = s.db.AutoMigrate(&ShortCodeInfo{}); err != nil {
-		log.Printf("Failed to create/update db tables with error %s", err.Error())
-		return err
+		log.Printf("%s", fmt.Sprintf("Failed to create/update db tables with error %s", err.Error()))
+		os.Exit(1)
 	}
 
 	return nil
@@ -61,6 +63,7 @@ func (s *Store) Close() {
 	db, _ := s.db.DB()
 	if err := db.Close(); err != nil {
 		fmt.Fprintf(os.Stderr, "Could not close database connection: %v\n", err)
+		os.Exit(1)
 	}
 }
 
@@ -79,5 +82,3 @@ func (s *Store) FindByShortCode(shortCode string) *ShortCodeInfo {
 	urlInfo := infos[0]
 	return &urlInfo
 }
-
-var MetaStore *Store

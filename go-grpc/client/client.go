@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 
 	pb "github.com/keploy/samples-go/go-grpc/user"
 
@@ -23,7 +24,8 @@ func init() {
 	// Set up the gRPC connection
 	conn, err := grpc.NewClient("localhost:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Fatalf("failed to connect to gRPC server: %v", err)
+		log.Printf("failed to connect to gRPC server: %v", err)
+		os.Exit(1)
 	}
 	grpcClient = pb.NewUserServiceClient(conn)
 }
@@ -327,8 +329,8 @@ func main() {
 	r.DELETE("/users/stream", deleteUsersStream)
 
 	// Start Gin server
-	err := r.Run(":8080")
-	if err != nil && err != http.ErrServerClosed {
-		log.Fatalf("Failed to start server: %v", err)
+	if err := r.Run(":8080"); err != nil {
+		log.Printf("%s", err)
+		os.Exit(1)
 	}
 }

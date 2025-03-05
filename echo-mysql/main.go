@@ -1,10 +1,12 @@
-// Package main starts the application
+// Package main initializes and starts a URL shortening service using Echo framework,
+// connecting to a MySQL database and providing endpoints for shortening and resolving URLs
 package main
 
 import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/hermione/echo-mysql/uss"
@@ -17,15 +19,17 @@ func main() {
 	time.Sleep(2 * time.Second)
 	appConfig, err := godotenv.Read()
 	if err != nil {
-		log.Fatalf("Error reading .env file %s", err.Error())
+		log.Printf("Error reading .env file %s", err.Error())
+		os.Exit(1)
+
 	}
 
 	uss.MetaStore = &uss.Store{}
 	err = uss.MetaStore.Connect(appConfig)
 	if err != nil {
-		log.Fatalf("Failed to connect to db %s", err.Error())
+		log.Printf("Failed to connect to db %s", err.Error())
+		os.Exit(1)
 	}
-
 	StartHTTPServer()
 }
 

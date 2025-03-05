@@ -1,4 +1,4 @@
-// app.go
+// Package main provides a RESTful API for managing products using PostgreSQL as the database.
 package main
 
 import (
@@ -32,8 +32,8 @@ func (a *App) Initialize(host, user, password, dbname string) error {
 	var err error
 	a.DB, err = sql.Open("postgres", connectionString)
 	if err != nil {
-		log.Print(err)
-		return err
+		log.Printf("%s", err)
+		os.Exit(1)
 	}
 
 	a.Router = mux.NewRouter()
@@ -42,7 +42,6 @@ func (a *App) Initialize(host, user, password, dbname string) error {
 		Handler: a.Router,
 	}
 
-	// tom: this line is added after initializeRoutes is created later on
 	a.initializeRoutes()
 	return err
 }
@@ -50,7 +49,8 @@ func (a *App) Initialize(host, user, password, dbname string) error {
 func (a *App) Run(addr string) {
 	go func() {
 		if err := a.Server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("Could not listen on %s: %v\n", addr, err)
+			log.Printf("Could not listen on %s: %v\n", addr, err)
+			os.Exit(1)
 		}
 	}()
 
@@ -64,7 +64,8 @@ func (a *App) Run(addr string) {
 	defer cancel()
 
 	if err := a.Server.Shutdown(ctx); err != nil {
-		fmt.Fprintf(os.Stderr, "Server forced to shutdown: %v\n", err)
+		log.Printf("Server forced to shutdown: %v", err)
+		os.Exit(1)
 	}
 
 	log.Println("Server exiting")
@@ -101,8 +102,9 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
-	if _, err := w.Write(response); err != nil {
-		fmt.Println("Error writing response:", err)
+	_, err := w.Write(response)
+	if err != nil {
+		log.Println(err)
 	}
 }
 
@@ -135,7 +137,8 @@ func (a *App) createProduct(w http.ResponseWriter, r *http.Request) {
 	}
 	defer func() {
 		if err := r.Body.Close(); err != nil {
-			fmt.Printf("Error closing request body: %v\n", err)
+			log.Printf("%s", err)
+			os.Exit(1)
 		}
 	}()
 
@@ -161,10 +164,10 @@ func (a *App) updateProduct(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, http.StatusBadRequest, "Invalid resquest payload")
 		return
 	}
-
 	defer func() {
 		if err := r.Body.Close(); err != nil {
-			fmt.Printf("Error closing request body: %v\n", err)
+			log.Printf("%s", err)
+			os.Exit(1)
 		}
 	}()
 	p.ID = id

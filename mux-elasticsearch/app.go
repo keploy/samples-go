@@ -1,3 +1,5 @@
+// Package main provides a simple HTTP server that interacts with Elasticsearch to perform CRUD operations on documents.
+// The server is built using the `gorilla/mux` router and `elasticsearch-go` client for communicating with the Elasticsearch service.
 package main
 
 import (
@@ -95,10 +97,10 @@ func (a *App) createDocument(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
 	defer func() {
-		if err := res.Body.Close(); err != nil {
-			fmt.Printf("Error closing response body: %v\n", err)
+		if err = res.Body.Close(); err != nil {
+			log.Printf("%s", err)
+			os.Exit(1)
 		}
 	}()
 
@@ -137,8 +139,9 @@ func (a *App) getDocument(w http.ResponseWriter, r *http.Request) {
 	}
 
 	defer func() {
-		if err := res.Body.Close(); err != nil {
-			fmt.Printf("Error closing response body: %v\n", err)
+		if err = res.Body.Close(); err != nil {
+			log.Printf("%s", err)
+			os.Exit(1)
 		}
 	}()
 
@@ -190,10 +193,10 @@ func (a *App) updateDocument(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
 	defer func() {
-		if err := res.Body.Close(); err != nil {
-			fmt.Printf("Error closing response body: %v\n", err)
+		if err = res.Body.Close(); err != nil {
+			log.Printf("%s", err)
+			os.Exit(1)
 		}
 	}()
 
@@ -218,10 +221,10 @@ func (a *App) deleteDocument(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
 	defer func() {
-		if err := res.Body.Close(); err != nil {
-			fmt.Printf("Error closing response body: %v\n", err)
+		if err = res.Body.Close(); err != nil {
+			log.Printf("%s", err)
+			os.Exit(1)
 		}
 	}()
 
@@ -236,7 +239,8 @@ func (a *App) deleteDocument(w http.ResponseWriter, r *http.Request) {
 func (a *App) Run(port string) {
 	go func() {
 		if err := a.Server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("Could not listen on %s: %v\n", port, err)
+			log.Printf("Could not listen on %s: %v\n", port, err)
+			os.Exit(1)
 		}
 	}()
 
@@ -250,7 +254,8 @@ func (a *App) Run(port string) {
 	defer cancel()
 
 	if err := a.Server.Shutdown(ctx); err != nil {
-		fmt.Fprintf(os.Stderr, "Server forced to shutdown: %v\n", err)
+		log.Printf("Server forced to shutdown: %v", err)
+		os.Exit(1)
 	}
 
 	log.Println("Server exiting")

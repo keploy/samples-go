@@ -3,6 +3,7 @@ package redis
 
 import (
 	"log"
+	"os"
 
 	"github.com/go-redis/redis"
 )
@@ -22,6 +23,7 @@ func Init() {
 	})
 	_, err := RedisClient.Ping().Result()
 	if err != nil {
-		log.Fatalf("Error initializing Redis client: %v", err)
+		log.Printf("Error initializing Redis client: %v", err)
+		os.Exit(1)
 	}
 }

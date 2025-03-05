@@ -1,15 +1,17 @@
-// Package server sets up and manages the HTTP server with routes and graceful shutdown.
+// Package server manages the HTTP server setup and graceful shutdown.
+// It initializes the server, starts it, and ensures it shuts down properly when receiving interrupt signals.
 package server
 
 import (
 	"context"
 	"fmt"
-	"github.com/keploy/gin-redis/routes"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/keploy/gin-redis/routes"
 )
 
 func Init() {

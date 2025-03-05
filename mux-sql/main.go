@@ -3,6 +3,7 @@ package main
 
 import (
 	"log"
+	"os"
 )
 
 func handleDeferError(err error) {
@@ -21,7 +22,8 @@ func main() {
 		"postgres") // db_name
 
 	if err != nil {
-		log.Fatal("Failed to initialize app", err)
+		log.Printf("Failed to initialize app %s", err)
+		os.Exit(1)
 	}
 
 	log.Printf("😃 Connected to 8010 port !!")
