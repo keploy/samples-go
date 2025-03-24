@@ -106,5 +106,5 @@ func (c *AppConfig) startPeriodicFetch(ctx context.Context) {
 		case <-ctx.Done():
 			return
 		}
-	}
+	} // comment
 }
