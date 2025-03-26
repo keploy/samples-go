@@ -1,4 +1,4 @@
-module allen-sqs
+module sqs
 
 go 1.22.1
 
