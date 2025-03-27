@@ -62,7 +62,7 @@ func main() {
 				// Pointing to the LocalStack SQS endpoint
 				if service == sqs.ServiceID {
 					return aws.Endpoint{
-						URL:           "http://localhost:4566", // LocalStack SQS endpoint
+						URL:           queueUrl, // LocalStack SQS endpoint
 						SigningRegion: "us-east-1",
 					}, nil
 				}
