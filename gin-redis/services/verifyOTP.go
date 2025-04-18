@@ -1,6 +1,7 @@
 package services
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 
@@ -10,7 +11,7 @@ import (
 )
 
 func Verifycode(request requeststruct.OTPRequest) (string, error) {
-	jsonData, err := redis.Session().Get(request.Email).Result()
+	jsonData, err := redis.Session().Get(context.Background(),request.Email).Result()
 	if err != nil {
 		return "", err
 	}
