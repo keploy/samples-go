@@ -21,7 +21,7 @@ func Init() {
 		Addr:     "localhost:6379", // Redis server address
 		Password: "",               // No password for local Redis, set it if needed
 		DB:       0,                // Default DB
-		Protocol:3,
+		Protocol: 3,
 	})
 	_, err := RedisClient.Ping(context.Background()).Result()
 	if err != nil {

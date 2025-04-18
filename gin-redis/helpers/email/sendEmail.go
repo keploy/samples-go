@@ -25,6 +25,6 @@ func SendEmail(to, userName string) (int, error) {
 	}
 
 	// Store the JSON string in Redis
-	err = redis.Session().Set(context.Background(),to, jsonData, 4*time.Hour).Err()
+	err = redis.Session().Set(context.Background(), to, jsonData, 4*time.Hour).Err()
 	return otp, err
 }

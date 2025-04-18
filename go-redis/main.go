@@ -370,7 +370,7 @@ func createProduct(c *gin.Context) {
 
 	product.ID = uuid.New().String()
 	var p redis.Pipeliner
-	err := saveProductToRedis(p,&product)
+	err := saveProductToRedis(p, &product)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -424,7 +424,7 @@ func updateProduct(c *gin.Context) {
 	}
 
 	var p redis.Pipeliner
-	err = saveProductToRedis(p,existingProduct)
+	err = saveProductToRedis(p, existingProduct)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
