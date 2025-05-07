@@ -7,7 +7,13 @@ import (
 	"strings"
 )
 
-const greeting = "Hello, trainer!"
+const greeting = `Welcome, brave Pokemon Trainer,
+to the PokeAPIExplorer—your open gateway to every corner of the Pokemon universe,
+where you can list every known location area,
+zoom into specific habitats to see which wild Pokemon appear, and
+summon full stat sheets for any Pokemon by name, all in your choice of plain text, XML, or HTML; 
+so grab your PokeBalls, venture into the tall grass of HTTP requests, and
+remember: in this API-driven adventure, data is the true prize—gotta fetch them all!`
 
 func (cfg *apiconfig) Greet(w http.ResponseWriter, r *http.Request) {
 	format := strings.ToLower(r.URL.Query().Get("format"))
