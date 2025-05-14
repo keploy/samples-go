@@ -2,10 +2,11 @@
 package redis
 
 import (
+	"context"
 	"log"
 	"os"
 
-	"github.com/go-redis/redis"
+	"github.com/redis/go-redis/v9"
 )
 
 var RedisClient *redis.Client
@@ -20,8 +21,9 @@ func Init() {
 		Addr:     "localhost:6379", // Redis server address
 		Password: "",               // No password for local Redis, set it if needed
 		DB:       0,                // Default DB
+		Protocol: 3,
 	})
-	_, err := RedisClient.Ping().Result()
+	_, err := RedisClient.Ping(context.Background()).Result()
 	if err != nil {
 		log.Printf("Error initializing Redis client: %v", err)
 		os.Exit(1)
