@@ -41,10 +41,7 @@ docker build -t echo-mysql-app .
 # Capture the Testcases
 
 ``` bash
-keploy record \                                                                                 
--c "docker run -p 9090:9090 --name echo-mysql-container --network keploy-network --rm echo-mysql-app" \
---container-name "echo-mysql-container" \
---buildDelay 60
+keploy record -c "docker run -p 9090:9090 --name echo-mysql-container --network keploy-network --rm echo-mysql-app" --container-name "echo-mysql-container" --buildDelay 60
 ```
 
 To generate testcases we just need to make some API calls. You can use Postman, Hoppscotch, or simply curl
@@ -83,9 +80,7 @@ Now both these API calls were captured as a testcase and should be visible on th
 Now that we have our testcase captured, run the test file.
 
 ```bash
-keploy test \                                                                                   
--c "docker run -p 9090:9090 --name echo-mysql-container --network keploy-network --rm echo-mysql-app" \
---delay 20
+keploy test -c "docker run -p 9090:9090 --name echo-mysql-container --network keploy-network --rm echo-mysql-app" --delay 20
 ```
 
 So no need to setup dependencies like MySQL, web-go locally or write mocks for your testing. 
