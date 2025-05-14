@@ -26,7 +26,7 @@ go mod download
 docker run --name mysql-container --network keploy-network -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=uss -p 3306:3306 --rm -d mysql:latest
 ```
 
-If the docker network doesn't exists, create it first.
+If the docker network doesn't exist, create it first.
 
 ```bash
 docker network create keploy-network
