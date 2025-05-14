@@ -5,6 +5,7 @@ A simple golang based url shortner
 # Requirments to run
 1. Golang [How to install Golang](https://go.dev/doc/install)
 2. Docker [How to install Docker?](https://docs.docker.com/engine/install/)
+3. Keploy [Quick Installation (API test generator)](https://github.com/keploy/keploy?tab=readme-ov-file#-quick-installation-api-test-generator)
 
 
 # Setting up the project
@@ -22,18 +23,28 @@ go mod download
 ## Let's start the MySql Instance
 
 ``` bash
-sudo docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=uss -p 3306:3306 --rm mysql:latest
+docker run --name mysql-container --network keploy-network -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=uss -p 3306:3306 --rm -d mysql:latest
 ```
-## Build the application 
+
+If the docker network doesn't exists, create it first.
+
+```bash
+docker network create keploy-network
+```
+
+## Build the docker image for the application 
 
 ``` bash
- go build -o echo-mysql . 
- ```
+docker build -t echo-mysql-app . 
+```
 
 # Capture the Testcases
 
 ``` bash
-sudo -E env PATH=$PATH oss record -c "./echo-mysql"
+keploy record \                                                                                 
+-c "docker run -p 9090:9090 --name echo-mysql-container --network keploy-network --rm echo-mysql-app" \
+--container-name "echo-mysql-container" \
+--buildDelay 60
 ```
 
 To generate testcases we just need to make some API calls. You can use Postman, Hoppscotch, or simply curl
@@ -51,13 +62,13 @@ To generate testcases we just need to make some API calls. You can use Postman, 
 ```
 
 
-3. Short URL:
+3. Shorten URL:
 ```bash
 -> curl -X POST http://localhost:9090/shorten -H "Content-Type: application/json" -d '{"url": "https://github.com"}'
 ```
 
 
-4. Resolve short code:
+4. Resolve shortened code:
 
 ```bash
 -> curl -X GET http://localhost:9090/resolve/4KepjkTT
@@ -72,14 +83,22 @@ Now both these API calls were captured as a testcase and should be visible on th
 Now that we have our testcase captured, run the test file.
 
 ```bash
-sudo -E env PATH=$PATH oss test -c "./echo-mysql" --delay 20
+keploy test \                                                                                   
+-c "docker run -p 9090:9090 --name echo-mysql-container --network keploy-network --rm echo-mysql-app" \
+--delay 20
 ```
 
-So no need to setup dependencies like MySQL, web-go locally or write mocks for your testing.
+So no need to setup dependencies like MySQL, web-go locally or write mocks for your testing. 
 
-oss test runs the test cases captured in the previous step. It replays the captured API calls against the application to verify its behavior. 
+keploy test runs the test cases captured in the previous step. It replays the captured API calls against the application to verify its behavior. 
 
 The application thinks it's talking to MySQL 😄
+
+You can verify this by stopping the mysql container and running the tests again.
+
+```bash
+docker stop mysql-container
+```
 
 We will get output something like this:
 
