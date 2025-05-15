@@ -14,31 +14,9 @@ Run the following commands to clone the repository and download the necessary Go
 
 ``` bash
 git clone https://github.com/keploy/samples-go.git && cd samples-go/echo-mysql
-go mod download
 ```
 
-
-# Running app
-
-## Let's start the MySql Instance
-
-``` bash
-docker run --name mysql-container --network keploy-network -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=uss -p 3306:3306 --rm -d mysql:latest
-```
-
-If the docker network doesn't exist, create it first.
-
-```bash
-docker network create keploy-network
-```
-
-## Build the docker image for the application 
-
-``` bash
-docker build -t echo-mysql-app . 
-```
-
-# Capture the Testcases
+## Run the app and Capture the Testcases
 
 ``` bash
 keploy record -c "docker compose up" --container-name "echo-mysql-container" --buildDelay 60
@@ -75,7 +53,7 @@ Now both these API calls were captured as a testcase and should be visible on th
 
 ![alt text](https://github.com/keploy/samples-go/blob/main/echo-mysql/img/keploy_record.png?raw=true)
 
-# Run the captured testcases
+## Run the captured testcases
 
 Now that we have our testcase captured, run the test file.
 
@@ -90,3 +68,44 @@ The application thinks it's talking to MySQL 😄.
 We will get output something like this:
 
 ![alt text](https://github.com/keploy/samples-go/blob/main/echo-mysql/img/keploy_test.png?raw=true)
+
+## Run the app without docker
+
+If you’d prefer to build and run the application locally without Docker, follow these steps:
+
+### Start the MySql Instance
+
+``` bash
+sudo docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=uss -p 3306:3306 --rm mysql:latest
+```
+### Build the application 
+
+prepare the .env file.
+
+```
+cp .env.local .env
+```
+
+download go modules.
+
+```
+go mod download
+```
+
+build the app.
+
+``` bash
+go build -o echo-mysql .
+```
+
+### Capture the Testcases
+
+``` bash
+sudo -E env PATH=$PATH keploy record -c "./echo-mysql"
+```
+
+### Run the Testcases
+
+```bash
+sudo -E env PATH=$PATH keploy test -c "./echo-mysql" --delay 20
+```
