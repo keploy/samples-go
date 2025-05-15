@@ -41,7 +41,7 @@ docker build -t echo-mysql-app .
 # Capture the Testcases
 
 ``` bash
-keploy record -c "docker run -p 9090:9090 --name echo-mysql-container --network keploy-network --rm echo-mysql-app" --container-name "echo-mysql-container" --buildDelay 60
+keploy record -c "docker compose up" --container-name "echo-mysql-container" --buildDelay 60
 ```
 
 To generate testcases we just need to make some API calls. You can use Postman, Hoppscotch, or simply curl
@@ -80,20 +80,12 @@ Now both these API calls were captured as a testcase and should be visible on th
 Now that we have our testcase captured, run the test file.
 
 ```bash
-keploy test -c "docker run -p 9090:9090 --name echo-mysql-container --network keploy-network --rm echo-mysql-app" --delay 20
+keploy test -c "docker compose up --no-deps app" --delay 20
 ```
 
-So no need to setup dependencies like MySQL, web-go locally or write mocks for your testing. 
+So no need to setup dependencies like MySQL, web-go locally or write mocks for your testing. `keploy test ` runs the test cases captured in the previous step. It replays the captured API calls against the application to verify its behavior. 
 
-keploy test runs the test cases captured in the previous step. It replays the captured API calls against the application to verify its behavior. 
-
-The application thinks it's talking to MySQL 😄
-
-You can verify this by stopping the mysql container and running the tests again.
-
-```bash
-docker stop mysql-container
-```
+The application thinks it's talking to MySQL 😄.
 
 We will get output something like this:
 
