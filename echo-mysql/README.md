@@ -58,7 +58,7 @@ Now both these API calls were captured as a testcase and should be visible on th
 Now that we have our testcase captured, run the test file.
 
 ```bash
-keploy test -c "docker compose up --no-deps app" --delay 20
+keploy test -c "docker compose up app" --delay 20
 ```
 
 So no need to setup dependencies like MySQL, web-go locally or write mocks for your testing. `keploy test ` runs the test cases captured in the previous step. It replays the captured API calls against the application to verify its behavior. 
