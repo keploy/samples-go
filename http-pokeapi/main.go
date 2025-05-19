@@ -32,6 +32,9 @@ func main() {
 	s.Get("/locations/{location}", cfg.FetchPokemons)
 	s.Get("/pokemon/{name}", cfg.AboutPokemon)
 
+	// returns response in different formats based on query parameter or Accept header
+	s.Get("/greet", cfg.Greet)
+
 	servmux := corsmiddleware(r)
 
 	srv := &http.Server{

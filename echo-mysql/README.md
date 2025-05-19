@@ -5,6 +5,7 @@ A simple golang based url shortner
 # Requirments to run
 1. Golang [How to install Golang](https://go.dev/doc/install)
 2. Docker [How to install Docker?](https://docs.docker.com/engine/install/)
+3. Keploy [Quick Installation (API test generator)](https://github.com/keploy/keploy?tab=readme-ov-file#-quick-installation-api-test-generator)
 
 
 # Setting up the project
@@ -13,27 +14,12 @@ Run the following commands to clone the repository and download the necessary Go
 
 ``` bash
 git clone https://github.com/keploy/samples-go.git && cd samples-go/echo-mysql
-go mod download
 ```
 
-
-# Running app
-
-## Let's start the MySql Instance
+## Run the app and Capture the Testcases
 
 ``` bash
-sudo docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=uss -p 3306:3306 --rm mysql:latest
-```
-## Build the application 
-
-``` bash
- go build -o echo-mysql . 
- ```
-
-# Capture the Testcases
-
-``` bash
-sudo -E env PATH=$PATH oss record -c "./echo-mysql"
+keploy record -c "docker compose up" --container-name "echo-mysql-container" --buildDelay 60
 ```
 
 To generate testcases we just need to make some API calls. You can use Postman, Hoppscotch, or simply curl
@@ -51,13 +37,13 @@ To generate testcases we just need to make some API calls. You can use Postman, 
 ```
 
 
-3. Short URL:
+3. Shorten URL:
 ```bash
 -> curl -X POST http://localhost:9090/shorten -H "Content-Type: application/json" -d '{"url": "https://github.com"}'
 ```
 
 
-4. Resolve short code:
+4. Resolve shortened code:
 
 ```bash
 -> curl -X GET http://localhost:9090/resolve/4KepjkTT
@@ -65,22 +51,61 @@ To generate testcases we just need to make some API calls. You can use Postman, 
 
 Now both these API calls were captured as a testcase and should be visible on the Keploy CLI. You should be seeing an app named keploy folder with the test cases we just captured and data mocks created.
 
-![alt text](https://github.com/Hermione2408/samples-go/blob/app/echo-mysql/img/keploy_record.png?raw=true)
+![alt text](https://github.com/keploy/samples-go/blob/main/echo-mysql/img/keploy_record.png?raw=true)
 
-# Run the captured testcases
+## Run the captured testcases
 
 Now that we have our testcase captured, run the test file.
 
 ```bash
-sudo -E env PATH=$PATH oss test -c "./echo-mysql" --delay 20
+keploy test -c "docker compose up app" --delay 20
 ```
 
-So no need to setup dependencies like MySQL, web-go locally or write mocks for your testing.
+So no need to setup dependencies like MySQL, web-go locally or write mocks for your testing. `keploy test ` runs the test cases captured in the previous step. It replays the captured API calls against the application to verify its behavior. 
 
-oss test runs the test cases captured in the previous step. It replays the captured API calls against the application to verify its behavior. 
-
-The application thinks it's talking to MySQL 😄
+The application thinks it's talking to MySQL 😄.
 
 We will get output something like this:
 
-![alt text](https://github.com/Hermione2408/samples-go/blob/app/echo-mysql/img/keploy_test.png?raw=true)
+![alt text](https://github.com/keploy/samples-go/blob/main/echo-mysql/img/keploy_test.png?raw=true)
+
+## Run the app without docker
+
+If you’d prefer to build and run the application locally without Docker, follow these steps:
+
+### Start the MySql Instance
+
+``` bash
+sudo docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=uss -p 3306:3306 --rm mysql:latest
+```
+### Build the application 
+
+prepare the .env file.
+
+```
+cp .env.local .env
+```
+
+download go modules.
+
+```
+go mod download
+```
+
+build the app.
+
+``` bash
+go build -o echo-mysql .
+```
+
+### Capture the Testcases
+
+``` bash
+sudo -E env PATH=$PATH keploy record -c "./echo-mysql"
+```
+
+### Run the Testcases
+
+```bash
+sudo -E env PATH=$PATH keploy test -c "./echo-mysql" --delay 20
+```
