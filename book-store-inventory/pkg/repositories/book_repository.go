@@ -3,6 +3,7 @@ package repositories
 
 import (
 	"database/sql"
+	"fmt"
 
 	"github.com/saketV8/book-store-inventory/pkg/models"
 )
@@ -50,7 +51,12 @@ func (bookModel *BookModel) GetBooks() ([]models.Book, error) {
 }
 
 func (bookModel *BookModel) GetBookByID(bookID string) (models.Book, error) {
-	statement := `SELECT book_id, title, author, price, published_date, stock_quantity FROM books WHERE book_id = ? ;`
+	// Input validation
+	if bookID == "" {
+		return models.Book{}, fmt.Errorf("book ID cannot be empty")
+	}
+
+	statement := `SELECT book_id, title, author, price, published_date, stock_quantity FROM books WHERE book_id = ?`
 	// empty book model
 	book := models.Book{}
 
@@ -62,8 +68,14 @@ func (bookModel *BookModel) GetBookByID(bookID string) (models.Book, error) {
 		&book.PublishedDate,
 		&book.StockQuantity,
 	)
+
 	if err != nil {
-		return book, err
+		// Handle specific case when no book is found
+		if err == sql.ErrNoRows {
+			return models.Book{}, fmt.Errorf("book with ID %s not found", bookID)
+		}
+		// Return original error for other database issues
+		return models.Book{}, fmt.Errorf("failed to get book by ID %s: %w", bookID, err)
 	}
 
 	return book, nil
