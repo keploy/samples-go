@@ -18,7 +18,6 @@ func SetupPublicRouter(app *App, superRouterGroup *gin.Engine) {
 		{
 			// GET
 			v1.GET("/books/", app.Books.GetBooksHandler)
-			// v1.GET("/book/id/:book_id", app.Books.GetBookByIDHandler)
 			v1.GET("/book/id/*book_id", app.Books.GetBookByIDHandler)
 
 			// POST
