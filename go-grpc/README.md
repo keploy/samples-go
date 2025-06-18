@@ -29,7 +29,7 @@ Once we have our binary file ready,this command will start the recording of API 
 sudo -E keploy record -c "bash -c './grpc-server & ./grpc-client'"
 ```
 
-To genereate testcases we just need to make some API calls. You can use [Postman](https://www.postman.com/), [Hoppscotch](https://hoppscotch.io/), or simply `curl`
+To generate testcases we just need to make some API calls. You can use [Postman](https://www.postman.com/), [Hoppscotch](https://hoppscotch.io/), or simply `curl`
 
 ### Generate testcases
 
@@ -177,7 +177,7 @@ Once we have our docker image ready,this command will start the recording of API
 keploy record -c "docker run -p 8080:8080 --name grpcApp --network keploy-network grpc-client:1.0"
 ```
 
-To genereate testcases we just need to make some API calls. You can use [Postman](https://www.postman.com/), [Hoppscotch](https://hoppscotch.io/), or simply `curl`
+To generate testcases we just need to make some API calls. You can use [Postman](https://www.postman.com/), [Hoppscotch](https://hoppscotch.io/), or simply `curl`
 
 ### Generate testcases
 We can generate the test cases by following a similar process to the one used when running Keploy on a local machine.

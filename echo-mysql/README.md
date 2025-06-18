@@ -1,8 +1,8 @@
 # echo-mysql
-A simple golang based url shortner
+A simple golang based url shortener
 
 
-# Requirments to run
+# Requirements to run
 1. Golang [How to install Golang](https://go.dev/doc/install)
 2. Docker [How to install Docker?](https://docs.docker.com/engine/install/)
 

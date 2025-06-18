@@ -1,11 +1,11 @@
 ## Quick Gitpod experience intructions
-This sample app is a simple url shortner and located in echo-sql. It uses a postgres db. 
+This sample app is a simple url shortener and located in echo-sql. It uses a postgres db.
 
 ## Generate testcases
 
-To genereate testcases we just need to make some API calls.
+To generate testcases we just need to make some API calls.
 
-### Generate shortned url
+### Generate shortened url
 
 ```
 curl --request POST \

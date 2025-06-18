@@ -42,9 +42,9 @@ docker build -t gin-app:1.0 .
 keploy record -c "docker run -p 8080:8080 --name MongoApp --network keploy-network gin-app:1.0"
 ```
 
-To genereate testcases we just need to make some API calls. You can use [Postman](https://www.postman.com/), [Hoppscotch](https://hoppscotch.io/), or simply `curl`
+To generate testcases we just need to make some API calls. You can use [Postman](https://www.postman.com/), [Hoppscotch](https://hoppscotch.io/), or simply `curl`
 
-### 1. Generate shortned url
+### 1. Generate shortened url
 
 ```bash
 curl --request POST \
