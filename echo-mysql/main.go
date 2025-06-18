@@ -78,5 +78,5 @@ func StartHTTPServer() {
 	// automatically add routers for net/http/pprof e.g. /debug/pprof, /debug/pprof/heap, etc.
 	// go get github.com/hiko1129/echo-pprof
 	//echopprof.Wrap(e)
-	e.Logger.Fatal(e.Start(":9090"))
+	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", os.Getenv("APP_PORT"))))
 }
