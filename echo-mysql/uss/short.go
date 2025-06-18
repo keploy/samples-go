@@ -3,17 +3,13 @@ package uss
 
 import (
 	"crypto/sha256"
-	"fmt"
-	"math/big"
-
 	"github.com/itchyny/base58-go"
 )
 
 func GenerateShortLink(initialLink string) string {
-	urlHashBytes := sha256Of(initialLink)
-	generatedNumber := new(big.Int).SetBytes(urlHashBytes).Uint64()
-	finalString := base58Encoded([]byte(fmt.Sprintf("%d", generatedNumber)))
-	return finalString[:8]
+	hash := sha256Of(initialLink)
+	truncated := hash[:6]
+	return base58Encoded(truncated)
 }
 
 func sha256Of(input string) []byte {
