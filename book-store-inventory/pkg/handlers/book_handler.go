@@ -2,7 +2,11 @@
 package handlers
 
 import (
+	"database/sql"
+	"errors"
 	"net/http"
+	"regexp"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/saketV8/book-store-inventory/pkg/models"
@@ -26,17 +30,44 @@ func (bookHandler *BookHandler) GetBooksHandler(ctx *gin.Context) {
 }
 
 func (bookHandler *BookHandler) GetBookByIDHandler(ctx *gin.Context) {
-	// getting param from the URL
-	/* http://localhost:9090/api/v1/book/id/3 --> 3 is param here */
 	bookIDParam := ctx.Param("book_id")
+	bookIDParam = strings.TrimPrefix(bookIDParam, "/")
+
+	if bookIDParam == "" || strings.TrimSpace(bookIDParam) == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Invalid or empty book ID in URL",
+			"details": "Book ID must be a valid non-empty value",
+		})
+		return
+	}
+
+	// Only allow numeric IDs (if DB expects integers)
+	matched, _ := regexp.MatchString(`^\d+$`, bookIDParam)
+	if !matched {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Invalid Book ID",
+			"details": "Book ID must be a positive integer",
+		})
+		return
+	}
+
 	book, err := bookHandler.BookModel.GetBookByID(bookIDParam)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			ctx.JSON(http.StatusNotFound, gin.H{
+				"error":   "Book not found",
+				"details": "No book found with the given ID",
+			})
+			return
+		}
+
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"error":   "Failed to get book by ID",
 			"details": err.Error(),
 		})
 		return
 	}
+
 	ctx.JSON(http.StatusOK, book)
 }
 
