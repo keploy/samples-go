@@ -88,7 +88,7 @@ go build
 ### :inbox_tray: Capture the test cases using Keploy
 
 ```sh
-sudo -E keploy record -c "./book-store-inventory
+sudo -E keploy record -c "./book-store-inventory"
 ```
 > [!TIP]
 > If any error occur try above command without `sudo -E`
