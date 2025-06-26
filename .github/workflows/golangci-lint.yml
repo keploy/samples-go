@@ -1,65 +1,255 @@
-name: golangci-lint
+#==============================================================================
+# STATIC ANALYSIS WORKFLOW
+#==============================================================================
+# This workflow performs automated static code analysis on Go and JavaScript/JSX
+# files when pull requests are made to the dev-review-setup branch.
+# 
+# Key Features:
+# - Intelligent path filtering to only analyze changed directories
+# - Dynamic matrix strategy for parallel execution across multiple projects
+# - Integration with reviewdog for inline PR comments
+# - Automatic dependency management for both Go and JS projects
+# - Concurrency control to prevent resource conflicts
+#==============================================================================
+
+name: Static Analysis
+
+#==============================================================================
+# WORKFLOW TRIGGERS
+#==============================================================================
+# This workflow is triggered on pull request events targeting the 
+# dev-review-setup branch. It only runs when specific file types are modified
+# to optimize CI/CD resource usage.
+#==============================================================================
 on:
-  push:
-    branches:
-      - master
-      - main
   pull_request:
-    types: [opened, edited, synchronize, reopened]
+    branches: [ dev-review-setup ]
+    # Trigger on these PR events to catch all code changes
+    types: [opened, synchronize, reopened, edited]
+    # Path-based filtering to prevent unnecessary runs
+    paths:
+      - '**.go'                                    # Go source files
+      - '**.js'                                    # JavaScript files  
+      - '**.jsx'                                   # React JSX files
+      - '.github/workflows/golangci-lint.yml'     # This workflow file itself
 
-permissions:
-  contents: read
-  # Optional: allow read access to pull request. Use with `only-new-issues` option.
-  pull-requests: read
-
-# cancel the in-progress workflow when PR is refreshed.
+#==============================================================================
+# CONCURRENCY CONTROL
+#==============================================================================
+# Prevents multiple instances of this workflow from running simultaneously
+# on the same PR or branch, canceling older runs to save resources
+#==============================================================================
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  group: ${{ github.workflow }}-${{ github.head_ref || github.sha }}
   cancel-in-progress: true
 
-
 jobs:
-  golangci:
-    name: lint
+  #============================================================================
+  # JOB 1: CHANGE DETECTION AND MATRIX PREPARATION
+  #============================================================================
+  # This job determines which directories contain changed files and builds
+  # dynamic matrices for the subsequent linting jobs. This approach ensures
+  # we only run static analysis on projects that have actual changes.
+  #============================================================================
+  filter:
+    name: Determine Changed Directories
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        working-directory:
-          - echo-mysql
-          - echo-sql
-          - fasthttp-postgres
-          - gin-mongo
-          - gin-redis
-          - go-grpc
-          - go-jwt
-          - go-twilio
-          - graphql-sql
-          - http-pokeapi
-          - mux-elasticsearch
-          - mux-mysql
-          - mux-sql
-          - S3-Keploy
-          - sse-svelte
-          - users-profile
-          - book-store-inventory
-          
+    
+    # Output matrices that will be consumed by downstream jobs
+    outputs:
+      go_matrix: ${{ steps.matrix_builder.outputs.go_matrix }}    # Array of Go project directories
+      js_matrix: ${{ steps.matrix_builder.outputs.js_matrix }}    # Array of JS project directories
+    
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-go@v4
-        with:
-          go-version: '1.23.4'
-          cache: false
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3
-        with:
-          # Require: The version of golangci-lint to use.
-          # When `install-mode` is `binary` (default) the value can be v1.2 or v1.2.3 or `latest` to use the latest version.
-          # When `install-mode` is `goinstall` the value can be v1.2.3, `latest`, or the hash of a commit.
-          version: v1.63.4
+      #------------------------------------------------------------------------
+      # Checkout the repository code to analyze file changes
+      #------------------------------------------------------------------------
+      - name: Check out code
+        uses: actions/checkout@v4
 
-          # Optional: working directory, useful for monorepos
-          working-directory: ${{matrix.working-directory}}
+      #------------------------------------------------------------------------
+      # Use dorny/paths-filter to detect changes in specific directory patterns
+      # This action compares the current PR against the target branch
+      #------------------------------------------------------------------------
+      - name: Use paths-filter action
+        uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          # Return list of changed files as JSON for processing
+          list-files: 'json'
+          filters: |
+            go:
+              - 'static-code-go/**'         
+              - 'echo-mysql/**'            
+              - 'echo-sql/**'               
+              - 'fasthttp-postgres/**'     
+              - 'gin-mongo/**'              
+              - 'gin-redis/**'             
+              - 'go-grpc/**'               
+              - 'go-jwt/**'                 
+              - 'go-twilio/**'              
+              - 'graphql-sql/**'            
+              - 'http-pokeapi/**'           
+              - 'mux-elasticsearch/**'      
+              - 'mux-mysql/**'              
+              - 'mux-sql/**'                
+              - 'S3-Keploy/**'              
+              - 'sse-svelte/**'             
+              - 'users-profile/**'          
+              - 'book-store-inventory/**'   
+            
+            js:
+              - 'static-code-js/**'        
 
-          # Optional: The mode to install golangci-lint. It can be 'binary' or 'goinstall'.
-          install-mode: "goinstall"
+      #------------------------------------------------------------------------
+      # Build dynamic matrices from the changed file lists
+      # This script extracts unique directory names from changed file paths
+      # and formats them as JSON arrays for use in matrix strategies
+      # This reduces unnecessary runs and speeds up CI/CD and saves a lot of resources
+      #------------------------------------------------------------------------
+      - name: Build Matrix from changed files
+        id: matrix_builder
+        if: steps.changes.outputs.go == 'true' || steps.changes.outputs.js == 'true'
+        run: |
+          # Process Go files: extract root directory names and create unique JSON array
+          # Example: "echo-mysql/main.go" -> "echo-mysql"
+          go_dirs=$(echo '${{ steps.changes.outputs.go_files }}' | jq -r '[.[] | split("/")[0]] | unique | tojson')
+          echo "go_matrix=$go_dirs" >> $GITHUB_OUTPUT
+
+          # Process JavaScript files: extract root directory names and create unique JSON array  
+          # Example: "frontend/src/app.js" -> "frontend"
+          js_dirs=$(echo '${{ steps.changes.outputs.js_files }}' | jq -r '[.[] | split("/")[0]] | unique | tojson')
+          echo "js_matrix=$js_dirs" >> $GITHUB_OUTPUT
+
+  #============================================================================
+  # JOB 2: GO STATIC ANALYSIS
+  #============================================================================
+  # Runs golangci-lint on each Go project directory that contains changes.
+  # Uses reviewdog to provide inline PR comments for any linting issues found.
+  #============================================================================
+  lint_and_fix_go:
+    name: Go Static Analysis
+    needs: filter                                                    # Wait for change detection
+    if: ${{ needs.filter.outputs.go_matrix != '[]' }}               # Only run if Go changes detected
+    runs-on: ubuntu-latest
+    
+    # Required permissions for the job to function properly
+    permissions:
+      contents: write        # Needed to read repository code
+      pull-requests: write   # Needed to post review comments
+    
+    # Matrix strategy: run this job in parallel for each changed Go directory
+    strategy:
+      fail-fast: false      # Continue running other matrix jobs even if one fails
+      matrix:
+        working-directory: ${{ fromJSON(needs.filter.outputs.go_matrix) }}
+
+    steps:
+      #------------------------------------------------------------------------
+      # Checkout with full git history for accurate diff analysis
+      #------------------------------------------------------------------------
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0     # Full history needed for proper linting context
+
+      #------------------------------------------------------------------------
+      # Ensure Go module is properly initialized and dependencies are resolved
+      # This step handles cases where go.mod might be missing or outdated
+      # It is required by reviewdog with Golangci-lint
+      #------------------------------------------------------------------------
+      - name: Ensure Go module exists and tidy
+        run: |
+          # Initialize go.mod if it doesn't exist (defensive programming)
+          if [ ! -f go.mod ]; then
+            go mod init github.com/${{ github.repository }}
+          fi
+          # Resolve and cleanup dependencies
+          go mod tidy
+        working-directory: ./${{ matrix.working-directory }}
+
+      #------------------------------------------------------------------------
+      # Run golangci-lint with reviewdog integration
+      # This provides inline PR comments for any issues found
+      #------------------------------------------------------------------------
+      - name: Run lint and report issues
+        uses: reviewdog/action-golangci-lint@v2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review                              # Post comments on PR
+          workdir: ./${{ matrix.working-directory }}
+          fail_level: warning                                     # Fail on warnings and above
+
+  #============================================================================
+  # JOB 3: JAVASCRIPT/JSX STATIC ANALYSIS  
+  #============================================================================
+  # Runs ESLint on each JavaScript/JSX project directory that contains changes.
+  # Automatically sets up Node.js environment and ESLint configuration if needed.
+  #============================================================================
+  lint_js:
+    name: JavaScript Static Analysis
+    needs: filter                                                    # Wait for change detection
+    if: ${{ needs.filter.outputs.js_matrix != '[]' }}               # Only run if JS changes detected
+    runs-on: ubuntu-latest
+    
+    # Required permissions for the job to function properly
+    permissions:
+      contents: read         # Needed to read repository code
+      pull-requests: write   # Needed to post review comments
+    
+    # Matrix strategy: run this job in parallel for each changed JS directory
+    strategy:
+      fail-fast: false      # Continue running other matrix jobs even if one fails
+      matrix:
+        working-directory: ${{ fromJSON(needs.filter.outputs.js_matrix) }}
+        
+    steps:
+      #------------------------------------------------------------------------
+      # Checkout repository code
+      #------------------------------------------------------------------------
+      - uses: actions/checkout@v4
+
+      #------------------------------------------------------------------------
+      # Setup Node.js environment with LTS version
+      # Using version 18 for stability and wide compatibility
+      #------------------------------------------------------------------------
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      #------------------------------------------------------------------------
+      # Ensure ESLint environment is properly configured
+      # This step handles projects that might not have ESLint setup yet
+      #------------------------------------------------------------------------
+      - name: Ensure package.json and eslint.config.mjs exist
+        run: |
+          # Create package.json if missing (defensive programming)
+          if [ ! -f package.json ]; then
+            npm init -y                                    # Create with defaults
+            npm install eslint --save-dev                  # Install ESLint as dev dependency
+          fi
+          
+          # Create basic ESLint configuration if missing
+          # Using flat config format (ESLint 9+) with essential rules
+          if [ ! -f eslint.config.mjs ]; then
+            echo "export default [{ rules: { semi: 'error', quotes: ['error', 'single'] } }];" > eslint.config.mjs
+          fi
+        working-directory: ./${{ matrix.working-directory }}
+
+      #------------------------------------------------------------------------
+      # Run ESLint with reviewdog integration
+      # This provides inline PR comments for any JavaScript/JSX issues found
+      #------------------------------------------------------------------------
+      - name: Run ESLint via reviewdog (PR review)
+        uses: reviewdog/action-eslint@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review                              # Post comments on PR
+          # ESLint flags explanation:
+          # --config: Use our generated flat config file
+          # **/*.{js,jsx,ts,tsx}: Lint all JS/JSX/TS/TSX files recursively
+          # --no-error-on-unmatched-pattern: Don't fail if no files match pattern
+          eslint_flags: '--config eslint.config.mjs **/*.{js,jsx,ts,tsx} --no-error-on-unmatched-pattern'
+          fail_level: error                                       
+          workdir: ./${{ matrix.working-directory }}
