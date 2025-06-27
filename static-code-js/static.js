@@ -19,7 +19,7 @@ app.get('/user', (req, res) => {
         return res.status(400).json({ error: 'Invalid or missing user ID' });
     }
 
-    const user = fetchUser(Number(id));
+    const user = fetchUser(Number(id);
     return res.json({
         message: `Hello, ${user.name}! Your email is ${user.email}.`,
         user,
