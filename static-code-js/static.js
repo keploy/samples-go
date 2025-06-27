@@ -7,8 +7,8 @@ const port = 3000;
 function fetchUser(id) {
     return {
         id,
-        name: 'Bob',
-        email: 'bob@example.com',
+        name: "Bob",
+        email: "bob@example.com",
     };
 }
 
