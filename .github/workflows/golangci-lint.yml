@@ -139,10 +139,6 @@ jobs:
     if: ${{ needs.filter.outputs.go_matrix != '[]' }}               # Only run if Go changes detected
     runs-on: ubuntu-latest
     
-    # Required permissions for the job to function properly
-    permissions:
-      contents: write        # Needed to read repository code
-      pull-requests: write   # Needed to post review comments
     
     # Matrix strategy: run this job in parallel for each changed Go directory
     strategy:
@@ -198,10 +194,6 @@ jobs:
     if: ${{ needs.filter.outputs.js_matrix != '[]' }}               # Only run if JS changes detected
     runs-on: ubuntu-latest
     
-    # Required permissions for the job to function properly
-    permissions:
-      contents: read         # Needed to read repository code
-      pull-requests: write   # Needed to post review comments
     
     # Matrix strategy: run this job in parallel for each changed JS directory
     strategy:
