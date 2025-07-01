@@ -14,11 +14,14 @@
 
 name: Static Analysis
 
-permissions:
-  contents: read
-  pull-requests: write
-  checks: write
-  statuses: write
+# permissions:
+#   contents: read
+#   pull-requests: write
+#   checks: write
+#   statuses: write
+  
+permissions: write-all
+  
   
 #==============================================================================
 # WORKFLOW TRIGGERS
