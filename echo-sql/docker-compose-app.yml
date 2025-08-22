@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  go-app:
+    build:
+      context: .
+      # ssh:
+      #   - default
+    container_name: echoApp
+    ports:
+      - "8082:8082"
+    networks:
+      - babab
+
+networks:
+  babab:
+    name: babab
+    external: true

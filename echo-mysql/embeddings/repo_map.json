@@ -1,0 +1,92 @@
+{
+  "Close": [
+    {
+      "name": "Close",
+      "type": "Method",
+      "file_path": "uss/store.go",
+      "start_line": 62,
+      "end_line": 68,
+      "content": "func (s *Store) Close() {\n\tdb, _ := s.db.DB()\n\tif err := db.Close(); err != nil {\n\t\tfmt.Fprintf(os.Stderr, \"Could not close database connection: %v\\n\", err)\n\t\tos.Exit(1)\n\t}\n}"
+    }
+  ],
+  "Connect": [
+    {
+      "name": "Connect",
+      "type": "Method",
+      "file_path": "uss/store.go",
+      "start_line": 26,
+      "end_line": 60,
+      "content": "func (s *Store) Connect(config map[string]string) error {\n\t// Open up our database connection.\n\tvar err error\n\tmysqlDSN := fmt.Sprintf(\n\t\t\"%s:%s@tcp(%s:%s)/%s?charset=utf8\u0026parseTime=True\u0026loc=Local\u0026tls=False\",\n\t\tconfig[\"MYSQL_USER\"],\n\t\tconfig[\"MYSQL_PASSWORD\"],\n\t\tconfig[\"MYSQL_HOST\"],\n\t\tconfig[\"MYSQL_PORT\"],\n\t\tconfig[\"MYSQL_DBNAME\"],\n\t)\n\ts.db, err = gorm.Open(mysql.New(mysql.Config{\n\t\tDSN:               mysqlDSN,\n\t\tDefaultStringSize: 256,\n\t}), \u0026gorm.Config{})\n\tif err != nil {\n\t\treturn err\n\t}\n\n\tsqlDB, err := s.db.DB()\n\tif err != nil {\n\t\treturn err\n\t}\n\n\tsqlDB.SetConnMaxLifetime(1 * time.Hour)\n\tsqlDB.SetMaxIdleConns(100)\n\tsqlDB.SetMaxOpenConns(512)\n\n\tif err = s.db.AutoMigrate(\u0026ShortCodeInfo{}); err != nil {\n\t\tlog.Printf(\"%s\", fmt.Sprintf(\"Failed to create/update db tables with error %s\", err.Error()))\n\t\tos.Exit(1)\n\t}\n\n\treturn nil\n}"
+    }
+  ],
+  "FindByShortCode": [
+    {
+      "name": "FindByShortCode",
+      "type": "Method",
+      "file_path": "uss/store.go",
+      "start_line": 75,
+      "end_line": 84,
+      "content": "func (s *Store) FindByShortCode(shortCode string) *ShortCodeInfo {\n\tvar infos []ShortCodeInfo\n\ts.db.Order(\"updated_at desc\").Find(\u0026infos, \"short_code = ?\", shortCode)\n\tif len(infos) == 0 {\n\t\treturn nil\n\t}\n\n\turlInfo := infos[0]\n\treturn \u0026urlInfo\n}"
+    }
+  ],
+  "GenerateShortLink": [
+    {
+      "name": "GenerateShortLink",
+      "type": "Function",
+      "file_path": "uss/short.go",
+      "start_line": 12,
+      "end_line": 17,
+      "content": "func GenerateShortLink(initialLink string) string {\n\turlHashBytes := sha256Of(initialLink)\n\tgeneratedNumber := new(big.Int).SetBytes(urlHashBytes).Uint64()\n\tfinalString := base58Encoded([]byte(fmt.Sprintf(\"%d\", generatedNumber)))\n\treturn finalString[:8]\n}"
+    }
+  ],
+  "Persist": [
+    {
+      "name": "Persist",
+      "type": "Method",
+      "file_path": "uss/store.go",
+      "start_line": 70,
+      "end_line": 73,
+      "content": "func (s *Store) Persist(info *ShortCodeInfo) error {\n\ts.db.Save(info)\n\treturn nil\n}"
+    }
+  ],
+  "StartHTTPServer": [
+    {
+      "name": "StartHTTPServer",
+      "type": "Function",
+      "file_path": "main.go",
+      "start_line": 36,
+      "end_line": 82,
+      "content": "func StartHTTPServer() {\n\te := echo.New()\n\te.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{\n\t\tFormat: `${remote_ip} [${time_rfc3339}] \"${method} ${uri} HTTP/1.0\" ${status} ${latency_human} ${bytes_out} ${error} \"${user_agent}\"` + \"\\n\",\n\t\tSkipper: func(c echo.Context) bool {\n\t\t\treturn c.Request().RequestURI == \"/healthcheck\"\n\t\t},\n\t}))\n\te.Use(middleware.Recover())\n\te.GET(\"/\", func(c echo.Context) error {\n\t\treturn c.String(http.StatusOK, \"Hello, World!\")\n\t})\n\te.GET(\"/healthcheck\", func(c echo.Context) error {\n\t\treturn c.String(http.StatusOK, \"good!\")\n\t})\n\n\te.GET(\"/resolve/:code\", func(c echo.Context) error {\n\t\tcode := c.Param(\"code\")\n\t\tinfo := uss.MetaStore.FindByShortCode(code)\n\t\tif info != nil {\n\t\t\treturn c.JSON(http.StatusOK, info)\n\t\t}\n\n\t\treturn c.String(http.StatusNotFound, \"Not Found.\")\n\t})\n\n\te.POST(\"/shorten\", func(c echo.Context) error {\n\t\treq := new(uss.ShortCodeInfo)\n\t\tif err := c.Bind(req); err != nil {\n\t\t\treturn err\n\t\t}\n\n\t\treq.ShortCode = uss.GenerateShortLink(req.URL)\n\t\terr := uss.MetaStore.Persist(req)\n\t\tif err != nil {\n\t\t\treturn c.String(http.StatusInternalServerError, fmt.Sprintf(\"Failed Persisiting Entity with Error %s\", err.Error()))\n\t\t}\n\n\t\treq.UpdatedAt = req.UpdatedAt.Truncate(time.Second)\n\t\treturn c.JSON(http.StatusOK, req)\n\t})\n\n\t// automatically add routers for net/http/pprof e.g. /debug/pprof, /debug/pprof/heap, etc.\n\t// go get github.com/hiko1129/echo-pprof\n\t//echopprof.Wrap(e)\n\te.Logger.Fatal(e.Start(\":9090\"))\n}"
+    }
+  ],
+  "base58Encoded": [
+    {
+      "name": "base58Encoded",
+      "type": "Function",
+      "file_path": "uss/short.go",
+      "start_line": 25,
+      "end_line": 29,
+      "content": "func base58Encoded(bytes []byte) string {\n\tencoding := base58.BitcoinEncoding\n\tencoded, _ := encoding.Encode(bytes)\n\treturn string(encoded)\n}"
+    }
+  ],
+  "main": [
+    {
+      "name": "main",
+      "type": "Function",
+      "file_path": "main.go",
+      "start_line": 18,
+      "end_line": 34,
+      "content": "func main() {\n\ttime.Sleep(2 * time.Second)\n\tappConfig, err := godotenv.Read()\n\tif err != nil {\n\t\tlog.Printf(\"Error reading .env file %s\", err.Error())\n\t\tos.Exit(1)\n\n\t}\n\n\tuss.MetaStore = \u0026uss.Store{}\n\terr = uss.MetaStore.Connect(appConfig)\n\tif err != nil {\n\t\tlog.Printf(\"Failed to connect to db %s\", err.Error())\n\t\tos.Exit(1)\n\t}\n\tStartHTTPServer()\n}"
+    }
+  ],
+  "sha256Of": [
+    {
+      "name": "sha256Of",
+      "type": "Function",
+      "file_path": "uss/short.go",
+      "start_line": 19,
+      "end_line": 23,
+      "content": "func sha256Of(input string) []byte {\n\talgorithm := sha256.New()\n\talgorithm.Write([]byte(input))\n\treturn algorithm.Sum(nil)\n}"
+    }
+  ]
+}
