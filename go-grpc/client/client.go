@@ -46,15 +46,15 @@ func checkHealth(c *gin.Context) {
 	})
 	if err != nil || Health.GetStatus() != grpc_health_v1.HealthCheckResponse_SERVING {
 		c.JSON(http.StatusServiceUnavailable, gin.H{
-			"status":        "UNHEALTHY",
+			"status":       "UNHEALTHY",
 			"user_service": "NOT_SERVING",
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"status":         "HEALTHY",
-		"user_service":  "SERVING",
+		"status":       "HEALTHY",
+		"user_service": "SERVING",
 	})
 }
 
