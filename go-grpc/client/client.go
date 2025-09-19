@@ -7,16 +7,19 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	pb "github.com/keploy/samples-go/go-grpc/user"
 
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/health/grpc_health_v1"
 )
 
 var (
 	grpcClient pb.UserServiceClient
+	grpcConn   *grpc.ClientConn
 )
 
 func init() {
@@ -27,7 +30,61 @@ func init() {
 		log.Printf("failed to connect to gRPC server: %v", err)
 		os.Exit(1)
 	}
+	grpcConn = conn
 	grpcClient = pb.NewUserServiceClient(conn)
+
+	go watchHealthStatus()
+}
+
+func checkHealth(c *gin.Context) {
+	healthClient := grpc_health_v1.NewHealthClient(grpcConn)
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+
+	Health, err := healthClient.Check(ctx, &grpc_health_v1.HealthCheckRequest{
+		Service: "user.UserService",
+	})
+	if err != nil || Health.GetStatus() != grpc_health_v1.HealthCheckResponse_SERVING {
+		c.JSON(http.StatusServiceUnavailable, gin.H{
+			"status":        "UNHEALTHY",
+			"user_service": "NOT_SERVING",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":         "HEALTHY",
+		"user_service":  "SERVING",
+	})
+}
+
+func watchHealthStatus() {
+	healthClient := grpc_health_v1.NewHealthClient(grpcConn)
+
+	// Watch each logical service in its own goroutine
+	go watchService(healthClient, "user.UserService")
+}
+
+func watchService(client grpc_health_v1.HealthClient, service string) {
+	stream, err := client.Watch(context.Background(), &grpc_health_v1.HealthCheckRequest{
+		Service: service,
+	})
+	if err != nil {
+		log.Printf("[Watcher] ERROR: Could not start watch for '%s': %v", service, err)
+		return
+	}
+	log.Printf("[Watcher] Started watching health for '%s'", service)
+
+	for {
+		resp, err := stream.Recv()
+		if err != nil {
+			log.Printf("[Watcher] ERROR: Stream for '%s' broke: %v. Will attempt to reconnect...", service, err)
+			time.Sleep(5 * time.Second)
+			go watchService(client, service)
+			return // End this broken goroutine
+		}
+		log.Printf("[Watcher] HEALTH UPDATE for '%s': New status is %s", service, resp.Status)
+	}
 }
 
 func createUser(c *gin.Context) {
@@ -318,6 +375,7 @@ func main() {
 	// Set up Gin router
 	r := gin.Default()
 
+	r.GET("/health", checkHealth)
 	// Set up routes
 	r.POST("/users", createUser)
 	r.GET("/users", getUsers)
