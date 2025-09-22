@@ -15,6 +15,8 @@ import (
 	pb "github.com/keploy/samples-go/go-grpc/user"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/health"
+	"google.golang.org/grpc/health/grpc_health_v1"
 )
 
 var (
@@ -259,6 +261,11 @@ func main() {
 
 	s := grpc.NewServer()
 	pb.RegisterUserServiceServer(s, &server{})
+
+	healthServer := health.NewServer()
+	grpc_health_v1.RegisterHealthServer(s, healthServer)
+
+	healthServer.SetServingStatus("user.UserService", grpc_health_v1.HealthCheckResponse_SERVING)
 
 	log.Println("gRPC server running on port 50051")
 	if err := s.Serve(lis); err != nil {

@@ -33,6 +33,12 @@ To genereate testcases we just need to make some API calls. You can use [Postman
 
 ### Generate testcases
 
+0. For health checks :
+```bash
+curl http://localhost:8080/health
+```
+
+
 1. POST request calling unary RPCs
 ```bash
 curl -X POST http://localhost:8080/users \
