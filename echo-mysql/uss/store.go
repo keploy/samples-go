@@ -13,10 +13,13 @@ import (
 var MetaStore *Store
 
 type ShortCodeInfo struct {
-	UID       uint64    `json:"id" sql:"AUTO_INCREMENT" gorm:"primary_key"`
-	ShortCode string    `json:"shortcode" gorm:"uniqueIndex"`
-	URL       string    `json:"url"`
-	UpdatedAt time.Time `json:"updated_at" gorm:"datetime(0);autoUpdateTime"`
+	UID       uint64 `json:"id" sql:"AUTO_INCREMENT" gorm:"primary_key"`
+	ShortCode string `json:"shortcode" gorm:"uniqueIndex"`
+	URL       string `json:"url"`
+
+	UpdatedAt time.Time `json:"updated_at" gorm:"type:datetime(6);autoUpdateTime"`
+	EndTime   time.Time `json:"end_time" gorm:"type:datetime(6)"`
+	CreatedBy string    `json:"created_by"`
 }
 
 type Store struct {
@@ -81,4 +84,12 @@ func (s *Store) FindByShortCode(shortCode string) *ShortCodeInfo {
 
 	urlInfo := infos[0]
 	return &urlInfo
+}
+
+// FindActive retrieves all records that have not yet expired.
+func (s *Store) FindActive() []ShortCodeInfo {
+	var infos []ShortCodeInfo
+	// Query for records where the end_time is greater than the current time.
+	s.db.Where("end_time > ?", time.Now()).Find(&infos)
+	return infos
 }

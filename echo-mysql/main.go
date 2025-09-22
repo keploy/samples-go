@@ -75,6 +75,31 @@ func StartHTTPServer() {
 		return c.JSON(http.StatusOK, req)
 	})
 
+	e.POST("/seed", func(c echo.Context) error {
+
+		end := time.Date(9999, 1, 1, 0, 0, 0, 0, time.Local)
+
+		// Populate the new CreatedBy field instead of Random
+		info := &uss.ShortCodeInfo{
+			EndTime:   end,
+			CreatedBy: "Akash",
+		}
+
+		if err := uss.MetaStore.Persist(info); err != nil {
+			return c.String(http.StatusInternalServerError, err.Error())
+		}
+		return c.JSON(http.StatusOK, info)
+	})
+
+	e.GET("/query/active", func(c echo.Context) error {
+		// Call the new data store function that doesn't need any parameters.
+		infos := uss.MetaStore.FindActive()
+
+		// Return the found records as JSON.
+		// If nothing is found, this will correctly return an empty JSON array: []
+		return c.JSON(http.StatusOK, infos)
+	})
+
 	// automatically add routers for net/http/pprof e.g. /debug/pprof, /debug/pprof/heap, etc.
 	// go get github.com/hiko1129/echo-pprof
 	//echopprof.Wrap(e)
