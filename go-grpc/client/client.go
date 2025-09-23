@@ -385,7 +385,10 @@ func main() {
 	// Ensure connection cleanup on exit
 	defer func() {
 		if grpcConn != nil {
-			grpcConn.Close()
+			err := grpcConn.Close()
+			if err != nil {
+				log.Printf("Failed to close gRPC connection: %v", err)
+			}
 		}
 	}()
 
