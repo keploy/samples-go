@@ -1,4 +1,4 @@
-// NO NEED
+// gRPC client implementation using go-kratos framework
 package main
 
 import (
@@ -7,47 +7,87 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	pb "github.com/keploy/samples-go/go-grpc/user"
 
 	"github.com/gin-gonic/gin"
+	kratosLog "github.com/go-kratos/kratos/v2/log"
+	"github.com/go-kratos/kratos/v2/middleware/logging"
+	"github.com/go-kratos/kratos/v2/middleware/metadata"
+	"github.com/go-kratos/kratos/v2/middleware/tracing"
+	trGrpc "github.com/go-kratos/kratos/v2/transport/grpc"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
-	"google.golang.org/grpc/health/grpc_health_v1"
+	"google.golang.org/grpc/credentials"
 )
 
 var (
 	grpcClient pb.UserServiceClient
 	grpcConn   *grpc.ClientConn
+	logger     kratosLog.Logger
 )
 
-func init() {
+// GetGrpcClientConn creates a gRPC client connection using go-kratos
+func GetGrpcClientConn(endpoint string, logger kratosLog.Logger) (*grpc.ClientConn, error) {
+	grpcOpts := make([]grpc.DialOption, 0)
+	env := os.Getenv("ENV")
+	if strings.Contains(endpoint, "443") && (env == "" || env == "local") {
+		grpcOpts = append(grpcOpts, grpc.WithTransportCredentials(credentials.NewClientTLSFromCert(nil, "")))
+	}
 
-	// Set up the gRPC connection
-	conn, err := grpc.NewClient("localhost:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	return trGrpc.DialInsecure(context.Background(),
+		trGrpc.WithEndpoint(endpoint),
+		trGrpc.WithOptions(grpcOpts...),
+		trGrpc.WithMiddleware(
+			metadata.Client(),
+			tracing.Client(),
+			logging.Client(logger),
+		))
+}
+
+func init() {
+	// Initialize logger
+	logger = kratosLog.With(kratosLog.NewStdLogger(os.Stdout),
+		"ts", kratosLog.DefaultTimestamp,
+		"caller", kratosLog.DefaultCaller,
+		"service.id", "grpc-client",
+		"service.name", "grpc-client",
+		"service.version", "v1.0.0",
+	)
+
+	// Set up the gRPC connection using go-kratos
+	conn, err := GetGrpcClientConn("localhost:50051", logger)
 	if err != nil {
 		log.Printf("failed to connect to gRPC server: %v", err)
 		os.Exit(1)
 	}
 	grpcConn = conn
 	grpcClient = pb.NewUserServiceClient(conn)
-
-	go watchHealthStatus()
 }
 
 func checkHealth(c *gin.Context) {
-	healthClient := grpc_health_v1.NewHealthClient(grpcConn)
+	// With go-kratos, health checks are handled automatically by the framework
+	// This endpoint now just checks if the connection is alive
+	if grpcConn == nil {
+		c.JSON(http.StatusServiceUnavailable, gin.H{
+			"status":       "UNHEALTHY",
+			"user_service": "NOT_CONNECTED",
+		})
+		return
+	}
+
+	// Test the connection by making a lightweight call
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
 
-	Health, err := healthClient.Check(ctx, &grpc_health_v1.HealthCheckRequest{
-		Service: "user.UserService",
-	})
-	if err != nil || Health.GetStatus() != grpc_health_v1.HealthCheckResponse_SERVING {
+	// Try to get users as a simple health check
+	_, err := grpcClient.GetUsers(ctx, &pb.Empty{})
+	if err != nil {
 		c.JSON(http.StatusServiceUnavailable, gin.H{
 			"status":       "UNHEALTHY",
 			"user_service": "NOT_SERVING",
+			"error":        err.Error(),
 		})
 		return
 	}
@@ -56,35 +96,6 @@ func checkHealth(c *gin.Context) {
 		"status":       "HEALTHY",
 		"user_service": "SERVING",
 	})
-}
-
-func watchHealthStatus() {
-	healthClient := grpc_health_v1.NewHealthClient(grpcConn)
-
-	// Watch each logical service in its own goroutine
-	go watchService(healthClient, "user.UserService")
-}
-
-func watchService(client grpc_health_v1.HealthClient, service string) {
-	stream, err := client.Watch(context.Background(), &grpc_health_v1.HealthCheckRequest{
-		Service: service,
-	})
-	if err != nil {
-		log.Printf("[Watcher] ERROR: Could not start watch for '%s': %v", service, err)
-		return
-	}
-	log.Printf("[Watcher] Started watching health for '%s'", service)
-
-	for {
-		resp, err := stream.Recv()
-		if err != nil {
-			log.Printf("[Watcher] ERROR: Stream for '%s' broke: %v. Will attempt to reconnect...", service, err)
-			time.Sleep(5 * time.Second)
-			go watchService(client, service)
-			return // End this broken goroutine
-		}
-		log.Printf("[Watcher] HEALTH UPDATE for '%s': New status is %s", service, resp.Status)
-	}
 }
 
 func createUser(c *gin.Context) {
@@ -372,6 +383,16 @@ func UpdateUsersStream(c *gin.Context) {
 }
 
 func main() {
+	// Ensure connection cleanup on exit
+	defer func() {
+		if grpcConn != nil {
+			err := grpcConn.Close()
+			if err != nil {
+				log.Printf("Failed to close gRPC connection: %v", err)
+			}
+		}
+	}()
+
 	// Set up Gin router
 	r := gin.Default()
 
@@ -386,9 +407,10 @@ func main() {
 	r.PUT("/users/stream", UpdateUsersStream)
 	r.DELETE("/users/stream", deleteUsersStream)
 
+	log.Println("Starting HTTP server on :8080 with go-kratos gRPC client")
 	// Start Gin server
 	if err := r.Run(":8080"); err != nil {
-		log.Printf("%s", err)
+		log.Printf("Failed to start server: %s", err)
 		os.Exit(1)
 	}
 }
