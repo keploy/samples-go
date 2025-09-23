@@ -83,10 +83,6 @@ curl -i -X POST http://localhost:9090/seed/dates
 
 ### 4) Query helpers for replay validation
 
-```bash
-# List all rows that haven't expired yet
-curl -i http://localhost:9090/query/active
-
 # Find rows with end_time exactly equal to the given timestamp (ISO-8601 accepted)
 # e.g., date-only, full datetime, fractional seconds, or 'Z'
 curl -i "http://localhost:9090/query/by-endtime?ts=9999-12-31T23:59:59.999999Z"

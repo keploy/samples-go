@@ -18,11 +18,11 @@ func ToDBLocalMicro(t time.Time) time.Time {
 }
 
 var layouts = []string{
-	time.RFC3339Nano,                   // 2006-01-02T15:04:05.999999999Z07:00
-	time.RFC3339,                       // 2006-01-02T15:04:05Z07:00
-	"2006-01-02 15:04:05.999999",       // MySQL DATETIME(6)
-	"2006-01-02 15:04:05",              // MySQL DATETIME
-	"2006-01-02",                       // Date-only (assume midnight)
+	time.RFC3339Nano,             // 2006-01-02T15:04:05.999999999Z07:00
+	time.RFC3339,                 // 2006-01-02T15:04:05Z07:00
+	"2006-01-02 15:04:05.999999", // MySQL DATETIME(6)
+	"2006-01-02 15:04:05",        // MySQL DATETIME
+	"2006-01-02",                 // Date-only (assume midnight)
 }
 
 // ParseFlexible tries common timestamp formats and returns UTC at microsecond precision.
