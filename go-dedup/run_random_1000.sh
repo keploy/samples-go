@@ -7,15 +7,12 @@ BASE_URL="http://localhost:8080"
 # Array of endpoints that return 200 status codes
 endpoints=(
     "/"
-    "/random"
     "/someone"
     "/noone"
     "/everyone"
     "/status"
-    "/timestamp"
     "/everything"
     "/somewhere"
-    "/xml"
     "/api/v1/users"
     "/api/v2/data"
     "/somebody"
@@ -40,7 +37,7 @@ endpoints=(
 
 # Counter for tracking progress
 count=0
-total=5000
+total=1000
 success_count=0
 error_count=0
 
