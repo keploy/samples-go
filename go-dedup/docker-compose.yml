@@ -1,0 +1,7 @@
+services:
+  app:
+    build:
+      context: .
+    container_name: dedup-go
+    ports:
+      - "8080:8080"
