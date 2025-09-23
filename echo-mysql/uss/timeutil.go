@@ -1,4 +1,4 @@
-// Package uss - time utilities for stable DATETIME(6) handling and flexible parsing.
+// Package uss provides time utilities for stable DATETIME(6) handling and flexible parsing.
 package uss
 
 import (
@@ -6,13 +6,16 @@ import (
 	"time"
 )
 
-// We standardize comparisons at microsecond precision (MySQL DATETIME(6)).
+// ToMicroUTC standardizes a time.Time to UTC at microsecond precision, suitable for
+// comparisons and for formats like MySQL's DATETIME(6).
 func ToMicroUTC(t time.Time) time.Time {
 	return t.UTC().Truncate(time.Microsecond)
 }
 
-// For writing to DB with DSN loc=Local, it’s safest to pass "local wall time"
-// to avoid accidental TZ conversions by the driver when formatting parameters.
+// ToDBLocalMicro converts a time.Time to the local timezone and truncates it to
+// microsecond precision. For writing to a DB with a DSN configured with loc=Local,
+// it is safest to pass the "local wall time" to avoid accidental timezone
+// conversions by the database driver.
 func ToDBLocalMicro(t time.Time) time.Time {
 	return t.In(time.Local).Truncate(time.Microsecond)
 }

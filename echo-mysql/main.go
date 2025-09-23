@@ -1,3 +1,4 @@
+// Package main implements the HTTP server for the URL shortening service.
 package main
 
 import (
