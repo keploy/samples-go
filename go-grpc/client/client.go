@@ -1,3 +1,4 @@
+// gRPC client implementation using go-kratos framework
 package main
 
 import (
