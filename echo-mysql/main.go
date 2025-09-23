@@ -1,5 +1,3 @@
-// Package main initializes and starts a URL shortening service using Echo framework,
-// connecting to a MySQL database and providing endpoints for shortening and resolving URLs
 package main
 
 import (
@@ -15,13 +13,32 @@ import (
 	"github.com/labstack/echo/middleware"
 )
 
+// ensure UTC in JSON responses for determinism across environments
+func utcInfo(in *uss.ShortCodeInfo) *uss.ShortCodeInfo {
+	if in == nil {
+		return nil
+	}
+	cp := *in
+	cp.EndTime = cp.EndTime.UTC()
+	cp.UpdatedAt = cp.UpdatedAt.UTC()
+	return &cp
+}
+func utcInfos(in []uss.ShortCodeInfo) []uss.ShortCodeInfo {
+	out := make([]uss.ShortCodeInfo, len(in))
+	for i := range in {
+		out[i] = in[i]
+		out[i].EndTime = in[i].EndTime.UTC()
+		out[i].UpdatedAt = in[i].UpdatedAt.UTC()
+	}
+	return out
+}
+
 func main() {
 	time.Sleep(2 * time.Second)
 	appConfig, err := godotenv.Read()
 	if err != nil {
 		log.Printf("Error reading .env file %s", err.Error())
 		os.Exit(1)
-
 	}
 
 	uss.MetaStore = &uss.Store{}
@@ -37,25 +54,19 @@ func StartHTTPServer() {
 	e := echo.New()
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: `${remote_ip} [${time_rfc3339}] "${method} ${uri} HTTP/1.0" ${status} ${latency_human} ${bytes_out} ${error} "${user_agent}"` + "\n",
-		Skipper: func(c echo.Context) bool {
-			return c.Request().RequestURI == "/healthcheck"
-		},
+		Skipper: func(c echo.Context) bool { return c.Request().RequestURI == "/healthcheck" },
 	}))
 	e.Use(middleware.Recover())
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
-	})
-	e.GET("/healthcheck", func(c echo.Context) error {
-		return c.String(http.StatusOK, "good!")
-	})
+
+	e.GET("/", func(c echo.Context) error { return c.String(http.StatusOK, "Hello, World!") })
+	e.GET("/healthcheck", func(c echo.Context) error { return c.String(http.StatusOK, "good!") })
 
 	e.GET("/resolve/:code", func(c echo.Context) error {
 		code := c.Param("code")
 		info := uss.MetaStore.FindByShortCode(code)
 		if info != nil {
-			return c.JSON(http.StatusOK, info)
+			return c.JSON(http.StatusOK, utcInfo(info))
 		}
-
 		return c.String(http.StatusNotFound, "Not Found.")
 	})
 
@@ -64,44 +75,128 @@ func StartHTTPServer() {
 		if err := c.Bind(req); err != nil {
 			return err
 		}
-
 		req.ShortCode = uss.GenerateShortLink(req.URL)
-		err := uss.MetaStore.Persist(req)
-		if err != nil {
+		if err := uss.MetaStore.Persist(req); err != nil {
 			return c.String(http.StatusInternalServerError, fmt.Sprintf("Failed Persisiting Entity with Error %s", err.Error()))
 		}
-
 		req.UpdatedAt = req.UpdatedAt.Truncate(time.Second)
-		return c.JSON(http.StatusOK, req)
+		return c.JSON(http.StatusOK, utcInfo(req))
 	})
 
+	// Original "seed" kept (now sets CreatedBy too)
 	e.POST("/seed", func(c echo.Context) error {
-
-		end := time.Date(9999, 1, 1, 0, 0, 0, 0, time.Local)
-
-		// Populate the new CreatedBy field instead of Random
+		end := time.Date(9999, 1, 1, 0, 0, 0, 0, time.UTC)
 		info := &uss.ShortCodeInfo{
+			ShortCode: "dt-sentinel-9999-01-01T00:00:00Z",
+			URL:       "https://example.com/sentinel-start",
 			EndTime:   end,
-			CreatedBy: "dev@keploy.io",
+			CreatedBy: "keploy.io/dates",
 		}
-
-		if err := uss.MetaStore.Persist(info); err != nil {
+		if err := uss.MetaStore.UpsertByShortCode(info); err != nil {
 			return c.String(http.StatusInternalServerError, err.Error())
 		}
-		return c.JSON(http.StatusOK, info)
+		return c.JSON(http.StatusOK, utcInfo(info))
 	})
 
-	e.GET("/query/active", func(c echo.Context) error {
-		// Call the new data store function that doesn't need any parameters.
-		infos := uss.MetaStore.FindActive()
+	// seed a set of edge-case datetimes
+	e.POST("/seed/dates", func(c echo.Context) error {
+		nowMicro := uss.ToMicroUTC(time.Now())
 
-		// Return the found records as JSON.
-		// If nothing is found, this will correctly return an empty JSON array: []
-		return c.JSON(http.StatusOK, infos)
+		// Labels become ShortCode so they’re easy to fetch directly.
+		payload := []*uss.ShortCodeInfo{
+			{
+				ShortCode: "dt-sentinel-9999-01-01T00:00:00Z",
+				URL:       "https://example.com/sentinel-start",
+				EndTime:   uss.SentinelStart,
+				CreatedBy: "keploy.io/dates",
+			},
+			{
+				ShortCode: "dt-max-9999-12-31T23:59:59.999999Z",
+				URL:       "https://example.com/sentinel-max",
+				EndTime:   uss.SentinelMax,
+				CreatedBy: "keploy.io/dates",
+			},
+			{
+				ShortCode: "dt-min-1000-01-01T00:00:00Z",
+				URL:       "https://example.com/min-valid",
+				EndTime:   time.Date(1000, 1, 1, 0, 0, 0, 0, time.UTC),
+				CreatedBy: "keploy.io/dates",
+			},
+			{
+				ShortCode: "dt-epoch-1970-01-01T00:00:00Z",
+				URL:       "https://example.com/epoch",
+				EndTime:   time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC),
+				CreatedBy: "keploy.io/dates",
+			},
+			{
+				ShortCode: "dt-leap-2020-02-29T12:34:56Z",
+				URL:       "https://example.com/leap",
+				EndTime:   time.Date(2020, 2, 29, 12, 34, 56, 0, time.UTC),
+				CreatedBy: "keploy.io/dates",
+			},
+			{
+				ShortCode: "dt-offset-2023-07-01T18:30:00+05:30",
+				URL:       "https://example.com/offset",
+				EndTime:   time.Date(2023, 7, 1, 18, 30, 0, 0, time.FixedZone("IST", 5*3600+30*60)),
+				CreatedBy: "keploy.io/dates",
+			},
+			{
+				ShortCode: "dt-now-trunc",
+				URL:       "https://example.com/now",
+				EndTime:   nowMicro,
+				CreatedBy: "keploy.io/dates",
+			},
+		}
+
+		if err := uss.MetaStore.UpsertMany(payload); err != nil {
+			return c.String(http.StatusInternalServerError, err.Error())
+		}
+		// Return what we wrote (UTC’d for JSON determinism)
+		resp := make([]uss.ShortCodeInfo, 0, len(payload))
+		for _, p := range payload {
+			if got := uss.MetaStore.FindByShortCode(p.ShortCode); got != nil {
+				resp = append(resp, *utcInfo(got))
+			}
+		}
+		return c.JSON(http.StatusOK, resp)
 	})
 
-	// automatically add routers for net/http/pprof e.g. /debug/pprof, /debug/pprof/heap, etc.
-	// go get github.com/hiko1129/echo-pprof
-	//echopprof.Wrap(e)
+	// exact EndTime query (RFC3339/RFC3339Nano/MySQL-like)
+	e.GET("/query/by-endtime", func(c echo.Context) error {
+		ts := c.QueryParam("ts")
+		if ts == "" {
+			return c.String(http.StatusBadRequest, "query param 'ts' required (RFC3339 or MySQL datetime)")
+		}
+		t, err := uss.ParseFlexible(ts)
+		if err != nil {
+			return c.String(http.StatusBadRequest, fmt.Sprintf("parse error: %v", err))
+		}
+		infos := uss.MetaStore.FindByEndTime(t)
+		return c.JSON(http.StatusOK, utcInfos(infos))
+	})
+
+	// fetch both sentinels
+	e.GET("/query/sentinels", func(c echo.Context) error {
+		infos := uss.MetaStore.FindSentinels()
+		return c.JSON(http.StatusOK, utcInfos(infos))
+	})
+
+	// fetch any seeded date rows
+	e.GET("/query/dates", func(c echo.Context) error {
+		infos := uss.MetaStore.FindSeededDates()
+		return c.JSON(http.StatusOK, utcInfos(infos))
+	})
+
+	// fetch by label (stored in ShortCode)
+	e.GET("/query/label/:label", func(c echo.Context) error {
+		label := c.Param("label")
+		info := uss.MetaStore.FindByShortCode(label)
+		if info == nil {
+			return c.String(http.StatusNotFound, "Not Found.")
+		}
+		return c.JSON(http.StatusOK, utcInfo(info))
+	})
+
+	// e.g., echopprof.Wrap(e)
 	e.Logger.Fatal(e.Start(":9090"))
 }
