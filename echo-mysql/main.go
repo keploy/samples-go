@@ -53,7 +53,7 @@ func main() {
 func StartHTTPServer() {
 	e := echo.New()
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: `${remote_ip} [${time_rfc3339}] "${method} ${uri} HTTP/1.0" ${status} ${latency_human} ${bytes_out} ${error} "${user_agent}"` + "\n",
+		Format:  `${remote_ip} [${time_rfc3339}] "${method} ${uri} HTTP/1.0" ${status} ${latency_human} ${bytes_out} ${error} "${user_agent}"` + "\n",
 		Skipper: func(c echo.Context) bool { return c.Request().RequestURI == "/healthcheck" },
 	}))
 	e.Use(middleware.Recover())
