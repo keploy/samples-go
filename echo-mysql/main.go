@@ -82,7 +82,7 @@ func StartHTTPServer() {
 		// Populate the new CreatedBy field instead of Random
 		info := &uss.ShortCodeInfo{
 			EndTime:   end,
-			CreatedBy: "Akash",
+			CreatedBy: "dev@keploy.io",
 		}
 
 		if err := uss.MetaStore.Persist(info); err != nil {
