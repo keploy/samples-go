@@ -44,7 +44,7 @@ Make API Calls using Hoppscotch, Postman or cURL command. Keploy with capture th
 
 #### Generate testcases
 
-To genereate testcases we just need to make some API calls. You can use [Postman](https://www.postman.com/), [Hoppscotch](https://hoppscotch.io/), or simply `curl`
+To generate testcases we just need to make some API calls. You can use [Postman](https://www.postman.com/), [Hoppscotch](https://hoppscotch.io/), or simply `curl`
 
 1. Post Command To Insert Document
 
