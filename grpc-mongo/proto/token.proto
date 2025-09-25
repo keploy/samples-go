@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package tokenpb;
+option go_package = "example.com/grpc-mongo-pipeline/proto;proto";
+
+service TokenService {
+  rpc SeedTokens(SeedRequest) returns (Ack);
+  rpc NextToken(NextTokenRequest) returns (TokenReply);
+}
+
+message SeedRequest { repeated string tokens = 1; }
+message Ack { bool ok = 1; string message = 2; }
+message NextTokenRequest {}
+message TokenReply { string token = 1; }
