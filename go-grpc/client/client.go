@@ -47,7 +47,6 @@ func GetGrpcClientConn(endpoint string, logger kratosLog.Logger) (*grpc.ClientCo
 }
 
 func init() {
-	// Initialize logger
 	logger = kratosLog.With(kratosLog.NewStdLogger(os.Stdout),
 		"ts", kratosLog.DefaultTimestamp,
 		"caller", kratosLog.DefaultCaller,
@@ -56,7 +55,6 @@ func init() {
 		"service.version", "v1.0.0",
 	)
 
-	// Set up the gRPC connection using go-kratos
 	conn, err := GetGrpcClientConn("localhost:50051", logger)
 	if err != nil {
 		log.Printf("failed to connect to gRPC server: %v", err)
@@ -382,6 +380,21 @@ func UpdateUsersStream(c *gin.Context) {
 	c.JSON(http.StatusOK, updUsers)
 }
 
+func getLargeUsers(c *gin.Context) {
+	// Call the GetLargeUsersResponse gRPC method
+	res, err := grpcClient.GetLargeUsersResponse(context.Background(), &pb.Empty{})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message":    "Successfully received large payload.",
+		"user_count": len(res.Users),
+		"first_user": res.Users[0], // Just show the first user as a sample
+	})
+}
+
 func main() {
 	// Ensure connection cleanup on exit
 	defer func() {
@@ -407,6 +420,7 @@ func main() {
 	r.PUT("/users/stream", UpdateUsersStream)
 	r.DELETE("/users/stream", deleteUsersStream)
 
+	r.GET("/users/large", getLargeUsers)
 	log.Println("Starting HTTP server on :8080 with go-kratos gRPC client")
 	// Start Gin server
 	if err := r.Run(":8080"); err != nil {

@@ -17,6 +17,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health"
 	"google.golang.org/grpc/health/grpc_health_v1"
+	"google.golang.org/protobuf/proto"
 )
 
 var (
@@ -177,6 +178,49 @@ func (s *server) DeleteUsersStream(stream pb.UserService_DeleteUsersStreamServer
 
 		delete(userStore, int(req.GetId()))
 	}
+}
+
+func (s *server) GetLargeUsersResponse(_ context.Context, _ *pb.Empty) (*pb.UsersResponse, error) {
+	log.Println("gRPC server received a request to get a large user payload")
+
+	const targetSize = 3 * 1024 * 1024 // 3 MB in bytes
+
+	// Create a sample user to measure its serialized size.
+	// Using realistic but long strings to get a decent base size.
+	sampleUser := &pb.User{
+		Id:    1,
+		Name:  "Johnathan Doe The Third, Esquire of the Grand Valley Region",
+		Email: "johnathan.doe.the.third.esquire.of.the.grand.valley.region@example.com",
+		Age:   42,
+	}
+
+	// Marshal the sample user to find its approximate size in bytes.
+	sampleUserBytes, err := proto.Marshal(sampleUser)
+	if err != nil {
+		return nil, fmt.Errorf("failed to measure user size: %w", err)
+	}
+	sizePerUser := len(sampleUserBytes)
+
+	// Calculate how many users we need to reach the target size.
+	numUsers := targetSize / sizePerUser
+	if targetSize%sizePerUser != 0 {
+		numUsers++ // Add one more to ensure we are at or over the target size
+	}
+
+	// Generate the list of users.
+	users := make([]*pb.User, 0, numUsers)
+	for i := 0; i < numUsers; i++ {
+		users = append(users, &pb.User{
+			Id:    int32(i + 1), // Unique ID for each user
+			Name:  sampleUser.Name,
+			Email: sampleUser.Email,
+			Age:   sampleUser.Age,
+		})
+	}
+
+	log.Printf("Generated %d users with an approximate total payload size of %.2f MB", numUsers, float64(numUsers*sizePerUser)/1024/1024)
+
+	return &pb.UsersResponse{Users: users}, nil
 }
 
 // GetUsersStream RPC (Server Streaming)
