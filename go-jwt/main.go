@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -57,8 +58,12 @@ func GenerateTokenHandler(c *gin.Context) {
 	password := "example_password"
 
 	// Set token expiration time
-	expirationTime := time.Now().Add(5 * time.Minute)
-
+	expiryMinutesStr := c.DefaultQuery("expiry", "5")
+	expiryMinutes, err := strconv.Atoi(expiryMinutesStr)
+	if err != nil || expiryMinutes <= 0 {
+		expiryMinutes = 5
+	}
+	expirationTime := time.Now().Add(time.Duration(expiryMinutes) * time.Minute)
 	// Create the JWT claims, which includes the username and expiry time
 	claims := &Claims{
 		Username: username,
