@@ -124,7 +124,7 @@ func main() {
 	router.GET("/nothing", func(c *gin.Context) { c.JSON(http.StatusOK, gin.H{"message": "Nothing"}) })
 	router.GET("/somewhere", func(c *gin.Context) { c.JSON(http.StatusOK, gin.H{"message": "Somewhere"}) })
 	router.GET("/nowhere", func(c *gin.Context) { c.JSON(http.StatusOK, gin.H{"message": "Nowhere"}) })
-	
+
 	// Group 2: RESTful API for 'products'
 	router.GET("/products", func(c *gin.Context) {
 		products := []Product{
@@ -183,7 +183,7 @@ func main() {
 		filepath := c.Param("filepath")
 		c.JSON(http.StatusOK, gin.H{"requested_file": filepath})
 	})
-	
+
 	// Group 4: Different response types
 	router.GET("/html", func(c *gin.Context) {
 		c.Data(http.StatusOK, "text/html; charset=utf-8", []byte("<h1>This is HTML</h1>"))
@@ -194,7 +194,7 @@ func main() {
 	router.GET("/redirect", func(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "http://google.com")
 	})
-	
+
 	// Group 5: More HTTP methods
 	router.PATCH("/config", func(c *gin.Context) {
 		var update ConfigUpdate
@@ -222,8 +222,12 @@ func main() {
 	v2 := router.Group("/api/v2")
 	{
 		v2.GET("/data", func(c *gin.Context) { c.JSON(http.StatusOK, gin.H{"version": 2, "payload": "new data format"}) })
-		v2.GET("/users", func(c *gin.Context) { c.JSON(http.StatusOK, gin.H{"version": 2, "users": []map[string]string{{"name": "gamma"}, {"name": "delta"}}}) })
-		v2.POST("/users", func(c *gin.Context) { c.JSON(http.StatusCreated, gin.H{"version": 2, "message": "user successfully registered"}) })
+		v2.GET("/users", func(c *gin.Context) {
+			c.JSON(http.StatusOK, gin.H{"version": 2, "users": []map[string]string{{"name": "gamma"}, {"name": "delta"}}})
+		})
+		v2.POST("/users", func(c *gin.Context) {
+			c.JSON(http.StatusCreated, gin.H{"version": 2, "message": "user successfully registered"})
+		})
 	}
 
 	// Group 7: Filler endpoints to reach 63
@@ -241,11 +245,13 @@ func main() {
 	router.GET("/anybody", func(c *gin.Context) { c.JSON(http.StatusOK, gin.H{"message": "Anybody"}) })
 	router.GET("/everybody", func(c *gin.Context) { c.JSON(http.StatusOK, gin.H{"message": "Everybody"}) })
 	router.GET("/somebody", func(c *gin.Context) { c.JSON(http.StatusOK, gin.H{"message": "Somebody"}) })
-	router.PUT("/user/:id/password", func(c *gin.Context) { c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("password for user %s updated", c.Param("id"))}) })
+	router.PUT("/user/:id/password", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("password for user %s updated", c.Param("id"))})
+	})
 	router.GET("/user/:id/profile", func(c *gin.Context) { c.JSON(http.StatusOK, gin.H{"user_id": c.Param("id"), "profile": "..."}) })
 	router.POST("/events", func(c *gin.Context) { c.JSON(http.StatusAccepted, gin.H{"status": "event received"}) })
 	router.GET("/session/info", func(c *gin.Context) { c.JSON(http.StatusOK, gin.H{"session_id": "xyz-123", "active": true}) })
-	
+
 	// Start the HTTP server on port 8080
 	router.Run(":8080")
 }
