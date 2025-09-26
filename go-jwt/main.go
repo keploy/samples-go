@@ -168,7 +168,6 @@ func CheckTimeHandler(c *gin.Context) {
 	log.Printf(
 		"Server Time: %s",
 		serverTime.String(),
-		
 	)
 
 	log.Printf(
