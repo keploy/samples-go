@@ -58,7 +58,7 @@ this will return the response.
 2. Fetch the Products
 ```bash
 curl --request GET \
-      --url http://localhost:8000/generate-token \
+      --url http://localhost:8000/generate-token?expiry=15 \
       --header 'Host: localhost:8000' \
       --header 'User-Agent: curl/7.81.0' \
       --header 'Accept: */*' 
