@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -135,6 +136,58 @@ func CheckTokenHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"username": claims.Username})
 }
 
+// CheckTimeHandler checks if a client-provided timestamp is within 1 second of the server time.
+// The timestamp should be provided as a Unix timestamp in the 'ts' query parameter.
+func CheckTimeHandler(c *gin.Context) {
+	// 1. Get the timestamp string from the URL query parameter 'ts'
+	clientTimeStr := c.Query("ts")
+	if clientTimeStr == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing 'ts' query parameter"})
+		return
+	}
+
+	// 2. Parse the string into an integer (Unix timestamp)
+	clientTimestamp, err := strconv.ParseInt(clientTimeStr, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid timestamp format. Must be a Unix timestamp in seconds."})
+		return
+	}
+
+	// 3. Convert the integer timestamp to a time.Time object
+	clientTime := time.Unix(clientTimestamp, 0)
+	serverTime := time.Now()
+
+	// 4. Calculate the duration (difference) between server time and client time
+	diff := serverTime.Sub(clientTime)
+
+	// 5. Get the absolute value of the duration, since the client could be ahead or behind
+	if diff < 0 {
+		diff = -diff
+	}
+
+	log.Printf(
+		"Server Time: %s",
+		serverTime.String(),
+		
+	)
+
+	log.Printf(
+		"Time difference: %s",
+		diff.String(),
+	)
+
+	// 6. Check if the difference is greater than 1 second
+	if diff > time.Second {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+
+	time.Sleep(1 * time.Second)
+
+	// 7. If the check passes, send a 200 OK response
+	c.Status(http.StatusOK)
+}
+
 func main() {
 	time.Sleep(2 * time.Second)
 	initDB()
@@ -150,6 +203,7 @@ func main() {
 	router.GET("/health", HealthCheckHandler)
 	router.GET("/generate-token", GenerateTokenHandler)
 	router.GET("/check-token", CheckTokenHandler)
+	router.GET("/check-time", CheckTimeHandler)
 
 	err = router.Run(":8000")
 	if err != nil && err != http.ErrServerClosed {
