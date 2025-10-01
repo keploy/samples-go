@@ -25,7 +25,10 @@ services:
     volumes: 
       - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
-      - babab
+      babab:
+        aliases:
+          - postgresDb
+
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
       interval: 5s
