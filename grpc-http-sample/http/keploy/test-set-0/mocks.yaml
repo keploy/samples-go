@@ -1,0 +1,119 @@
+version: api.keploy.io/v1beta1
+kind: gRPC
+name: mock-0
+spec:
+    grpcReq:
+        headers:
+            pseudo_headers:
+                :authority: localhost:50051
+                :method: POST
+                :path: /example.ExampleService/SayHello
+                :scheme: http
+            ordinary_headers:
+                content-type: application/grpc
+                grpc-timeout: 986616u
+                te: trailers
+                user-agent: grpc-go/1.67.1
+        body:
+            compression_flag: 0
+            message_length: 7
+            decoded_data: |
+                1: {"world"}
+    grpcResp:
+        headers:
+            pseudo_headers:
+                :status: "200"
+            ordinary_headers:
+                content-type: application/grpc
+        body:
+            compression_flag: 0
+            message_length: 15
+            decoded_data: |
+                1: {"Hello, world!"}
+        trailers:
+            pseudo_headers: {}
+            ordinary_headers:
+                grpc-message: ""
+                grpc-status: "0"
+    reqTimestampMock: 2024-10-09T14:20:51.694192937+05:30
+    resTimestampMock: 2024-10-09T14:20:51.699999378+05:30
+---
+version: api.keploy.io/v1beta1
+kind: gRPC
+name: mock-1
+spec:
+    grpcReq:
+        headers:
+            pseudo_headers:
+                :authority: localhost:50051
+                :method: POST
+                :path: /example.ExampleService/SayHello
+                :scheme: http
+            ordinary_headers:
+                content-type: application/grpc
+                grpc-timeout: 993335u
+                te: trailers
+                user-agent: grpc-go/1.67.1
+        body:
+            compression_flag: 0
+            message_length: 6
+            decoded_data: |
+                1: {"John"}
+    grpcResp:
+        headers:
+            pseudo_headers:
+                :status: "200"
+            ordinary_headers:
+                content-type: application/grpc
+        body:
+            compression_flag: 0
+            message_length: 14
+            decoded_data: |
+                1: {"Hello, John!"}
+        trailers:
+            pseudo_headers: {}
+            ordinary_headers:
+                grpc-message: ""
+                grpc-status: "0"
+    reqTimestampMock: 2024-10-09T14:21:09.066179963+05:30
+    resTimestampMock: 2024-10-09T14:21:09.067043986+05:30
+---
+version: api.keploy.io/v1beta1
+kind: gRPC
+name: mock-2
+spec:
+    grpcReq:
+        headers:
+            pseudo_headers:
+                :authority: localhost:50051
+                :method: POST
+                :path: /example.ExampleService/SayHello
+                :scheme: http
+            ordinary_headers:
+                content-type: application/grpc
+                grpc-timeout: 995726u
+                te: trailers
+                user-agent: grpc-go/1.67.1
+        body:
+            compression_flag: 0
+            message_length: 6
+            decoded_data: |
+                1: {"Jack"}
+    grpcResp:
+        headers:
+            pseudo_headers:
+                :status: "200"
+            ordinary_headers:
+                content-type: application/grpc
+        body:
+            compression_flag: 0
+            message_length: 14
+            decoded_data: |
+                1: {"Hello, Jack!"}
+        trailers:
+            pseudo_headers: {}
+            ordinary_headers:
+                grpc-message: ""
+                grpc-status: "0"
+    reqTimestampMock: 2024-10-09T14:21:27.566671195+05:30
+    resTimestampMock: 2024-10-09T14:21:27.5674101+05:30
