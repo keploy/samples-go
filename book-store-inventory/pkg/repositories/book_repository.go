@@ -1,8 +1,9 @@
-// Package repositories contains logic to interact with database uisng raw SQL queries
+// Package repositories contains logic to interact with database using raw SQL queries
 package repositories
 
 import (
 	"database/sql"
+	"errors"
 
 	"github.com/saketV8/book-store-inventory/pkg/models"
 )
@@ -11,6 +12,7 @@ type BookModel struct {
 	DB *sql.DB
 }
 
+// GetBooks fetches all books from the database.
 func (bookModel *BookModel) GetBooks() ([]models.Book, error) {
 	statement := `SELECT book_id, title, author, price, published_date, stock_quantity FROM books ORDER BY book_id DESC`
 
@@ -18,13 +20,11 @@ func (bookModel *BookModel) GetBooks() ([]models.Book, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close() // ✅ Prevent resource leak
 
-	//initializing the empty slice <Book> of data type <models.Book>
 	books := []models.Book{}
 	for rows.Next() {
-		// initializing the empty variable <book> of data type <models.Book>
 		book := models.Book{}
-		//extracting data from rows and setting in <models.Book>
 		err := rows.Scan(
 			&book.BookID,
 			&book.Title,
@@ -36,24 +36,25 @@ func (bookModel *BookModel) GetBooks() ([]models.Book, error) {
 		if err != nil {
 			return nil, err
 		}
-
-		// adding books to the books slice/array
 		books = append(books, book)
 	}
-	err = rows.Err()
-	if err != nil {
+
+	if err := rows.Err(); err != nil {
 		return nil, err
 	}
 
-	// final return
 	return books, nil
 }
 
+// GetBookByID fetches a book by its ID.
 func (bookModel *BookModel) GetBookByID(bookID string) (models.Book, error) {
-	statement := `SELECT book_id, title, author, price, published_date, stock_quantity FROM books WHERE book_id = ? ;`
-	// empty book model
-	book := models.Book{}
+	if bookID == "" {
+		return models.Book{}, errors.New("empty book ID")
+	}
 
+	statement := `SELECT book_id, title, author, price, published_date, stock_quantity FROM books WHERE book_id = ?`
+
+	book := models.Book{}
 	err := bookModel.DB.QueryRow(statement, bookID).Scan(
 		&book.BookID,
 		&book.Title,
@@ -62,17 +63,29 @@ func (bookModel *BookModel) GetBookByID(bookID string) (models.Book, error) {
 		&book.PublishedDate,
 		&book.StockQuantity,
 	)
+
 	if err != nil {
-		return book, err
+		if errors.Is(err, sql.ErrNoRows) {
+			// Pass this explicitly so the handler can handle 404 logic
+			return models.Book{}, sql.ErrNoRows
+		}
+		return models.Book{}, err
 	}
 
 	return book, nil
 }
 
+// AddBook inserts a new book into the database.
 func (bookModel *BookModel) AddBook(book models.Book) (models.Book, error) {
 	statement := `INSERT INTO books (title, author, price, published_date, stock_quantity) VALUES (?, ?, ?, ?, ?)`
 
-	result, err := bookModel.DB.Exec(statement, book.Title, book.Author, book.Price, book.PublishedDate, book.StockQuantity)
+	result, err := bookModel.DB.Exec(statement,
+		book.Title,
+		book.Author,
+		book.Price,
+		book.PublishedDate,
+		book.StockQuantity,
+	)
 	if err != nil {
 		return models.Book{}, err
 	}
@@ -82,13 +95,11 @@ func (bookModel *BookModel) AddBook(book models.Book) (models.Book, error) {
 		return models.Book{}, err
 	}
 
-	// adding Id to book model inserted autmatically by sqlite before returning to end user
-	// removing int gives int64 cannot covert to int :)
 	book.BookID = int(lastInsertedID)
-
 	return book, nil
 }
 
+// DeleteBook removes a book from the database.
 func (bookModel *BookModel) DeleteBook(book models.BookDeleteRequestBody) (int, error) {
 	statement := `DELETE FROM books WHERE book_id = ?;`
 
@@ -105,10 +116,18 @@ func (bookModel *BookModel) DeleteBook(book models.BookDeleteRequestBody) (int, 
 	return int(rowAffected), nil
 }
 
+// UpdateBook updates book details in the database.
 func (bookModel *BookModel) UpdateBook(book models.BookUpdateRequestBody) (int, error) {
 	statement := `UPDATE books SET title = ?, author = ?, price = ?, published_date = ?, stock_quantity = ? WHERE book_id = ?`
 
-	result, err := bookModel.DB.Exec(statement, book.Title, book.Author, book.Price, book.PublishedDate, book.StockQuantity, book.BookID)
+	result, err := bookModel.DB.Exec(statement,
+		book.Title,
+		book.Author,
+		book.Price,
+		book.PublishedDate,
+		book.StockQuantity,
+		book.BookID,
+	)
 	if err != nil {
 		return 0, err
 	}
