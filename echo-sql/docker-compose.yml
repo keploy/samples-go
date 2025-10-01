@@ -7,26 +7,31 @@ services:
     ports:
       - "8082:8082"
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     networks:
       - babab
 
   postgres:
-        image: postgres:10.5
-        container_name: postgresDb
-        restart: always
-        environment:
-          - POSTGRES_DB=postgres
-          - POSTGRES_USER=postgres
-          - POSTGRES_PASSWORD=password
-        ports:
-          - '5432:5432'
-        volumes: 
-          # - ./postgres-data:/var/lib/postgresql/data
-          # copy the sql script to create tables
-          - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
-        networks:
-          - babab
+    image: postgres:10.5
+    container_name: postgresDb
+    restart: always
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - '5432:5432'
+    volumes: 
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - babab
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
 networks:
     babab: 
