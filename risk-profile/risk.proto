@@ -9,18 +9,21 @@ message UserLowRisk {
   int32 id = 1;
   string name = 2;
   string email = 3;
+  int64 timestamp = 4;
 }
 
 message UserMediumRisk {
   int32 id = 1;
   string name = 2;
   string email = 3;
+  int64 timestamp = 4;
 }
 
 message UserHighRiskType {
   int32 id = 1;
   string name = 2;
   string email = 3;
+  int64 timestamp = 4;
 }
 
 message UserHighRiskRemoval {
@@ -28,12 +31,7 @@ message UserHighRiskRemoval {
   string name = 2;
   string email = 3;
   bool removal_requested = 4; // Indicates if removal has been requested
-}
-
-message UserStatusChangeHighRisk {
-  int32 id = 1;
-  string name = 2;
-  string email = 3;
+  int64 timestamp = 5;
 }
 
 message Empty {}
@@ -48,5 +46,4 @@ service RiskService {
   rpc GetUserMediumRisk(Empty) returns (UserMediumRisk);
   rpc GetUserHighRiskType(Empty) returns (UserHighRiskType);
   rpc GetUserHighRiskRemoval(Empty) returns (UserHighRiskRemoval);
-  rpc StatusChangeHighRisk(Empty) returns (UserStatusChangeHighRisk);
 }

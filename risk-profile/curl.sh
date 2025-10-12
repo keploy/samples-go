@@ -9,4 +9,8 @@ curl http://localhost:8080/users-high-risk-removal
 curl http://localhost:8080/status-change-high-risk
 curl http://localhost:8080/content-type-change-high-risk
 curl http://localhost:8080/header-change-medium-risk
-curl http://localhost:8080/noisy-header
+
+# Combined tests
+curl http://localhost:8080/status-body-change
+curl http://localhost:8080/header-body-change
+curl http://localhost:8080/status-body-header-change

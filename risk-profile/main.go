@@ -122,12 +122,33 @@ func headerChangeMediumRisk(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
-func noisyHeader(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Date", time.Now().UTC().Format(http.TimeFormat))
+func statusBodyChange(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	response := map[string]interface{}{
-		"message":   "Check the Date header!",
-		"timestamp": time.Now().Unix(),
+		"message":   "Status and body not changed",
+		"timestamp": time.Now().UnixNano(),
+	}
+	json.NewEncoder(w).Encode(response)
+}
+
+func headerBodyChange(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("X-Transaction-ID", "txn-1")
+	w.Header().Set("Content-Type", "application/json")
+	response := map[string]interface{}{
+		"message":   "Header and body not changed",
+		"timestamp": time.Now().UnixNano(),
+	}
+	json.NewEncoder(w).Encode(response)
+}
+
+func statusBodyHeaderChange(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("X-Transaction-ID", "txn-1")
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	response := map[string]interface{}{
+		"message":   "Status, body, and header not changed",
+		"timestamp": time.Now().UnixNano(),
 	}
 	json.NewEncoder(w).Encode(response)
 }
@@ -181,7 +202,9 @@ func main() {
 	mux.HandleFunc("/status-change-high-risk", statusChangeHighRisk)
 	mux.HandleFunc("/content-type-change-high-risk", contentTypeChangeHighRisk)
 	mux.HandleFunc("/header-change-medium-risk", headerChangeMediumRisk)
-	mux.HandleFunc("/noisy-header", noisyHeader)
+	mux.HandleFunc("/status-body-change", statusBodyChange)
+	mux.HandleFunc("/header-body-change", headerBodyChange)
+	mux.HandleFunc("/status-body-header-change", statusBodyHeaderChange)
 
 	httpServer := &http.Server{
 		Addr:    ":8080",
