@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type RiskServiceClient interface {
 	GetUserLowRisk(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserLowRisk, error)
 	GetUserMediumRisk(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserMediumRisk, error)
+	GetUserMediumRiskWithAddition(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserMediumRiskWithAddition, error)
 	GetUserHighRiskType(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserHighRiskType, error)
 	GetUserHighRiskRemoval(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserHighRiskRemoval, error)
 }
@@ -54,6 +55,15 @@ func (c *riskServiceClient) GetUserMediumRisk(ctx context.Context, in *Empty, op
 	return out, nil
 }
 
+func (c *riskServiceClient) GetUserMediumRiskWithAddition(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserMediumRiskWithAddition, error) {
+	out := new(UserMediumRiskWithAddition)
+	err := c.cc.Invoke(ctx, "/risk.RiskService/GetUserMediumRiskWithAddition", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *riskServiceClient) GetUserHighRiskType(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserHighRiskType, error) {
 	out := new(UserHighRiskType)
 	err := c.cc.Invoke(ctx, "/risk.RiskService/GetUserHighRiskType", in, out, opts...)
@@ -78,6 +88,7 @@ func (c *riskServiceClient) GetUserHighRiskRemoval(ctx context.Context, in *Empt
 type RiskServiceServer interface {
 	GetUserLowRisk(context.Context, *Empty) (*UserLowRisk, error)
 	GetUserMediumRisk(context.Context, *Empty) (*UserMediumRisk, error)
+	GetUserMediumRiskWithAddition(context.Context, *Empty) (*UserMediumRiskWithAddition, error)
 	GetUserHighRiskType(context.Context, *Empty) (*UserHighRiskType, error)
 	GetUserHighRiskRemoval(context.Context, *Empty) (*UserHighRiskRemoval, error)
 	mustEmbedUnimplementedRiskServiceServer()
@@ -92,6 +103,9 @@ func (UnimplementedRiskServiceServer) GetUserLowRisk(context.Context, *Empty) (*
 }
 func (UnimplementedRiskServiceServer) GetUserMediumRisk(context.Context, *Empty) (*UserMediumRisk, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserMediumRisk not implemented")
+}
+func (UnimplementedRiskServiceServer) GetUserMediumRiskWithAddition(context.Context, *Empty) (*UserMediumRiskWithAddition, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserMediumRiskWithAddition not implemented")
 }
 func (UnimplementedRiskServiceServer) GetUserHighRiskType(context.Context, *Empty) (*UserHighRiskType, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserHighRiskType not implemented")
@@ -148,6 +162,24 @@ func _RiskService_GetUserMediumRisk_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _RiskService_GetUserMediumRiskWithAddition_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RiskServiceServer).GetUserMediumRiskWithAddition(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/risk.RiskService/GetUserMediumRiskWithAddition",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RiskServiceServer).GetUserMediumRiskWithAddition(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _RiskService_GetUserHighRiskType_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Empty)
 	if err := dec(in); err != nil {
@@ -198,6 +230,10 @@ var RiskService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUserMediumRisk",
 			Handler:    _RiskService_GetUserMediumRisk_Handler,
+		},
+		{
+			MethodName: "GetUserMediumRiskWithAddition",
+			Handler:    _RiskService_GetUserMediumRiskWithAddition_Handler,
 		},
 		{
 			MethodName: "GetUserHighRiskType",
