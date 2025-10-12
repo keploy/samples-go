@@ -26,6 +26,7 @@ func getUsersLowRisk(w http.ResponseWriter, r *http.Request) {
 		"name":      user.Name,
 		"email":     user.Email,
 		"timestamp": time.Now().Unix(),
+		"phone":     "9999988888",
 	}
 	json.NewEncoder(w).Encode(response)
 }
@@ -35,7 +36,7 @@ func getUsersMediumRisk(w http.ResponseWriter, r *http.Request) {
 	user := originalUsers[0]
 	response := map[string]interface{}{
 		"id":        user.ID,
-		"name":      user.Name,
+		"name":      user.Name + "-Modified",
 		"email":     user.Email,
 		"timestamp": time.Now().Unix(),
 	}
@@ -47,9 +48,10 @@ func getUsersMediumRiskWithAddition(w http.ResponseWriter, r *http.Request) {
 	user := originalUsers[0]
 	response := map[string]interface{}{
 		"id":        user.ID,
-		"name":      user.Name,
+		"name":      user.Name + "-Modified",
 		"email":     user.Email,
 		"timestamp": time.Now().Unix(),
+		"phone":     "9999988888",
 	}
 	json.NewEncoder(w).Encode(response)
 }
@@ -58,7 +60,7 @@ func getUsersHighRiskType(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	user := originalUsers[0]
 	response := map[string]interface{}{
-		"id":        user.ID,
+		"id":        "123",
 		"name":      user.Name,
 		"email":     user.Email,
 		"timestamp": time.Now().Unix(),
@@ -72,7 +74,6 @@ func getUsersHighRiskRemoval(w http.ResponseWriter, r *http.Request) {
 	response := map[string]interface{}{
 		"id":        user.ID,
 		"name":      user.Name,
-		"email":     user.Email,
 		"timestamp": time.Now().Unix(),
 	}
 	json.NewEncoder(w).Encode(response)
@@ -80,7 +81,7 @@ func getUsersHighRiskRemoval(w http.ResponseWriter, r *http.Request) {
 
 func statusChangeHighRisk(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(http.StatusAccepted)
 	response := map[string]interface{}{
 		"status":    "OK",
 		"timestamp": time.Now().Unix(),
@@ -89,7 +90,7 @@ func statusChangeHighRisk(w http.ResponseWriter, r *http.Request) {
 }
 
 func contentTypeChangeHighRisk(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "application/xml")
 	w.WriteHeader(http.StatusOK)
 	response := map[string]interface{}{
 		"message":   "This is JSON.",
@@ -99,7 +100,7 @@ func contentTypeChangeHighRisk(w http.ResponseWriter, r *http.Request) {
 }
 
 func headerChangeMediumRisk(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("X-Custom-Header", "initial-value-123")
+	w.Header().Set("X-Custom-Header", "initial-value-456")
 	w.WriteHeader(http.StatusOK)
 	response := map[string]interface{}{
 		"status":    "header test",
@@ -110,30 +111,30 @@ func headerChangeMediumRisk(w http.ResponseWriter, r *http.Request) {
 
 func statusBodyChange(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(http.StatusAccepted)
 	response := map[string]interface{}{
-		"message":   "Status and body not changed",
+		"message":   "Status and body changed",
 		"timestamp": time.Now().UnixNano(),
 	}
 	json.NewEncoder(w).Encode(response)
 }
 
 func headerBodyChange(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("X-Transaction-ID", "txn-1")
+	w.Header().Set("X-Transaction-ID", "txn-2")
 	w.Header().Set("Content-Type", "application/json")
 	response := map[string]interface{}{
-		"message":   "Header and body not changed",
+		"message":   "Header and body changed",
 		"timestamp": time.Now().UnixNano(),
 	}
 	json.NewEncoder(w).Encode(response)
 }
 
 func statusBodyHeaderChange(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("X-Transaction-ID", "txn-1")
+	w.Header().Set("X-Transaction-ID", "txn-2")
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(http.StatusAccepted)
 	response := map[string]interface{}{
-		"message":   "Status, body, and header not changed",
+		"message":   "Status, body, and header changed",
 		"timestamp": time.Now().UnixNano(),
 	}
 	json.NewEncoder(w).Encode(response)
