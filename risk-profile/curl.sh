@@ -4,6 +4,7 @@ curl http://localhost:8080/users-medium-risk
 curl http://localhost:8080/users-medium-risk-with-addition
 curl http://localhost:8080/users-high-risk-type
 curl http://localhost:8080/users-high-risk-removal
+curl http://localhost:8080/schema-completely-changed
 
 # Status and Header tests
 curl http://localhost:8080/status-change-high-risk
