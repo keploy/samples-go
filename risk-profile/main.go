@@ -166,6 +166,10 @@ func (s *riskServer) GetUserMediumRisk(ctx context.Context, in *pb.Empty) (*pb.U
 	return &pb.UserMediumRisk{Id: 1, Name: "Alice", Email: "alice@example.com", Timestamp: time.Now().Unix()}, nil
 }
 
+func (s *riskServer) GetUserMediumRiskWithAddition(ctx context.Context, in *pb.Empty) (*pb.UserMediumRiskWithAddition, error) {
+	return &pb.UserMediumRiskWithAddition{Id: 1, Name: "Alice", Email: "alice@example.com", Timestamp: time.Now().Unix()}, nil
+}
+
 func (s *riskServer) GetUserHighRiskType(ctx context.Context, in *pb.Empty) (*pb.UserHighRiskType, error) {
 	return &pb.UserHighRiskType{Id: 1, Name: "Alice", Email: "alice@example.com", Timestamp: time.Now().Unix()}, nil
 }

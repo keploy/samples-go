@@ -5,9 +5,9 @@ import (
 	"log"
 	"time"
 
+	pb "github.com/keploy/samples-go/risk-profile/risk"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	pb "github.com/keploy/samples-go/risk-profile/risk"
 )
 
 const (
@@ -35,6 +35,12 @@ func main() {
 	_, err = c.GetUserMediumRisk(ctx, &pb.Empty{})
 	if err != nil {
 		log.Printf("could not call GetUserMediumRisk: %v", err)
+	}
+
+	log.Println("Calling GetUserMediumRiskWithAddition...")
+	_, err = c.GetUserMediumRiskWithAddition(ctx, &pb.Empty{})
+	if err != nil {
+		log.Printf("could not call GetUserMediumRiskWithAddition: %v", err)
 	}
 
 	log.Println("Calling GetUserHighRiskType...")

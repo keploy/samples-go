@@ -19,6 +19,13 @@ message UserMediumRisk {
   int64 timestamp = 4;
 }
 
+message UserMediumRiskWithAddition {
+  int32 id = 1;
+  string name = 2;
+  string email = 3;
+  int64 timestamp = 4;
+}
+
 message UserHighRiskType {
   int32 id = 1;
   string name = 2;
@@ -44,6 +51,7 @@ message SimpleResponse {
 service RiskService {
   rpc GetUserLowRisk(Empty) returns (UserLowRisk);
   rpc GetUserMediumRisk(Empty) returns (UserMediumRisk);
+  rpc GetUserMediumRiskWithAddition(Empty) returns (UserMediumRiskWithAddition);
   rpc GetUserHighRiskType(Empty) returns (UserHighRiskType);
   rpc GetUserHighRiskRemoval(Empty) returns (UserHighRiskRemoval);
 }
