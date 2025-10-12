@@ -139,6 +139,16 @@ func statusBodyHeaderChange(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
+func schemaCompletelyChanged(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/plain")
+	w.WriteHeader(http.StatusOK)
+	response := map[string]interface{}{
+		"message":   "Schema completely not changed",
+		"timestamp": time.Now().UnixNano(),
+	}
+	json.NewEncoder(w).Encode(response)
+}
+
 func main() {
 	log.Println("Application starting...")
 	http.HandleFunc("/users-low-risk", getUsersLowRisk)
@@ -152,6 +162,7 @@ func main() {
 	http.HandleFunc("/status-body-change", statusBodyChange)
 	http.HandleFunc("/header-body-change", headerBodyChange)
 	http.HandleFunc("/status-body-header-change", statusBodyHeaderChange)
+	http.HandleFunc("/schema-completely-changed", schemaCompletelyChanged)
 	port := "8080"
 	log.Printf("Server starting on port %s...", port)
 	if err := http.ListenAndServe(fmt.Sprintf(":%s", port), nil); err != nil {
