@@ -30,8 +30,8 @@ message UserHighRiskRemoval {
   int32 id = 1;
   string name = 2;
   string email = 3;
-  bool removal_requested = 4; // Indicates if removal has been requested
-  int64 timestamp = 5;
+  int64 timestamp = 4;
+  bool removal_requested = 5;
 }
 
 message Empty {}

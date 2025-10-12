@@ -171,7 +171,7 @@ func (s *riskServer) GetUserHighRiskType(ctx context.Context, in *pb.Empty) (*pb
 }
 
 func (s *riskServer) GetUserHighRiskRemoval(ctx context.Context, in *pb.Empty) (*pb.UserHighRiskRemoval, error) {
-	return &pb.UserHighRiskRemoval{Id: 1, Name: "Alice", Email: "alice@example.com", RemovalRequested: true, Timestamp: time.Now().Unix()}, nil
+	return &pb.UserHighRiskRemoval{Id: 1, Name: "Alice", Email: "alice@example.com", Timestamp: time.Now().Unix(), RemovalRequested: true}, nil
 }
 
 func main() {
