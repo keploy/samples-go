@@ -22,11 +22,11 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type RiskServiceClient interface {
-	GetUserLowRisk(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*User, error)
-	GetUserMediumRisk(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*User, error)
-	GetUserHighRiskType(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*User, error)
-	GetUserHighRiskRemoval(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*User, error)
-	StatusChangeHighRisk(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*SimpleResponse, error)
+	GetUserLowRisk(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserLowRisk, error)
+	GetUserMediumRisk(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserMediumRisk, error)
+	GetUserHighRiskType(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserHighRiskType, error)
+	GetUserHighRiskRemoval(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserHighRiskRemoval, error)
+	StatusChangeHighRisk(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserStatusChangeHighRisk, error)
 }
 
 type riskServiceClient struct {
@@ -37,8 +37,8 @@ func NewRiskServiceClient(cc grpc.ClientConnInterface) RiskServiceClient {
 	return &riskServiceClient{cc}
 }
 
-func (c *riskServiceClient) GetUserLowRisk(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*User, error) {
-	out := new(User)
+func (c *riskServiceClient) GetUserLowRisk(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserLowRisk, error) {
+	out := new(UserLowRisk)
 	err := c.cc.Invoke(ctx, "/risk.RiskService/GetUserLowRisk", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -46,8 +46,8 @@ func (c *riskServiceClient) GetUserLowRisk(ctx context.Context, in *Empty, opts 
 	return out, nil
 }
 
-func (c *riskServiceClient) GetUserMediumRisk(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*User, error) {
-	out := new(User)
+func (c *riskServiceClient) GetUserMediumRisk(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserMediumRisk, error) {
+	out := new(UserMediumRisk)
 	err := c.cc.Invoke(ctx, "/risk.RiskService/GetUserMediumRisk", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -55,8 +55,8 @@ func (c *riskServiceClient) GetUserMediumRisk(ctx context.Context, in *Empty, op
 	return out, nil
 }
 
-func (c *riskServiceClient) GetUserHighRiskType(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*User, error) {
-	out := new(User)
+func (c *riskServiceClient) GetUserHighRiskType(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserHighRiskType, error) {
+	out := new(UserHighRiskType)
 	err := c.cc.Invoke(ctx, "/risk.RiskService/GetUserHighRiskType", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -64,8 +64,8 @@ func (c *riskServiceClient) GetUserHighRiskType(ctx context.Context, in *Empty, 
 	return out, nil
 }
 
-func (c *riskServiceClient) GetUserHighRiskRemoval(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*User, error) {
-	out := new(User)
+func (c *riskServiceClient) GetUserHighRiskRemoval(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserHighRiskRemoval, error) {
+	out := new(UserHighRiskRemoval)
 	err := c.cc.Invoke(ctx, "/risk.RiskService/GetUserHighRiskRemoval", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -73,8 +73,8 @@ func (c *riskServiceClient) GetUserHighRiskRemoval(ctx context.Context, in *Empt
 	return out, nil
 }
 
-func (c *riskServiceClient) StatusChangeHighRisk(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*SimpleResponse, error) {
-	out := new(SimpleResponse)
+func (c *riskServiceClient) StatusChangeHighRisk(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserStatusChangeHighRisk, error) {
+	out := new(UserStatusChangeHighRisk)
 	err := c.cc.Invoke(ctx, "/risk.RiskService/StatusChangeHighRisk", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -86,11 +86,11 @@ func (c *riskServiceClient) StatusChangeHighRisk(ctx context.Context, in *Empty,
 // All implementations must embed UnimplementedRiskServiceServer
 // for forward compatibility
 type RiskServiceServer interface {
-	GetUserLowRisk(context.Context, *Empty) (*User, error)
-	GetUserMediumRisk(context.Context, *Empty) (*User, error)
-	GetUserHighRiskType(context.Context, *Empty) (*User, error)
-	GetUserHighRiskRemoval(context.Context, *Empty) (*User, error)
-	StatusChangeHighRisk(context.Context, *Empty) (*SimpleResponse, error)
+	GetUserLowRisk(context.Context, *Empty) (*UserLowRisk, error)
+	GetUserMediumRisk(context.Context, *Empty) (*UserMediumRisk, error)
+	GetUserHighRiskType(context.Context, *Empty) (*UserHighRiskType, error)
+	GetUserHighRiskRemoval(context.Context, *Empty) (*UserHighRiskRemoval, error)
+	StatusChangeHighRisk(context.Context, *Empty) (*UserStatusChangeHighRisk, error)
 	mustEmbedUnimplementedRiskServiceServer()
 }
 
@@ -98,19 +98,19 @@ type RiskServiceServer interface {
 type UnimplementedRiskServiceServer struct {
 }
 
-func (UnimplementedRiskServiceServer) GetUserLowRisk(context.Context, *Empty) (*User, error) {
+func (UnimplementedRiskServiceServer) GetUserLowRisk(context.Context, *Empty) (*UserLowRisk, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserLowRisk not implemented")
 }
-func (UnimplementedRiskServiceServer) GetUserMediumRisk(context.Context, *Empty) (*User, error) {
+func (UnimplementedRiskServiceServer) GetUserMediumRisk(context.Context, *Empty) (*UserMediumRisk, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserMediumRisk not implemented")
 }
-func (UnimplementedRiskServiceServer) GetUserHighRiskType(context.Context, *Empty) (*User, error) {
+func (UnimplementedRiskServiceServer) GetUserHighRiskType(context.Context, *Empty) (*UserHighRiskType, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserHighRiskType not implemented")
 }
-func (UnimplementedRiskServiceServer) GetUserHighRiskRemoval(context.Context, *Empty) (*User, error) {
+func (UnimplementedRiskServiceServer) GetUserHighRiskRemoval(context.Context, *Empty) (*UserHighRiskRemoval, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserHighRiskRemoval not implemented")
 }
-func (UnimplementedRiskServiceServer) StatusChangeHighRisk(context.Context, *Empty) (*SimpleResponse, error) {
+func (UnimplementedRiskServiceServer) StatusChangeHighRisk(context.Context, *Empty) (*UserStatusChangeHighRisk, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StatusChangeHighRisk not implemented")
 }
 func (UnimplementedRiskServiceServer) mustEmbedUnimplementedRiskServiceServer() {}

@@ -5,7 +5,32 @@ package risk;
 option go_package = "./;risk";
 
 // The "golden" V1 User message structure
-message User {
+message UserLowRisk {
+  int32 id = 1;
+  string name = 2;
+  string email = 3;
+}
+
+message UserMediumRisk {
+  int32 id = 1;
+  string name = 2;
+  string email = 3;
+}
+
+message UserHighRiskType {
+  int32 id = 1;
+  string name = 2;
+  string email = 3;
+}
+
+message UserHighRiskRemoval {
+  int32 id = 1;
+  string name = 2;
+  string email = 3;
+  bool removal_requested = 4; // Indicates if removal has been requested
+}
+
+message UserStatusChangeHighRisk {
   int32 id = 1;
   string name = 2;
   string email = 3;
@@ -19,9 +44,9 @@ message SimpleResponse {
 
 // The V1 RiskService defines the RPC methods.
 service RiskService {
-  rpc GetUserLowRisk(Empty) returns (User);
-  rpc GetUserMediumRisk(Empty) returns (User);
-  rpc GetUserHighRiskType(Empty) returns (User);
-  rpc GetUserHighRiskRemoval(Empty) returns (User);
-  rpc StatusChangeHighRisk(Empty) returns (SimpleResponse);
+  rpc GetUserLowRisk(Empty) returns (UserLowRisk);
+  rpc GetUserMediumRisk(Empty) returns (UserMediumRisk);
+  rpc GetUserHighRiskType(Empty) returns (UserHighRiskType);
+  rpc GetUserHighRiskRemoval(Empty) returns (UserHighRiskRemoval);
+  rpc StatusChangeHighRisk(Empty) returns (UserStatusChangeHighRisk);
 }

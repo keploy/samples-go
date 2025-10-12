@@ -86,24 +86,24 @@ type riskServer struct {
 	pb.UnimplementedRiskServiceServer
 }
 
-func (s *riskServer) GetUserLowRisk(ctx context.Context, in *pb.Empty) (*pb.User, error) {
-	return &pb.User{Id: 1, Name: "Alice", Email: "alice@example.com"}, nil
+func (s *riskServer) GetUserLowRisk(ctx context.Context, in *pb.Empty) (*pb.UserLowRisk, error) {
+	return &pb.UserLowRisk{Id: 1, Name: "Alice", Email: "alice@example.com"}, nil
 }
 
-func (s *riskServer) GetUserMediumRisk(ctx context.Context, in *pb.Empty) (*pb.User, error) {
-	return &pb.User{Id: 1, Name: "Alice", Email: "alice@example.com"}, nil
+func (s *riskServer) GetUserMediumRisk(ctx context.Context, in *pb.Empty) (*pb.UserMediumRisk, error) {
+	return &pb.UserMediumRisk{Id: 1, Name: "Alice", Email: "alice@example.com"}, nil
 }
 
-func (s *riskServer) GetUserHighRiskType(ctx context.Context, in *pb.Empty) (*pb.User, error) {
-	return &pb.User{Id: 1, Name: "Alice", Email: "alice@example.com"}, nil
+func (s *riskServer) GetUserHighRiskType(ctx context.Context, in *pb.Empty) (*pb.UserHighRiskType, error) {
+	return &pb.UserHighRiskType{Id: 1, Name: "Alice", Email: "alice@example.com"}, nil
 }
 
-func (s *riskServer) GetUserHighRiskRemoval(ctx context.Context, in *pb.Empty) (*pb.User, error) {
-	return &pb.User{Id: 1, Name: "Alice", Email: "alice@example.com"}, nil
+func (s *riskServer) GetUserHighRiskRemoval(ctx context.Context, in *pb.Empty) (*pb.UserHighRiskRemoval, error) {
+	return &pb.UserHighRiskRemoval{Id: 1, Name: "Alice", Email: "alice@example.com", RemovalRequested: false}, nil
 }
 
-func (s *riskServer) StatusChangeHighRisk(ctx context.Context, in *pb.Empty) (*pb.SimpleResponse, error) {
-	return &pb.SimpleResponse{Message: "OK"}, nil
+func (s *riskServer) StatusChangeHighRisk(ctx context.Context, in *pb.Empty) (*pb.UserStatusChangeHighRisk, error) {
+	return &pb.UserStatusChangeHighRisk{Id: 1, Name: "Alice", Email: "alice@example.com"}, nil
 }
 
 func main() {
