@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package risk;
+
+option go_package = "./;risk";
+
+// The "golden" V1 User message structure
+message User {
+  int32 id = 1;
+  string name = 2;
+  string email = 3;
+}
+
+message Empty {}
+
+message SimpleResponse {
+    string message = 1;
+}
+
+// The V1 RiskService defines the RPC methods.
+service RiskService {
+  rpc GetUserLowRisk(Empty) returns (User);
+  rpc GetUserMediumRisk(Empty) returns (User);
+  rpc GetUserHighRiskType(Empty) returns (User);
+  rpc GetUserHighRiskRemoval(Empty) returns (User);
+  rpc StatusChangeHighRisk(Empty) returns (SimpleResponse);
+}

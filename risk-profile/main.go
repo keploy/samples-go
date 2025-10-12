@@ -1,12 +1,22 @@
 package main
 
+//go:generate protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative ./risk.proto
+
 import (
+	"context"
 	"encoding/json"
-	"fmt"
+	"errors"
 	"log"
+	"net"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
+
+	pb "github.com/keploy/samples-go/risk-profile/risk"
+
+	"google.golang.org/grpc"
 )
 
 // --- V1 Data Structures and Data ---
@@ -16,157 +26,145 @@ type UserV1 struct {
 	Email string `json:"email"`
 }
 
-// The base data remains a slice, but we will only serve the first element.
 var originalUsers = []UserV1{
 	{ID: 1, Name: "Alice", Email: "alice@example.com"},
-	{ID: 2, Name: "Bob", Email: "bob@example.com"},
 }
 
-// --- V2 Data Structures for High-Risk Scenarios ---
-type UserHighRiskTypeChange struct {
-	ID    string `json:"id"` // Type changed from int to string
-	Name  string `json:"name"`
-	Email string `json:"email"`
-}
+// --- API Handlers (V1) ---
 
-// --- API Handlers ---
-
-// BODY: LOW RISK (Only new fields added)
 func getUsersLowRisk(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	if os.Getenv("KEPLOY_MODE") == "test" {
-		dataWithAddedField := struct {
-			ID       int    `json:"id"`
-			Name     string `json:"name"`
-			Email    string `json:"email"`
-			IsActive bool   `json:"isActive"` // New field
-		}{
-			ID: 1, Name: "Alice", Email: "alice@example.com", IsActive: true,
-		}
-		json.NewEncoder(w).Encode(dataWithAddedField)
-		return
-	}
-	json.NewEncoder(w).Encode(originalUsers[0]) // Return a single object
+	json.NewEncoder(w).Encode(originalUsers[0])
 }
 
-// BODY: MEDIUM RISK (Value changes only)
 func getUsersMediumRisk(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	if os.Getenv("KEPLOY_MODE") == "test" {
-		dataWithValueChange := UserV1{
-			ID: 1, Name: "Alicia", Email: "alice@example.com", // Name changed
-		}
-		json.NewEncoder(w).Encode(dataWithValueChange)
-		return
-	}
-	json.NewEncoder(w).Encode(originalUsers[0]) // Return a single object
+	json.NewEncoder(w).Encode(originalUsers[0])
 }
 
-// BODY: MEDIUM RISK (New fields added + value changes)
 func getUsersMediumRiskWithAddition(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	if os.Getenv("KEPLOY_MODE") == "test" {
-		dataWithAdditionAndChange := struct {
-			ID       int    `json:"id"`
-			Name     string `json:"name"`
-			Email    string `json:"email"`
-			IsActive bool   `json:"isActive"` // New field
-		}{
-			ID: 1, Name: "Alicia", Email: "alice@example.com", IsActive: true, // Name changed AND IsActive added
-		}
-		json.NewEncoder(w).Encode(dataWithAdditionAndChange)
-		return
-	}
-	json.NewEncoder(w).Encode(originalUsers[0]) // Return a single object
+	json.NewEncoder(w).Encode(originalUsers[0])
 }
 
-// BODY: HIGH RISK (Field's type changes)
 func getUsersHighRiskType(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	if os.Getenv("KEPLOY_MODE") == "test" {
-		dataWithTypeChange := UserHighRiskTypeChange{
-			ID: "user-001", Name: "Alice", Email: "alice@example.com",
-		}
-		json.NewEncoder(w).Encode(dataWithTypeChange)
-		return
-	}
-	json.NewEncoder(w).Encode(originalUsers[0]) // Return a single object
+	json.NewEncoder(w).Encode(originalUsers[0])
 }
 
-// BODY: HIGH RISK (Field is removed)
 func getUsersHighRiskRemoval(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	if os.Getenv("KEPLOY_MODE") == "test" {
-		dataWithFieldRemoved := struct {
-			ID   int    `json:"id"`
-			Name string `json:"name"`
-		}{
-			ID: 1, Name: "Alice",
-		}
-		json.NewEncoder(w).Encode(dataWithFieldRemoved)
-		return
-	}
-	json.NewEncoder(w).Encode(originalUsers[0]) // Return a single object
+	json.NewEncoder(w).Encode(originalUsers[0])
 }
 
-// STATUS: HIGH RISK (Status code changes from 200 to 400)
 func statusChangeHighRisk(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	println("KEPLOY_MODE:", os.Getenv("KEPLOY_MODE"))
-	if os.Getenv("KEPLOY_MODE") == "test" {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(`{"error": "Bad Request"}`))
-		return
-	}
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`{"status": "OK"}`))
 }
 
-// HEADER: HIGH RISK (Content-Type changes)
 func contentTypeChangeHighRisk(w http.ResponseWriter, r *http.Request) {
-	if os.Getenv("KEPLOY_MODE") == "test" {
-		w.Header().Set("Content-Type", "text/plain")
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("This is now plain text."))
-		return
-	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`{"message": "This is JSON."}`))
 }
 
-// HEADER: MEDIUM RISK (A non-critical header changes)
 func headerChangeMediumRisk(w http.ResponseWriter, r *http.Request) {
-	if os.Getenv("KEPLOY_MODE") == "test" {
-		w.Header().Set("X-Custom-Header", "new-value-987")
-	} else {
-		w.Header().Set("X-Custom-Header", "initial-value-123")
-	}
+	w.Header().Set("X-Custom-Header", "initial-value-123")
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`{"status": "header test"}`))
 }
 
-// NOISY: This should PASS if noise is configured correctly.
 func noisyHeader(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Date", time.Now().UTC().Format(http.TimeFormat))
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`{"message": "Check the Date header!"}`))
 }
 
+// --- gRPC Server Implementation (V1) ---
+type riskServer struct {
+	pb.UnimplementedRiskServiceServer
+}
+
+func (s *riskServer) GetUserLowRisk(ctx context.Context, in *pb.Empty) (*pb.User, error) {
+	return &pb.User{Id: 1, Name: "Alice", Email: "alice@example.com"}, nil
+}
+
+func (s *riskServer) GetUserMediumRisk(ctx context.Context, in *pb.Empty) (*pb.User, error) {
+	return &pb.User{Id: 1, Name: "Alice", Email: "alice@example.com"}, nil
+}
+
+func (s *riskServer) GetUserHighRiskType(ctx context.Context, in *pb.Empty) (*pb.User, error) {
+	return &pb.User{Id: 1, Name: "Alice", Email: "alice@example.com"}, nil
+}
+
+func (s *riskServer) GetUserHighRiskRemoval(ctx context.Context, in *pb.Empty) (*pb.User, error) {
+	return &pb.User{Id: 1, Name: "Alice", Email: "alice@example.com"}, nil
+}
+
+func (s *riskServer) StatusChangeHighRisk(ctx context.Context, in *pb.Empty) (*pb.SimpleResponse, error) {
+	return &pb.SimpleResponse{Message: "OK"}, nil
+}
+
 func main() {
 	log.Println("Application starting...")
-	http.HandleFunc("/users-low-risk", getUsersLowRisk)
-	http.HandleFunc("/users-medium-risk", getUsersMediumRisk)
-	http.HandleFunc("/users-medium-risk-with-addition", getUsersMediumRiskWithAddition)
-	http.HandleFunc("/users-high-risk-type", getUsersHighRiskType)
-	http.HandleFunc("/users-high-risk-removal", getUsersHighRiskRemoval)
-	http.HandleFunc("/status-change-high-risk", statusChangeHighRisk)
-	http.HandleFunc("/content-type-change-high-risk", contentTypeChangeHighRisk)
-	http.HandleFunc("/header-change-medium-risk", headerChangeMediumRisk)
-	http.HandleFunc("/noisy-header", noisyHeader)
-	port := "8080"
-	log.Printf("Server starting on port %s...", port)
-	if err := http.ListenAndServe(fmt.Sprintf(":%s", port), nil); err != nil {
-		log.Fatalf("could not start server: %s\n", err)
+
+	// --- Start gRPC Server ---
+	grpcLis, err := net.Listen("tcp", ":8081")
+	if err != nil {
+		log.Fatalf("failed to listen for gRPC: %v", err)
 	}
+	grpcServer := grpc.NewServer()
+
+	pb.RegisterRiskServiceServer(grpcServer, &riskServer{})
+	log.Printf("gRPC server listening at %v", grpcLis.Addr())
+	go func() {
+		if err := grpcServer.Serve(grpcLis); err != nil {
+			log.Printf("gRPC server error: %v", err)
+		}
+	}()
+
+	// --- Start HTTP Server ---
+	mux := http.NewServeMux()
+	mux.HandleFunc("/users-low-risk", getUsersLowRisk)
+	mux.HandleFunc("/users-medium-risk", getUsersMediumRisk)
+	mux.HandleFunc("/users-medium-risk-with-addition", getUsersMediumRiskWithAddition)
+	mux.HandleFunc("/users-high-risk-type", getUsersHighRiskType)
+	mux.HandleFunc("/users-high-risk-removal", getUsersHighRiskRemoval)
+	mux.HandleFunc("/status-change-high-risk", statusChangeHighRisk)
+	mux.HandleFunc("/content-type-change-high-risk", contentTypeChangeHighRisk)
+	mux.HandleFunc("/header-change-medium-risk", headerChangeMediumRisk)
+	mux.HandleFunc("/noisy-header", noisyHeader)
+
+	httpServer := &http.Server{
+		Addr:    ":8080",
+		Handler: mux,
+	}
+	log.Printf("HTTP server starting on port 8080...")
+	go func() {
+		if err := httpServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			log.Fatalf("could not start HTTP server: %s\n", err)
+		}
+	}()
+
+	// --- Graceful Shutdown Logic ---
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+	log.Println("Shutdown signal received, initiating graceful shutdown...")
+
+	// --- Shutdown Servers ---
+	log.Println("Shutting down gRPC server...")
+	grpcServer.GracefulStop()
+	log.Println("gRPC server stopped.")
+
+	log.Println("Shutting down HTTP server...")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := httpServer.Shutdown(ctx); err != nil {
+		log.Fatalf("HTTP server forced to shutdown: %v", err)
+	}
+	log.Println("HTTP server stopped.")
+
+	log.Println("Application shut down gracefully.")
 }
