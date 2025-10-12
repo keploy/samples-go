@@ -26,7 +26,6 @@ type RiskServiceClient interface {
 	GetUserMediumRisk(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserMediumRisk, error)
 	GetUserHighRiskType(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserHighRiskType, error)
 	GetUserHighRiskRemoval(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserHighRiskRemoval, error)
-	StatusChangeHighRisk(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserStatusChangeHighRisk, error)
 }
 
 type riskServiceClient struct {
@@ -73,15 +72,6 @@ func (c *riskServiceClient) GetUserHighRiskRemoval(ctx context.Context, in *Empt
 	return out, nil
 }
 
-func (c *riskServiceClient) StatusChangeHighRisk(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserStatusChangeHighRisk, error) {
-	out := new(UserStatusChangeHighRisk)
-	err := c.cc.Invoke(ctx, "/risk.RiskService/StatusChangeHighRisk", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // RiskServiceServer is the server API for RiskService service.
 // All implementations must embed UnimplementedRiskServiceServer
 // for forward compatibility
@@ -90,7 +80,6 @@ type RiskServiceServer interface {
 	GetUserMediumRisk(context.Context, *Empty) (*UserMediumRisk, error)
 	GetUserHighRiskType(context.Context, *Empty) (*UserHighRiskType, error)
 	GetUserHighRiskRemoval(context.Context, *Empty) (*UserHighRiskRemoval, error)
-	StatusChangeHighRisk(context.Context, *Empty) (*UserStatusChangeHighRisk, error)
 	mustEmbedUnimplementedRiskServiceServer()
 }
 
@@ -109,9 +98,6 @@ func (UnimplementedRiskServiceServer) GetUserHighRiskType(context.Context, *Empt
 }
 func (UnimplementedRiskServiceServer) GetUserHighRiskRemoval(context.Context, *Empty) (*UserHighRiskRemoval, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserHighRiskRemoval not implemented")
-}
-func (UnimplementedRiskServiceServer) StatusChangeHighRisk(context.Context, *Empty) (*UserStatusChangeHighRisk, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method StatusChangeHighRisk not implemented")
 }
 func (UnimplementedRiskServiceServer) mustEmbedUnimplementedRiskServiceServer() {}
 
@@ -198,24 +184,6 @@ func _RiskService_GetUserHighRiskRemoval_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
-func _RiskService_StatusChangeHighRisk_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(RiskServiceServer).StatusChangeHighRisk(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/risk.RiskService/StatusChangeHighRisk",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RiskServiceServer).StatusChangeHighRisk(ctx, req.(*Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // RiskService_ServiceDesc is the grpc.ServiceDesc for RiskService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -238,10 +206,6 @@ var RiskService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUserHighRiskRemoval",
 			Handler:    _RiskService_GetUserHighRiskRemoval_Handler,
-		},
-		{
-			MethodName: "StatusChangeHighRisk",
-			Handler:    _RiskService_StatusChangeHighRisk_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

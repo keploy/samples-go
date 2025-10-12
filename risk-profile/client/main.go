@@ -49,11 +49,5 @@ func main() {
 		log.Printf("could not call GetUserHighRiskRemoval: %v", err)
 	}
 
-	log.Println("Calling StatusChangeHighRisk...")
-	_, err = c.StatusChangeHighRisk(ctx, &pb.Empty{})
-	if err != nil {
-		log.Printf("could not call StatusChangeHighRisk: %v", err)
-	}
-
 	log.Println("Finished gRPC client calls.")
 }

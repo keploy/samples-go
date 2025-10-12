@@ -34,51 +34,102 @@ var originalUsers = []UserV1{
 
 func getUsersLowRisk(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(originalUsers[0])
+	user := originalUsers[0]
+	response := map[string]interface{}{
+		"id":        user.ID,
+		"name":      user.Name,
+		"email":     user.Email,
+		"timestamp": time.Now().Unix(),
+	}
+	json.NewEncoder(w).Encode(response)
 }
 
 func getUsersMediumRisk(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(originalUsers[0])
+	user := originalUsers[0]
+	response := map[string]interface{}{
+		"id":        user.ID,
+		"name":      user.Name,
+		"email":     user.Email,
+		"timestamp": time.Now().Unix(),
+	}
+	json.NewEncoder(w).Encode(response)
 }
 
 func getUsersMediumRiskWithAddition(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(originalUsers[0])
+	user := originalUsers[0]
+	response := map[string]interface{}{
+		"id":        user.ID,
+		"name":      user.Name,
+		"email":     user.Email,
+		"timestamp": time.Now().Unix(),
+	}
+	json.NewEncoder(w).Encode(response)
 }
 
 func getUsersHighRiskType(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(originalUsers[0])
+	user := originalUsers[0]
+	response := map[string]interface{}{
+		"id":        user.ID,
+		"name":      user.Name,
+		"email":     user.Email,
+		"timestamp": time.Now().Unix(),
+	}
+	json.NewEncoder(w).Encode(response)
 }
 
 func getUsersHighRiskRemoval(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(originalUsers[0])
+	user := originalUsers[0]
+	response := map[string]interface{}{
+		"id":        user.ID,
+		"name":      user.Name,
+		"email":     user.Email,
+		"timestamp": time.Now().Unix(),
+	}
+	json.NewEncoder(w).Encode(response)
 }
 
 func statusChangeHighRisk(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(`{"status": "OK"}`))
+	response := map[string]interface{}{
+		"status":    "OK",
+		"timestamp": time.Now().Unix(),
+	}
+	json.NewEncoder(w).Encode(response)
 }
 
 func contentTypeChangeHighRisk(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(`{"message": "This is JSON."}`))
+	response := map[string]interface{}{
+		"message":   "This is JSON.",
+		"timestamp": time.Now().Unix(),
+	}
+	json.NewEncoder(w).Encode(response)
 }
 
 func headerChangeMediumRisk(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("X-Custom-Header", "initial-value-123")
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(`{"status": "header test"}`))
+	response := map[string]interface{}{
+		"status":    "header test",
+		"timestamp": time.Now().Unix(),
+	}
+	json.NewEncoder(w).Encode(response)
 }
 
 func noisyHeader(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Date", time.Now().UTC().Format(http.TimeFormat))
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(`{"message": "Check the Date header!"}`))
+	response := map[string]interface{}{
+		"message":   "Check the Date header!",
+		"timestamp": time.Now().Unix(),
+	}
+	json.NewEncoder(w).Encode(response)
 }
 
 // --- gRPC Server Implementation (V1) ---
@@ -87,23 +138,19 @@ type riskServer struct {
 }
 
 func (s *riskServer) GetUserLowRisk(ctx context.Context, in *pb.Empty) (*pb.UserLowRisk, error) {
-	return &pb.UserLowRisk{Id: 1, Name: "Alice", Email: "alice@example.com"}, nil
+	return &pb.UserLowRisk{Id: 1, Name: "Alice", Email: "alice@example.com", Timestamp: time.Now().Unix()}, nil
 }
 
 func (s *riskServer) GetUserMediumRisk(ctx context.Context, in *pb.Empty) (*pb.UserMediumRisk, error) {
-	return &pb.UserMediumRisk{Id: 1, Name: "Alice", Email: "alice@example.com"}, nil
+	return &pb.UserMediumRisk{Id: 1, Name: "Alice", Email: "alice@example.com", Timestamp: time.Now().Unix()}, nil
 }
 
 func (s *riskServer) GetUserHighRiskType(ctx context.Context, in *pb.Empty) (*pb.UserHighRiskType, error) {
-	return &pb.UserHighRiskType{Id: 1, Name: "Alice", Email: "alice@example.com"}, nil
+	return &pb.UserHighRiskType{Id: 1, Name: "Alice", Email: "alice@example.com", Timestamp: time.Now().Unix()}, nil
 }
 
 func (s *riskServer) GetUserHighRiskRemoval(ctx context.Context, in *pb.Empty) (*pb.UserHighRiskRemoval, error) {
-	return &pb.UserHighRiskRemoval{Id: 1, Name: "Alice", Email: "alice@example.com", RemovalRequested: true}, nil
-}
-
-func (s *riskServer) StatusChangeHighRisk(ctx context.Context, in *pb.Empty) (*pb.UserStatusChangeHighRisk, error) {
-	return &pb.UserStatusChangeHighRisk{Id: 1, Name: "Alice", Email: "alice@example.com"}, nil
+	return &pb.UserHighRiskRemoval{Id: 1, Name: "Alice", Email: "alice@example.com", RemovalRequested: true, Timestamp: time.Now().Unix()}, nil
 }
 
 func main() {
