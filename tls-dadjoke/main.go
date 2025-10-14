@@ -28,7 +28,6 @@ func jokeHandler(w http.ResponseWriter, r *http.Request) {
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", "Go Joke App (https://github.com/example/repo)")
 
-
 	// Execute the request.
 	resp, err := client.Do(req)
 	if err != nil {
