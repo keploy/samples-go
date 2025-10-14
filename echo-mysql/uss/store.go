@@ -1,11 +1,15 @@
 package uss
 
 import (
+	"crypto/tls"
+	"crypto/x509"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"time"
 
+	sql "github.com/go-sql-driver/mysql"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -31,10 +35,28 @@ type Store struct {
 
 // Connect establishes a connection to the MySQL database and runs auto-migrations.
 func (s *Store) Connect(config map[string]string) error {
+	caCertPath := config["MYSQL_SSL_CA"]
+	if caCertPath != "" {
+		rootCertPool := x509.NewCertPool()
+		pem, err := ioutil.ReadFile(caCertPath)
+		if err != nil {
+			return fmt.Errorf("failed to read CA certificate: %w", err)
+		}
+		if ok := rootCertPool.AppendCertsFromPEM(pem); !ok {
+			return fmt.Errorf("failed to append CA certificate to pool")
+		}
+
+		// Register a custom TLS configuration
+		sql.RegisterTLSConfig("custom-tls", &tls.Config{
+			RootCAs: rootCertPool,
+			// ServerName should match the CN in your server certificate
+			ServerName: "mysql",
+		})
+	}
 	// Open up our database connection.
 	var err error
 	mysqlDSN := fmt.Sprintf(
-		"%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local&tls=False",
+		"%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local&tls=custom-tls",
 		config["MYSQL_USER"],
 		config["MYSQL_PASSWORD"],
 		config["MYSQL_HOST"],
