@@ -1,11 +1,14 @@
 package uss
 
 import (
+	"crypto/tls"
+	"crypto/x509"
 	"fmt"
 	"log"
 	"os"
 	"time"
 
+	sql "github.com/go-sql-driver/mysql"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -29,28 +32,67 @@ type Store struct {
 	db *gorm.DB
 }
 
-// Connect establishes a connection to the MySQL database and runs auto-migrations.
+func registerTLSConfig(config map[string]string) error {
+	if sslMode, exists := config["MYSQL_SSL_MODE"]; exists && sslMode == "production" {
+		if caPath, exists := config["MYSQL_SSL_CA"]; exists && caPath != "" {
+			rootCertPool := x509.NewCertPool()
+			pem, err := os.ReadFile(caPath)
+			if err != nil {
+				return fmt.Errorf("failed to read CA file: %w", err)
+			}
+			if ok := rootCertPool.AppendCertsFromPEM(pem); !ok {
+				return fmt.Errorf("failed to append CA certs")
+			}
+
+			tlsConfig := &tls.Config{
+				RootCAs:            rootCertPool,
+				InsecureSkipVerify: true,
+			}
+
+			if err := sql.RegisterTLSConfig(sslMode, tlsConfig); err != nil {
+				log.Printf("Registered TLS config '%s'", sslMode)
+			}
+			return nil
+		}
+	}
+	return nil
+}
+
 func (s *Store) Connect(config map[string]string) error {
-	// Open up our database connection.
+	if err := registerTLSConfig(config); err != nil {
+		return fmt.Errorf("failed to register TLS config: %w", err)
+	}
+
 	var err error
 	mysqlDSN := fmt.Sprintf(
-		"%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local&tls=False",
+		"%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local&tls=%s",
 		config["MYSQL_USER"],
 		config["MYSQL_PASSWORD"],
 		config["MYSQL_HOST"],
 		config["MYSQL_PORT"],
 		config["MYSQL_DBNAME"],
+		config["MYSQL_SSL_MODE"],
 	)
 	s.db, err = gorm.Open(mysql.New(mysql.Config{
 		DSN:               mysqlDSN,
 		DefaultStringSize: 256,
 	}), &gorm.Config{})
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to connect to database: %w", err)
 	}
+
+	var sslStatus string
+	var variableName string
+	s.db.Raw("SHOW STATUS LIKE 'Ssl_cipher'").Row().Scan(&variableName, &sslStatus)
+	if sslStatus == "" {
+		s.Close()
+		return fmt.Errorf("CRITICAL: Failed to establish SSL connection - connection is UNENCRYPTED")
+	}
+	log.Printf("✅ SSL connection established with cipher: %s", sslStatus)
 
 	sqlDB, err := s.db.DB()
 	if err != nil {
+		s.Close()
 		return err
 	}
 

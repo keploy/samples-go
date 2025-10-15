@@ -1,0 +1,14 @@
+services:
+  db-ssl:
+    image: mysql:latest
+    container_name: mysql-container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: uss
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./certs:/etc/mysql/certs:ro
+      - ./custom.cnf:/etc/mysql/conf.d/custom.cnf:ro
+    user: "999:999"
