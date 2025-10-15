@@ -81,14 +81,21 @@ func (s *Store) Connect(config map[string]string) error {
 		return fmt.Errorf("failed to connect to database: %w", err)
 	}
 
-	var sslStatus string
-	var variableName string
-	s.db.Raw("SHOW STATUS LIKE 'Ssl_cipher'").Row().Scan(&variableName, &sslStatus)
-	if sslStatus == "" {
-		s.Close()
-		return fmt.Errorf("CRITICAL: Failed to establish SSL connection - connection is UNENCRYPTED")
+	// Only enforce SSL verification if the mode is set to 'production'
+	if config["MYSQL_SSL_MODE"] == "production" {
+		var sslStatus string
+		var variableName string
+		s.db.Raw("SHOW STATUS LIKE 'Ssl_cipher'").Row().Scan(&variableName, &sslStatus)
+		if sslStatus == "" {
+			s.Close()
+			// The error is now correctly tied to the configuration requirement
+			return fmt.Errorf("CRITICAL: SSL connection required (MYSQL_SSL_MODE=production) but connection is UNENCRYPTED")
+		}
+		log.Printf("✅ SSL connection established with cipher: %s", sslStatus)
+	} else {
+		// For any other mode (like 'false'), just log a warning and continue
+		log.Printf("⚠️ SSL not required by config. Proceeding with a potentially unencrypted database connection.")
 	}
-	log.Printf("✅ SSL connection established with cipher: %s", sslStatus)
 
 	sqlDB, err := s.db.DB()
 	if err != nil {
