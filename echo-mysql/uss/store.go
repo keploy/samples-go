@@ -85,7 +85,11 @@ func (s *Store) Connect(config map[string]string) error {
 	if config["MYSQL_SSL_MODE"] == "production" {
 		var sslStatus string
 		var variableName string
-		s.db.Raw("SHOW STATUS LIKE 'Ssl_cipher'").Row().Scan(&variableName, &sslStatus)
+		err := s.db.Raw("SHOW STATUS LIKE 'Ssl_cipher'").Row().Scan(&variableName, &sslStatus)
+		if err != nil {
+			s.Close()
+			return fmt.Errorf("failed to verify SSL connection: %w", err)
+		}
 		if sslStatus == "" {
 			s.Close()
 			// The error is now correctly tied to the configuration requirement
