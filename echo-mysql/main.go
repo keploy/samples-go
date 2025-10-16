@@ -1,7 +1,7 @@
-// Package main implements the HTTP server for the URL shortening service.
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -15,16 +15,6 @@ import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
-
-func GracefulShutdown() {
-	stopper := make(chan os.Signal, 1)
-	// listens for interrupt and SIGTERM signal
-	signal.Notify(stopper, os.Interrupt, syscall.SIGTERM)
-	go func() {
-		<-stopper
-		os.Exit(0)
-	}()
-}
 
 // ensure UTC in JSON responses for determinism across environments
 func utcInfo(in *uss.ShortCodeInfo) *uss.ShortCodeInfo {
@@ -48,6 +38,7 @@ func utcInfos(in []uss.ShortCodeInfo) []uss.ShortCodeInfo {
 
 func main() {
 	time.Sleep(2 * time.Second)
+
 	appConfig, err := godotenv.Read()
 	if err != nil {
 		log.Printf("Error reading .env file %s", err.Error())
@@ -55,18 +46,37 @@ func main() {
 	}
 
 	uss.MetaStore = &uss.Store{}
-	err = uss.MetaStore.Connect(appConfig)
-	if err != nil {
+	if err := uss.MetaStore.Connect(appConfig); err != nil {
 		log.Printf("Failed to connect to db %s", err.Error())
 		os.Exit(1)
 	}
 
-	GracefulShutdown()
+	// Build server (non-blocking)
+	e := StartHTTPServer()
 
-	StartHTTPServer()
+	// Start server in background goroutine
+	go func() {
+		if err := e.Start(":9090"); err != nil && err != http.ErrServerClosed {
+			e.Logger.Errorf("server start failed: %v", err)
+		}
+	}()
+
+	// Coordinated, graceful shutdown
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
+	<-ctx.Done() // wait for signal
+
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	if err := e.Shutdown(shutdownCtx); err != nil {
+		e.Logger.Errorf("server shutdown error: %v", err)
+	}
+
 }
 
-func StartHTTPServer() {
+func StartHTTPServer() *echo.Echo {
 	e := echo.New()
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format:  `${remote_ip} [${time_rfc3339}] "${method} ${uri} HTTP/1.0" ${status} ${latency_human} ${bytes_out} ${error} "${user_agent}"` + "\n",
@@ -117,8 +127,6 @@ func StartHTTPServer() {
 	// seed a set of edge-case datetimes
 	e.POST("/seed/dates", func(c echo.Context) error {
 		nowMicro := uss.ToMicroUTC(time.Now())
-
-		// Labels become ShortCode so they’re easy to fetch directly.
 		payload := []*uss.ShortCodeInfo{
 			{
 				ShortCode: "dt-sentinel-9999-01-01T00:00:00Z",
@@ -167,7 +175,6 @@ func StartHTTPServer() {
 		if err := uss.MetaStore.UpsertMany(payload); err != nil {
 			return c.String(http.StatusInternalServerError, err.Error())
 		}
-		// Return what we wrote (UTC’d for JSON determinism)
 		resp := make([]uss.ShortCodeInfo, 0, len(payload))
 		for _, p := range payload {
 			if got := uss.MetaStore.FindByShortCode(p.ShortCode); got != nil {
@@ -208,11 +215,10 @@ func StartHTTPServer() {
 		label := c.Param("label")
 		info := uss.MetaStore.FindByShortCode(label)
 		if info == nil {
-			return c.String(http.StatusNotFound, "Not Found.")
+			return c.JSON(http.StatusNotFound, map[string]string{"error": "Not Found."})
 		}
 		return c.JSON(http.StatusOK, utcInfo(info))
 	})
 
-	// e.g., echopprof.Wrap(e)
-	e.Logger.Fatal(e.Start(":9090"))
+	return e
 }
