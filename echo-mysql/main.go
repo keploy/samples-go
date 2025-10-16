@@ -6,6 +6,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/hermione/echo-mysql/uss"
@@ -13,6 +15,16 @@ import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
+
+func GracefulShutdown() {
+	stopper := make(chan os.Signal, 1)
+	// listens for interrupt and SIGTERM signal
+	signal.Notify(stopper, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-stopper
+		os.Exit(0)
+	}()
+}
 
 // ensure UTC in JSON responses for determinism across environments
 func utcInfo(in *uss.ShortCodeInfo) *uss.ShortCodeInfo {
@@ -48,6 +60,9 @@ func main() {
 		log.Printf("Failed to connect to db %s", err.Error())
 		os.Exit(1)
 	}
+
+	GracefulShutdown()
+
 	StartHTTPServer()
 }
 
