@@ -22,7 +22,7 @@ var logger *zap.Logger
 
 func main() {
 	time.Sleep(2 * time.Second)
-	logger, _ := zap.NewProduction()
+	logger, _ = zap.NewProduction()
 	defer func() {
 		err := logger.Sync() // flushes buffer, if any
 		if err != nil {
@@ -32,7 +32,7 @@ func main() {
 
 	dbName, collection := "keploy", "url-shortener"
 
-	client, err := New("mongoDb:27017", dbName)
+	client, err := New("localhost:27017", dbName)
 	if err != nil {
 		logger.Fatal("failed to create mgo db client", zap.Error(err))
 	}
@@ -48,6 +48,8 @@ func main() {
 
 	r.GET("/:param", getURL)
 	r.POST("/url", putURL)
+	r.GET("/verify-email", verifyEmail)
+
 	srv := &http.Server{
 		Addr:    ":" + port,
 		Handler: r,

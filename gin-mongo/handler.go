@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"time"
 
+	emailverifier "github.com/AfterShip/email-verifier"
 	"github.com/gin-gonic/gin"
 	"github.com/itchyny/base58-go"
 	"go.mongodb.org/mongo-driver/bson"
@@ -125,4 +126,52 @@ func base58Encoded(bytes []byte) string {
 	encoding := base58.BitcoinEncoding
 	encoded, _ := encoding.Encode(bytes)
 	return string(encoded)
+}
+
+// EmailResponse represents the email verification response
+type EmailResponse struct {
+	Email     string `json:"email"`
+	Valid     bool   `json:"valid"`
+	Reachable bool   `json:"reachable"`
+	Message   string `json:"message"`
+}
+
+// verifyEmail handles email verification requests
+func verifyEmail(c *gin.Context) {
+	email := c.Query("email")
+	if email == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Email query parameter is required"})
+		return
+	}
+
+	verifier := emailverifier.NewVerifier()
+	result, err := verifier.Verify(email)
+
+	logger.Info("Email verification result", zap.String("email", email), zap.Any("result", result), zap.Error(err))
+
+	if err != nil {
+		logger.Error("Error verifying email", zap.Error(err))
+		c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Error verifying email: %v", err)})
+		return
+	}
+
+	response := EmailResponse{
+		Email: email,
+	}
+
+	if !result.Syntax.Valid {
+		response.Valid = false
+		response.Reachable = false
+		response.Message = "Email syntax is invalid"
+	} else if result.Reachable == "no" {
+		response.Valid = true
+		response.Reachable = false
+		response.Message = "Email is not reachable"
+	} else {
+		response.Valid = true
+		response.Reachable = true
+		response.Message = "Email is valid and reachable"
+	}
+
+	c.JSON(http.StatusOK, response)
 }
