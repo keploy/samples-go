@@ -48,6 +48,7 @@ func main() {
 
 	r.GET("/:param", getURL)
 	r.POST("/url", putURL)
+	r.GET("/verify-email", verifyEmail)
 	srv := &http.Server{
 		Addr:    ":" + port,
 		Handler: r,
