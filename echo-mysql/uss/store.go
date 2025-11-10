@@ -50,7 +50,7 @@ func registerTLSConfig(config map[string]string) error {
 			}
 
 			if err := sql.RegisterTLSConfig(sslMode, tlsConfig); err != nil {
-				log.Printf("Registered TLS config '%s'", sslMode)
+				return fmt.Errorf("failed to register TLS config '%s': %w", sslMode, err)
 			}
 			return nil
 		}
