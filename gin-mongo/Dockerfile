@@ -1,5 +1,5 @@
 # === Build Stage ===
-FROM golang:1.20-bookworm AS build-stage
+FROM golang:1.22-bookworm AS build-stage
 
 # Set the working directory
 WORKDIR /app
