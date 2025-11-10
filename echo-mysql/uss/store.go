@@ -64,6 +64,10 @@ func (s *Store) Connect(config map[string]string) error {
 	}
 
 	var err error
+	sslMode := config["MYSQL_SSL_MODE"]
+	if sslMode == "" {
+		sslMode = "false"
+	}
 	mysqlDSN := fmt.Sprintf(
 		"%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local&tls=%s",
 		config["MYSQL_USER"],
@@ -71,7 +75,7 @@ func (s *Store) Connect(config map[string]string) error {
 		config["MYSQL_HOST"],
 		config["MYSQL_PORT"],
 		config["MYSQL_DBNAME"],
-		config["MYSQL_SSL_MODE"],
+		sslMode,
 	)
 	s.db, err = gorm.Open(mysql.New(mysql.Config{
 		DSN:               mysqlDSN,
