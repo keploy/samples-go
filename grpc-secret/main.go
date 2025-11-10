@@ -513,62 +513,6 @@ func buildUniqueSecrets(uniques map[string]string) *secretspb.UniqueSecrets {
 	}
 }
 
-func buildAstroResponse() *secretspb.AstroResponse {
-	// Based on ASTRO_JSON in your Python sample
-	return &secretspb.AstroResponse{
-		Status: 200,
-		Reason: "OK",
-		Data: &secretspb.AstroData{
-			Catalog: &secretspb.Catalog{
-				CatalogId: "NGC-ORION",
-				Name:      "Deep Sky Catalog – Orion Region",
-				Entries: []*secretspb.CatalogEntry{
-					{
-						Object: &secretspb.AstroObject{
-							Id:   "M42",
-							Type: "Nebula",
-							Content: []*secretspb.AstroContent{
-								{
-									Language: 1,
-									Desc: &secretspb.AstroDesc{
-										Text: "\"\\u003cdiv style=\\\"text-align:justify\\\" \\u003eThe Orion Nebula (M42) is a diffuse nebula visible to the naked eye; it is one of the most studied regions of star formation.\\u003c\\/div\\u003e\\n\"",
-									},
-									Images: []*secretspb.AstroImage{
-										{Alt: "\\\\frac{{L}}{{4\\pi d^{2}}}", Src: "luminosity_distance.png"},
-										{Alt: "v_{esc}=\\\\sqrt{\\\\frac{2GM}{{R}}}", Src: "escape_velocity.png"},
-									},
-									ObjectLanguage: "ENGLISH",
-									Nature:         "CATALOG_ENTRY",
-								},
-								{
-									Language: 2,
-									Desc: &secretspb.AstroDesc{
-										Text: "\"\\u003cdiv style=\\\"text-align:justify\\\" \\u003e\\u0913\\u0930\\u093e\\u092f\\u0928 \\u0928\\u0947\\u092c\\u094d\\u092f\\u0942\\u0932\\u093e (M42) \\u090f\\u0915 \\u0935\\u093f\\u0938\\u094d\\u0924\\u0943\\u0924 \\u0928\\u0947\\u092c\\u094d\\u092f\\u0942\\u0932\\u093e \\u0939\\u0948 \\u091c\\u094b \\u0928\\u0902\\u0917\\u0940 \\u0906\\u0902\\u0916\\u094b\\u0902 \\u0938\\u0947 \\u0926\\u093f\\u0916\\u093e\\u0908 \\u0926\\u0947\\u0924\\u0940 \\u0939\\u0948।\\u003c\\/div\\u003e\\n\"",
-									},
-									Images: []*secretspb.AstroImage{
-										{Alt: "\\\\int_0^{R} 4\\pi r^2 \\rho(r)\\,dr = {{M_{\\odot}}}", Src: "mass_integral.png"},
-									},
-									ObjectLanguage: "HINDI",
-									Nature:         "CATALOG_ENTRY",
-								},
-							},
-							Spectrum: &secretspb.Spectrum{
-								WavelengthNm: []float64{486.1, 656.3},
-								Lines:        []string{"H\\\\beta", "H\\\\alpha"},
-							},
-						},
-						Metadata: &secretspb.AstroMetadata{
-							Ra:         "05h35m17.3s",
-							Dec:        "-05\u00B023'28\"",
-							DistanceLy: 1344,
-						},
-					},
-				},
-			},
-		},
-	}
-}
-
 func buildJwtLabResponse() *secretspb.JwtLabResponse {
 	r := rand.New(rand.NewSource(jwtSeed))
 	j := fakeJWT(r)
@@ -638,13 +582,6 @@ func buildCdnResponse() *secretspb.CdnResponse {
 		Fields: &secretspb.CdnFields{
 			HdntsPlain: hdntsPlain,
 		},
-	}
-}
-
-func buildHealthResponse() *secretspb.HealthResponse {
-	return &secretspb.HealthResponse{
-		Status: "ok",
-		Ts:     fixedTimestamp,
 	}
 }
 
@@ -737,19 +674,6 @@ func (s *server) GetSecret(ctx context.Context, req *secretspb.SecretRequest) (*
 	return buildSecretResponse(req.GetId()), nil
 }
 
-func (s *server) GetAstro(ctx context.Context, _ *secretspb.AstroRequest) (*secretspb.AstroResponse, error) {
-	// Extract and log incoming headers
-	jwt, apiKey, sessionToken := extractAuthFromMetadata(ctx)
-	logIncomingHeaders("GetAstro", jwt, apiKey, sessionToken)
-
-	// Set response headers with secrets
-	if err := setResponseMetadata(ctx); err != nil {
-		log.Printf(metadataErrorMsg, err)
-	}
-
-	return buildAstroResponse(), nil
-}
-
 func (s *server) JwtLab(ctx context.Context, _ *secretspb.JwtLabRequest) (*secretspb.JwtLabResponse, error) {
 	// Extract and log incoming headers
 	jwt, apiKey, sessionToken := extractAuthFromMetadata(ctx)
@@ -787,19 +711,6 @@ func (s *server) Cdn(ctx context.Context, _ *secretspb.CdnRequest) (*secretspb.C
 	}
 
 	return buildCdnResponse(), nil
-}
-
-func (s *server) Health(ctx context.Context, _ *secretspb.HealthRequest) (*secretspb.HealthResponse, error) {
-	// Extract and log incoming headers
-	jwt, apiKey, sessionToken := extractAuthFromMetadata(ctx)
-	logIncomingHeaders("Health", jwt, apiKey, sessionToken)
-
-	// Set response headers with secrets
-	if err := setResponseMetadata(ctx); err != nil {
-		log.Printf(metadataErrorMsg, err)
-	}
-
-	return buildHealthResponse(), nil
 }
 
 func main() {
