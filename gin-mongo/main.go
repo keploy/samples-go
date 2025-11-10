@@ -6,12 +6,13 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"os/signal"
-	"syscall"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
+
+	"os/signal"
+	"syscall"
 
 	"go.uber.org/zap"
 )
@@ -20,7 +21,8 @@ var col *mongo.Collection
 var logger *zap.Logger
 
 func main() {
-	logger, _ := zap.NewProduction()
+	time.Sleep(2 * time.Second)
+	logger, _ = zap.NewProduction()
 	defer func() {
 		err := logger.Sync() // flushes buffer, if any
 		if err != nil {
@@ -46,6 +48,8 @@ func main() {
 
 	r.GET("/:param", getURL)
 	r.POST("/url", putURL)
+	r.GET("/verify-email", verifyEmail)
+
 	srv := &http.Server{
 		Addr:    ":" + port,
 		Handler: r,
@@ -54,15 +58,14 @@ func main() {
 	stopper := make(chan os.Signal, 1)
 	signal.Notify(stopper, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 	go func() {
-		select {
-		case <-stopper:
-			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-			defer cancel()
-			if err := srv.Shutdown(ctx); err != nil {
-				logger.Fatal("Server Shutdown:", zap.Error(err))
-			}
-			logger.Info("stopper called")
+		<-stopper
+
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+		if err := srv.Shutdown(ctx); err != nil {
+			logger.Fatal("Server Shutdown:", zap.Error(err))
 		}
+		logger.Info("stopper called")
 	}()
 
 	if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
