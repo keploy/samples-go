@@ -32,7 +32,7 @@ func main() {
 
 	dbName, collection := "keploy", "url-shortener"
 
-	client, err := New("mongoDb:27017", dbName)
+	client, err := New("localhost:27017", dbName)
 	if err != nil {
 		logger.Fatal("failed to create mgo db client", zap.Error(err))
 	}
