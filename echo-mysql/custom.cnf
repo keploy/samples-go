@@ -1,0 +1,7 @@
+[mysqld]
+ssl_ca=/etc/mysql/certs/ca.pem
+ssl_cert=/etc/mysql/certs/server-cert.pem
+ssl_key=/etc/mysql/certs/server-key.pem
+require_secure_transport=ON
+ssl_cipher=ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384
+tls_ciphersuites=TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
