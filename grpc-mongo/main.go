@@ -24,7 +24,7 @@ type server struct {
 }
 
 func mongoConnect(ctx context.Context, uri string) (*mongo.Client, error) {
-	clientOpts := options.Client().ApplyURI(uri).
+	clientOpts := options.Client().ApplyURI("mongoDb:27017").
 		SetMinPoolSize(1).
 		SetMaxPoolSize(1).
 		SetRetryReads(false).
