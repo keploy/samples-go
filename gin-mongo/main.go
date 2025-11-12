@@ -20,7 +20,8 @@ var col *mongo.Collection
 var logger *zap.Logger
 
 func main() {
-	logger, _ := zap.NewProduction()
+	time.Sleep(2 * time.Second)
+	logger, _ = zap.NewProduction()
 	defer func() {
 		err := logger.Sync() // flushes buffer, if any
 		if err != nil {
@@ -46,6 +47,7 @@ func main() {
 
 	r.GET("/:param", getURL)
 	r.POST("/url", putURL)
+	r.GET("/verify-email", verifyEmail)
 	srv := &http.Server{
 		Addr:    ":" + port,
 		Handler: r,
