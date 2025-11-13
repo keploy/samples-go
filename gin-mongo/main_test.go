@@ -14,10 +14,10 @@ import (
 
 func setup(t *testing.T) {
 	err := keploy.New(keploy.Config{
-		Name:             "TestPutURL",
-		Mode:             keploy.MODE_RECORD,
-		Path:             "<path for storing stubs>",
-		Delay:            10,
+		Name:  "TestPutURL",
+		Mode:  keploy.MODE_RECORD,
+		Path:  "<path for storing stubs>",
+		Delay: 10,
 	})
 	if err != nil {
 		t.Fatalf("error while running keploy: %v", err)
@@ -30,8 +30,6 @@ func setup(t *testing.T) {
 	db := client.Database(dbName)
 	col = db.Collection(collection)
 }
-
-
 
 func TestPutURL(t *testing.T) {
 
