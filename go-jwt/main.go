@@ -1,9 +1,7 @@
-// Package main is the entry point for the JWT-based user authentication service
-// using Gin framework and PostgreSQL database. It provides endpoints for
-// health check, token generation, and token validation.
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -13,7 +11,9 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
+
+	// Change: Imported MySQL dialect instead of Postgres
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 var (
@@ -37,12 +37,23 @@ type Claims struct {
 }
 
 func initDB() {
-	dsn := "postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable"
-	db, err = gorm.Open("postgres", dsn)
+	// Change: MySQL Data Source Name (DSN)
+	// Format: username:password@tcp(host:port)/dbname?param=value
+	// parseTime=True is critical for GORM to handle time.Time correctly in MySQL
+	dsn := "myuser:mypassword@tcp(localhost:3306)/mydb?charset=utf8&parseTime=True&loc=Local"
+
+	// Change: Open connection using "mysql" driver
+	db, err = gorm.Open("mysql", dsn)
 	if err != nil {
 		log.Printf("Failed to connect to database: %s", err)
+		// Add a retry hint or check if docker is running
+		log.Println("Ensure Docker is running and the MySQL container is ready.")
 		os.Exit(1)
 	}
+
+	// Enable Gorm logging to see SQL queries (optional, helpful for debugging)
+	// db.LogMode(true)
+
 	db.AutoMigrate(&User{})
 }
 
@@ -56,7 +67,7 @@ func GenerateTokenHandler(c *gin.Context) {
 	// Normally, you'd get this from the request, but we're hardcoding it for simplicity
 	username := "example_user"
 	password := "example_password"
-
+	fmt.Println("here is the current time :", time.Now().Unix())
 	// Set token expiration time
 	expirationTime := time.Now().Add(5 * time.Minute)
 
@@ -83,6 +94,7 @@ func GenerateTokenHandler(c *gin.Context) {
 	if db.Where("username = ?", username).First(&user).RecordNotFound() {
 		user = User{Username: username, Password: password, Token: tokenString}
 		db.Create(&user)
+		fmt.Println("token getting saved :", user)
 	} else {
 		user.Password = password
 		user.Token = tokenString
@@ -188,7 +200,10 @@ func CheckTimeHandler(c *gin.Context) {
 }
 
 func main() {
+	// Give Docker a moment to spin up if running via compose,
+	// though strictly 2 seconds might not be enough for a cold MySQL boot.
 	time.Sleep(2 * time.Second)
+
 	initDB()
 	defer func() {
 		if err := db.Close(); err != nil {
