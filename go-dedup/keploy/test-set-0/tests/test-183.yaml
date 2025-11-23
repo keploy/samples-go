@@ -8,32 +8,32 @@ spec:
     method: GET
     proto_major: 1
     proto_minor: 1
-    url: http://localhost:8080/proxy
+    url: http://localhost:8080/someone
     header:
       Accept: '*/*'
       Host: localhost:8080
       User-Agent: curl/8.5.0
     body: ""
-    timestamp: 2025-11-23T10:18:07.343510656Z
+    timestamp: 2025-11-23T10:32:23.407818815Z
   resp:
     status_code: 200
     header:
-      Content-Length: "38"
+      Content-Length: "21"
       Content-Type: application/json; charset=utf-8
-      Date: Sun, 23 Nov 2025 10:18:07 GMT
-    body: '{"forwarding_to":"downstream-service"}'
+      Date: Sun, 23 Nov 2025 10:32:23 GMT
+    body: '{"message":"Someone"}'
     status_message: OK
     proto_major: 0
     proto_minor: 0
-    timestamp: 2025-11-23T10:18:07.343805996Z
+    timestamp: 2025-11-23T10:32:23.408296668Z
   objects: []
   assertions:
     noise:
       header.Date: []
-  created: 1763893087
+  created: 1763893943
 curl: |
   curl --request GET \
-    --url http://localhost:8080/proxy \
+    --url http://localhost:8080/someone \
     --header 'User-Agent: curl/8.5.0' \
     --header 'Accept: */*' \
     --header 'Host: localhost:8080' \

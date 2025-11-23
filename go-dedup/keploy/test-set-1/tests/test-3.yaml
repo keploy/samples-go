@@ -8,32 +8,32 @@ spec:
     method: GET
     proto_major: 1
     proto_minor: 1
-    url: http://localhost:8080/ping
+    url: http://localhost:8080/somebody
     header:
       Accept: '*/*'
       Host: localhost:8080
       User-Agent: curl/8.5.0
     body: ""
-    timestamp: 2025-11-23T10:18:05.919453864Z
+    timestamp: 2025-11-23T10:32:46.331837101Z
   resp:
     status_code: 200
     header:
-      Content-Length: "4"
-      Content-Type: text/plain; charset=utf-8
-      Date: Sun, 23 Nov 2025 10:18:05 GMT
-    body: pong
+      Content-Length: "22"
+      Content-Type: application/json; charset=utf-8
+      Date: Sun, 23 Nov 2025 10:32:46 GMT
+    body: '{"message":"Somebody"}'
     status_message: OK
     proto_major: 0
     proto_minor: 0
-    timestamp: 2025-11-23T10:18:05.920051796Z
+    timestamp: 2025-11-23T10:32:46.332227223Z
   objects: []
   assertions:
     noise:
       header.Date: []
-  created: 1763893085
+  created: 1763893966
 curl: |
   curl --request GET \
-    --url http://localhost:8080/ping \
+    --url http://localhost:8080/somebody \
     --header 'Accept: */*' \
     --header 'Host: localhost:8080' \
     --header 'User-Agent: curl/8.5.0' \

@@ -8,32 +8,32 @@ spec:
     method: GET
     proto_major: 1
     proto_minor: 1
-    url: http://localhost:8080/proxy
+    url: http://localhost:8080/nowhere
     header:
       Accept: '*/*'
       Host: localhost:8080
       User-Agent: curl/8.5.0
     body: ""
-    timestamp: 2025-11-23T10:18:09.771041752Z
+    timestamp: 2025-11-23T10:32:25.7197766Z
   resp:
     status_code: 200
     header:
-      Content-Length: "38"
+      Content-Length: "21"
       Content-Type: application/json; charset=utf-8
-      Date: Sun, 23 Nov 2025 10:18:09 GMT
-    body: '{"forwarding_to":"downstream-service"}'
+      Date: Sun, 23 Nov 2025 10:32:25 GMT
+    body: '{"message":"Nowhere"}'
     status_message: OK
     proto_major: 0
     proto_minor: 0
-    timestamp: 2025-11-23T10:18:09.771386154Z
+    timestamp: 2025-11-23T10:32:25.720077971Z
   objects: []
   assertions:
     noise:
       header.Date: []
-  created: 1763893089
+  created: 1763893945
 curl: |
   curl --request GET \
-    --url http://localhost:8080/proxy \
-    --header 'User-Agent: curl/8.5.0' \
+    --url http://localhost:8080/nowhere \
     --header 'Accept: */*' \
     --header 'Host: localhost:8080' \
+    --header 'User-Agent: curl/8.5.0' \

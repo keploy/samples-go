@@ -8,32 +8,35 @@ spec:
     method: GET
     proto_major: 1
     proto_minor: 1
-    url: http://localhost:8080/nowhere
+    url: http://localhost:8080/search?q=test&limit=5
+    url_params:
+      limit: "5"
+      q: test
     header:
       Accept: '*/*'
       Host: localhost:8080
       User-Agent: curl/8.5.0
     body: ""
-    timestamp: 2025-11-23T10:18:09.694862502Z
+    timestamp: 2025-11-23T10:32:50.078524248Z
   resp:
     status_code: 200
     header:
-      Content-Length: "21"
+      Content-Length: "36"
       Content-Type: application/json; charset=utf-8
-      Date: Sun, 23 Nov 2025 10:18:09 GMT
-    body: '{"message":"Nowhere"}'
+      Date: Sun, 23 Nov 2025 10:32:50 GMT
+    body: '{"limit":"5","searching_for":"test"}'
     status_message: OK
     proto_major: 0
     proto_minor: 0
-    timestamp: 2025-11-23T10:18:09.695186533Z
+    timestamp: 2025-11-23T10:32:50.078876888Z
   objects: []
   assertions:
     noise:
       header.Date: []
-  created: 1763893089
+  created: 1763893970
 curl: |
   curl --request GET \
-    --url http://localhost:8080/nowhere \
+    --url http://localhost:8080/search?q=test&limit=5 \
     --header 'Accept: */*' \
     --header 'Host: localhost:8080' \
     --header 'User-Agent: curl/8.5.0' \

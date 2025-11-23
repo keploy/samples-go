@@ -8,32 +8,32 @@ spec:
     method: GET
     proto_major: 1
     proto_minor: 1
-    url: http://localhost:8080/items
+    url: http://localhost:8080/system/logs
     header:
       Accept: '*/*'
       Host: localhost:8080
       User-Agent: curl/8.5.0
     body: ""
-    timestamp: 2025-11-23T10:18:07.98850841Z
+    timestamp: 2025-11-23T10:32:48.44477475Z
   resp:
     status_code: 200
     header:
-      Content-Length: "132"
+      Content-Length: "35"
       Content-Type: application/json; charset=utf-8
-      Date: Sun, 23 Nov 2025 10:18:07 GMT
-    body: '[{"id":"item1","name":"Laptop","price":1200},{"id":"item2","name":"Mouse","price":25.5},{"id":"item3","name":"Keyboard","price":75}]'
+      Date: Sun, 23 Nov 2025 10:32:48 GMT
+    body: '{"entries":1024,"log_level":"INFO"}'
     status_message: OK
     proto_major: 0
     proto_minor: 0
-    timestamp: 2025-11-23T10:18:07.98887222Z
+    timestamp: 2025-11-23T10:32:48.445063381Z
   objects: []
   assertions:
     noise:
       header.Date: []
-  created: 1763893087
+  created: 1763893968
 curl: |
   curl --request GET \
-    --url http://localhost:8080/items \
+    --url http://localhost:8080/system/logs \
     --header 'Accept: */*' \
     --header 'Host: localhost:8080' \
     --header 'User-Agent: curl/8.5.0' \

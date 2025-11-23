@@ -8,32 +8,32 @@ spec:
     method: GET
     proto_major: 1
     proto_minor: 1
-    url: http://localhost:8080/api/v2/users
+    url: http://localhost:8080/api/v1/users
     header:
       Accept: '*/*'
       Host: localhost:8080
       User-Agent: curl/8.5.0
     body: ""
-    timestamp: 2025-11-23T10:18:05.952808755Z
+    timestamp: 2025-11-23T10:32:22.044918256Z
   resp:
     status_code: 200
     header:
-      Content-Length: "57"
+      Content-Length: "38"
       Content-Type: application/json; charset=utf-8
-      Date: Sun, 23 Nov 2025 10:18:05 GMT
-    body: '{"users":[{"name":"gamma"},{"name":"delta"}],"version":2}'
+      Date: Sun, 23 Nov 2025 10:32:22 GMT
+    body: '{"users":["alpha","beta"],"version":1}'
     status_message: OK
     proto_major: 0
     proto_minor: 0
-    timestamp: 2025-11-23T10:18:05.953229426Z
+    timestamp: 2025-11-23T10:32:22.045389648Z
   objects: []
   assertions:
     noise:
       header.Date: []
-  created: 1763893085
+  created: 1763893942
 curl: |
   curl --request GET \
-    --url http://localhost:8080/api/v2/users \
+    --url http://localhost:8080/api/v1/users \
+    --header 'Accept: */*' \
     --header 'Host: localhost:8080' \
     --header 'User-Agent: curl/8.5.0' \
-    --header 'Accept: */*' \

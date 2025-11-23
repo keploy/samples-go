@@ -8,32 +8,32 @@ spec:
     method: GET
     proto_major: 1
     proto_minor: 1
-    url: http://localhost:8080/nowhere
+    url: http://localhost:8080/somewhere
     header:
       Accept: '*/*'
       Host: localhost:8080
       User-Agent: curl/8.5.0
     body: ""
-    timestamp: 2025-11-23T10:18:07.235468791Z
+    timestamp: 2025-11-23T10:32:47.640808116Z
   resp:
     status_code: 200
     header:
-      Content-Length: "21"
+      Content-Length: "23"
       Content-Type: application/json; charset=utf-8
-      Date: Sun, 23 Nov 2025 10:18:07 GMT
-    body: '{"message":"Nowhere"}'
+      Date: Sun, 23 Nov 2025 10:32:47 GMT
+    body: '{"message":"Somewhere"}'
     status_message: OK
     proto_major: 0
     proto_minor: 0
-    timestamp: 2025-11-23T10:18:07.235771742Z
+    timestamp: 2025-11-23T10:32:47.641103917Z
   objects: []
   assertions:
     noise:
       header.Date: []
-  created: 1763893087
+  created: 1763893967
 curl: |
   curl --request GET \
-    --url http://localhost:8080/nowhere \
-    --header 'User-Agent: curl/8.5.0' \
+    --url http://localhost:8080/somewhere \
     --header 'Accept: */*' \
     --header 'Host: localhost:8080' \
+    --header 'User-Agent: curl/8.5.0' \
