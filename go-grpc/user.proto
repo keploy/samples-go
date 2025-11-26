@@ -8,6 +8,7 @@ service UserService {
   // Normal CRUD operations
   rpc CreateUser (UserRequest) returns (UserResponse);
   rpc GetUsers (Empty) returns (UsersResponse);
+  rpc GetLargeUsersResponse(Empty) returns (UsersResponse);
   rpc UpdateUser (UserRequest) returns (UserResponse);
   rpc DeleteUser (UserID) returns (Empty);
 
