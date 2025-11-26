@@ -40,6 +40,8 @@ def validate_grpc_data_json(report_file_path):
     print(f"Found {len(tests)} test(s) in the report\n")
     
     all_valid = True
+    valid_count = 0
+    invalid_count = 0
     
     # Check each test
     for idx, test in enumerate(tests, 1):
@@ -66,22 +68,28 @@ def validate_grpc_data_json(report_file_path):
                     print(f"✓ Valid JSON found")
                     print(f"  JSON keys: {list(parsed_json.keys())}")
                     print()
+                    valid_count += 1
                 except json.JSONDecodeError as e:
                     print(f"✗ Invalid JSON - Parse error: {e}")
                     print(f"  Value preview: {expected_value[:100]}...")
                     print()
+                    invalid_count += 1
                     all_valid = False
         
         if not grpc_data_found:
             print(f"⚠ No GRPC_DATA found in test {idx}")
             print()
     
+    total_checks = valid_count + invalid_count
     print("=" * 80)
-    if all_valid:
-        print("✓ Found valid JSON, feature is working")
+    if all_valid and total_checks > 0:
+        print(f"✓ All {valid_count} GRPC_DATA value(s) are valid JSON, feature is working")
         return True
+    elif total_checks == 0:
+        print("⚠ No GRPC_DATA values found to validate")
+        return False
     else:
-        print("✗ Some GRPC_DATA values are not valid JSON")
+        print(f"✗ {invalid_count} of {total_checks} GRPC_DATA value(s) are not valid JSON")
         return False
 
 
