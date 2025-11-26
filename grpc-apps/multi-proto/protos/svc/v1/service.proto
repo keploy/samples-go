@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package svc.v1;
+
+option go_package = "github.com/keploy/samples-go/grpc-apps/multi-proto/protos/svc/v1;svcv1";
+
+import "svc/v1/user.proto";
+import "svc/v1/product.proto";
+import "google/protobuf/timestamp.proto";
+
+service DataService {
+  rpc GetSimpleData(SimpleDataRequest) returns (SimpleDataResponse);
+  rpc GetComplexData(ComplexDataRequest) returns (ComplexDataResponse);
+}
+
+message SimpleDataRequest {
+  string id = 1;
+}
+
+message SimpleDataResponse {
+  string message = 1;
+  int32 code = 2;
+  bool success = 3;
+  double value = 4;
+  repeated string items = 5;
+  map<string, string> metadata = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+message ComplexDataRequest {
+  string query = 1;
+  int32 limit = 2;
+}
+
+message ComplexDataResponse {
+  string status = 1;
+  int32 total_count = 2;
+  bool has_more = 3;
+  repeated User users = 4;
+  repeated Product products = 5;
+  map<string, int32> statistics = 6;
+  google.protobuf.Timestamp processed_at = 7;
+  ResponseMetadata metadata = 8;
+}
+
+message ResponseMetadata {
+  string request_id = 1;
+  double processing_time_ms = 2;
+  string server_version = 3;
+  map<string, string> tags = 4;
+}

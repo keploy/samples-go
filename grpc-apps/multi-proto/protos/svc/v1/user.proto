@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package svc.v1;
+
+option go_package = "github.com/keploy/samples-go/grpc-apps/multi-proto/protos/svc/v1;svcv1";
+
+import "google/protobuf/timestamp.proto";
+
+message User {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  int32 age = 4;
+  bool is_active = 5;
+  double balance = 6;
+  google.protobuf.Timestamp created_at = 7;
+  Address address = 8;
+  repeated string tags = 9;
+  map<string, string> metadata = 10;
+}
+
+message Address {
+  string street = 1;
+  string city = 2;
+  string state = 3;
+  string zip_code = 4;
+  string country = 5;
+}
