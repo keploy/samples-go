@@ -87,7 +87,7 @@ def validate_grpc_data_json(report_file_path):
 
 if __name__ == "__main__":
     # Default to the test report file in the workspace
-    default_report = Path(__file__).parent / "keploy/reports/test-run-1/test-set-0-report.yaml"
+    default_report = Path(__file__).parent / "keploy/reports/test-run-0/test-set-0-report.yaml"
     
     if len(sys.argv) > 1:
         report_path = sys.argv[1]
