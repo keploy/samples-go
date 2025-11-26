@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package svc.v1;
+
+option go_package = "github.com/keploy/samples-go/grpc-apps/multi-proto/protos/svc/v1;svcv1";
+
+import "google/protobuf/timestamp.proto";
+
+message Product {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  double price = 4;
+  int32 quantity = 5;
+  bool in_stock = 6;
+  repeated string categories = 7;
+  map<string, string> attributes = 8;
+  google.protobuf.Timestamp updated_at = 9;
+  ProductDetails details = 10;
+}
+
+message ProductDetails {
+  string manufacturer = 1;
+  string model = 2;
+  int32 warranty_months = 3;
+  double weight = 4;
+  map<string, double> dimensions = 5;
+}
