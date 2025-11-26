@@ -1,7 +1,7 @@
 # Introduction
 This is a simple url shortener written in Golang and MySQL
 
-# Requirments to run 
+# Requirements to run
 1. Golang [How to install Golang](https://go.dev/doc/install)
 2. Docker [How to install Docker?](https://docs.docker.com/engine/install/)
 

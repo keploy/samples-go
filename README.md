@@ -20,7 +20,7 @@ This repo contains the sample for [Keploy's](https://keploy.io)🐰 with Golang.
 
 1. [Echo-MySQL](https://github.com/keploy/samples-go/tree/main/echo-mysql)
 2. [Echo-SQL](https://github.com/keploy/samples-go/tree/main/echo-sql)
-3. [Fasthttp-Postgress](https://github.com/keploy/samples-go/tree/main/fasthttp-postgres)
+3. [Fasthttp-Postgres](https://github.com/keploy/samples-go/tree/main/fasthttp-postgres)
 4. [Gin-Mongo](https://github.com/keploy/samples-go/tree/main/gin-mongo)
 5. [Gin-Redis](https://github.com/keploy/samples-go/tree/main/gin-redis)
 6. [Go-Grpc](https://github.com/keploy/samples-go/tree/main/go-grpc)
