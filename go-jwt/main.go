@@ -54,7 +54,7 @@ func initDB() {
 	// Enable Gorm logging to see SQL queries (optional, helpful for debugging)
 	// db.LogMode(true)
 
-	// db.AutoMigrate(&User{})
+	db.AutoMigrate(&User{})
 }
 
 // HealthCheckHandler handles the health check route
