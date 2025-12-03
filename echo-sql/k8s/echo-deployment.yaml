@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-sql
+  labels:
+    app: echo-sql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: echo-sql
+  template:
+    metadata:
+      labels:
+        app: echo-sql
+    spec:
+      containers:
+        - name: echo-sql
+          # image should be built locally and loaded into kind (see README)
+          image: echo-sql:local
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PORT
+              value: "8082"
+          ports:
+            - containerPort: 8082
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: echo-sql-service
+  labels:
+    app: echo-sql
+spec:
+  type: ClusterIP
+  selector:
+    app: echo-sql
+  ports:
+    - port: 8082
+      targetPort: 8082
+      protocol: TCP

@@ -32,6 +32,90 @@ If there is an error saying keploy-network could not be found. Use the following
 docker network create keploy-network
 ```
 
+## Run on a local kind Kubernetes cluster (with TLS)
+
+The files in the `k8s/` folder let you run the app and a PostgreSQL instance inside a local kind cluster. The Ingress is configured for host `echo.local` and expects a TLS secret named `echo-sql-tls`.
+
+Prerequisites:
+- kind
+- kubectl
+- docker (or other local container runtime used by kind)
+- openssl (to generate a self-signed TLS cert)
+
+Steps (copies you can run locally):
+
+1. Create a kind cluster (choose a name):
+
+```zsh
+kind create cluster --name echo-sql
+```
+
+2. Install the ingress-nginx controller for kind:
+
+```zsh
+# This manifest is the provider-kind deployment maintained by the ingress-nginx project
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.1/deploy/static/provider/kind/deploy.yaml
+
+# Wait for the controller to be ready
+kubectl -n ingress-nginx wait --for=condition=ready pod -l app.kubernetes.io/component=controller --timeout=120s
+```
+
+3. Build the Docker image and load it into kind:
+
+```zsh
+docker build -t echo-sql:local .
+kind load docker-image echo-sql:local --name echo-sql
+```
+
+4. Create a self-signed TLS certificate for the Ingress host (echo.local) and create a TLS secret in the cluster:
+
+```zsh
+# Generate cert/key for echo.local
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+  -keyout tls.key -out tls.crt -subj "/CN=echo.local/O=echo.local"
+
+# Create the TLS secret in Kubernetes
+kubectl create secret tls echo-sql-tls --cert=tls.crt --key=tls.key
+```
+
+5. Apply the manifests (Postgres, app and Ingress):
+
+```zsh
+kubectl apply -f k8s/postgres-deployment.yaml
+kubectl apply -f k8s/echo-deployment.yaml
+kubectl apply -f k8s/ingress.yaml
+```
+
+6. Add a hosts entry so your local machine resolves `echo.local` to the kind cluster (kind exposes ingress on localhost):
+
+Edit `/etc/hosts` and add:
+
+```
+127.0.0.1 echo.local
+```
+
+7. Test the service via the Ingress over HTTPS (self-signed -> use -k with curl):
+
+```zsh
+# Create a short URL
+curl -k -X POST https://echo.local/url -H "Content-Type: application/json" -d '{"url":"https://example.com"}'
+
+# Use the returned path (or test a GET)
+curl -k https://echo.local/<short-id>
+```
+
+Notes and tips:
+- The Postgres Deployment uses `POSTGRES_PASSWORD=password` and exposes a Service named `postgresDb` (the application expects that hostname). The data directory is ephemeral (emptyDir) for local testing in kind; for persistent data create a PVC and StorageClass.
+- If you change the app image name or registry, update `k8s/echo-deployment.yaml` accordingly.
+- If the Ingress is not routing as expected, check the ingress-nginx controller logs and ensure the controller became ready.
+
+Cleanup:
+
+```zsh
+kind delete cluster --name echo-sql
+rm tls.crt tls.key
+```
+
 
 ### Update the Host
 
