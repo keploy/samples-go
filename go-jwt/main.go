@@ -40,7 +40,7 @@ func initDB() {
 	// Change: MySQL Data Source Name (DSN)
 	// Format: username:password@tcp(host:port)/dbname?param=value
 	// parseTime=True is critical for GORM to handle time.Time correctly in MySQL
-	dsn := "myuser:mypassword@tcp(localhost:3306)/mydb?charset=utf8&parseTime=True&loc=Local"
+	dsn := "myuser:mypassword@tcp(localhost:3306)/mydb?charset=utf8&parseTime=True&loc=Local&timeout=30s&readTimeout=30s"
 
 	// Change: Open connection using "mysql" driver
 	db, err = gorm.Open("mysql", dsn)
