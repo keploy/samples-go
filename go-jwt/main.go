@@ -37,23 +37,30 @@ type Claims struct {
 }
 
 func initDB() {
-	// Change: MySQL Data Source Name (DSN)
-	// Format: username:password@tcp(host:port)/dbname?param=value
-	// parseTime=True is critical for GORM to handle time.Time correctly in MySQL
-	dsn := "myuser:mypassword@tcp(localhost:3306)/mydb?charset=utf8&parseTime=True&loc=Local&timeout=30s&readTimeout=30s"
+	dsn := "myuser:mypassword@tcp(localhost:3306)/mydb?charset=utf8&parseTime=True&loc=Local&timeout=60s&readTimeout=60s"
 
-	// Change: Open connection using "mysql" driver
-	db, err = gorm.Open("mysql", dsn)
-	if err != nil {
-		log.Printf("Failed to connect to database: %s", err)
-		// Add a retry hint or check if docker is running
+	var connectionErr error
+	// Attempt to connect 10 times, waiting 2 seconds between attempts
+	for i := 0; i < 10; i++ {
+		db, connectionErr = gorm.Open("mysql", dsn)
+		if connectionErr == nil {
+			// Success! Check if we can actually ping
+			if err := db.DB().Ping(); err == nil {
+				break
+			}
+		}
+
+		log.Printf("Database not ready yet (Attempt %d/10)... Waiting...", i+1)
+		time.Sleep(2 * time.Second)
+	}
+
+	if connectionErr != nil {
+		log.Printf("Failed to connect to database after retries: %s", connectionErr)
 		log.Println("Ensure Docker is running and the MySQL container is ready.")
 		os.Exit(1)
 	}
 
-	// Enable Gorm logging to see SQL queries (optional, helpful for debugging)
-	// db.LogMode(true)
-
+	log.Println("Successfully connected to the database!")
 	db.AutoMigrate(&User{})
 }
 
