@@ -42,6 +42,7 @@ func InitApp() error {
 	}
 
 	defer func() {
+		// Close the database connection when the application exits
 		if closeErr := db.Close(); closeErr != nil {
 			log.Println("Error closing database connection:", closeErr)
 		}
@@ -64,18 +65,24 @@ func InitApp() error {
 		Name:    "Server",
 	}
 
+	// Start server in a goroutine
 	go func() {
 		log.Println("Starting server on :8080")
 		if err := server.ListenAndServe(":8080"); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("Error starting server: %s\n", err)
 		}
 	}()
-
+	// Graceful shutdown handling
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	// Notify on interrupt signals (e.g., Ctrl+C)
+
 	<-quit
+	// Block until a signal is received
 
 	log.Println("Shutting down server...")
+
+	// Attempt to gracefully shut down the server
 	if err := server.Shutdown(); err != nil {
 		log.Printf("Error shutting down server: %s\n", err)
 		return err
