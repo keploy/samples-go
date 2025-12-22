@@ -12,14 +12,17 @@ import (
 	"syscall"
 	"time"
 
+
+	_ "github.com/lib/pq"
 	"github.com/fasthttp/router"
 	"github.com/valyala/fasthttp"
 )
 
 func InitApp() error {
 	time.Sleep(2 * time.Second)
+
 	// Database connection initialization
-	uri := "postgresql://postgres:password@localhost:5432/db?sslmode=disable"
+	uri := "postgresql://postgres:password@postgres:5432/db?sslmode=disable"
 	db, err := sql.Open("postgres", uri)
 	if err != nil {
 		log.Print("Error connecting to database:", err)

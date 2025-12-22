@@ -6,7 +6,6 @@ A sample application that get, create, update, and delete the data of a user in 
 ```
 git clone https://github.com/keploy/samples-go && cd fasthttp-postgres
 
-go mod download
 ```
 
 ## Installation
@@ -19,22 +18,16 @@ Keploy can be used on Linux, Windows and MacOS through [Docker](https://docs.doc
 
 > Note: To run Keploy on MacOS through [Docker](https://docs.docker.com/desktop/release-notes/#4252) the version must be ```4.25.2``` or above.
 
-### Let's start the MongoDB Instance
-Using the docker-compose file we will start our mongodb instance:-
+### Let's start the Server
+Using the docker-compose file we will start :-
 ```bash
-sudo docker-compose up -d postgres
-```
-
-Now, we will create the docker image of our application:-
-
-```bash
-go build -cover
+docker-compose up --build
 ```
 
 ### Capture the Testcases
 
 ```shell
-keploy record -c "./app"
+keploy record -c "docker-compose up" --container-name=fasthttp_app
 ```
 
 To genereate testcases we just need to make some API calls. You can use [Postman](https://www.postman.com/), [Hoppscotch](https://hoppscotch.io/), or simply `curl`: -
@@ -58,7 +51,7 @@ curl -i http://localhost:8080/books
 Now that we have our testcase captured, run the test file.
 
 ```shell
-keploy test -c "./app" --goCoverage --delay 10
+keploy test -c "docker-compose up" --container-name=fasthttp_app --goCoverage --delay 10
 ```
 
 ![alt text](./img/testrun.png)
