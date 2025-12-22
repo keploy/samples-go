@@ -13,13 +13,28 @@ import (
 	"time"
 
 	"github.com/fasthttp/router"
+	_ "github.com/lib/pq"
 	"github.com/valyala/fasthttp"
 )
 
 func InitApp() error {
 	time.Sleep(2 * time.Second)
-	// Database connection initialization
-	uri := "postgresql://postgres:password@localhost:5432/db?sslmode=disable"
+
+	// Read DB config from environment variables
+	dbHost := os.Getenv("DB_HOST")
+	dbPort := os.Getenv("DB_PORT")
+	dbUser := os.Getenv("DB_USER")
+	dbPassword := os.Getenv("DB_PASSWORD")
+	dbName := os.Getenv("DB_NAME")
+
+	if dbHost == "" || dbPort == "" || dbUser == "" || dbName == "" {
+		log.Fatal("Database environment variables are not set")
+	}
+
+	uri := "postgresql://" + dbUser + ":" + dbPassword +
+		"@" + dbHost + ":" + dbPort + "/" + dbName +
+		"?sslmode=disable"
+
 	db, err := sql.Open("postgres", uri)
 	if err != nil {
 		log.Print("Error connecting to database:", err)
@@ -27,7 +42,6 @@ func InitApp() error {
 	}
 
 	defer func() {
-		// Close the database connection when the application exits
 		if closeErr := db.Close(); closeErr != nil {
 			log.Println("Error closing database connection:", closeErr)
 		}
@@ -45,29 +59,23 @@ func InitApp() error {
 	router.POST("/books", ctrl.CreateBook)
 	router.POST("/authors", ctrl.CreateAuthor)
 
-	// Server initialization
 	server := &fasthttp.Server{
 		Handler: router.Handler,
 		Name:    "Server",
 	}
 
-	// Start server in a goroutine
 	go func() {
-		log.Println("Starting server: http://localhost:8080")
+		log.Println("Starting server on :8080")
 		if err := server.ListenAndServe(":8080"); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("Error starting server: %s\n", err)
 		}
 	}()
 
-	// Graceful shutdown handling
 	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM) // Notify on interrupt signals (e.g., Ctrl+C)
-
-	// Block until a signal is received
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
-	log.Println("Shutting down server...")
 
-	// Attempt to gracefully shut down the server
+	log.Println("Shutting down server...")
 	if err := server.Shutdown(); err != nil {
 		log.Printf("Error shutting down server: %s\n", err)
 		return err
