@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/fasthttp/router"
+	// Blank import required to register the PostgreSQL driver
 	_ "github.com/lib/pq"
 	"github.com/valyala/fasthttp"
 )
