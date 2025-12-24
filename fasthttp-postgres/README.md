@@ -18,16 +18,33 @@ Keploy can be used on Linux, Windows and MacOS through [Docker](https://docs.doc
 
 > Note: To run Keploy on MacOS through [Docker](https://docs.docker.com/desktop/release-notes/#4252) the version must be ```4.25.2``` or above.
 
-### Let's start the Server
-Using the docker-compose file we will start :-
+### Option 1: Run with Docker
+
+Start the server:
 ```bash
 docker-compose up --build
 ```
 
-### Capture the Testcases
-
+Capture testcases:
 ```shell
 keploy record -c "docker-compose up" --container-name=fasthttp_app
+```
+
+### Option 2: Run Without Docker
+
+Start the Postgres container:
+```bash
+docker-compose up -d postgres
+```
+
+Build the application:
+```bash
+go build -o app -cover
+```
+
+Capture testcases:
+```shell
+keploy record -c "./app"
 ```
 
 To genereate testcases we just need to make some API calls. You can use [Postman](https://www.postman.com/), [Hoppscotch](https://hoppscotch.io/), or simply `curl`: -
@@ -50,8 +67,14 @@ curl -i http://localhost:8080/books
 
 Now that we have our testcase captured, run the test file.
 
+**Using Docker:**
 ```shell
-keploy test -c "docker-compose up" --container-name=fasthttp_app --goCoverage --delay 10
+keploy test -c "docker-compose up" --container-name=fasthttp_app --delay 10
+```
+
+**Locally:**
+```shell
+keploy test -c "./app" --goCoverage --delay 10
 ```
 
 ![alt text](./img/testrun.png)
@@ -59,3 +82,4 @@ keploy test -c "docker-compose up" --container-name=fasthttp_app --goCoverage --
 _Voila! Our testcases have passed🥳_ . We can also notice that by capturing just few API calls we got around 88.5% of aggregated coverage with keploy generated testcases
 
 If you like the sample application, Don't forget to star us ✨
+    
