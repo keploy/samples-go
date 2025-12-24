@@ -1,7 +1,7 @@
-version: '3.7'
+version: '3.9'
 services:
     postgres:
-        image: postgres:10.5
+        image: postgres:15
         container_name: postgresDB
         restart: always
         environment:
@@ -12,3 +12,19 @@ services:
           - '5432:5432'
         volumes:
           - ./migrations:/docker-entrypoint-initdb.d
+          - pgdata:/var/lib/postgresql/data
+    app:
+        build: .
+        depends_on:
+          - postgres
+        environment:
+          - DB_HOST=postgres
+          - DB_PORT=5432
+          - DB_USER=postgres
+          - DB_PASSWORD=password
+          - DB_NAME=db
+        ports:
+          - '8080:8080'
+
+volumes:
+    pgdata:
