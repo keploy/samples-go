@@ -16,7 +16,7 @@ services:
         build: 
             context: .
             dockerfile: Dockerfile
-        container_name:  fasthttp-app
+        container_name: fasthttp-app
         environment:
           - DB_HOST=postgres
           - DB_PORT=5432
