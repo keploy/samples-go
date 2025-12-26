@@ -249,6 +249,6 @@ The application provides the following endpoints:
 ## Contributing
 
 Contributions are welcome! Please make sure to:
-- Follow the existing project structure
-- Test your changes with both Docker Compose and local methods
-- Update documentation if needed
+- Follow the existing project structure.
+- Test your changes with both Docker Compose and local methods.
+- Update documentation if needed.
