@@ -24,7 +24,7 @@ func InitApp() error {
 	if dbHost == "" {
 		dbHost = "localhost"
 	}
-	dbPort := os. Getenv("DB_PORT")
+	dbPort := os.Getenv("DB_PORT")
 	if dbPort == "" {
 		dbPort = "5432"
 	}
