@@ -6,7 +6,7 @@ A sample application demonstrating how to build a FastHTTP server with PostgreSQ
 
 ### For Local Development (without Docker)
 - Go 1.21 or higher
-- PostgreSQL 10. 5 or higher (running locally)
+- PostgreSQL 10.5 or higher (running locally)
 
 ### For Docker Setup
 - Docker and Docker Compose installed
@@ -162,7 +162,7 @@ Press `Ctrl+C` in the terminal running the application.
 ```
 fasthttp-postgres/
 ├── Dockerfile
-├── docker-compose. yml
+├── docker-compose.yml
 ├── main.go
 ├── go.mod
 ├── go.sum
@@ -171,7 +171,7 @@ fasthttp-postgres/
 │   ├── handlers/
 │   │   └── handler.go
 │   └── repository/
-│       └── repository. go
+│       └── repository.go
 └── migrations/
     └── init.sql
 ```
@@ -183,7 +183,7 @@ fasthttp-postgres/
 ### Docker Compose Issues
 
 **Warning about version attribute:**
-This is informational.  Docker Compose no longer requires the `version` field, but it won't affect functionality. 
+This is informational.
 
 **Container fails to start:**
 ```bash
@@ -199,7 +199,7 @@ ports:
 ```
 
 **Database connection timeout:**
-- Ensure PostgreSQL container is running:  `docker-compose ps`
+- Ensure PostgreSQL container is running: `docker-compose ps`
 - Check environment variables match in `docker-compose.yml`
 
 ### Local Development Issues
