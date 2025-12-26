@@ -5,13 +5,14 @@ import (
 	"database/sql"
 	"fasthttp-postgres/internal/handlers"
 	"fasthttp-postgres/internal/repository"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
-
+	_ "github.com/lib/pq"
 	"github.com/fasthttp/router"
 	"github.com/valyala/fasthttp"
 )
@@ -19,7 +20,30 @@ import (
 func InitApp() error {
 	time.Sleep(2 * time.Second)
 	// Database connection initialization
-	uri := "postgresql://postgres:password@localhost:5432/db?sslmode=disable"
+	dbHost := os.Getenv("DB_HOST")
+	if dbHost == "" {
+		dbHost = "localhost"
+	}
+	dbPort := os.Getenv("DB_PORT")
+	if dbPort == "" {
+		dbPort = "5432"
+	}
+	dbUser := os.Getenv("DB_USER")
+	if dbUser == "" {
+		dbUser = "postgres"
+	}
+	dbPassword := os.Getenv("DB_PASSWORD")
+	if dbPassword == "" {
+		dbPassword = "password"
+	}
+	dbName := os.Getenv("DB_NAME")
+	if dbName == "" {
+		dbName = "db"
+	}
+
+	uri := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable",
+		dbUser, dbPassword, dbHost, dbPort, dbName)
+	
 	db, err := sql.Open("postgres", uri)
 	if err != nil {
 		log.Print("Error connecting to database:", err)
