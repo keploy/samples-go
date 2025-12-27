@@ -30,14 +30,6 @@ Capture testcases:
 keploy record -c "docker-compose up" --container-name=fasthttp_app
 ```
 
-Run Captured Testcases:
-```shell
-keploy test -c "docker-compose up" --container-name=fasthttp_app --delay 10
-```
-
-![alt text](./img/testrun.png)
-
-
 ### Option 2: Run Without Docker
 
 > Note: When running the app locally, ensure `DB_HOST=localhost` is set in the environment.
@@ -58,13 +50,6 @@ Capture testcases:
 keploy record -c "go run main.go"
 ```
 
-Run Captured Testcases:
-```shell
-keploy test -c "go run main.go" --goCoverage --delay 10
-```
-
-![alt text](./img/testrun.png)
-
 
 To genereate testcases we just need to make some API calls. You can use [Postman](https://www.postman.com/), [Hoppscotch](https://hoppscotch.io/), or simply `curl`: -
 
@@ -81,6 +66,22 @@ curl -i http://localhost:8080/books
 ```
 
 ![Keploy Testcases](./img/testcases.png)
+
+### Run captured tests
+
+Now that we have our testcase captured, run the test file.
+
+Run With Docker:
+```shell
+keploy test -c "docker-compose up" --container-name=fasthttp_app --delay 10
+```
+
+Run Without Docker:
+```shell
+keploy test -c "go run main.go" --goCoverage --delay 10
+```
+
+![alt text](./img/testrun.png)
 
 
 _Voila! Our testcases have passed🥳_ . We can also notice that by capturing just few API calls we got around 88.5% of aggregated coverage with keploy generated testcases
