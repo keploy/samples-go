@@ -20,4 +20,10 @@ services:
       - "8080:8080"
     depends_on:
       - postgres
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - DB_NAME=db
     restart: always
