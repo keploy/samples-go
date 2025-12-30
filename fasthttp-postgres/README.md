@@ -20,63 +20,93 @@ Keploy can be used on Linux, Windows and MacOS through [Docker](https://docs.doc
 
 ### Option 1: Run with Docker
 
-Start the server:
+#### Start the server:
 ```bash
 docker-compose up --build
 ```
 
-Capture testcases:
+#### Capture testcases:
 ```shell
 keploy record -c "docker-compose up" --container-name=fasthttp_app
 ```
 
-### Option 2: Run Without Docker
 
-> Note: When running the app locally, ensure `DB_HOST=localhost` is set in the environment.
+##### To genereate testcases we just need to make some API calls. You can use [Postman](https://www.postman.com/), [Hoppscotch](https://hoppscotch.io/), or simply `curl`: -
 
-
-Start the Postgres container:
-```bash
-docker-compose up -d postgres
-```
-
-Run the application:
-```bash
-go run main.go
-```
-
-Capture testcases:
-```shell
-keploy record -c "go run main.go"
-```
-
-
-To genereate testcases we just need to make some API calls. You can use [Postman](https://www.postman.com/), [Hoppscotch](https://hoppscotch.io/), or simply `curl`: -
-
-1. Post Requests
+###### 1. Post Requests
 ```shell
 curl -X POST -H "Content-Type: application/json" -d '{"name":"Author Name"}' http://localhost:8080/authors
+```
 
+```shell
 curl -X POST -H "Content-Type: application/json" -d '{"title":"Book Title","author_id":1}' http://localhost:8080/books
 ```
 
-2. Get Requests
+###### 2. Get Requests
 ```bash
 curl -i http://localhost:8080/books
 ```
 
 ![Keploy Testcases](./img/testcases.png)
 
-### Run captured tests
+#### Run captured tests:
 
 Now that we have our testcase captured, run the test file.
 
-Run With Docker:
+
 ```shell
 keploy test -c "docker-compose up" --container-name=fasthttp_app --delay 10
 ```
 
-Run Without Docker:
+![alt text](./img/testrun.png)
+
+
+### Option 2: Run Without Docker
+
+> Note: When running the app locally, ensure `DB_HOST=localhost` is set in the environment.
+
+
+#### Start the Postgres container:
+```bash
+docker-compose up -d postgres
+```
+
+
+#### Run the application:
+```bash
+go run main.go
+```
+
+#### Capture testcases:
+```shell
+keploy record -c "go run main.go"
+```
+
+> Note: The server would be running on http://localhost:8080
+
+
+##### To genereate testcases we just need to make some API calls. You can use [Postman](https://www.postman.com/), [Hoppscotch](https://hoppscotch.io/), or simply `curl`: - 
+
+###### 1. Post Requests
+```shell
+curl -X POST -H "Content-Type: application/json" -d '{"name":"Author Name"}' http://localhost:8080/authors
+```
+```shell
+curl -X POST -H "Content-Type: application/json" -d '{"title":"Book Title","author_id":1}' http://localhost:8080/books
+```
+
+###### 2. Get Requests
+```bash
+curl -i http://localhost:8080/books
+```
+
+
+![Keploy Testcases](./img/testcases.png)
+
+#### Run captured tests
+
+Now that we have our testcase captured, run the test file.
+
 ```shell
 keploy test -c "go run main.go" --goCoverage --delay 10
 ```
