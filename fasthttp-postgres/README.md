@@ -20,14 +20,9 @@ Keploy can be used on Linux, Windows and MacOS through [Docker](https://docs.doc
 
 ### Option 1: Run with Docker
 
-#### Start the server:
-```bash
-docker-compose up --build
-```
-
 #### Capture testcases:
 ```shell
-keploy record -c "docker-compose up" --container-name=fasthttp_app
+keploy record -c "docker compose up" --container-name=fasthttp_app
 ```
 
 
@@ -55,7 +50,7 @@ Now that we have our testcase captured, run the test file.
 
 
 ```shell
-keploy test -c "docker-compose up" --container-name=fasthttp_app --delay 10
+keploy test -c "docker compose up" --container-name=fasthttp_app --delay 10
 ```
 
 ![alt text](./img/testrun.png)
@@ -63,23 +58,20 @@ keploy test -c "docker-compose up" --container-name=fasthttp_app --delay 10
 
 ### Option 2: Run Without Docker
 
-> Note: When running the app locally, ensure `DB_HOST=localhost` is set in the environment.
-
 
 #### Start the Postgres container:
 ```bash
-docker-compose up -d postgres
+docker compose up -d postgres
 ```
 
-
-#### Run the application:
+### Build the Application
 ```bash
-go run main.go
+go build -o app
 ```
 
 #### Capture testcases:
 ```shell
-keploy record -c "go run main.go"
+keploy record -c "./app"
 ```
 
 > Note: The server would be running on http://localhost:8080
@@ -108,7 +100,7 @@ curl -i http://localhost:8080/books
 Now that we have our testcase captured, run the test file.
 
 ```shell
-keploy test -c "go run main.go" --goCoverage --delay 10
+keploy test -c "./app" --delay 10
 ```
 
 ![alt text](./img/testrun.png)

@@ -13,9 +13,9 @@ import (
 	"syscall"
 	"time"
 
-
-	_ "github.com/lib/pq"
 	"github.com/fasthttp/router"
+	// Import pq driver for PostgreSQL
+	_ "github.com/lib/pq"
 	"github.com/valyala/fasthttp"
 )
 
