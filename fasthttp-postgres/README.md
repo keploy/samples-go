@@ -58,6 +58,18 @@ keploy test -c "docker compose up" --container-name=fasthttp_app --delay 10
 
 ### Option 2: Run Without Docker
 
+> Note: When recording or replaying test cases with Keploy, the required
+> database environment variables must be available to Keploy.
+> Therefore, these variables must be provided using a `.env` file with
+> the following values in this directory:
+>
+> ```env
+> DB_HOST=localhost
+> DB_PORT=5432
+> DB_USER=postgres
+> DB_PASSWORD=password
+> DB_NAME=db
+> ```
 
 #### Start the Postgres container:
 ```bash
