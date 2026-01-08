@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fasthttp-postgres/internal/handlers"
 	"fasthttp-postgres/internal/repository"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -12,14 +13,28 @@ import (
 	"syscall"
 	"time"
 
+	_ "github.com/lib/pq"
+
 	"github.com/fasthttp/router"
 	"github.com/valyala/fasthttp"
 )
 
 func InitApp() error {
 	time.Sleep(2 * time.Second)
-	// Database connection initialization
-	uri := "postgresql://postgres:password@localhost:5432/db?sslmode=disable"
+
+	// Read database configuration from environment variables
+	dbHost := getEnv("DB_HOST", "localhost")
+	dbPort := getEnv("DB_PORT", "5432")
+	dbUser := getEnv("DB_USER", "postgres")
+	dbPassword := getEnv("DB_PASSWORD", "password")
+	dbName := getEnv("DB_NAME", "db")
+
+	// Build connection string from environment variables
+	uri := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable",
+		dbUser, dbPassword, dbHost, dbPort, dbName)
+
+	log.Printf("Connecting to database at %s:%s/%s", dbHost, dbPort, dbName)
+
 	db, err := sql.Open("postgres", uri)
 	if err != nil {
 		log.Print("Error connecting to database:", err)
@@ -27,7 +42,6 @@ func InitApp() error {
 	}
 
 	defer func() {
-		// Close the database connection when the application exits
 		if closeErr := db.Close(); closeErr != nil {
 			log.Println("Error closing database connection:", closeErr)
 		}
@@ -36,7 +50,6 @@ func InitApp() error {
 	repo := repository.NewRepository(db)
 	ctrl := handlers.NewHandler(repo)
 
-	// Router initialization
 	router := router.New()
 	router.GET("/authors", ctrl.GetAllAuthors)
 	router.GET("/books", ctrl.GetAllBooks)
@@ -45,13 +58,11 @@ func InitApp() error {
 	router.POST("/books", ctrl.CreateBook)
 	router.POST("/authors", ctrl.CreateAuthor)
 
-	// Server initialization
 	server := &fasthttp.Server{
 		Handler: router.Handler,
 		Name:    "Server",
 	}
 
-	// Start server in a goroutine
 	go func() {
 		log.Println("Starting server: http://localhost:8080")
 		if err := server.ListenAndServe(":8080"); err != nil && err != http.ErrServerClosed {
@@ -59,15 +70,12 @@ func InitApp() error {
 		}
 	}()
 
-	// Graceful shutdown handling
 	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM) // Notify on interrupt signals (e.g., Ctrl+C)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 
-	// Block until a signal is received
 	<-quit
 	log.Println("Shutting down server...")
 
-	// Attempt to gracefully shut down the server
 	if err := server.Shutdown(); err != nil {
 		log.Printf("Error shutting down server: %s\n", err)
 		return err
@@ -75,4 +83,13 @@ func InitApp() error {
 
 	log.Println("Server gracefully stopped")
 	return nil
+}
+
+// getEnv reads an environment variable or returns a default value if not set
+func getEnv(key, defaultValue string) string {
+	value := os.Getenv(key)
+	if value == "" {
+		return defaultValue
+	}
+	return value
 }

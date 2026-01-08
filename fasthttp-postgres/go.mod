@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/fasthttp/router v1.4.18
-	github.com/lib/pq v1.10.0
+	github.com/lib/pq v1.10.9
 	github.com/valyala/fasthttp v1.45.0
 )
 
