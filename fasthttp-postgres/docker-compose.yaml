@@ -1,14 +1,29 @@
 version: '3.7'
 services:
-    postgres:
-        image: postgres:10.5
-        container_name: postgresDB
-        restart: always
-        environment:
-          - POSTGRES_DB=db
-          - POSTGRES_USER=postgres
-          - POSTGRES_PASSWORD=password
-        ports:
-          - '5432:5432'
-        volumes:
-          - ./migrations:/docker-entrypoint-initdb.d
+  postgres:
+    image: postgres:10.5
+    container_name: postgresDB
+    restart: always
+    environment:
+      - POSTGRES_DB=db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./migrations:/docker-entrypoint-initdb.d
+
+  app:
+    build: .
+    container_name: fasthttp_app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - DB_NAME=db
+    restart: always
