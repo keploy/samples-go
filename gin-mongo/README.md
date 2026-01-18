@@ -112,8 +112,22 @@ This time all the test cases will pass.
 Spin up your mongo container using
 
 ```shell
-sudo docker run --rm -p27017:27017 -d --network keploy-network --name mongoDb mongo
+sudo docker run --rm -p 27017:27017 -d --network keploy-network --name mongoDb mongo
 ```
+> ⚠️ **Important (Native mode): Mongo hostname**
+>
+> The application may try to connect to MongoDB using the hostname `mongodb:27017`.
+> If you're running MongoDB locally (bound to `localhost:27017`), you have 2 options:
+>
+> **Option A (recommended): map `mongodb` to localhost**
+> ```bash
+> echo "127.0.0.1 mongodb" | sudo tee -a /etc/hosts
+> ```
+>
+> **Option B: update MongoDB URI in code**
+> Update the MongoDB connection string in `main.go` to:
+> `mongodb://localhost:27017`
+
 
 ### Update the Host
 
