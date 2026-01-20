@@ -36,17 +36,21 @@ jobs:
           # Ensure base branch is available locally for diff
           echo "Step 0: prepare diff base"
           if [ "${{ github.event_name }}" = "pull_request" ]; then
+            # PR: diff against base branch
             git fetch origin ${{ github.base_ref }}
             diff_base="origin/${{ github.base_ref }}"
           else
-            diff_base="HEAD~1"
+            # Push: diff against previous commit safely
+            if [ "${{ github.event.before }}" != "0000000000000000000000000000000000000000" ]; then
+              diff_base="${{ github.event.before }}"
+            else
+              # Initial commit: diff against empty tree
+              diff_base="$(git hash-object -t tree /dev/null)"
+            fi
           fi
 
           echo "Step 1: get changed files"
           files=$(git diff --name-only "$diff_base"...HEAD)
-
-          # echo "Step 1: get changed files"
-          # files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
 
           echo "Step 2: get top-level directories"
           dirs=$(echo "$files" | cut -d/ -f1 | sort -u)
@@ -55,13 +59,11 @@ jobs:
           projects=()
           for dir in $dirs; do
             if [ -f "$dir/go.mod" ]; then
-              # projects+=("\"$dir\"")
               projects+=("$dir")
             fi
           done
 
           echo "Step 4: build matrix json"
-          # matrix=$(printf '%s\n' "${projects[@]}" | jq -R . | jq -cs .)
           if [ ${#projects[@]} -eq 0 ]; then
             matrix="[]"
           else
