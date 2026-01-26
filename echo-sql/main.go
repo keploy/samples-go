@@ -28,15 +28,22 @@ func handleDeferError(fn func() error) {
 }
 
 func main() {
-	time.Sleep(2 * time.Second)
-	if os.Getenv("PORT") != "" {
-		port = os.Getenv("PORT")
-	}
 	var err error
 	Logger, _ = zap.NewProduction()
 	defer handleDeferError(Logger.Sync) // flushes buffer
 
-	Database, err = NewConnection(ConnectionDetails{
+	Logger.Info("Starting application...")
+
+	if os.Getenv("PORT") != "" {
+		port = os.Getenv("PORT")
+	}
+
+	// Create a context with timeout for database connection
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	Logger.Info("Waiting for database connection...")
+	Database, err = NewConnection(ctx, ConnectionDetails{
 		host: "postgresDb",
 		// host: "localhost" when using natively
 		//host:     "echo-sql-postgres-1",
@@ -47,8 +54,10 @@ func main() {
 	})
 
 	if err != nil {
+		Logger.Sync() // Ensure logs are flushed before exiting
 		Logger.Fatal("Failed to establish connection to local PostgreSQL instance:", zap.Error(err))
 	}
+	Logger.Info("Database connection established successfully")
 
 	defer handleDeferError(Database.Close)
 
@@ -77,10 +86,10 @@ func main() {
 	<-quit // Wait for OS signal to quit
 
 	// Create a context with timeout for graceful shutdown
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
+	shutdownCtx, shutdownCancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer shutdownCancel()
 
-	if err := r.Shutdown(ctx); err != nil {
+	if err := r.Shutdown(shutdownCtx); err != nil {
 		Logger.Fatal("Server forced to shutdown:", zap.Error(err))
 	}
 

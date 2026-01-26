@@ -12,6 +12,7 @@ import (
 	"github.com/itchyny/base58-go"
 	"github.com/labstack/echo/v4"
 	_ "github.com/lib/pq"
+	"go.uber.org/zap"
 )
 
 type ConnectionDetails struct {
@@ -41,7 +42,7 @@ type successResponse struct {
 /*
 NewConnection Establishes a connection with the PostgreSQL instance.
 */
-func NewConnection(connDetails ConnectionDetails) (*sql.DB, error) {
+func NewConnection(ctx context.Context, connDetails ConnectionDetails) (*sql.DB, error) {
 	dbInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		connDetails.host, connDetails.port, connDetails.user, connDetails.password, connDetails.dbName)
 
@@ -51,20 +52,26 @@ func NewConnection(connDetails ConnectionDetails) (*sql.DB, error) {
 	}
 
 	// Ping the database to ensure a connection can be established
-	err = db.Ping()
+	Logger.Info("Pinging database...")
+	err = db.PingContext(ctx)
 	if err != nil {
+		Logger.Error("Ping failed", zap.Error(err))
 		return nil, err
 	}
+	Logger.Info("Ping successful")
 
 	// Check if the "url_map" table exists, create it if not
-	if err := createURLMapTable(db); err != nil {
+	Logger.Info("Creating table if not exists...")
+	if err := createURLMapTable(ctx, db); err != nil {
+		Logger.Error("Failed to create table", zap.Error(err))
 		return nil, err
 	}
+	Logger.Info("Table creation check passed")
 
 	return db, nil
 }
 
-func createURLMapTable(db *sql.DB) error {
+func createURLMapTable(ctx context.Context, db *sql.DB) error {
 	query := `
 		CREATE TABLE IF NOT EXISTS url_map (
 			id           VARCHAR(255) PRIMARY KEY,
@@ -74,7 +81,10 @@ func createURLMapTable(db *sql.DB) error {
 		);
 	`
 
-	_, err := db.Exec(query)
+	_, err := db.ExecContext(ctx, query)
+	if err != nil {
+		Logger.Error("ExecContext failed for create table", zap.Error(err))
+	}
 	return err
 }
 
