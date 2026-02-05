@@ -194,8 +194,8 @@ func CheckTimeHandler(c *gin.Context) {
 		diff.String(),
 	)
 
-	// 6. Check if the difference is greater than 1 second
-	if diff > time.Second {
+	// 6. Check if the difference is greater than 1.5 seconds
+	if diff > 1500*time.Millisecond {
 		c.Status(http.StatusBadRequest)
 		return
 	}
