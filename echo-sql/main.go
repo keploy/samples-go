@@ -4,6 +4,7 @@ package main
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
@@ -54,7 +55,10 @@ func main() {
 	})
 
 	if err != nil {
-		Logger.Sync() // Ensure logs are flushed before exiting
+		// Ensure logs are flushed before exiting
+		if err := Logger.Sync(); err != nil {
+			fmt.Printf("logger sync error: %v\n", err)
+		}
 		Logger.Fatal("Failed to establish connection to local PostgreSQL instance:", zap.Error(err))
 	}
 	Logger.Info("Database connection established successfully")
