@@ -4,6 +4,7 @@ package repositories
 import (
 	"database/sql"
 	"errors"
+	"log"
 
 	"github.com/saketV8/book-store-inventory/pkg/models"
 )
@@ -20,7 +21,12 @@ func (bookModel *BookModel) GetBooks() ([]models.Book, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close() // ✅ Prevent resource leak
+	// Prevent resource leak
+	defer func() {
+		if err := rows.Close(); err != nil {
+			log.Println("failed to close rows:", err)
+		}
+	}()
 
 	books := []models.Book{}
 	for rows.Next() {
