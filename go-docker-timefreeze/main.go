@@ -20,7 +20,7 @@ type Claims struct {
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Login attempt at :", time.Now())
-	expirationTime := time.Now().Add(2 * time.Minute)
+	expirationTime := time.Now().Add(10 * time.Second)
 
 	claims := &Claims{
 		Username: "testuser",
