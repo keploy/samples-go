@@ -54,7 +54,10 @@ func main() {
 	})
 
 	if err != nil {
-		Logger.Sync() // Ensure logs are flushed before exiting
+		// Ensure logs are flushed before exiting
+		if syncErr := Logger.Sync(); syncErr != nil {
+			Logger.Error("Failed to sync logger", zap.Error(syncErr))
+		}
 		Logger.Fatal("Failed to establish connection to local PostgreSQL instance:", zap.Error(err))
 	}
 	Logger.Info("Database connection established successfully")
