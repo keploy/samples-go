@@ -6,8 +6,53 @@ A simple CRUD application to showcase Keploy integration capabilities using [Go-
 
 1. [Go](https://go.dev/doc/install)
 2. [AWS Access Key and Security Key](https://aws.github.io/aws-sdk-go-v2/docs/getting-started/#get-your-aws-access-keys)
+3. [Docker](https://docs.docker.com/engine/install/) (optional, for containerized deployment)
 
-## Running app on Ubuntu 22.04.03 LTS
+## Running app using Docker
+
+Keploy can be used on Linux, Windows and MacOS through [Docker](https://docs.docker.com/engine/install/).
+
+> Note: To run Keploy on MacOS through [Docker](https://docs.docker.com/desktop/release-notes/#4252) the version must be ```4.25.2``` or above.
+
+### Setting aws credentials
+
+Before running the app, ensure you have AWS credentials configured in your home directory:
+
+```bash
+mkdir -p ~/.aws
+cat > ~/.aws/credentials << EOF
+[default]
+aws_access_key_id = <YOUR_ACCESS_KEY_ID>
+aws_secret_access_key = <YOUR_SECRET_ACCESS_KEY>
+EOF
+```
+
+### Setup and build the application
+
+```bash
+git clone https://github.com/keploy/samples-go.git && cd samples-go/S3-Keploy
+docker build -t s3-keploy-app:1.0 .
+```
+
+### Using docker-compose
+
+Alternatively, you can use docker-compose to run the application:
+
+```bash
+# Create the external network if it doesn't exist
+docker network create keploy-network
+
+# Start the application
+docker-compose up
+```
+
+### Capture the Testcases
+
+```shell
+keploy record -c "docker run -p 3000:3000 --name s3KeployApp --network keploy-network -v ~/.aws:/root/.aws:ro s3-keploy-app:1.0"
+```
+
+## Running app on Ubuntu 22.04.03 LTS (without Docker)
 
 ### Setting aws credentials
 
