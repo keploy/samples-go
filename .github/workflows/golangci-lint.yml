@@ -17,39 +17,82 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
   cancel-in-progress: true
 
-
 jobs:
+  detect-go-projects:
+    name: project-changes
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+
+    steps:
+      # Checkout full history so git diff works correctly
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build matrix of changed Go projects
+        id: set-matrix
+        run: |
+          # Ensure base branch is available locally for diff
+          echo "Step 0: prepare diff base"
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            # PR: diff against base branch
+            git fetch origin ${{ github.base_ref }}
+            diff_base="origin/${{ github.base_ref }}"
+          else
+            # Push: diff against previous commit safely
+            if [ "${{ github.event.before }}" != "0000000000000000000000000000000000000000" ]; then
+              diff_base="${{ github.event.before }}"
+            else
+              # Initial commit: diff against empty tree
+              diff_base="$(git hash-object -t tree /dev/null)"
+            fi
+          fi
+
+          echo "Step 1: get changed files"
+          files=$(git diff --name-only "$diff_base"...HEAD)
+
+          echo "Step 2: get top-level directories"
+          dirs=$(echo "$files" | cut -d/ -f1 | sort -u)
+
+          echo "Step 3: filter go projects"
+          projects=()
+          for dir in $dirs; do
+            if [ -f "$dir/go.mod" ]; then
+              projects+=("$dir")
+            fi
+          done
+
+          echo "Step 4: build matrix json"
+          if [ ${#projects[@]} -eq 0 ]; then
+            matrix="[]"
+          else
+            joined=$(printf '"%s",' "${projects[@]}")
+            joined="[${joined%,}]"
+            matrix="$joined"
+          fi
+
+          echo "Step 5: final changed go projects :"
+          echo "$matrix"
+
+          echo "matrix={\"working-directory\":$matrix}" >> "$GITHUB_OUTPUT"
+
   golangci:
     name: lint
+    needs: detect-go-projects
+    # Skip job if no Go projects were modified
+    if: ${{ needs.detect-go-projects.outputs.matrix != '{"working-directory":[]}' }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix:
-        working-directory:
-          - echo-mysql
-          - echo-sql
-          - fasthttp-postgres
-          - gin-mongo
-          - gin-redis
-          - go-grpc
-          - go-jwt
-          - go-twilio
-          - graphql-sql
-          - http-pokeapi
-          - mux-elasticsearch
-          - mux-mysql
-          - mux-sql
-          - S3-Keploy
-          - sse-svelte
-          - users-profile
-          - book-store-inventory
-          
+      matrix: ${{ fromJson(needs.detect-go-projects.outputs.matrix) }}
+
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-go@v4
         with:
-          go-version: '1.23.4'
-          cache: false
+          go-version: "1.23.4"
+          cache: true
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
