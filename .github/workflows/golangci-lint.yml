@@ -43,6 +43,8 @@ jobs:
           - sse-svelte
           - users-profile
           - book-store-inventory
+          - simple-grpc
+          - http-sse
           
     steps:
       - uses: actions/checkout@v3
