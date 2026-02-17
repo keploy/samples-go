@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package demo;
+option go_package = "./pb";
+
+service DemoService {
+  // 1. Health Check
+  rpc Health (Empty) returns (HealthResponse);
+
+  // 2. Simple Hello
+  rpc Hello (Empty) returns (HelloResponse);
+
+  // 3. Echo (with message)
+  rpc Echo (EchoRequest) returns (EchoResponse);
+
+  // 4. Add Numbers
+  rpc Add (AddRequest) returns (AddResponse);
+
+  // 5. Get Current Time
+  rpc GetTime (Empty) returns (TimeResponse);
+
+  // 6. Get Resource by ID
+  rpc GetResource (ResourceRequest) returns (ResourceResponse);
+}
+
+// Messages
+message Empty {}
+
+message HealthResponse {
+  bool ok = 1;
+}
+
+message HelloResponse {
+  string msg = 1;
+}
+
+message EchoRequest {
+  string msg = 1;
+}
+
+message EchoResponse {
+  string echo = 1;
+}
+
+message AddRequest {
+  int32 a = 1;
+  int32 b = 2;
+}
+
+message AddResponse {
+  int32 a = 1;
+  int32 b = 2;
+  int32 sum = 3;
+}
+
+message TimeResponse {
+  string now = 1;
+}
+
+message ResourceRequest {
+  string id = 1;
+}
+
+message ResourceResponse {
+  string id = 1;
+  string type = 2;
+  bool fixed = 3;
+}
