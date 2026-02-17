@@ -1,0 +1,9 @@
+:80 {
+  @sse_student path /subscribe/student/events*
+  reverse_proxy @sse_student host.docker.internal:8000
+
+  @sse_teacher path /subscribe/teacher/events*
+  reverse_proxy @sse_teacher host.docker.internal:8000
+
+  reverse_proxy host.docker.internal:8000
+}
