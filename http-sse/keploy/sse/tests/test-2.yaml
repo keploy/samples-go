@@ -8,7 +8,7 @@ spec:
     method: GET
     proto_major: 1
     proto_minor: 1
-    url: http://doubt.local-2/subscribe/teacher/events?teacherId=t-42
+    url: http://doubt.local/subscribe/teacher/events?teacherId=t-42
     url_params:
       teacherId: t-42
     header:
