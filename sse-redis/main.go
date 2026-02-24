@@ -107,7 +107,11 @@ func handleCreateMessage(w http.ResponseWriter, r *http.Request) {
 		Category:  input.Category,
 		CreatedAt: time.Now().UTC().Format(time.RFC3339Nano),
 	}
-	raw, _ := json.Marshal(msg)
+	raw, err := json.Marshal(msg)
+	if err != nil {
+		http.Error(w, "failed to serialize message", http.StatusInternalServerError)
+		return
+	}
 
 	if err := rdb.RPush(r.Context(), redisKey, string(raw)).Err(); err != nil {
 		http.Error(w, "redis write failed: "+err.Error(), http.StatusInternalServerError)
