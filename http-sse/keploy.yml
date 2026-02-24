@@ -19,7 +19,9 @@ buildDelay: 30
 test:
     selectedTests: {}
     globalNoise:
-        global: {}
+        global:
+            body: 
+                "timestamp": []
         test-sets: {}
     replaceWith:
         global: 
