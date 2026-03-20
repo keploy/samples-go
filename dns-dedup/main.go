@@ -6,6 +6,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"sort"
 	"strconv"
 	"time"
 )
@@ -42,6 +43,7 @@ func main() {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		sort.Strings(ips) // deterministic order for replay comparison
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(map[string]interface{}{
 			"domain": d,
@@ -77,6 +79,7 @@ func main() {
 			if err != nil {
 				results = append(results, result{Iteration: i, Error: err.Error()})
 			} else {
+				sort.Strings(ips) // deterministic order for replay comparison
 				key := fmt.Sprintf("%v", ips)
 				isNew := !seen[key]
 				seen[key] = true
