@@ -29,6 +29,18 @@ func main() {
 	var wg sync.WaitGroup
 	wg.Add(2)
 
+	// Optional ping server on :8050; disabled via SKIP_PING_SERVER=1 so that
+	// CI can validate replaceWith port-mapping (8050→8000) actually works.
+	var pingSrv *http.Server
+	if os.Getenv("SKIP_PING_SERVER") == "" {
+		pingSrv = &http.Server{
+			Addr:              "0.0.0.0:8050",
+			Handler:           pingMux(),
+			ReadHeaderTimeout: 50 * time.Second,
+		}
+		wg.Add(1)
+	}
+
 	go func() {
 		defer wg.Done()
 		log.Printf("[HTTP] listening on %s\n", httpSrv.Addr)
@@ -45,6 +57,16 @@ func main() {
 		}
 	}()
 
+	if pingSrv != nil {
+		go func() {
+			defer wg.Done()
+			log.Printf("[PING] listening on %s\n", pingSrv.Addr)
+			if err := pingSrv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+				log.Fatalf("[PING] ListenAndServe: %v", err)
+			}
+		}()
+	}
+
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, os.Interrupt)
 	<-stop
@@ -54,6 +76,9 @@ func main() {
 
 	_ = httpSrv.Shutdown(ctx)
 	_ = sseSrv.Shutdown(ctx)
+	if pingSrv != nil {
+		_ = pingSrv.Shutdown(ctx)
+	}
 
 	wg.Wait()
 	log.Println("bye")
@@ -130,6 +155,14 @@ func httpMux() http.Handler {
 		})
 	})
 
+	// 7) ping — also served on :8050 to test port mapping
+	mux.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+		writeJSON(w, http.StatusOK, map[string]any{
+			"pong": true,
+			"from": "http",
+		})
+	})
+
 	// IMPORTANT: SSE routes MUST NOT be served on HTTP port.
 	// If replay routes SSE traffic to HTTP :8000 => deterministic 404.
 	mux.HandleFunc("/subscribe/student/events", func(w http.ResponseWriter, r *http.Request) {
@@ -151,6 +184,21 @@ func httpMux() http.Handler {
 			"error": "not found",
 			"path":  r.URL.Path,
 			"port":  8000,
+		})
+	})
+
+	return mux
+}
+
+/* ----------------------------- PING :8050 ----------------------------- */
+
+func pingMux() http.Handler {
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+		writeJSON(w, http.StatusOK, map[string]any{
+			"pong": true,
+			"from": "http",
 		})
 	})
 
