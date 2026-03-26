@@ -33,13 +33,22 @@ test:
                 url:
                     "localhost:8003": "localhost:8000"
                     "localhost:8004": "localhost:8000"
-            sse: 
-                url: 
+            sse:
+                url:
                     "doubt.local": "localhost:8047"
+            port-mapping-test:
+                port:
+                    8050: 8000
     delay: 5
     host: ""
     port: 0
     grpcPort: 0
+    ssePort: 8047
+    protocol:
+        http:
+            port: 8000
+        sse:
+            port: 8047
     apiTimeout: 5
     skipCoverage: false
     coverageReportPath: ""
