@@ -1,0 +1,110 @@
+package main
+
+import (
+	"context"
+	"flag"
+	"fmt"
+	"log"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+)
+
+func main() {
+	httpPort := flag.Int("http-port", 8000, "normal HTTP port (non-SSE)")
+	ssePort := flag.Int("sse-port", 8047, "SSE port")
+	flag.Parse()
+
+	httpMux := http.NewServeMux()
+	httpMux.HandleFunc("/health", func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte("ok\n"))
+	})
+	// Intentionally do NOT register /subscribe/student/events (or "/") on :8000.
+	// This allows us to reproduce the 404 when Keploy replays the SSE preflight on the wrong port.
+
+	sseMux := http.NewServeMux()
+	sseMux.HandleFunc("/health", func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte("ok\n"))
+	})
+	sseMux.HandleFunc("/subscribe/student/events", handleEvents)
+
+	httpSrv := &http.Server{Addr: fmt.Sprintf("0.0.0.0:%d", *httpPort), Handler: httpMux}
+	sseSrv := &http.Server{Addr: fmt.Sprintf("0.0.0.0:%d", *ssePort), Handler: sseMux}
+
+	errCh := make(chan error, 2)
+	go func() {
+		log.Printf("HTTP listening on %s", httpSrv.Addr)
+		errCh <- httpSrv.ListenAndServe()
+	}()
+	go func() {
+		log.Printf("SSE listening on %s", sseSrv.Addr)
+		errCh <- sseSrv.ListenAndServe()
+	}()
+
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
+
+	select {
+	case sig := <-stop:
+		log.Printf("signal received: %s", sig)
+	case err := <-errCh:
+		if err != nil && err != http.ErrServerClosed {
+			log.Printf("server error: %v", err)
+		}
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	_ = httpSrv.Shutdown(ctx)
+	_ = sseSrv.Shutdown(ctx)
+}
+
+func writeCORS(w http.ResponseWriter) {
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Max-Age", "7200")
+}
+
+func handleEvents(w http.ResponseWriter, r *http.Request) {
+	writeCORS(w)
+
+	// CORS preflight: respond successfully, but do NOT set text/event-stream.
+	// This is key to reproducing the Keploy issue: the test case won't be detected as SSE.
+	if r.Method == http.MethodOptions {
+		w.Header().Set("Content-Length", "0")
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
+	if r.Method != http.MethodGet {
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	flusher, ok := w.(http.Flusher)
+	if !ok {
+		http.Error(w, "streaming unsupported", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "text/event-stream")
+	w.Header().Set("Cache-Control", "no-cache")
+	w.Header().Set("Connection", "keep-alive")
+	w.WriteHeader(http.StatusOK)
+
+	doubtID := r.URL.Query().Get("doubtId")
+	if doubtID == "" {
+		doubtID = "missing"
+	}
+
+	for i := 0; i < 3; i++ {
+		_, _ = fmt.Fprintf(w, "event: message\ndata: {\"doubtId\":\"%s\",\"n\":%d}\n\n", doubtID, i)
+		flusher.Flush()
+		time.Sleep(250 * time.Millisecond)
+	}
+}
