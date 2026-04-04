@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
@@ -125,7 +126,12 @@ func handleEvents(w http.ResponseWriter, r *http.Request) {
 		default:
 		}
 
-		if _, err := fmt.Fprintf(w, "event: message\ndata: {\"doubtId\":\"%s\",\"n\":%d}\n\n", doubtID, i); err != nil {
+		payload, err := json.Marshal(map[string]any{"doubtId": doubtID, "n": i})
+		if err != nil {
+			return
+		}
+
+		if _, err := fmt.Fprintf(w, "event: message\ndata: %s\n\n", payload); err != nil {
 			return
 		}
 		flusher.Flush()
