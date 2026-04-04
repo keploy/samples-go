@@ -11,7 +11,7 @@ import (
 
 func main() {
 	targetURL := flag.String("url", "http://localhost:8047/subscribe/student/events?doubtId=repro", "URL to send the CORS preflight to")
-	hostHeader := flag.String("host", "doubt-service.example.com", "Host header override (optional)")
+	hostHeader := flag.String("host", "", "Host header override (optional)")
 	origin := flag.String("origin", "https://web.example.com", "Origin header")
 	flag.Parse()
 
