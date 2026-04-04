@@ -13,6 +13,10 @@ import (
 )
 
 func main() {
+	os.Exit(run())
+}
+
+func run() int {
 	httpPort := flag.Int("http-port", 8000, "normal HTTP port (non-SSE)")
 	ssePort := flag.Int("sse-port", 8047, "SSE port")
 	flag.Parse()
@@ -35,14 +39,21 @@ func main() {
 	httpSrv := &http.Server{Addr: fmt.Sprintf("0.0.0.0:%d", *httpPort), Handler: httpMux}
 	sseSrv := &http.Server{Addr: fmt.Sprintf("0.0.0.0:%d", *ssePort), Handler: sseMux}
 
-	errCh := make(chan error, 2)
+	type serverErr struct {
+		name string
+		addr string
+		err  error
+	}
+
+	exitCode := 0
+	errCh := make(chan serverErr, 2)
 	go func() {
 		log.Printf("HTTP listening on %s", httpSrv.Addr)
-		errCh <- httpSrv.ListenAndServe()
+		errCh <- serverErr{name: "HTTP", addr: httpSrv.Addr, err: httpSrv.ListenAndServe()}
 	}()
 	go func() {
 		log.Printf("SSE listening on %s", sseSrv.Addr)
-		errCh <- sseSrv.ListenAndServe()
+		errCh <- serverErr{name: "SSE", addr: sseSrv.Addr, err: sseSrv.ListenAndServe()}
 	}()
 
 	stop := make(chan os.Signal, 1)
@@ -51,9 +62,11 @@ func main() {
 	select {
 	case sig := <-stop:
 		log.Printf("signal received: %s", sig)
-	case err := <-errCh:
-		if err != nil && err != http.ErrServerClosed {
-			log.Printf("server error: %v", err)
+	case server := <-errCh:
+		if server.err != nil && server.err != http.ErrServerClosed {
+			log.Printf("%s listener error on %s: %v", server.name, server.addr, server.err)
+			log.Printf("hint: check for port conflicts/permissions, then retry")
+			exitCode = 1
 		}
 	}
 
@@ -61,6 +74,8 @@ func main() {
 	defer cancel()
 	_ = httpSrv.Shutdown(ctx)
 	_ = sseSrv.Shutdown(ctx)
+
+	return exitCode
 }
 
 func writeCORS(w http.ResponseWriter) {
