@@ -117,9 +117,25 @@ func handleEvents(w http.ResponseWriter, r *http.Request) {
 		doubtID = "missing"
 	}
 
+	ctx := r.Context()
 	for i := 0; i < 3; i++ {
-		_, _ = fmt.Fprintf(w, "event: message\ndata: {\"doubtId\":\"%s\",\"n\":%d}\n\n", doubtID, i)
+		select {
+		case <-ctx.Done():
+			return
+		default:
+		}
+
+		if _, err := fmt.Fprintf(w, "event: message\ndata: {\"doubtId\":\"%s\",\"n\":%d}\n\n", doubtID, i); err != nil {
+			return
+		}
 		flusher.Flush()
-		time.Sleep(250 * time.Millisecond)
+
+		if i < 2 {
+			select {
+			case <-ctx.Done():
+				return
+			case <-time.After(250 * time.Millisecond):
+			}
+		}
 	}
 }
