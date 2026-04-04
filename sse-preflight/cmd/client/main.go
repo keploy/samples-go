@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -16,7 +17,8 @@ func main() {
 
 	req, err := http.NewRequest(http.MethodOptions, *targetURL, nil)
 	if err != nil {
-		panic(err)
+		fmt.Fprintf(os.Stderr, "failed to create request: %v\n", err)
+		os.Exit(1)
 	}
 
 	if *hostHeader != "" {
@@ -31,11 +33,16 @@ func main() {
 	client := &http.Client{Timeout: 5 * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
-		panic(err)
+		fmt.Fprintf(os.Stderr, "request failed: %v\n", err)
+		os.Exit(1)
 	}
 	defer resp.Body.Close()
 
-	body, _ := io.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "failed to read response body: %v\n", err)
+		os.Exit(1)
+	}
 	fmt.Printf("status=%s\n", resp.Status)
 	fmt.Printf("headers=%v\n", resp.Header)
 	fmt.Printf("body=%q\n", string(body))

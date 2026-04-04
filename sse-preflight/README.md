@@ -12,7 +12,7 @@ This is a tiny Go app meant to reproduce the Keploy replay failure where an `OPT
 ## Run the server (without Keploy)
 
 ```bash
-cd samples-go/sse-preflight
+cd sse-preflight
 go run ./cmd/server
 ```
 
@@ -39,7 +39,7 @@ keploy record -c "go run ./cmd/server"
 Terminal B (during the 20s window):
 
 ```bash
-go run ./cmd/client --url "http://localhost:8047/subscribe/student/events?doubtId=repro" --host "doubt-service.example.com" 
+go run ./cmd/client --url "http://localhost:8047/subscribe/student/events?doubtId=repro" --host "doubt-service.example.com"
 ```
 
 ### 2) Replay
