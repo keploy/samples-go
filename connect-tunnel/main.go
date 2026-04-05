@@ -18,8 +18,6 @@ import (
 var proxyClient *http.Client
 
 func init() {
-	// Use http.ProxyFromEnvironment which handles HTTP_PROXY, HTTPS_PROXY,
-	// NO_PROXY, and their lowercase variants per the standard convention.
 	proxyClient = &http.Client{
 		Transport: &http.Transport{
 			Proxy: http.ProxyFromEnvironment,
@@ -27,8 +25,6 @@ func init() {
 		Timeout: 15 * time.Second,
 	}
 
-	// Warn if no proxy is configured — this sample is meant to exercise
-	// CONNECT tunneling and will fall back to direct connections otherwise.
 	if os.Getenv("HTTP_PROXY") == "" && os.Getenv("HTTPS_PROXY") == "" &&
 		os.Getenv("http_proxy") == "" && os.Getenv("https_proxy") == "" {
 		log.Println("WARNING: no proxy environment variables set; /via-proxy will use direct connections instead of CONNECT tunnel")
@@ -44,12 +40,16 @@ func main() {
 		port = "8080"
 	}
 	log.Printf("connect-tunnel sample listening on :%s", port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
+		log.Fatalf("server failed: %v", err)
+	}
 }
 
 func handleHealth(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
+	if err := json.NewEncoder(w).Encode(map[string]string{"status": "ok"}); err != nil {
+		log.Printf("failed to write health response: %v", err)
+	}
 }
 
 func handleViaProxy(w http.ResponseWriter, r *http.Request) {
@@ -71,7 +71,7 @@ func handleViaProxy(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	body, err := io.ReadAll(io.LimitReader(resp.Body, 1<<20)) // 1MB limit
+	body, err := io.ReadAll(io.LimitReader(resp.Body, 1<<20))
 	if err != nil {
 		writeJSONError(w, http.StatusBadGateway, "failed to read upstream response")
 		return
@@ -81,21 +81,27 @@ func handleViaProxy(w http.ResponseWriter, r *http.Request) {
 	if err := json.Unmarshal(body, &upstream); err != nil {
 		w.Header().Set("Content-Type", "text/plain")
 		w.WriteHeader(resp.StatusCode)
-		w.Write(body)
+		if _, writeErr := w.Write(body); writeErr != nil {
+			log.Printf("failed to write response body: %v", writeErr)
+		}
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(resp.StatusCode)
-	json.NewEncoder(w).Encode(map[string]interface{}{
+	if err := json.NewEncoder(w).Encode(map[string]interface{}{
 		"proxied":     true,
 		"upstream_url": upstream["url"],
 		"status_code": resp.StatusCode,
-	})
+	}); err != nil {
+		log.Printf("failed to encode response: %v", err)
+	}
 }
 
 func writeJSONError(w http.ResponseWriter, status int, msg string) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
-	json.NewEncoder(w).Encode(map[string]string{"error": msg})
+	if err := json.NewEncoder(w).Encode(map[string]string{"error": msg}); err != nil {
+		log.Printf("failed to write error response: %v", err)
+	}
 }
