@@ -15,11 +15,12 @@ import (
 //   GET /health       — returns {"status":"ok"}, no external deps
 //   GET /via-proxy    — fetches an HTTPS URL through HTTP_PROXY CONNECT tunnel
 
-var proxyClient *http.Client
+var (
+	proxyClient    *http.Client
+	proxyConfigured bool
+)
 
 func init() {
-	// Clone DefaultTransport to retain its sensible defaults (timeouts,
-	// idle conn management, HTTP/2) and override only the Proxy function.
 	transport := http.DefaultTransport.(*http.Transport).Clone()
 	transport.Proxy = http.ProxyFromEnvironment
 	proxyClient = &http.Client{
@@ -27,9 +28,10 @@ func init() {
 		Timeout:   15 * time.Second,
 	}
 
-	if os.Getenv("HTTP_PROXY") == "" && os.Getenv("HTTPS_PROXY") == "" &&
-		os.Getenv("http_proxy") == "" && os.Getenv("https_proxy") == "" {
-		log.Println("no proxy environment variables set; /via-proxy will use direct connections instead of CONNECT tunnel")
+	proxyConfigured = os.Getenv("HTTP_PROXY") != "" || os.Getenv("HTTPS_PROXY") != "" ||
+		os.Getenv("http_proxy") != "" || os.Getenv("https_proxy") != ""
+	if !proxyConfigured {
+		log.Println("no proxy env vars set (e.g. HTTP_PROXY=http://proxy:3128); /via-proxy will use direct connections")
 	}
 }
 
@@ -92,7 +94,7 @@ func handleViaProxy(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(resp.StatusCode)
 	if err := json.NewEncoder(w).Encode(map[string]interface{}{
-		"proxied":     true,
+		"proxied":     proxyConfigured,
 		"upstream_url": upstream["url"],
 		"status_code": resp.StatusCode,
 	}); err != nil {
