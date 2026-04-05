@@ -26,6 +26,13 @@ func init() {
 		},
 		Timeout: 15 * time.Second,
 	}
+
+	// Warn if no proxy is configured — this sample is meant to exercise
+	// CONNECT tunneling and will fall back to direct connections otherwise.
+	if os.Getenv("HTTP_PROXY") == "" && os.Getenv("HTTPS_PROXY") == "" &&
+		os.Getenv("http_proxy") == "" && os.Getenv("https_proxy") == "" {
+		log.Println("WARNING: no proxy environment variables set; /via-proxy will use direct connections instead of CONNECT tunnel")
+	}
 }
 
 func main() {
