@@ -71,9 +71,15 @@ func handleViaProxy(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	body, err := io.ReadAll(io.LimitReader(resp.Body, 1<<20))
+	const maxBody = 1 << 20 // 1 MiB
+	lr := io.LimitReader(resp.Body, maxBody+1)
+	body, err := io.ReadAll(lr)
 	if err != nil {
 		writeJSONError(w, http.StatusBadGateway, "failed to read upstream response body")
+		return
+	}
+	if len(body) > maxBody {
+		writeJSONError(w, http.StatusBadGateway, "upstream response exceeded 1 MiB limit")
 		return
 	}
 
