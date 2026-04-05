@@ -1,7 +1,6 @@
 package main
 
 import (
-	"crypto/tls"
 	"encoding/json"
 	"io"
 	"log"
@@ -16,6 +15,26 @@ import (
 // Endpoints:
 //   GET /health       — returns {"status":"ok"}, no external deps
 //   GET /via-proxy    — fetches https://httpbin.org/get through HTTP_PROXY
+
+var proxyClient *http.Client
+
+func init() {
+	proxyAddr := os.Getenv("HTTP_PROXY")
+	if proxyAddr == "" {
+		proxyAddr = os.Getenv("HTTPS_PROXY")
+	}
+	transport := &http.Transport{}
+	if proxyAddr != "" {
+		proxyURL, err := url.Parse(proxyAddr)
+		if err == nil {
+			transport.Proxy = http.ProxyURL(proxyURL)
+		}
+	}
+	proxyClient = &http.Client{
+		Transport: transport,
+		Timeout:   15 * time.Second,
+	}
+}
 
 func main() {
 	http.HandleFunc("/health", handleHealth)
@@ -35,42 +54,23 @@ func handleHealth(w http.ResponseWriter, _ *http.Request) {
 }
 
 func handleViaProxy(w http.ResponseWriter, _ *http.Request) {
-	proxyAddr := os.Getenv("HTTP_PROXY")
-	if proxyAddr == "" {
-		proxyAddr = os.Getenv("HTTPS_PROXY")
-	}
-	if proxyAddr == "" {
-		http.Error(w, `{"error":"no HTTP_PROXY configured"}`, http.StatusInternalServerError)
-		return
-	}
-
-	proxyURL, err := url.Parse(proxyAddr)
-	if err != nil {
-		http.Error(w, `{"error":"bad proxy url"}`, http.StatusInternalServerError)
-		return
-	}
-
 	targetURL := os.Getenv("TARGET_URL")
 	if targetURL == "" {
 		targetURL = "https://httpbin.org/get"
 	}
 
-	client := &http.Client{
-		Transport: &http.Transport{
-			Proxy:           http.ProxyURL(proxyURL),
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-		},
-		Timeout: 15 * time.Second,
-	}
-
-	resp, err := client.Get(targetURL)
+	resp, err := proxyClient.Get(targetURL)
 	if err != nil {
-		http.Error(w, `{"error":"`+err.Error()+`"}`, http.StatusBadGateway)
+		writeJSONError(w, http.StatusBadGateway, "upstream request failed", err)
 		return
 	}
 	defer resp.Body.Close()
 
-	body, _ := io.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		writeJSONError(w, http.StatusBadGateway, "failed to read upstream response", err)
+		return
+	}
 
 	var upstream map[string]interface{}
 	if err := json.Unmarshal(body, &upstream); err != nil {
@@ -81,8 +81,17 @@ func handleViaProxy(w http.ResponseWriter, _ *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{
-		"proxied":      true,
-		"upstream_url":  upstream["url"],
-		"status_code":  resp.StatusCode,
+		"proxied":     true,
+		"upstream_url": upstream["url"],
+		"status_code": resp.StatusCode,
+	})
+}
+
+func writeJSONError(w http.ResponseWriter, status int, msg string, err error) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	json.NewEncoder(w).Encode(map[string]string{
+		"error":   msg,
+		"details": err.Error(),
 	})
 }

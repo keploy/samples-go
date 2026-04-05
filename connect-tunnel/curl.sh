@@ -7,9 +7,9 @@ set -euo pipefail
 BASE_URL="${BASE_URL:-http://localhost:8080}"
 
 echo "=== GET /health ==="
-curl -s "$BASE_URL/health"
+curl -fsS "$BASE_URL/health"
 echo ""
 
 echo "=== GET /via-proxy ==="
-curl -s --max-time 15 "$BASE_URL/via-proxy"
+curl -fsS --max-time 15 "$BASE_URL/via-proxy"
 echo ""
