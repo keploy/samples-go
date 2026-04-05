@@ -13,7 +13,7 @@ import (
 //
 // Endpoints:
 //   GET /health       — returns {"status":"ok"}, no external deps
-//   GET /via-proxy    — fetches an HTTPS URL through HTTP_PROXY CONNECT tunnel
+//   GET /via-proxy    — fetches an HTTPS URL through HTTP_PROXY/HTTPS_PROXY CONNECT tunnel
 
 var proxyClient *http.Client
 
@@ -66,7 +66,7 @@ func handleViaProxy(w http.ResponseWriter, r *http.Request) {
 
 	resp, err := proxyClient.Do(req)
 	if err != nil {
-		writeJSONError(w, http.StatusBadGateway, "upstream request failed; check proxy connectivity (HTTP_PROXY), DNS resolution, and target reachability")
+		writeJSONError(w, http.StatusBadGateway, "upstream request failed; check proxy connectivity (HTTP_PROXY/HTTPS_PROXY), DNS resolution, and target reachability")
 		return
 	}
 	defer resp.Body.Close()
