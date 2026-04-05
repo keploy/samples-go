@@ -15,10 +15,7 @@ import (
 //   GET /health       — returns {"status":"ok"}, no external deps
 //   GET /via-proxy    — fetches an HTTPS URL through HTTP_PROXY CONNECT tunnel
 
-var (
-	proxyClient    *http.Client
-	proxyConfigured bool
-)
+var proxyClient *http.Client
 
 func init() {
 	transport := http.DefaultTransport.(*http.Transport).Clone()
@@ -26,12 +23,6 @@ func init() {
 	proxyClient = &http.Client{
 		Transport: transport,
 		Timeout:   15 * time.Second,
-	}
-
-	proxyConfigured = os.Getenv("HTTP_PROXY") != "" || os.Getenv("HTTPS_PROXY") != "" ||
-		os.Getenv("http_proxy") != "" || os.Getenv("https_proxy") != ""
-	if !proxyConfigured {
-		log.Println("no proxy env vars set (e.g. HTTP_PROXY=http://proxy:3128); /via-proxy will use direct connections")
 	}
 }
 
@@ -64,13 +55,13 @@ func handleViaProxy(w http.ResponseWriter, r *http.Request) {
 
 	req, err := http.NewRequestWithContext(r.Context(), http.MethodGet, targetURL, nil)
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "failed to create request")
+		writeJSONError(w, http.StatusInternalServerError, "invalid TARGET_URL")
 		return
 	}
 
 	resp, err := proxyClient.Do(req)
 	if err != nil {
-		writeJSONError(w, http.StatusBadGateway, "upstream request failed")
+		writeJSONError(w, http.StatusBadGateway, "upstream request failed; check proxy and network connectivity")
 		return
 	}
 	defer resp.Body.Close()
@@ -94,9 +85,8 @@ func handleViaProxy(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(resp.StatusCode)
 	if err := json.NewEncoder(w).Encode(map[string]interface{}{
-		"proxied":     proxyConfigured,
 		"upstream_url": upstream["url"],
-		"status_code": resp.StatusCode,
+		"status_code":  resp.StatusCode,
 	}); err != nil {
 		log.Printf("failed to encode response: %v", err)
 	}
