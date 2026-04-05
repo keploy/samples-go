@@ -48,7 +48,7 @@ func handleHealth(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(map[string]string{"status": "ok"}); err != nil {
-		log.Printf("failed to write health response: %v", err)
+		log.Printf("failed to write health response (likely client disconnect): %v", err)
 	}
 }
 
@@ -60,20 +60,20 @@ func handleViaProxy(w http.ResponseWriter, r *http.Request) {
 
 	req, err := http.NewRequestWithContext(r.Context(), http.MethodGet, targetURL, nil)
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "invalid TARGET_URL")
+		writeJSONError(w, http.StatusInternalServerError, "invalid TARGET_URL; check the TARGET_URL environment variable")
 		return
 	}
 
 	resp, err := proxyClient.Do(req)
 	if err != nil {
-		writeJSONError(w, http.StatusBadGateway, "upstream request failed; check proxy and network connectivity")
+		writeJSONError(w, http.StatusBadGateway, "upstream request failed; check proxy connectivity (HTTP_PROXY), DNS resolution, and target reachability")
 		return
 	}
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(io.LimitReader(resp.Body, 1<<20))
 	if err != nil {
-		writeJSONError(w, http.StatusBadGateway, "failed to read upstream response")
+		writeJSONError(w, http.StatusBadGateway, "failed to read upstream response body")
 		return
 	}
 
@@ -82,7 +82,7 @@ func handleViaProxy(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/plain")
 		w.WriteHeader(resp.StatusCode)
 		if _, writeErr := w.Write(body); writeErr != nil {
-			log.Printf("failed to write response body: %v", writeErr)
+			log.Printf("failed to write response body (likely client disconnect): %v", writeErr)
 		}
 		return
 	}
@@ -93,7 +93,7 @@ func handleViaProxy(w http.ResponseWriter, r *http.Request) {
 		"upstream_url": upstream["url"],
 		"status_code":  resp.StatusCode,
 	}); err != nil {
-		log.Printf("failed to encode response: %v", err)
+		log.Printf("failed to encode response (likely client disconnect): %v", err)
 	}
 }
 
@@ -101,6 +101,6 @@ func writeJSONError(w http.ResponseWriter, status int, msg string) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
 	if err := json.NewEncoder(w).Encode(map[string]string{"error": msg}); err != nil {
-		log.Printf("failed to write error response: %v", err)
+		log.Printf("failed to write error response (likely client disconnect): %v", err)
 	}
 }
