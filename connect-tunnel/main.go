@@ -27,7 +27,7 @@ func init() {
 
 	if os.Getenv("HTTP_PROXY") == "" && os.Getenv("HTTPS_PROXY") == "" &&
 		os.Getenv("http_proxy") == "" && os.Getenv("https_proxy") == "" {
-		log.Println("WARNING: no proxy environment variables set; /via-proxy will use direct connections instead of CONNECT tunnel")
+		log.Println("no proxy environment variables set; /via-proxy will use direct connections instead of CONNECT tunnel")
 	}
 }
 
@@ -41,7 +41,7 @@ func main() {
 	}
 	log.Printf("connect-tunnel sample listening on :%s", port)
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
-		log.Fatalf("server failed: %v", err)
+		log.Fatalf("server failed on port %s: %v (check if port is already in use or set APP_PORT)", port, err)
 	}
 }
 
