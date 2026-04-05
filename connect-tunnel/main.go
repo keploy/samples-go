@@ -18,11 +18,13 @@ import (
 var proxyClient *http.Client
 
 func init() {
+	// Clone DefaultTransport to retain its sensible defaults (timeouts,
+	// idle conn management, HTTP/2) and override only the Proxy function.
+	transport := http.DefaultTransport.(*http.Transport).Clone()
+	transport.Proxy = http.ProxyFromEnvironment
 	proxyClient = &http.Client{
-		Transport: &http.Transport{
-			Proxy: http.ProxyFromEnvironment,
-		},
-		Timeout: 15 * time.Second,
+		Transport: transport,
+		Timeout:   15 * time.Second,
 	}
 
 	if os.Getenv("HTTP_PROXY") == "" && os.Getenv("HTTPS_PROXY") == "" &&
