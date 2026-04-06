@@ -263,18 +263,16 @@ On the next run (test mode), the `rand.Shuffle` may flip the inner field order, 
 
 ### Prerequisites
 
-- Go 1.21+
+- Go 1.26+
 - `protoc` compiler (only needed if modifying the `.proto` file)
 
 ### Run without Keploy
 
 ```bash
 # Terminal 1 — start the server
-cd /home/anju/grpc-protoscope
 go run ./server/
 
 # Terminal 2 — call it (run multiple times to see different field orderings)
-cd /home/anju/grpc-protoscope
 go run ./client/
 go run ./client/
 go run ./client/
@@ -286,26 +284,26 @@ You'll see the facet entries printed in different orders across calls.
 
 ## 5. Reproducing the Bug with Keploy
 
-### Step 1: Build Keploy from source (if needed)
+### Step 1: Install Keploy
+
+Install Keploy using the [official installation guide](https://keploy.io/docs/server/installation/), or build from source:
 
 ```bash
-cd /home/anju/keploy
+git clone https://github.com/keploy/keploy.git && cd keploy
 go build -ldflags="-X main.apiServerURI=https://api.keploy.io" -o keploy
+export PATH=$PWD:$PATH
 ```
 
 ### Step 2: Record a test case
 
 ```bash
-cd /home/anju/grpc-protoscope
-
 # Start recording
-/home/anju/keploy/keploy record -c "go run ./server/"
+keploy record -c "go run ./server/"
 ```
 
 In another terminal, trigger the gRPC call:
 
 ```bash
-cd /home/anju/grpc-protoscope
 go run ./client/
 ```
 
@@ -314,8 +312,7 @@ Then press `Ctrl+C` in the recording terminal. Keploy saves the test case in `ke
 ### Step 3: Replay (test mode)
 
 ```bash
-cd /home/anju/grpc-protoscope
-/home/anju/keploy/keploy test -c "go run ./server/"
+keploy test -c "go run ./server/"
 ```
 
 **Expected result:** Because `rand.Shuffle` randomizes field ordering each time, ~50% of test runs will produce a different wire order than the recording, triggering:
@@ -336,14 +333,14 @@ If the test passes (same random order happened to match), delete the `keploy/` f
 ```
 grpc-protoscope/
 ├── README.md                      ← This file
+├── go.mod
+├── go.sum
 ├── proto/search.proto             ← Protobuf schema matching the bug report structure
 ├── searchpb/                      ← Generated Go protobuf/gRPC code
 │   ├── search.pb.go
 │   └── search_grpc.pb.go
 ├── server/main.go                 ← gRPC server with randomized wire field ordering
-├── client/main.go                 ← gRPC client that calls the Search RPC
-├── go.mod
-├── go.sum
-└── keploy/                        ← Keploy test artifacts (created after recording)
-    └── test-set-0/tests/test-1.yaml
+└── client/main.go                 ← gRPC client that calls the Search RPC
 ```
+
+> **Note:** The `keploy/` directory (test artifacts) is generated at runtime when you run `keploy record` and is not checked into the repository.
