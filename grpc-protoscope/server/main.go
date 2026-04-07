@@ -7,6 +7,7 @@ import (
 	"math"
 	"math/rand"
 	"net"
+	"time"
 
 	pb "zepto-grpc/searchpb"
 
@@ -32,6 +33,8 @@ func buildFacetEntry(name string, numericVal *float64, textVal *string) []byte {
 	entry = protowire.AppendBytes(entry, fv)
 	return entry
 }
+
+var rng = rand.New(rand.NewSource(time.Now().UnixNano()))
 
 // buildResponse constructs SearchResponse wire bytes with randomized
 // repeated-field ordering inside the facet buckets.
@@ -65,7 +68,7 @@ func buildResponse() []byte {
 		buildFacetEntry("type", nil, &ovs),
 	}
 	// RANDOMIZE repeated entries — triggers the bug
-	rand.Shuffle(len(availEntries), func(i, j int) {
+	rng.Shuffle(len(availEntries), func(i, j int) {
 		availEntries[i], availEntries[j] = availEntries[j], availEntries[i]
 	})
 	var availBucket []byte
@@ -80,7 +83,7 @@ func buildResponse() []byte {
 		buildFacetEntry("candidateCnt", &one, nil),
 		buildFacetEntry("resultCnt", &one, nil),
 	}
-	rand.Shuffle(len(pricingEntries), func(i, j int) {
+	rng.Shuffle(len(pricingEntries), func(i, j int) {
 		pricingEntries[i], pricingEntries[j] = pricingEntries[j], pricingEntries[i]
 	})
 	var pricingBucket []byte
@@ -110,14 +113,22 @@ func (rawCodec) Marshal(v interface{}) ([]byte, error) {
 	if b, ok := v.(*rawFrame); ok {
 		return b.data, nil
 	}
-	return proto.Marshal(v.(proto.Message))
+	msg, ok := v.(proto.Message)
+	if !ok {
+		return nil, fmt.Errorf("rawCodec.Marshal: expected *rawFrame or proto.Message, got %T", v)
+	}
+	return proto.Marshal(msg)
 }
 func (rawCodec) Unmarshal(data []byte, v interface{}) error {
 	if b, ok := v.(*rawFrame); ok {
 		b.data = append(b.data[:0], data...)
 		return nil
 	}
-	return proto.Unmarshal(data, v.(proto.Message))
+	msg, ok := v.(proto.Message)
+	if !ok {
+		return fmt.Errorf("rawCodec.Unmarshal: expected *rawFrame or proto.Message, got %T", v)
+	}
+	return proto.Unmarshal(data, msg)
 }
 
 type rawFrame struct{ data []byte }
