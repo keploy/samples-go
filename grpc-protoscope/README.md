@@ -263,7 +263,7 @@ On the next run (test mode), the `rand.Shuffle` may flip the inner field order, 
 
 ### Prerequisites
 
-- Go 1.26+
+- Go 1.24+
 - `protoc` compiler (only needed if modifying the `.proto` file)
 
 ### Run without Keploy

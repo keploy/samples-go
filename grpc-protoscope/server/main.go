@@ -7,7 +7,6 @@ import (
 	"math"
 	"math/rand"
 	"net"
-	"time"
 
 	pb "zepto-grpc/searchpb"
 
@@ -33,8 +32,6 @@ func buildFacetEntry(name string, numericVal *float64, textVal *string) []byte {
 	entry = protowire.AppendBytes(entry, fv)
 	return entry
 }
-
-var rng = rand.New(rand.NewSource(time.Now().UnixNano()))
 
 // buildResponse constructs SearchResponse wire bytes with randomized
 // repeated-field ordering inside the facet buckets.
@@ -68,7 +65,7 @@ func buildResponse() []byte {
 		buildFacetEntry("type", nil, &ovs),
 	}
 	// RANDOMIZE repeated entries — triggers the bug
-	rng.Shuffle(len(availEntries), func(i, j int) {
+	rand.Shuffle(len(availEntries), func(i, j int) {
 		availEntries[i], availEntries[j] = availEntries[j], availEntries[i]
 	})
 	var availBucket []byte
@@ -83,7 +80,7 @@ func buildResponse() []byte {
 		buildFacetEntry("candidateCnt", &one, nil),
 		buildFacetEntry("resultCnt", &one, nil),
 	}
-	rng.Shuffle(len(pricingEntries), func(i, j int) {
+	rand.Shuffle(len(pricingEntries), func(i, j int) {
 		pricingEntries[i], pricingEntries[j] = pricingEntries[j], pricingEntries[i]
 	})
 	var pricingBucket []byte
@@ -136,7 +133,7 @@ type rawFrame struct{ data []byte }
 func main() {
 	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		log.Fatalf("failed to listen on :50051: %v (check if the port is already in use)", err)
 	}
 
 	s := grpc.NewServer(grpc.ForceServerCodec(rawCodec{}))
@@ -154,16 +151,29 @@ func main() {
 					if err := dec(req); err != nil {
 						return nil, err
 					}
-					log.Printf("Received search query: %s", req.GetQuery())
-					return &rawFrame{data: buildResponse()}, nil
+					handler := func(ctx context.Context, req any) (any, error) {
+						searchReq := req.(*pb.SearchRequest)
+						log.Printf("Received search query: %s", searchReq.GetQuery())
+						return &rawFrame{data: buildResponse()}, nil
+					}
+					if interceptor == nil {
+						return handler(ctx, req)
+					}
+					info := &grpc.UnaryServerInfo{
+						Server:     srv,
+						FullMethod: "/search.SearchService/Search",
+					}
+					return interceptor(ctx, req, info, handler)
 				},
 			},
 		},
 	}
-	s.RegisterService(&sd, &struct{ pb.UnimplementedSearchServiceServer }{})
+	s.RegisterService(&sd, &struct {
+		pb.UnimplementedSearchServiceServer
+	}{})
 
 	fmt.Println("gRPC server listening on :50051")
 	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+		log.Fatalf("gRPC server stopped: %v", err)
 	}
 }

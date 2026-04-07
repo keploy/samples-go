@@ -17,7 +17,7 @@ func main() {
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err != nil {
-		log.Fatalf("failed to connect: %v", err)
+		log.Fatalf("failed to connect to localhost:50051: %v (ensure the server is running)", err)
 	}
 	defer conn.Close()
 
@@ -28,7 +28,7 @@ func main() {
 
 	resp, err := client.Search(ctx, &pb.SearchRequest{Query: "shoes"})
 	if err != nil {
-		log.Fatalf("Search failed: %v", err)
+		log.Fatalf("Search RPC failed: %v (ensure the server is running and the service is registered)", err)
 	}
 
 	fmt.Printf("Score:    %.1f\n", resp.GetScore())
