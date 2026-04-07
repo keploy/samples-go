@@ -32,8 +32,8 @@ jobs:
               # Change to the project directory
               cd "$dir" || continue
 
-              # Build the project
-              if go build -o app; then
+              # Build the project (supports modules with multiple commands under ./cmd/*)
+              if go build ./...; then
                 echo "Successfully built $dir"
               else
                 echo "Failed to build $dir" >&2
