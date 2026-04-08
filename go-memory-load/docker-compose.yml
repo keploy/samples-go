@@ -1,0 +1,46 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: load-test-db
+    environment:
+      POSTGRES_DB: orderdb
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: app_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app_user -d orderdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build:
+      context: .
+    container_name: load-test-api
+    environment:
+      APP_PORT: "8080"
+      POSTGRES_DSN: postgres://app_user:app_password@db:5432/orderdb?sslmode=disable
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  k6:
+    image: grafana/k6:0.49.0
+    profiles: ["loadtest"]
+    environment:
+      BASE_URL: http://api:8080
+    volumes:
+      - ./loadtest:/scripts:ro
+    depends_on:
+      api:
+        condition: service_started
+    entrypoint: ["k6"]
+
+volumes:
+  postgres_data:
