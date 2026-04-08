@@ -48,7 +48,7 @@ export const options = isSmokeProfile
           stages: [
             { target: 15, duration: '15s' },
             { target: 30, duration: '30s' },
-            { target: 60, duration: '45s' },
+            { target: 50, duration: '45s' },
             { target: 20, duration: '15s' },
           ],
         },
