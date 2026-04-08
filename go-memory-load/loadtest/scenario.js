@@ -4,8 +4,12 @@ import { Counter, Trend } from 'k6/metrics';
 import { check, sleep } from 'k6';
 
 const isSmokeProfile = __ENV.TEST_PROFILE === 'smoke';
-const MIXED_API_PREALLOCATED_VUS = parsePositiveIntEnv('MIXED_API_PREALLOCATED_VUS', 100);
-const MIXED_API_MAX_VUS = parsePositiveIntEnv('MIXED_API_MAX_VUS', 300);
+const MIXED_API_START_VUS = parsePositiveIntEnv('MIXED_API_START_VUS', 10);
+const MIXED_API_VU_STAGE_TARGETS = parsePositiveIntListEnv(
+  'MIXED_API_VU_STAGE_TARGETS',
+  [20, 40, 80, 30],
+  4
+);
 const LARGE_PAYLOAD_PREALLOCATED_VUS = parsePositiveIntEnv('LARGE_PAYLOAD_PREALLOCATED_VUS', 16);
 const LARGE_PAYLOAD_MAX_VUS = parsePositiveIntEnv('LARGE_PAYLOAD_MAX_VUS', 64);
 const LARGE_PAYLOAD_SIZE_MBS = (__ENV.LARGE_PAYLOAD_SIZES_MB || '1,2,4')
@@ -40,16 +44,13 @@ export const options = isSmokeProfile
   : {
       scenarios: {
         mixed_api_load: {
-          executor: 'ramping-arrival-rate',
-          startRate: 5,
-          timeUnit: '1s',
-          preAllocatedVUs: MIXED_API_PREALLOCATED_VUS,
-          maxVUs: MIXED_API_MAX_VUS,
+          executor: 'ramping-vus',
+          startVUs: MIXED_API_START_VUS,
           stages: [
-            { target: 15, duration: '15s' },
-            { target: 30, duration: '30s' },
-            { target: 50, duration: '45s' },
-            { target: 20, duration: '15s' },
+            { target: MIXED_API_VU_STAGE_TARGETS[0], duration: '15s' },
+            { target: MIXED_API_VU_STAGE_TARGETS[1], duration: '30s' },
+            { target: MIXED_API_VU_STAGE_TARGETS[2], duration: '45s' },
+            { target: MIXED_API_VU_STAGE_TARGETS[3], duration: '15s' },
           ],
         },
         large_payload_cycle: {
@@ -90,6 +91,19 @@ const largePayloadDeletedBytes = new Counter('large_payload_deleted_bytes');
 function parsePositiveIntEnv(name, fallback) {
   const value = parseInt(__ENV[name] || '', 10);
   return Number.isFinite(value) && value > 0 ? value : fallback;
+}
+
+function parsePositiveIntListEnv(name, fallback, expectedLength) {
+  const values = (__ENV[name] || '')
+    .split(',')
+    .map((value) => parseInt(value.trim(), 10))
+    .filter((value) => Number.isFinite(value) && value > 0);
+
+  if (values.length === expectedLength) {
+    return values;
+  }
+
+  return fallback;
 }
 
 function jsonParams() {
