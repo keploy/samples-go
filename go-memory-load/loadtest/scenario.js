@@ -18,6 +18,19 @@ const LARGE_PAYLOAD_SIZE_MBS = (__ENV.LARGE_PAYLOAD_SIZES_MB || '1,2,4')
   .filter((value) => Number.isFinite(value) && value > 0);
 const LARGE_PAYLOAD_SIZES = LARGE_PAYLOAD_SIZE_MBS.length > 0 ? LARGE_PAYLOAD_SIZE_MBS : [1];
 
+const LARGE_PAYLOAD_STAGE_TARGETS = parsePositiveIntListEnv(
+  'LARGE_PAYLOAD_STAGE_TARGETS',
+  [2, 4, 2],
+  3
+);
+
+const THRESHOLD_HTTP_FAILED_RATE = parseFloatEnv('THRESHOLD_HTTP_FAILED_RATE', 0.02);
+const THRESHOLD_HTTP_P95 = parsePositiveIntEnv('THRESHOLD_HTTP_P95', 2500);
+const THRESHOLD_HTTP_AVG = parsePositiveIntEnv('THRESHOLD_HTTP_AVG', 1200);
+const THRESHOLD_LARGE_INSERT_P95 = parsePositiveIntEnv('THRESHOLD_LARGE_INSERT_P95', 5000);
+const THRESHOLD_LARGE_GET_P95 = parsePositiveIntEnv('THRESHOLD_LARGE_GET_P95', 5000);
+const THRESHOLD_LARGE_DELETE_P95 = parsePositiveIntEnv('THRESHOLD_LARGE_DELETE_P95', 3000);
+
 export const options = isSmokeProfile
   ? {
       scenarios: {
@@ -60,18 +73,18 @@ export const options = isSmokeProfile
           preAllocatedVUs: LARGE_PAYLOAD_PREALLOCATED_VUS,
           maxVUs: LARGE_PAYLOAD_MAX_VUS,
           stages: [
-            { target: 2, duration: '15s' },
-            { target: 4, duration: '30s' },
-            { target: 2, duration: '15s' },
+            { target: LARGE_PAYLOAD_STAGE_TARGETS[0], duration: '15s' },
+            { target: LARGE_PAYLOAD_STAGE_TARGETS[1], duration: '30s' },
+            { target: LARGE_PAYLOAD_STAGE_TARGETS[2], duration: '15s' },
           ],
         },
       },
       thresholds: {
-        http_req_failed: ['rate<0.02'],
-        http_req_duration: ['p(95)<2500', 'avg<1200'],
-        large_payload_insert_duration: ['p(95)<5000'],
-        large_payload_get_duration: ['p(95)<5000'],
-        large_payload_delete_duration: ['p(95)<3000'],
+        http_req_failed: [`rate<${THRESHOLD_HTTP_FAILED_RATE}`],
+        http_req_duration: [`p(95)<${THRESHOLD_HTTP_P95}`, `avg<${THRESHOLD_HTTP_AVG}`],
+        large_payload_insert_duration: [`p(95)<${THRESHOLD_LARGE_INSERT_P95}`],
+        large_payload_get_duration: [`p(95)<${THRESHOLD_LARGE_GET_P95}`],
+        large_payload_delete_duration: [`p(95)<${THRESHOLD_LARGE_DELETE_P95}`],
       },
     };
 
@@ -90,6 +103,11 @@ const largePayloadDeletedBytes = new Counter('large_payload_deleted_bytes');
 
 function parsePositiveIntEnv(name, fallback) {
   const value = parseInt(__ENV[name] || '', 10);
+  return Number.isFinite(value) && value > 0 ? value : fallback;
+}
+
+function parseFloatEnv(name, fallback) {
+  const value = parseFloat(__ENV[name] || '');
   return Number.isFinite(value) && value > 0 ? value : fallback;
 }
 
