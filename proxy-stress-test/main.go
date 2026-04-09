@@ -183,7 +183,7 @@ func newTransport() *http.Transport {
 		MaxIdleConns:      0,
 		IdleConnTimeout:   1 * time.Nanosecond,
 		TLSClientConfig: &tls.Config{
-			InsecureSkipVerify: true, // accept Keploy's MITM cert
+			InsecureSkipVerify: true, //nolint:gosec // intentional: accept Keploy MITM proxy cert
 		},
 		// Custom dialer with short timeouts
 		DialContext: (&net.Dialer{
@@ -291,6 +291,9 @@ func transferHandler(db *sql.DB) http.HandlerFunc {
 				}
 				count++
 			}
+			if rowErr := rows.Err(); rowErr != nil {
+				result.DBError = rowErr.Error()
+			}
 			rows.Close()
 			result.DBLargeRows = count
 		}
@@ -307,7 +310,9 @@ func transferHandler(db *sql.DB) http.HandlerFunc {
 				for i := range cols {
 					ptrs[i+1] = &cols[i]
 				}
-				_ = wideRows.Scan(ptrs...)
+				if scanErr := wideRows.Scan(ptrs...); scanErr != nil {
+				break
+			}
 			}
 			wideRows.Close()
 		}
@@ -470,7 +475,10 @@ func backgroundNoise(ctx context.Context) {
 			go func() {
 				// Each of these during replay = "no matching mock found" = error to errChannel
 				client := &http.Client{Transport: newTransport(), Timeout: 5 * time.Second}
-				req, _ := http.NewRequest("GET", httpsTarget, nil)
+				req, err := http.NewRequest("GET", httpsTarget, nil)
+				if err != nil {
+					return
+				}
 				resp, err := client.Do(req)
 				if err == nil {
 					resp.Body.Close()
@@ -491,7 +499,7 @@ func main() {
 	// Init OTel (Issue 2 — exports to localhost:4318 with no collector)
 	shutdownOTel, err := initOTel(ctx)
 	if err != nil {
-		log.Printf("WARN: OTel init failed (expected if no collector): %v", err)
+		log.Printf("OTel init returned error (expected if no collector): %v", err)
 	} else {
 		defer shutdownOTel()
 	}
@@ -499,7 +507,7 @@ func main() {
 	// Init Postgres
 	db, err := initDB()
 	if err != nil {
-		log.Fatalf("Failed to connect to database: %v", err)
+		log.Fatalf("Failed to connect to database (check DATABASE_URL env var): %v", err)
 	}
 	defer db.Close()
 
@@ -517,7 +525,7 @@ func main() {
 	log.Printf("  HTTPS target: %s", httpsTarget)
 	log.Printf("  HTTP proxy:   %s", httpProxyURL)
 	log.Printf("  OTel endpoint: %s (enabled=%v, interval=%s)", otelEndpoint, otelEnabled, otelInterval)
-	log.Printf("  DB: %s", dbDSN)
+	log.Printf("  DB: [redacted]")
 	log.Printf("  Concurrent conns: %d", concurrentConns)
 	log.Printf("  Background noise: %d conns/sec", bgNoiseConns)
 

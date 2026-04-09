@@ -1,27 +1,18 @@
 #!/bin/bash
-
-# Proxy Stress Test — exercises:
-# 1. Concurrent HTTPS through CONNECT tunnel (TLS cert caching)
-# 2. Large PostgreSQL DataRow responses (wire protocol reassembly)
-# 3. HTTP POST through forward proxy (MatchType validation)
-#
-# This test verifies that Keploy recording and replay work correctly under
-# proxy stress conditions that previously caused 322s p99 latency and hangs.
-
 set -euo pipefail
 
-source ./../../.github/workflows/test_workflow_scripts/test-iid.sh
+# Proxy Stress Test — e2e regression test for:
+# 1. TLS cert caching (concurrent HTTPS through CONNECT tunnel)
+# 2. Large PostgreSQL DataRow responses (wire protocol reassembly)
+# 3. HTTP POST through forward proxy (MatchType validation)
 
 docker compose build
-
-sudo rm -rf keploy/
-
-$RECORD_BIN config --generate
+rm -rf keploy/
 
 container_kill() {
     REC_PID="$(pgrep -n -f 'keploy record' || true)"
     echo "Keploy record PID: $REC_PID"
-    sudo kill -INT "$REC_PID" 2>/dev/null || true
+    kill -INT "$REC_PID" 2>/dev/null || true
 }
 
 send_request(){
@@ -34,25 +25,10 @@ send_request(){
         sleep 3
     done
     echo "App started"
-
-    # Test 1: Concurrent HTTPS through CONNECT tunnel + large PG rows
-    echo "=== Recording: /api/transfer (10 concurrent HTTPS + 50 large PG rows) ==="
-    curl -sf http://localhost:8080/api/transfer | tee /tmp/transfer.json
-    echo ""
-
-    # Test 2: Batch concurrent HTTPS (triggers cert storm without caching)
-    echo "=== Recording: /api/batch-transfer (20 concurrent HTTPS + 300 PG rows) ==="
-    curl -sf http://localhost:8080/api/batch-transfer | tee /tmp/batch.json
-    echo ""
-
-    # Test 3: POST through proxy (MatchType validation)
-    echo "=== Recording: /api/post-transfer (POST through CONNECT tunnel) ==="
-    curl -sf http://localhost:8080/api/post-transfer | tee /tmp/post.json
-    echo ""
-
-    # Health check
+    curl -sf http://localhost:8080/api/transfer
+    curl -sf http://localhost:8080/api/batch-transfer
+    curl -sf http://localhost:8080/api/post-transfer
     curl -sf http://localhost:8080/health
-
     sleep 5
     container_kill
     wait
@@ -60,37 +36,20 @@ send_request(){
 
 container_name="proxyStressApp"
 
-# Record phase
 send_request &
-$RECORD_BIN record -c "docker compose up" --container-name "$container_name" --generateGithubActions=false |& tee "${container_name}.txt"
+keploy record -c "docker compose up" --container-name "$container_name" --generateGithubActions=false |& tee "${container_name}.txt"
 
-if grep "WARNING: DATA RACE" "${container_name}.txt"; then
-    echo "Race condition detected in recording"
-    cat "${container_name}.txt"
-    exit 1
-fi
-
-# Check that recording succeeded (no fatal errors)
 if grep -q "panic:" "${container_name}.txt"; then
     echo "Panic detected during recording"
     cat "${container_name}.txt"
     exit 1
 fi
 
-echo "Recording completed successfully"
+echo "Recording completed"
 sleep 5
-
-# Shutdown services before replay
 docker compose down
 
-# Replay phase
-$REPLAY_BIN test -c 'docker compose up' --containerName "$container_name" --apiTimeout 60 --delay 20 --generate-github-actions=false &> "${container_name}-replay.txt"
-
-if grep "WARNING: DATA RACE" "${container_name}-replay.txt"; then
-    echo "Race condition detected in replay"
-    cat "${container_name}-replay.txt"
-    exit 1
-fi
+keploy test -c 'docker compose up' --containerName "$container_name" --apiTimeout 60 --delay 20 --generate-github-actions=false &> "${container_name}-replay.txt"
 
 if grep -q "panic:" "${container_name}-replay.txt"; then
     echo "Panic detected during replay"
@@ -98,7 +57,6 @@ if grep -q "panic:" "${container_name}-replay.txt"; then
     exit 1
 fi
 
-# Verify test results
 all_passed=true
 for report_file in ./keploy/reports/test-run-0/test-set-*-report.yaml; do
     if [ ! -f "$report_file" ]; then

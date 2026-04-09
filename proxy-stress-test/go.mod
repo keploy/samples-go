@@ -1,4 +1,4 @@
-module github.com/keploy/repro-app
+module github.com/keploy/samples-go/proxy-stress-test
 
 go 1.22.0
 

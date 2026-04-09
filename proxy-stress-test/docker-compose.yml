@@ -16,15 +16,15 @@ services:
       retries: 10
 
   proxy:
-    image: vimagick/tinyproxy
+    image: vimagick/tinyproxy:latest
     ports:
-      - "3128:3128"
+      - "127.0.0.1:3128:3128"
     command: >
       sh -c "echo 'Port 3128' > /tmp/tp.conf &&
              echo 'Listen 0.0.0.0' >> /tmp/tp.conf &&
              echo 'Timeout 300' >> /tmp/tp.conf &&
              echo 'MaxClients 100' >> /tmp/tp.conf &&
-             echo 'Allow 0.0.0.0/0' >> /tmp/tp.conf &&
+             echo 'Allow 172.16.0.0/12' >> /tmp/tp.conf &&
              echo 'ConnectPort 443' >> /tmp/tp.conf &&
              tinyproxy -d -c /tmp/tp.conf"
 
