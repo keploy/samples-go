@@ -1,41 +1,40 @@
 #!/bin/bash
 set -euo pipefail
 
-# Proxy Stress Test — e2e regression test for:
-# 1. TLS cert caching (concurrent HTTPS through CONNECT tunnel)
-# 2. Large PostgreSQL DataRow responses (wire protocol reassembly)
-# 3. HTTP POST through forward proxy (MatchType validation)
+# Proxy Stress Test — e2e regression test for Keploy proxy fixes
 
 docker compose build
 rm -rf keploy/
 
+cleanup() {
+    docker compose down 2>/dev/null || true
+}
+trap cleanup EXIT
+
 container_kill() {
     REC_PID="$(pgrep -n -f 'keploy record' || true)"
-    echo "Keploy record PID: $REC_PID"
-    kill -INT "$REC_PID" 2>/dev/null || true
+    if [ -n "$REC_PID" ]; then
+        kill -INT "$REC_PID" 2>/dev/null || true
+    fi
 }
 
 send_request(){
     sleep 15
-    app_started=false
     max_attempts=30
     attempt=0
-    while [ "$app_started" = false ]; do
-        if curl -sf http://localhost:8080/health > /dev/null 2>&1; then
-            app_started=true
-        fi
-        sleep 3
+    while ! curl -sf --max-time 5 http://localhost:8080/health > /dev/null 2>&1; do
         attempt=$((attempt + 1))
         if [ "$attempt" -ge "$max_attempts" ]; then
             echo "App failed to start after $max_attempts attempts"
             exit 1
         fi
+        sleep 3
     done
     echo "App started"
-    curl -sf http://localhost:8080/api/transfer
-    curl -sf http://localhost:8080/api/batch-transfer
-    curl -sf http://localhost:8080/api/post-transfer
-    curl -sf http://localhost:8080/health
+    curl -sf --max-time 30 http://localhost:8080/api/transfer
+    curl -sf --max-time 30 http://localhost:8080/api/batch-transfer
+    curl -sf --max-time 30 http://localhost:8080/api/post-transfer
+    curl -sf --max-time 5 http://localhost:8080/health
     sleep 5
     container_kill
     wait
@@ -57,6 +56,8 @@ sleep 5
 docker compose down
 
 keploy test -c 'docker compose up' --container-name "$container_name" --apiTimeout 60 --delay 20 --generate-github-actions=false &> "${container_name}-replay.txt"
+
+docker compose down
 
 if grep -q "panic:" "${container_name}-replay.txt"; then
     echo "Panic detected during replay"

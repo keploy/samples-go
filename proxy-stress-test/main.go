@@ -85,7 +85,7 @@ func initOTel(ctx context.Context) (func(), error) {
 
 	res, err := resource.New(ctx,
 		resource.WithAttributes(
-			semconv.ServiceName("repro-app"),
+			semconv.ServiceName("proxy-stress-test"),
 			semconv.ServiceVersion("0.1.0"),
 		),
 	)
@@ -371,7 +371,7 @@ func batchTransferHandler(db *sql.DB) http.HandlerFunc {
 		}
 		wg.Wait()
 
-		// Also query multiple large Postgres result sets concurrently
+		// Also query multiple large Postgres result sets
 		dbRows := 0
 		for i := 0; i < 3; i++ {
 			rows, err := db.QueryContext(ctx,
@@ -406,7 +406,9 @@ func batchTransferHandler(db *sql.DB) http.HandlerFunc {
 func healthHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		status := "ok"
-		if err := db.PingContext(r.Context()); err != nil {
+		ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
+		defer cancel()
+		if err := db.PingContext(ctx); err != nil {
 			status = "db_down: " + err.Error()
 		}
 		w.Header().Set("Content-Type", "application/json")
