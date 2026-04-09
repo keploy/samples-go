@@ -59,15 +59,15 @@ func envDuration(key string, fallback time.Duration) time.Duration {
 }
 
 var (
-	listenAddr         = env("LISTEN_ADDR", ":8080")
-	dbDSN              = env("DATABASE_URL", "postgres://repro:repro@localhost:5432/reprodb?sslmode=disable")
-	httpsTarget        = env("HTTPS_TARGET", "https://httpbin.org/get")
-	httpProxyURL       = env("HTTP_PROXY_URL", "")        // e.g. http://forward-proxy:3128
-	concurrentConns    = envInt("CONCURRENT_CONNS", 20)    // number of parallel HTTPS connections per request
-	otelEndpoint       = env("OTEL_EXPORTER_OTLP_ENDPOINT", "localhost:4318")
-	otelEnabled        = env("OTEL_ENABLED", "true") == "true"
-	otelInterval       = envDuration("OTEL_EXPORT_INTERVAL", 5*time.Second)  // configurable OTel export interval
-	bgNoiseConns       = envInt("BG_NOISE_CONNS", 0)                         // background HTTP noise connections per second
+	listenAddr      = env("LISTEN_ADDR", ":8080")
+	dbDSN           = env("DATABASE_URL", "postgres://repro:repro@localhost:5432/reprodb?sslmode=disable")
+	httpsTarget     = env("HTTPS_TARGET", "https://httpbin.org/get")
+	httpProxyURL    = env("HTTP_PROXY_URL", "")      // e.g. http://forward-proxy:3128
+	concurrentConns = envInt("CONCURRENT_CONNS", 20) // number of parallel HTTPS connections per request
+	otelEndpoint    = env("OTEL_EXPORTER_OTLP_ENDPOINT", "localhost:4318")
+	otelEnabled     = env("OTEL_ENABLED", "true") == "true"
+	otelInterval    = envDuration("OTEL_EXPORT_INTERVAL", 5*time.Second) // configurable OTel export interval
+	bgNoiseConns    = envInt("BG_NOISE_CONNS", 0)                        // background HTTP noise connections per second
 )
 
 // ---------------------------------------------------------------------------
@@ -311,8 +311,8 @@ func transferHandler(db *sql.DB) http.HandlerFunc {
 					ptrs[i+1] = &cols[i]
 				}
 				if scanErr := wideRows.Scan(ptrs...); scanErr != nil {
-				break
-			}
+					break
+				}
 			}
 			wideRows.Close()
 		}

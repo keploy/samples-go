@@ -18,11 +18,18 @@ container_kill() {
 send_request(){
     sleep 15
     app_started=false
+    max_attempts=30
+    attempt=0
     while [ "$app_started" = false ]; do
         if curl -sf http://localhost:8080/health > /dev/null 2>&1; then
             app_started=true
         fi
         sleep 3
+        attempt=$((attempt + 1))
+        if [ "$attempt" -ge "$max_attempts" ]; then
+            echo "App failed to start after $max_attempts attempts"
+            exit 1
+        fi
     done
     echo "App started"
     curl -sf http://localhost:8080/api/transfer
@@ -37,7 +44,7 @@ send_request(){
 container_name="proxyStressApp"
 
 send_request &
-keploy record -c "docker compose up" --container-name "$container_name" --generateGithubActions=false |& tee "${container_name}.txt"
+keploy record -c "docker compose up" --container-name "$container_name" --generate-github-actions=false |& tee "${container_name}.txt"
 
 if grep -q "panic:" "${container_name}.txt"; then
     echo "Panic detected during recording"
@@ -49,7 +56,7 @@ echo "Recording completed"
 sleep 5
 docker compose down
 
-keploy test -c 'docker compose up' --containerName "$container_name" --apiTimeout 60 --delay 20 --generate-github-actions=false &> "${container_name}-replay.txt"
+keploy test -c 'docker compose up' --container-name "$container_name" --apiTimeout 60 --delay 20 --generate-github-actions=false &> "${container_name}-replay.txt"
 
 if grep -q "panic:" "${container_name}-replay.txt"; then
     echo "Panic detected during replay"
