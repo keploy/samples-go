@@ -38,9 +38,24 @@ services:
       DATABASE_URL: "postgres://repro:repro@db:5432/reprodb?sslmode=disable"
       HTTPS_TARGET: "https://httpbin.org/get"
       HTTP_PROXY_URL: "http://proxy:3128"
-      CONCURRENT_CONNS: "10"
-      OTEL_ENABLED: "false"
-      BG_NOISE_CONNS: "0"
+      # High concurrency to stress-test cert generation and error channel.
+      # 42 matches the production traffic pattern from Agoda travel-card-api.
+      CONCURRENT_CONNS: "42"
+      BATCH_SIZE: "42"
+      # OTel enabled with no collector — generates mock-not-found errors
+      # that stress the error channel during replay.
+      OTEL_ENABLED: "true"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "localhost:4318"
+      OTEL_EXPORT_INTERVAL: "500ms"
+      # Background noise connections stress error channel between tests.
+      BG_NOISE_CONNS: "2"
     depends_on:
       db:
         condition: service_healthy
+    # CPU limit simulates a resource-constrained K8s pod. Without this,
+    # cert storm and error channel bugs are masked by excess CPU.
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: "512M"
