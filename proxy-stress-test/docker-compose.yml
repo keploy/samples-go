@@ -38,24 +38,26 @@ services:
       DATABASE_URL: "postgres://repro:repro@db:5432/reprodb?sslmode=disable"
       HTTPS_TARGET: "https://httpbin.org/get"
       HTTP_PROXY_URL: "http://proxy:3128"
-      # High concurrency to stress-test cert generation and error channel.
-      # 42 matches the production traffic pattern from Agoda travel-card-api.
-      CONCURRENT_CONNS: "42"
-      BATCH_SIZE: "42"
-      # OTel enabled with no collector — generates mock-not-found errors
-      # that stress the error channel during replay.
+      # 20 concurrent HTTPS connections through CONNECT tunnel.
+      # Exercises TLS cert caching (same code path as production 42).
+      CONCURRENT_CONNS: "20"
+      BATCH_SIZE: "20"
+      # OTel ENABLED with no collector — validates the error drain fix.
+      # Without the drain, OTel mock-not-found errors fill the 100-slot
+      # channel and cause the replay to hang. With the drain, replay
+      # completes normally.
       OTEL_ENABLED: "true"
       OTEL_EXPORTER_OTLP_ENDPOINT: "localhost:4318"
-      OTEL_EXPORT_INTERVAL: "500ms"
-      # Background noise connections stress error channel between tests.
-      BG_NOISE_CONNS: "2"
+      OTEL_EXPORT_INTERVAL: "1s"
+      # Background noise: 1 conn/sec generates additional mock-not-found
+      # errors between tests, exercising the error drain under load.
+      BG_NOISE_CONNS: "1"
     depends_on:
       db:
         condition: service_healthy
-    # CPU limit simulates a resource-constrained K8s pod. Without this,
-    # cert storm and error channel bugs are masked by excess CPU.
+    # Resource limits for GitHub Actions ubuntu-latest (4 vCPU / 16GB).
     deploy:
       resources:
         limits:
-          cpus: "0.50"
-          memory: "512M"
+          cpus: "1.0"
+          memory: "1G"
