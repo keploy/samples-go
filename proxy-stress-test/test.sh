@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
+cd "$(dirname "$0")"
+
 # Proxy Stress Test — e2e regression test for Keploy proxy fixes
 
 docker compose build
