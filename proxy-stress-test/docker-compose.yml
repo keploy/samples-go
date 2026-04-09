@@ -1,0 +1,46 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: repro
+      POSTGRES_PASSWORD: repro
+      POSTGRES_DB: reprodb
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/01-init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U repro -d reprodb"]
+      interval: 2s
+      timeout: 5s
+      retries: 10
+
+  proxy:
+    image: vimagick/tinyproxy
+    ports:
+      - "3128:3128"
+    command: >
+      sh -c "echo 'Port 3128' > /tmp/tp.conf &&
+             echo 'Listen 0.0.0.0' >> /tmp/tp.conf &&
+             echo 'Timeout 300' >> /tmp/tp.conf &&
+             echo 'MaxClients 100' >> /tmp/tp.conf &&
+             echo 'Allow 0.0.0.0/0' >> /tmp/tp.conf &&
+             echo 'ConnectPort 443' >> /tmp/tp.conf &&
+             tinyproxy -d -c /tmp/tp.conf"
+
+  app:
+    build: .
+    container_name: proxyStressApp
+    ports:
+      - "8080:8080"
+    environment:
+      LISTEN_ADDR: ":8080"
+      DATABASE_URL: "postgres://repro:repro@db:5432/reprodb?sslmode=disable"
+      HTTPS_TARGET: "https://httpbin.org/get"
+      HTTP_PROXY_URL: "http://proxy:3128"
+      CONCURRENT_CONNS: "10"
+      OTEL_ENABLED: "false"
+      BG_NOISE_CONNS: "0"
+    depends_on:
+      db:
+        condition: service_healthy
