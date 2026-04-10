@@ -245,17 +245,23 @@ func (s *Server) writeStoreError(w http.ResponseWriter, err error) {
 func (s *Server) withLogging(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		recorder := &statusRecorder{ResponseWriter: w, statusCode: http.StatusOK}
-		start := time.Now()
+		debugEnabled := s.logger.Enabled(r.Context(), slog.LevelDebug)
+		var start time.Time
+		if debugEnabled {
+			start = time.Now()
+		}
 
 		next.ServeHTTP(recorder, r)
 
-		s.logger.Info(
-			"http request",
-			"method", r.Method,
-			"path", r.URL.Path,
-			"status", recorder.statusCode,
-			"duration_ms", time.Since(start).Milliseconds(),
-		)
+		if debugEnabled {
+			s.logger.Debug(
+				"http request",
+				"method", r.Method,
+				"path", r.URL.Path,
+				"status", recorder.statusCode,
+				"duration_ms", time.Since(start).Milliseconds(),
+			)
+		}
 	})
 }
 
