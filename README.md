@@ -36,6 +36,7 @@ This repo contains the sample for [Keploy's](https://keploy.io)🐰 with Golang.
 16. [HTTP-PokeAPI](https://github.com/keploy/samples-go/tree/main/http-pokeapi)
 17. [book-store-inventory (`gin + sqlite`) ](https://github.com/keploy/samples-go/tree/main/book-store-inventory)
 18. [SSE-Preflight](https://github.com/keploy/samples-go/tree/main/sse-preflight)
+19. [DNS-Mock-Test](https://github.com/keploy/samples-go/tree/main/dns-mock-test)
 
 
 ## Community Support ❤️

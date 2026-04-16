@@ -25,7 +25,15 @@ jobs:
           #!/bin/bash
           cd /home/runner/work/samples-go/samples-go
 
+          # Dirs that require a newer Go toolchain than the workflow provides
+          SKIP_DIRS=("dns-mock-test")
+
           for dir in */; do
+            dir_name="${dir%/}"
+            if [[ " ${SKIP_DIRS[*]} " =~ " ${dir_name} " ]]; then
+              echo "Skipping $dir (requires newer Go toolchain)"
+              continue
+            fi
             if [ -d "$dir" ] && [ -f "${dir}go.mod" ]; then
               echo "Building project in $dir"
 
