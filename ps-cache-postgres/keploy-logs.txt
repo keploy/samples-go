@@ -1,0 +1,3 @@
+🐰 Keploy: 2026-04-16T22:44:46.289866404+05:30 	[34mINFO[0m	Generated config file based on the flags that are used
+🐰 Keploy: 2026-04-16T22:44:47.293693135+05:30 	[34mINFO[0m	Keploy agent is ready to record test cases and mocks.
+🐰 Keploy: 2026-04-16T22:44:47.293768075+05:30 	[34mINFO[0m	Starting Application :	{"executing_cmd": "/usr/bin/sh -c ./server"}
