@@ -1,6 +1,6 @@
 module dns-test
 
-go 1.23
+go 1.24.0
 
 require github.com/miekg/dns v1.1.72
 
