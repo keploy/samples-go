@@ -1,3 +1,4 @@
+// Package main implements an HTTP server for DNS query testing via the miekg/dns library.
 package main
 
 import (
@@ -6,6 +7,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"os"
 
 	"github.com/miekg/dns"
 )
@@ -131,9 +133,7 @@ func handleTXTRecord(w http.ResponseWriter, r *http.Request) {
 	var txts []string
 	for _, rr := range records {
 		if txt, ok := rr.(*dns.TXT); ok {
-			for _, t := range txt.Txt {
-				txts = append(txts, t)
-			}
+			txts = append(txts, txt.Txt...)
 		}
 	}
 
@@ -283,21 +283,25 @@ func queryDNS(domain string, qtype uint16) ([]dns.RR, error) {
 }
 
 // Health check endpoint
-func handleHealth(w http.ResponseWriter, r *http.Request) {
+func handleHealth(w http.ResponseWriter, _ *http.Request) {
 	respondWithJSON(w, map[string]string{"status": "healthy", "protocol": "TCP"})
 }
 
 // Helper function to respond with JSON
 func respondWithJSON(w http.ResponseWriter, data interface{}) {
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(data)
+	if err := json.NewEncoder(w).Encode(data); err != nil {
+		fmt.Fprintf(os.Stderr, "json encode error: %v\n", err)
+	}
 }
 
 // Helper function to respond with error
 func respondWithError(w http.ResponseWriter, message string, statusCode int) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
-	json.NewEncoder(w).Encode(map[string]string{"error": message})
+	if err := json.NewEncoder(w).Encode(map[string]string{"error": message}); err != nil {
+		fmt.Fprintf(os.Stderr, "json encode error: %v\n", err)
+	}
 }
 
 func main() {

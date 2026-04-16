@@ -1,3 +1,4 @@
+// Package main provides a Redis-backed HTTP API sample for Keploy testing.
 package main
 
 import (
@@ -64,7 +65,9 @@ func main() {
 	router.GET("/health", healthCheck)
 
 	log.Println("Server running on :8080")
-	router.Run(":8080")
+	if err := router.Run(":8080"); err != nil {
+		log.Fatalf("server failed: %v", err)
+	}
 }
 
 // Handlers for complex data structures
@@ -321,9 +324,9 @@ func getProductFromRedis(key string) (*Product, error) {
 		Quantity: parseInt(data["quantity"]),
 	}
 
-	json.Unmarshal([]byte(data["metadata"]), &p.Metadata)
-	json.Unmarshal([]byte(data["related_ids"]), &p.RelatedIDs)
-	json.Unmarshal([]byte(data["categories"]), &p.Categories)
+	_ = json.Unmarshal([]byte(data["metadata"]), &p.Metadata)
+	_ = json.Unmarshal([]byte(data["related_ids"]), &p.RelatedIDs)
+	_ = json.Unmarshal([]byte(data["categories"]), &p.Categories)
 
 	return p, nil
 }

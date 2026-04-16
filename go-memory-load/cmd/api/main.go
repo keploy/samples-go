@@ -1,3 +1,4 @@
+// Package main is the entry point for the load-test API server.
 package main
 
 import (
@@ -34,7 +35,7 @@ func main() {
 		logger.Error("connect postgres", "error", err)
 		os.Exit(1)
 	}
-	defer db.Close()
+	defer db.Close() //nolint:errcheck
 
 	if err := database.EnsureRuntimeSchema(ctx, db); err != nil {
 		logger.Error("ensure runtime schema", "error", err)

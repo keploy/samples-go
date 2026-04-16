@@ -1,3 +1,4 @@
+// Package main provides a risk-profile HTTP server for Keploy testing.
 package main
 
 import (
@@ -18,7 +19,7 @@ var originalUsers = []UserV1{
 	{ID: 1, Name: "Alice", Email: "alice@example.com"},
 }
 
-func getUsersLowRisk(w http.ResponseWriter, r *http.Request) {
+func getUsersLowRisk(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	user := originalUsers[0]
 	response := map[string]interface{}{
@@ -27,10 +28,12 @@ func getUsersLowRisk(w http.ResponseWriter, r *http.Request) {
 		"email":     user.Email,
 		"timestamp": time.Now().Unix(),
 	}
-	json.NewEncoder(w).Encode(response)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		log.Printf("encode: %v", err)
+	}
 }
 
-func getUsersMediumRisk(w http.ResponseWriter, r *http.Request) {
+func getUsersMediumRisk(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	user := originalUsers[0]
 	response := map[string]interface{}{
@@ -39,10 +42,12 @@ func getUsersMediumRisk(w http.ResponseWriter, r *http.Request) {
 		"email":     user.Email,
 		"timestamp": time.Now().Unix(),
 	}
-	json.NewEncoder(w).Encode(response)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		log.Printf("encode: %v", err)
+	}
 }
 
-func getUsersMediumRiskWithAddition(w http.ResponseWriter, r *http.Request) {
+func getUsersMediumRiskWithAddition(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	user := originalUsers[0]
 	response := map[string]interface{}{
@@ -51,10 +56,12 @@ func getUsersMediumRiskWithAddition(w http.ResponseWriter, r *http.Request) {
 		"email":     user.Email,
 		"timestamp": time.Now().Unix(),
 	}
-	json.NewEncoder(w).Encode(response)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		log.Printf("encode: %v", err)
+	}
 }
 
-func getUsersHighRiskType(w http.ResponseWriter, r *http.Request) {
+func getUsersHighRiskType(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	user := originalUsers[0]
 	response := map[string]interface{}{
@@ -63,10 +70,12 @@ func getUsersHighRiskType(w http.ResponseWriter, r *http.Request) {
 		"email":     user.Email,
 		"timestamp": time.Now().Unix(),
 	}
-	json.NewEncoder(w).Encode(response)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		log.Printf("encode: %v", err)
+	}
 }
 
-func getUsersHighRiskRemoval(w http.ResponseWriter, r *http.Request) {
+func getUsersHighRiskRemoval(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	user := originalUsers[0]
 	response := map[string]interface{}{
@@ -75,60 +84,72 @@ func getUsersHighRiskRemoval(w http.ResponseWriter, r *http.Request) {
 		"email":     user.Email,
 		"timestamp": time.Now().Unix(),
 	}
-	json.NewEncoder(w).Encode(response)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		log.Printf("encode: %v", err)
+	}
 }
 
-func statusChangeHighRisk(w http.ResponseWriter, r *http.Request) {
+func statusChangeHighRisk(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	response := map[string]interface{}{
 		"status":    "OK",
 		"timestamp": time.Now().Unix(),
 	}
-	json.NewEncoder(w).Encode(response)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		log.Printf("encode: %v", err)
+	}
 }
 
-func contentTypeChangeHighRisk(w http.ResponseWriter, r *http.Request) {
+func contentTypeChangeHighRisk(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	response := map[string]interface{}{
 		"message":   "This is JSON.",
 		"timestamp": time.Now().Unix(),
 	}
-	json.NewEncoder(w).Encode(response)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		log.Printf("encode: %v", err)
+	}
 }
 
-func headerChangeMediumRisk(w http.ResponseWriter, r *http.Request) {
+func headerChangeMediumRisk(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("X-Custom-Header", "initial-value-123")
 	w.WriteHeader(http.StatusOK)
 	response := map[string]interface{}{
 		"status":    "header test",
 		"timestamp": time.Now().Unix(),
 	}
-	json.NewEncoder(w).Encode(response)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		log.Printf("encode: %v", err)
+	}
 }
 
-func statusBodyChange(w http.ResponseWriter, r *http.Request) {
+func statusBodyChange(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	response := map[string]interface{}{
 		"message":   "Status and body not changed",
 		"timestamp": time.Now().UnixNano(),
 	}
-	json.NewEncoder(w).Encode(response)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		log.Printf("encode: %v", err)
+	}
 }
 
-func headerBodyChange(w http.ResponseWriter, r *http.Request) {
+func headerBodyChange(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("X-Transaction-ID", "txn-1")
 	w.Header().Set("Content-Type", "application/json")
 	response := map[string]interface{}{
 		"message":   "Header and body not changed",
 		"timestamp": time.Now().UnixNano(),
 	}
-	json.NewEncoder(w).Encode(response)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		log.Printf("encode: %v", err)
+	}
 }
 
-func statusBodyHeaderChange(w http.ResponseWriter, r *http.Request) {
+func statusBodyHeaderChange(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("X-Transaction-ID", "txn-1")
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
@@ -136,17 +157,21 @@ func statusBodyHeaderChange(w http.ResponseWriter, r *http.Request) {
 		"message":   "Status, body, and header not changed",
 		"timestamp": time.Now().UnixNano(),
 	}
-	json.NewEncoder(w).Encode(response)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		log.Printf("encode: %v", err)
+	}
 }
 
-func schemaCompletelyChanged(w http.ResponseWriter, r *http.Request) {
+func schemaCompletelyChanged(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "text/plain")
 	w.WriteHeader(http.StatusOK)
 	response := map[string]interface{}{
 		"message":   "Schema completely not changed",
 		"timestamp": time.Now().UnixNano(),
 	}
-	json.NewEncoder(w).Encode(response)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		log.Printf("encode: %v", err)
+	}
 }
 
 func main() {

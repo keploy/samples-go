@@ -1,3 +1,4 @@
+// Package httpapi provides the HTTP API handlers for the load-test server.
 package httpapi
 
 import (
@@ -304,7 +305,7 @@ func writeJSON(w http.ResponseWriter, statusCode int, payload any) {
 }
 
 func decodeJSON(r *http.Request, target any) error {
-	defer r.Body.Close()
+	defer r.Body.Close() //nolint:errcheck
 
 	decoder := json.NewDecoder(r.Body)
 	decoder.DisallowUnknownFields()

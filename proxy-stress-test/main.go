@@ -1,3 +1,4 @@
+// Package main is a proxy stress-test app for Keploy regression testing.
 package main
 
 import (
@@ -216,7 +217,7 @@ func fetchHTTPS(ctx context.Context, targetURL string) (int, string, error) {
 	if err != nil {
 		return 0, "", err
 	}
-	defer resp.Body.Close()
+	defer resp.Body.Close() //nolint:errcheck
 	body, _ := io.ReadAll(resp.Body)
 	return resp.StatusCode, string(body), nil
 }
@@ -294,7 +295,7 @@ func transferHandler(db *sql.DB) http.HandlerFunc {
 			if rowErr := rows.Err(); rowErr != nil {
 				result.DBError = rowErr.Error()
 			}
-			rows.Close()
+			rows.Close() //nolint:errcheck
 			result.DBLargeRows = count
 		}
 
@@ -314,13 +315,15 @@ func transferHandler(db *sql.DB) http.HandlerFunc {
 					break
 				}
 			}
-			wideRows.Close()
+			wideRows.Close() //nolint:errcheck
 		}
 
 		result.Duration = time.Since(start).String()
 
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(result)
+		if err := json.NewEncoder(w).Encode(result); err != nil {
+			log.Printf("encode: %v", err)
+		}
 	}
 }
 
@@ -385,7 +388,7 @@ func batchTransferHandler(db *sql.DB) http.HandlerFunc {
 				_ = rows.Scan(&id, &name, &desc, &payload)
 				dbRows++
 			}
-			rows.Close()
+			rows.Close() //nolint:errcheck
 		}
 
 		res := batchResult{
@@ -398,7 +401,9 @@ func batchTransferHandler(db *sql.DB) http.HandlerFunc {
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(res)
+		if err := json.NewEncoder(w).Encode(res); err != nil {
+			log.Printf("encode: %v", err)
+		}
 	}
 }
 
@@ -412,14 +417,16 @@ func healthHandler(db *sql.DB) http.HandlerFunc {
 			status = "db_down: " + err.Error()
 		}
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(map[string]string{"status": status})
+		if err := json.NewEncoder(w).Encode(map[string]string{"status": status}); err != nil {
+			log.Printf("encode: %v", err)
+		}
 	}
 }
 
 // /api/post-transfer — POST endpoint to trigger SQS parser misclassification (Issue 4)
 // The SQS parser matches any buffer starting with "POST " — this HTTP POST through
 // the CONNECT tunnel will be first evaluated by the SQS parser before falling back.
-func postTransferHandler(db *sql.DB) http.HandlerFunc {
+func postTransferHandler(_ *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
 		ctx := r.Context()
@@ -444,17 +451,19 @@ func postTransferHandler(db *sql.DB) http.HandlerFunc {
 			respErr = err.Error()
 		} else {
 			status = resp.StatusCode
-			resp.Body.Close()
+			resp.Body.Close() //nolint:errcheck
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(map[string]interface{}{
+		if err := json.NewEncoder(w).Encode(map[string]interface{}{
 			"method":   "POST",
 			"target":   postTarget,
 			"status":   status,
 			"error":    respErr,
 			"duration": time.Since(start).String(),
-		})
+		}); err != nil {
+			log.Printf("encode: %v", err)
+		}
 	}
 }
 
@@ -483,7 +492,7 @@ func backgroundNoise(ctx context.Context) {
 				}
 				resp, err := client.Do(req)
 				if err == nil {
-					resp.Body.Close()
+					resp.Body.Close() //nolint:errcheck
 				}
 			}()
 		}
@@ -511,7 +520,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to connect to database (check DATABASE_URL env var): %v", err)
 	}
-	defer db.Close()
+	defer db.Close() //nolint:errcheck
 
 	// Start background noise (fills error channel during replay)
 	go backgroundNoise(ctx)

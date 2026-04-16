@@ -1,8 +1,10 @@
+// Package handler provides HTTP handlers for the pg-replicate API.
 package handler
 
 import (
 	"database/sql"
 	"encoding/json"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -60,13 +62,13 @@ func (h *Handler) CreateCompany(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusCreated, company)
 }
 
-func (h *Handler) ListCompanies(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) ListCompanies(w http.ResponseWriter, _ *http.Request) {
 	rows, err := h.db.Query("SELECT id, name, created_at FROM companies ORDER BY id")
 	if err != nil {
 		writeJSON(w, http.StatusInternalServerError, ErrorResponse{Error: "failed to list companies"})
 		return
 	}
-	defer rows.Close()
+	defer rows.Close() //nolint:errcheck
 
 	companies := []Company{}
 	for rows.Next() {
@@ -106,5 +108,7 @@ func (h *Handler) GetCompany(w http.ResponseWriter, r *http.Request) {
 func writeJSON(w http.ResponseWriter, status int, data any) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
-	json.NewEncoder(w).Encode(data)
+	if err := json.NewEncoder(w).Encode(data); err != nil {
+		log.Printf("json encode error: %v", err)
+	}
 }

@@ -1,3 +1,4 @@
+// Package main implements a JWT-based HTTP server for Keploy time-freeze testing.
 package main
 
 import (
@@ -18,7 +19,7 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
-func loginHandler(w http.ResponseWriter, r *http.Request) {
+func loginHandler(w http.ResponseWriter, _ *http.Request) {
 	fmt.Println("Login attempt at :", time.Now())
 	expirationTime := time.Now().Add(10 * time.Second)
 
@@ -44,7 +45,9 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	w.Write(jsonResponse)
+	if _, err = w.Write(jsonResponse); err != nil {
+		log.Printf("write error: %v", err)
+	}
 }
 
 func insecureExpiryOnlyMiddleware(next http.Handler) http.Handler {
@@ -74,9 +77,11 @@ func insecureExpiryOnlyMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-func protectedHandler(w http.ResponseWriter, r *http.Request) {
+func protectedHandler(w http.ResponseWriter, _ *http.Request) {
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Welcome to the protected area!"))
+	if _, err := w.Write([]byte("Welcome to the protected area!")); err != nil {
+		log.Printf("write error: %v", err)
+	}
 }
 
 // checkTimeHandler checks if a client-provided timestamp is within 1 second of the server time.
@@ -86,7 +91,9 @@ func checkTimeHandler(w http.ResponseWriter, r *http.Request) {
 	if clientTimeStr == "" {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]string{"error": "Missing 'ts' query parameter"})
+		if err := json.NewEncoder(w).Encode(map[string]string{"error": "Missing 'ts' query parameter"}); err != nil {
+			log.Printf("encode error: %v", err)
+		}
 		return
 	}
 
@@ -95,7 +102,9 @@ func checkTimeHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]string{"error": "Invalid timestamp format. Must be a Unix timestamp in seconds."})
+		if err := json.NewEncoder(w).Encode(map[string]string{"error": "Invalid timestamp format. Must be a Unix timestamp in seconds."}); err != nil {
+			log.Printf("encode error: %v", err)
+		}
 		return
 	}
 

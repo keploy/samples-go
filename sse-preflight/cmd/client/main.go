@@ -1,3 +1,4 @@
+// Package main is a CORS preflight client for the sse-preflight sample.
 package main
 
 import (
@@ -36,7 +37,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "request failed: %v\n", err)
 		os.Exit(1)
 	}
-	defer resp.Body.Close()
+	defer resp.Body.Close() //nolint:errcheck
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {

@@ -131,13 +131,13 @@ func (h *Handler) UpdateProject(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, p)
 }
 
-func (h *Handler) ListProjects(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) ListProjects(w http.ResponseWriter, _ *http.Request) {
 	rows, err := h.db.Query("SELECT id, name, status, created_at, updated_at FROM projects ORDER BY created_at")
 	if err != nil {
 		writeJSON(w, http.StatusInternalServerError, ErrorResponse{Error: "failed to list projects"})
 		return
 	}
-	defer rows.Close()
+	defer rows.Close() //nolint:errcheck
 
 	projects := []Project{}
 	for rows.Next() {

@@ -1,3 +1,4 @@
+// Package main implements a gRPC server for secrets management with JWT authentication.
 package main
 
 import (
@@ -638,7 +639,7 @@ func setResponseMetadata(ctx context.Context) error {
 func logIncomingHeaders(method string, jwt, apiKey, sessionToken string) {
 	log.Printf("[%s] Incoming headers:", method)
 	if jwt != "" {
-		log.Printf("  - Authorization (JWT): %s", jwt[:min(len(jwt), 50)]+"...")
+		log.Printf("  - Authorization (JWT): %s", jwt[:minInt(len(jwt), 50)]+"...")
 	}
 	if apiKey != "" {
 		log.Printf("  - X-Api-Key: %s", apiKey)
@@ -648,7 +649,7 @@ func logIncomingHeaders(method string, jwt, apiKey, sessionToken string) {
 	}
 }
 
-func min(a, b int) int {
+func minInt(a, b int) int {
 	if a < b {
 		return a
 	}

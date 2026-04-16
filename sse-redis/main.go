@@ -1,3 +1,4 @@
+// Package main implements a Redis-backed SSE server for Keploy testing.
 package main
 
 import (
@@ -162,7 +163,6 @@ func handleSSE(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-
 	w.Header().Set("Content-Type", "text/event-stream; charset=utf-8")
 	w.Header().Set("Cache-Control", "no-cache")
 	w.Header().Set("Connection", "keep-alive")
@@ -180,7 +180,7 @@ func handleSSE(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 	tickerBytes, _ := json.Marshal(tickerData)
-	fmt.Fprintf(w, "event:TICKER\ndata:%s\n\n", tickerBytes)
+	_, _ = fmt.Fprintf(w, "event:TICKER\ndata:%s\n\n", tickerBytes)
 	flusher.Flush()
 
 	for _, msg := range messages {
@@ -200,10 +200,10 @@ func handleSSE(w http.ResponseWriter, r *http.Request) {
 			},
 		}
 		data, _ := json.Marshal(sysData)
-		fmt.Fprintf(w, "event:message\ndata:%s\n\n", data)
+		_, _ = fmt.Fprintf(w, "event:message\ndata:%s\n\n", data)
 		flusher.Flush()
 		time.Sleep(flushDelay)
-		
+
 		// secondary update event (array payload pattern)
 		updateData := []map[string]interface{}{
 			{
@@ -221,7 +221,7 @@ func handleSSE(w http.ResponseWriter, r *http.Request) {
 			},
 		}
 		updateJSON, _ := json.Marshal(updateData)
-		fmt.Fprintf(w, "event:message\ndata:%s\n\n", updateJSON)
+		_, _ = fmt.Fprintf(w, "event:message\ndata:%s\n\n", updateJSON)
 		flusher.Flush()
 		time.Sleep(flushDelay)
 	}
@@ -240,7 +240,7 @@ func handleSSE(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 	finalJSON, _ := json.Marshal(finalData)
-	fmt.Fprintf(w, "event:message\ndata:%s\n\n", finalJSON)
+	_, _ = fmt.Fprintf(w, "event:message\ndata:%s\n\n", finalJSON)
 	flusher.Flush()
 }
 
@@ -308,13 +308,13 @@ func handleMultipart(w http.ResponseWriter, r *http.Request) {
 		event := buildStreamPayload(msg, requestID)
 		data, _ := json.Marshal(event)
 
-		fmt.Fprintf(w, "--%s\r\nContent-Type: application/json\r\n\r\n%s\r\n", boundary, data)
+		_, _ = fmt.Fprintf(w, "--%s\r\nContent-Type: application/json\r\n\r\n%s\r\n", boundary, data)
 		flusher.Flush()
 		if i < len(messages)-1 {
 			time.Sleep(flushDelay)
 		}
 	}
-	fmt.Fprintf(w, "--%s--\r\n", boundary)
+	_, _ = fmt.Fprintf(w, "--%s--\r\n", boundary)
 	flusher.Flush()
 }
 

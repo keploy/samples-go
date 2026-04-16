@@ -1,7 +1,9 @@
+// Package main provides a multi-endpoint Gin HTTP server for Keploy deduplication testing.
 package main
 
 import (
 	"fmt"
+	"log"
 	"math/rand"
 	"net/http"
 	"time"
@@ -55,8 +57,8 @@ func main() {
 
 	// 3. An endpoint that randomly returns 0 or 1
 	router.GET("/random", func(c *gin.Context) {
-		rand.Seed(time.Now().UnixNano())
-		randomNumber := rand.Intn(2)
+		r := rand.New(rand.NewSource(time.Now().UnixNano())) //nolint:gosec
+		randomNumber := r.Intn(2)
 		c.JSON(http.StatusOK, gin.H{"value": randomNumber})
 	})
 
@@ -253,5 +255,7 @@ func main() {
 	router.GET("/session/info", func(c *gin.Context) { c.JSON(http.StatusOK, gin.H{"session_id": "xyz-123", "active": true}) })
 
 	// Start the HTTP server on port 8080
-	router.Run(":8080")
+	if err := router.Run(":8080"); err != nil {
+		log.Fatalf("server failed: %v", err)
+	}
 }

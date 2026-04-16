@@ -1,3 +1,4 @@
+// Package store defines data models for the load-test API.
 package store
 
 import "time"
