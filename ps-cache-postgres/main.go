@@ -9,6 +9,7 @@ import (
 	"os"
 	"strconv"
 	"sync"
+	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -20,9 +21,17 @@ var (
 
 func main() {
 	var err error
-	pool, err = newPool(context.Background())
+	// Retry connection for up to 30s to handle Docker compose startup ordering
+	for i := 0; i < 30; i++ {
+		pool, err = newPool(context.Background())
+		if err == nil {
+			break
+		}
+		log.Printf("waiting for database (%d/30): %v", i+1, err)
+		time.Sleep(time.Second)
+	}
 	if err != nil {
-		log.Fatalf("failed to create pool (check DATABASE_URL and ensure Postgres is reachable): %v", err)
+		log.Fatalf("failed to create pool after 30s: %v", err)
 	}
 	defer pool.Close()
 
@@ -40,7 +49,7 @@ func main() {
 	}
 	log.Printf("listening on :%s", port)
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
-		log.Fatalf("server failed (check if port %s is already in use): %v", port, err)
+		log.Fatalf("server failed: %v", port, err)
 	}
 }
 
