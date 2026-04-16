@@ -17,11 +17,29 @@ import (
 var (
 	pool   *pgxpool.Pool
 	poolMu sync.RWMutex
+	ready  bool
 )
 
 func main() {
+	http.HandleFunc("/health", handleHealth)
+	http.HandleFunc("/account", handleAccount)
+	http.HandleFunc("/evict", handleEvict)
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	// Start HTTP server immediately so keploy health checks pass
+	go func() {
+		log.Printf("listening on :%s", port)
+		if err := http.ListenAndServe(":"+port, nil); err != nil {
+			log.Fatalf("server failed on port %s: %v", port, err)
+		}
+	}()
+
+	// Connect to DB with retries
 	var err error
-	// Retry connection for up to 30s to handle Docker compose startup ordering
 	for i := 0; i < 30; i++ {
 		pool, err = newPool(context.Background())
 		if err == nil {
@@ -33,29 +51,17 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to create pool after 30s: %v", err)
 	}
-	defer pool.Close()
-
 	if os.Getenv("INIT_DB") == "true" {
 		initDB()
 	}
-
-	http.HandleFunc("/health", handleHealth)
-	http.HandleFunc("/account", handleAccount)
-	http.HandleFunc("/evict", handleEvict)
-
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
-	log.Printf("listening on :%s", port)
-	if err := http.ListenAndServe(":"+port, nil); err != nil {
-		log.Fatalf("server failed on port %s: %v", port, err)
-	}
+	ready = true
+	log.Println("Application ready")
+	select {}
 }
 
 func initDB() {
 	ctx := context.Background()
-	stmts := []string{
+	for _, s := range []string{
 		`CREATE SCHEMA IF NOT EXISTS travelcard`,
 		`CREATE TABLE IF NOT EXISTS travelcard.travel_account (
 			id SERIAL PRIMARY KEY, member_id INT NOT NULL UNIQUE,
@@ -64,8 +70,7 @@ func initDB() {
 			(19, 'Alice', 1000), (23, 'Bob', 2500),
 			(31, 'Charlie', 500), (42, 'Diana', 7500)
 		ON CONFLICT (member_id) DO NOTHING`,
-	}
-	for _, s := range stmts {
+	} {
 		if _, err := pool.Exec(ctx, s); err != nil {
 			log.Fatalf("initDB: %v", err)
 		}
@@ -80,9 +85,7 @@ func newPool(ctx context.Context) (*pgxpool.Pool, error) {
 	}
 	maxConns := 1
 	if v := os.Getenv("POOL_MAX_CONNS"); v != "" {
-		if n, err := strconv.Atoi(v); err == nil {
-			maxConns = n
-		}
+		if n, err := strconv.Atoi(v); err == nil { maxConns = n }
 	}
 	cfg, err := pgxpool.ParseConfig(dsn)
 	if err != nil {
@@ -93,11 +96,7 @@ func newPool(ctx context.Context) (*pgxpool.Pool, error) {
 	return pgxpool.NewWithConfig(ctx, cfg)
 }
 
-func getPool() *pgxpool.Pool {
-	poolMu.RLock()
-	defer poolMu.RUnlock()
-	return pool
-}
+func getPool() *pgxpool.Pool { poolMu.RLock(); defer poolMu.RUnlock(); return pool }
 
 type Account struct {
 	ID       int    `json:"id"`
@@ -108,59 +107,34 @@ type Account struct {
 
 func handleHealth(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(map[string]string{"status": "ok"}); err != nil {
-		log.Printf("health: encode error: %v", err)
-	}
+	s := "starting"
+	if ready { s = "ok" }
+	json.NewEncoder(w).Encode(map[string]string{"status": s})
 }
 
 func handleAccount(w http.ResponseWriter, r *http.Request) {
-	memberStr := r.URL.Query().Get("member")
-	memberID, err := strconv.Atoi(memberStr)
-	if err != nil {
-		http.Error(w, "member param required (int)", 400)
-		return
-	}
-	ctx := r.Context()
+	if !ready { http.Error(w, "not ready", 503); return }
+	memberID, err := strconv.Atoi(r.URL.Query().Get("member"))
+	if err != nil { http.Error(w, "member param required (int)", 400); return }
 	p := getPool()
-	tx, err := p.Begin(ctx)
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
-	defer tx.Rollback(ctx)
-
-	var acct Account
-	err = tx.QueryRow(ctx,
+	tx, err := p.Begin(r.Context())
+	if err != nil { http.Error(w, err.Error(), 500); return }
+	defer tx.Rollback(r.Context())
+	var a Account
+	err = tx.QueryRow(r.Context(),
 		"SELECT id, member_id, name, balance FROM travelcard.travel_account WHERE member_id = $1",
-		memberID).Scan(&acct.ID, &acct.MemberID, &acct.Name, &acct.Balance)
-	if err != nil {
-		http.Error(w, fmt.Sprintf("member %d: %v", memberID, err), 500)
-		return
-	}
-	if err := tx.Commit(ctx); err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
+		memberID).Scan(&a.ID, &a.MemberID, &a.Name, &a.Balance)
+	if err != nil { http.Error(w, fmt.Sprintf("member %d: %v", memberID, err), 500); return }
+	tx.Commit(r.Context())
 	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(acct); err != nil {
-		log.Printf("account: encode error: %v", err)
-	}
+	json.NewEncoder(w).Encode(a)
 }
 
 func handleEvict(w http.ResponseWriter, r *http.Request) {
 	newP, err := newPool(r.Context())
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
-	poolMu.Lock()
-	oldPool := pool
-	pool = newP
-	poolMu.Unlock()
+	if err != nil { http.Error(w, err.Error(), 500); return }
+	poolMu.Lock(); oldPool := pool; pool = newP; poolMu.Unlock()
 	oldPool.Close()
-
 	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(map[string]string{"evicted": "true"}); err != nil {
-		log.Printf("evict: encode error: %v", err)
-	}
+	json.NewEncoder(w).Encode(map[string]string{"evicted": "true"})
 }
