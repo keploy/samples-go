@@ -1,3 +1,4 @@
+// Package main is a test app for Keploy DNS mock deduplication scenarios.
 package main
 
 import (
@@ -27,9 +28,11 @@ func main() {
 		domain = os.Args[1]
 	}
 
-	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/health", func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		fmt.Fprint(w, "ok")
+		if _, err := fmt.Fprint(w, "ok"); err != nil {
+			fmt.Fprintf(os.Stderr, "health write error: %v\n", err)
+		}
 	})
 
 	// Single DNS lookup
@@ -45,10 +48,12 @@ func main() {
 		}
 		sort.Strings(ips) // deterministic order for replay comparison
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(map[string]interface{}{
+		if err := json.NewEncoder(w).Encode(map[string]interface{}{
 			"domain": d,
 			"ips":    ips,
-		})
+		}); err != nil {
+			fmt.Fprintf(os.Stderr, "encode error: %v\n", err)
+		}
 	})
 
 	// Many DNS lookups for the same domain — the key dedup scenario.
@@ -89,12 +94,14 @@ func main() {
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(map[string]interface{}{
+		if err := json.NewEncoder(w).Encode(map[string]interface{}{
 			"domain":         d,
 			"total_queries":  n,
 			"unique_ip_sets": len(seen),
 			"results":        results,
-		})
+		}); err != nil {
+			fmt.Fprintf(os.Stderr, "encode error: %v\n", err)
+		}
 	})
 
 	port := "8086"

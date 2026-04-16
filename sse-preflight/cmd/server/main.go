@@ -1,3 +1,4 @@
+// Package main is an SSE server with CORS preflight support for Keploy testing.
 package main
 
 import (

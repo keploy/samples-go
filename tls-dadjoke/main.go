@@ -1,3 +1,4 @@
+// Package main provides a TLS-enabled dad joke HTTP server for Keploy testing.
 package main
 
 import (
@@ -8,7 +9,7 @@ import (
 )
 
 // jokeHandler is the function that handles requests to the /joke endpoint.
-func jokeHandler(w http.ResponseWriter, r *http.Request) {
+func jokeHandler(w http.ResponseWriter, _ *http.Request) {
 	// The API URL for icanhazdadjoke.com
 	jokeAPIURL := "https://icanhazdadjoke.com/"
 
@@ -36,7 +37,7 @@ func jokeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// Ensure the response body is closed when the function returns.
-	defer resp.Body.Close()
+	defer resp.Body.Close() //nolint:errcheck
 
 	// Check if the request to the joke API was successful.
 	if resp.StatusCode != http.StatusOK {
@@ -57,7 +58,9 @@ func jokeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	// Write the joke (which is already in JSON format) to our response.
-	w.Write(body)
+	if _, err = w.Write(body); err != nil {
+		log.Printf("Error writing response: %v", err)
+	}
 }
 
 func main() {

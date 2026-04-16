@@ -1,3 +1,4 @@
+// Package main implements an SQS sample app for Keploy testing.
 package main
 
 import (
@@ -20,7 +21,7 @@ import (
 	"go.uber.org/zap"
 )
 
-var queueUrl = "http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/localstack-queue" // Your SQS queue URL
+var queueURL = "http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/localstack-queue" // Your SQS queue URL
 
 var col *mongo.Collection
 var col2 *mongo.Collection
@@ -57,16 +58,16 @@ func main() {
 	awsCfg, err := config.LoadDefaultConfig(ctx,
 		config.WithRegion("us-east-1"), // LocalStack region (any valid region)
 		config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider("dummy", "dummy", "")), // LocalStack doesn't need real credentials
-		config.WithEndpointResolverWithOptions(aws.EndpointResolverWithOptionsFunc(
-			func(service, region string, options ...interface{}) (aws.Endpoint, error) {
+		config.WithEndpointResolverWithOptions(aws.EndpointResolverWithOptionsFunc( //nolint:staticcheck
+			func(service, _ string, _ ...interface{}) (aws.Endpoint, error) { //nolint:staticcheck
 				// Pointing to the LocalStack SQS endpoint
 				if service == sqs.ServiceID {
-					return aws.Endpoint{
-						URL:           queueUrl, // LocalStack SQS endpoint
+					return aws.Endpoint{ //nolint:staticcheck
+						URL:           queueURL, // LocalStack SQS endpoint
 						SigningRegion: "us-east-1",
 					}, nil
 				}
-				return aws.Endpoint{}, fmt.Errorf("unknown service %s", service)
+				return aws.Endpoint{}, fmt.Errorf("unknown service %s", service) //nolint:staticcheck
 			},
 		)),
 	)
@@ -116,7 +117,7 @@ func consumeSQSMessages(ctx context.Context, awsCfg aws.Config) {
 	for {
 		// Receive messages from SQS with WaitTimeSeconds = 4 and MaxMessages = 10
 		resp, err := sqsClient.ReceiveMessage(ctx, &sqs.ReceiveMessageInput{
-			QueueUrl:            &queueUrl,
+			QueueUrl:            &queueURL,
 			MaxNumberOfMessages: 10,
 			WaitTimeSeconds:     4,
 		})
@@ -147,7 +148,7 @@ func consumeSQSMessages(ctx context.Context, awsCfg aws.Config) {
 			logger.Info(fmt.Sprintf("Received message: %s\n", *message.Body))
 			// Delete the message after processing it
 			_, err = sqsClient.DeleteMessage(ctx, &sqs.DeleteMessageInput{
-				QueueUrl:      &queueUrl,
+				QueueUrl:      &queueURL,
 				ReceiptHandle: message.ReceiptHandle,
 			})
 			if err != nil {

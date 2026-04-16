@@ -1,3 +1,4 @@
+// Package main implements the gRPC client for the grpc-mongo sample.
 package main
 
 import (
@@ -22,16 +23,16 @@ func main() {
 	// dial with timeout
 	dialCtx, cancelDial := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancelDial()
-	conn, err := grpc.DialContext(
+	conn, err := grpc.DialContext( //nolint:staticcheck
 		dialCtx,
 		addr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithBlock(),
+		grpc.WithBlock(), //nolint:staticcheck
 	)
 	if err != nil {
 		log.Fatalf("dial: %v", err)
 	}
-	defer conn.Close()
+	defer conn.Close() //nolint:errcheck
 
 	c := pb.NewTokenServiceClient(conn)
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)

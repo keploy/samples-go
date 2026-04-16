@@ -1,3 +1,4 @@
+// Package main is the entry point for the pg-replicate HTTP server.
 package main
 
 import (
@@ -13,7 +14,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to connect to database: %v", err)
 	}
-	defer database.Close()
+	defer database.Close() //nolint:errcheck
 
 	if err := db.Migrate(database); err != nil {
 		log.Fatalf("failed to run migrations: %v", err)

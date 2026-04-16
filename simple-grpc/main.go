@@ -1,3 +1,4 @@
+// Package main implements a simple gRPC demo server.
 package main
 
 import (
@@ -18,17 +19,17 @@ type server struct {
 }
 
 // 1. Health Check
-func (s *server) Health(ctx context.Context, in *pb.Empty) (*pb.HealthResponse, error) {
+func (s *server) Health(_ context.Context, _ *pb.Empty) (*pb.HealthResponse, error) {
 	return &pb.HealthResponse{Ok: true}, nil
 }
 
 // 2. Simple Hello
-func (s *server) Hello(ctx context.Context, in *pb.Empty) (*pb.HelloResponse, error) {
+func (s *server) Hello(_ context.Context, _ *pb.Empty) (*pb.HelloResponse, error) {
 	return &pb.HelloResponse{Msg: "hello from grpc"}, nil
 }
 
 // 3. Echo
-func (s *server) Echo(ctx context.Context, in *pb.EchoRequest) (*pb.EchoResponse, error) {
+func (s *server) Echo(_ context.Context, in *pb.EchoRequest) (*pb.EchoResponse, error) {
 	msg := in.GetMsg()
 	if msg == "" {
 		msg = "empty"
@@ -37,7 +38,7 @@ func (s *server) Echo(ctx context.Context, in *pb.EchoRequest) (*pb.EchoResponse
 }
 
 // 4. Add Numbers
-func (s *server) Add(ctx context.Context, in *pb.AddRequest) (*pb.AddResponse, error) {
+func (s *server) Add(_ context.Context, in *pb.AddRequest) (*pb.AddResponse, error) {
 	sum := in.GetA() + in.GetB()
 	return &pb.AddResponse{
 		A:   in.GetA(),
@@ -47,14 +48,14 @@ func (s *server) Add(ctx context.Context, in *pb.AddRequest) (*pb.AddResponse, e
 }
 
 // 5. Get Current Time
-func (s *server) GetTime(ctx context.Context, in *pb.Empty) (*pb.TimeResponse, error) {
+func (s *server) GetTime(_ context.Context, _ *pb.Empty) (*pb.TimeResponse, error) {
 	return &pb.TimeResponse{
 		Now: time.Now().UTC().Format(time.RFC3339Nano),
 	}, nil
 }
 
 // 6. Get Resource by ID
-func (s *server) GetResource(ctx context.Context, in *pb.ResourceRequest) (*pb.ResourceResponse, error) {
+func (s *server) GetResource(_ context.Context, in *pb.ResourceRequest) (*pb.ResourceResponse, error) {
 	id := in.GetId()
 	if id == "" {
 		return nil, status.Error(codes.InvalidArgument, "missing id")

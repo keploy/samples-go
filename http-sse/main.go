@@ -1,3 +1,4 @@
+// Package main implements an HTTP and SSE server for Keploy SSE port reproduction testing.
 package main
 
 import (
@@ -90,7 +91,7 @@ func httpMux() http.Handler {
 	mux := http.NewServeMux()
 
 	// 1) health
-	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/health", func(w http.ResponseWriter, _ *http.Request) {
 		writeJSON(w, http.StatusOK, map[string]any{
 			"ok":   true,
 			"port": 8000,
@@ -98,7 +99,7 @@ func httpMux() http.Handler {
 	})
 
 	// 2) simple GET
-	mux.HandleFunc("/api/hello", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/hello", func(w http.ResponseWriter, _ *http.Request) {
 		writeJSON(w, http.StatusOK, map[string]any{
 			"msg":  "hello from http",
 			"port": 8000,
@@ -132,7 +133,7 @@ func httpMux() http.Handler {
 	})
 
 	// 5) time endpoint (dynamic, but ok for record; in replay you can mark noise if you want)
-	mux.HandleFunc("/api/time", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/time", func(w http.ResponseWriter, _ *http.Request) {
 		writeJSON(w, http.StatusOK, map[string]any{
 			"now":  time.Now().UTC().Format(time.RFC3339Nano),
 			"port": 8000,
@@ -156,7 +157,7 @@ func httpMux() http.Handler {
 	})
 
 	// 7) ping — also served on :8050 to test port mapping
-	mux.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/ping", func(w http.ResponseWriter, _ *http.Request) {
 		writeJSON(w, http.StatusOK, map[string]any{
 			"pong": true,
 			"from": "http",
@@ -165,13 +166,13 @@ func httpMux() http.Handler {
 
 	// IMPORTANT: SSE routes MUST NOT be served on HTTP port.
 	// If replay routes SSE traffic to HTTP :8000 => deterministic 404.
-	mux.HandleFunc("/subscribe/student/events", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/subscribe/student/events", func(w http.ResponseWriter, _ *http.Request) {
 		writeJSON(w, http.StatusNotFound, map[string]any{
 			"error": "SSE endpoint is NOT served on the HTTP port (:8000).",
 			"hint":  "This simulates wrong port mapping during replay.",
 		})
 	})
-	mux.HandleFunc("/subscribe/teacher/events", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/subscribe/teacher/events", func(w http.ResponseWriter, _ *http.Request) {
 		writeJSON(w, http.StatusNotFound, map[string]any{
 			"error": "Teacher SSE endpoint is NOT served on the HTTP port (:8000).",
 			"hint":  "This simulates wrong port mapping during replay.",
@@ -195,7 +196,7 @@ func httpMux() http.Handler {
 func pingMux() http.Handler {
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/ping", func(w http.ResponseWriter, _ *http.Request) {
 		writeJSON(w, http.StatusOK, map[string]any{
 			"pong": true,
 			"from": "http",
@@ -291,8 +292,10 @@ func streamSSE(w http.ResponseWriter, r *http.Request, kind, id string) {
 
 func writeSSE(w http.ResponseWriter, event string, payload any) {
 	b, _ := json.Marshal(payload)
-	fmt.Fprintf(w, "event:%s\n", event)
-	fmt.Fprintf(w, "data:%s\n\n", string(b))
+	if _, err := fmt.Fprintf(w, "event:%s\n", event); err != nil {
+		return
+	}
+	_, _ = fmt.Fprintf(w, "data:%s\n\n", string(b))
 }
 
 /* ------------------------------ helpers -------------------------------- */

@@ -1,3 +1,4 @@
+// Package database provides PostgreSQL connection helpers.
 package database
 
 import (
@@ -6,7 +7,7 @@ import (
 	"fmt"
 	"time"
 
-	_ "github.com/jackc/pgx/v5/stdlib"
+	_ "github.com/jackc/pgx/v5/stdlib" // pgx driver for database/sql
 )
 
 func Open(ctx context.Context, dsn string) (*sql.DB, error) {

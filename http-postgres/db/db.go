@@ -1,3 +1,4 @@
+// Package db provides PostgreSQL connection and migration helpers.
 package db
 
 import (
@@ -5,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	_ "github.com/lib/pq"
+	_ "github.com/lib/pq" // pq driver for database/sql
 )
 
 func Connect() (*sql.DB, error) {

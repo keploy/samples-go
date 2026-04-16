@@ -1,3 +1,4 @@
+// Package main implements the gRPC server for the grpc-mongo sample.
 package main
 
 import (
@@ -86,7 +87,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("mongo connect: %v", err)
 	}
-	defer client.Disconnect(context.Background())
+	defer client.Disconnect(context.Background()) //nolint:errcheck
 
 	col := client.Database("keploydb").Collection("tokens")
 	s := &server{col: col}

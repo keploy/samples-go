@@ -1,3 +1,4 @@
+// Package main implements a minimal HTTP app for testing Keploy's CONNECT tunnel recording and replay.
 package main
 
 import (
@@ -69,7 +70,7 @@ func handleViaProxy(w http.ResponseWriter, r *http.Request) {
 		writeJSONError(w, http.StatusBadGateway, "upstream request failed; check proxy connectivity (HTTP_PROXY/HTTPS_PROXY), DNS resolution, and target reachability")
 		return
 	}
-	defer resp.Body.Close()
+	defer resp.Body.Close() //nolint:errcheck
 
 	const maxBody = 1 << 20 // 1 MiB
 	lr := io.LimitReader(resp.Body, maxBody+1)

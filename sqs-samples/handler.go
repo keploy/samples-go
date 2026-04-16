@@ -49,14 +49,6 @@ func Upsert(ctx context.Context, u URL) error {
 	return nil
 }
 
-func getJoke(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"joke": "Why did the golfer bring two pairs of pants? In case he got a hole in one."})
-}
-
-func getExcuse(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"excuse": "We are not in the same version, hence there is a conflict."})
-}
-
 func getURL(c *gin.Context) {
 	hash := c.Param("param")
 	if hash == "" {

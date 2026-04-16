@@ -168,7 +168,7 @@ func (s *Store) CreateOrder(ctx context.Context, req CreateOrderRequest) (Order,
 	if err != nil {
 		return Order{}, fmt.Errorf("begin transaction: %w", err)
 	}
-	defer tx.Rollback()
+	defer tx.Rollback() //nolint:errcheck
 
 	var customerExists bool
 	if err := tx.QueryRowContext(
@@ -291,7 +291,7 @@ func (s *Store) GetOrder(ctx context.Context, orderID string) (Order, error) {
 		}
 		return Order{}, fmt.Errorf("query order: %w", err)
 	}
-	defer rows.Close()
+	defer rows.Close() //nolint:errcheck
 
 	var order Order
 	found := false
@@ -484,7 +484,7 @@ func (s *Store) SearchOrders(ctx context.Context, params OrderSearchParams) ([]O
 	if err != nil {
 		return nil, fmt.Errorf("query order search: %w", err)
 	}
-	defer rows.Close()
+	defer rows.Close() //nolint:errcheck
 
 	results := make([]OrderSearchResult, 0, params.Limit)
 	for rows.Next() {
@@ -575,7 +575,7 @@ func (s *Store) TopProducts(ctx context.Context, days, limit int) ([]TopProduct,
 	if err != nil {
 		return nil, fmt.Errorf("query top products: %w", err)
 	}
-	defer rows.Close()
+	defer rows.Close() //nolint:errcheck
 
 	results := make([]TopProduct, 0, limit)
 	for rows.Next() {
