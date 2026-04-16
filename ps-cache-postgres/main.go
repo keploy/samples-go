@@ -15,7 +15,7 @@ import (
 
 var (
 	pool   *pgxpool.Pool
-	poolMu sync.RWMutex // protects pool reassignment during /evict
+	poolMu sync.RWMutex
 )
 
 func main() {
@@ -25,6 +25,10 @@ func main() {
 		log.Fatalf("failed to create pool (check DATABASE_URL and ensure Postgres is reachable): %v", err)
 	}
 	defer pool.Close()
+
+	if os.Getenv("INIT_DB") == "true" {
+		initDB()
+	}
 
 	http.HandleFunc("/health", handleHealth)
 	http.HandleFunc("/account", handleAccount)
@@ -40,10 +44,30 @@ func main() {
 	}
 }
 
+func initDB() {
+	ctx := context.Background()
+	stmts := []string{
+		`CREATE SCHEMA IF NOT EXISTS travelcard`,
+		`CREATE TABLE IF NOT EXISTS travelcard.travel_account (
+			id SERIAL PRIMARY KEY, member_id INT NOT NULL UNIQUE,
+			name TEXT NOT NULL, balance INT NOT NULL DEFAULT 0)`,
+		`INSERT INTO travelcard.travel_account (member_id, name, balance) VALUES
+			(19, 'Alice', 1000), (23, 'Bob', 2500),
+			(31, 'Charlie', 500), (42, 'Diana', 7500)
+		ON CONFLICT (member_id) DO NOTHING`,
+	}
+	for _, s := range stmts {
+		if _, err := pool.Exec(ctx, s); err != nil {
+			log.Fatalf("initDB: %v", err)
+		}
+	}
+	log.Println("Database initialized")
+}
+
 func newPool(ctx context.Context) (*pgxpool.Pool, error) {
 	dsn := os.Getenv("DATABASE_URL")
 	if dsn == "" {
-		dsn = "postgres://postgres:postgres@localhost:6432/testdb?sslmode=disable"
+		dsn = "postgres://postgres:postgres@localhost:5432/testdb?sslmode=disable"
 	}
 	maxConns := 1
 	if v := os.Getenv("POOL_MAX_CONNS"); v != "" {
@@ -53,7 +77,7 @@ func newPool(ctx context.Context) (*pgxpool.Pool, error) {
 	}
 	cfg, err := pgxpool.ParseConfig(dsn)
 	if err != nil {
-		return nil, fmt.Errorf("parse config (verify DATABASE_URL format): %w", err)
+		return nil, fmt.Errorf("parse config: %w", err)
 	}
 	cfg.MaxConns = int32(maxConns)
 	cfg.MinConns = int32(maxConns)
