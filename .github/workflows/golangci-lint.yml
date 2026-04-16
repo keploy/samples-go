@@ -43,7 +43,8 @@ jobs:
           - sse-svelte
           - users-profile
           - book-store-inventory
-          
+          - dns-mock-test
+
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v4
