@@ -1,0 +1,9 @@
+$ORIGIN .
+$TTL 300
+@       IN SOA ns.keploy.test. admin.keploy.test. (2026042201 3600 600 86400 300)
+        IN NS  ns.keploy.test.
+ns.keploy.test.       IN A 172.30.0.10
+
+google.com.           IN A 142.250.80.46
+cloudflare.com.       IN A 104.16.132.229
+example.com.          IN A 93.184.215.14
