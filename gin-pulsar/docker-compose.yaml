@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  pulsar:
+    image: apachepulsar/pulsar:4.0.3
+    container_name: pulsar
+    command: bin/pulsar standalone
+    ports:
+      - "6650:6650"
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/admin/v2/brokers/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    container_name: gin-pulsar-app
+    ports:
+      - "8090:8090"
+    environment:
+      - PULSAR_URL=pulsar://pulsar:6650
+    depends_on:
+      pulsar:
+        condition: service_healthy
