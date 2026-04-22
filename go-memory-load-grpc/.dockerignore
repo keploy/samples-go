@@ -1,0 +1,19 @@
+# Build artifacts
+/bin/
+*.exe
+
+# Go module cache
+/vendor/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test output
+coverage.out
