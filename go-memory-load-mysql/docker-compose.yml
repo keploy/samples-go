@@ -1,0 +1,46 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: load-test-mysql-db
+    environment:
+      MYSQL_DATABASE: orderdb
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: app_password
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "app_user", "--password=app_password"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build:
+      context: .
+    container_name: load-test-mysql-api
+    environment:
+      APP_PORT: "8080"
+      MYSQL_DSN: "app_user:app_password@tcp(db:3306)/orderdb?parseTime=true&multiStatements=true&interpolateParams=true"
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  k6:
+    image: grafana/k6:0.49.0
+    profiles: ["loadtest"]
+    environment:
+      BASE_URL: http://api:8080
+    volumes:
+      - ./loadtest:/scripts:ro
+    depends_on:
+      api:
+        condition: service_started
+    entrypoint: ["k6"]
+
+volumes:
+  mysql_data:
