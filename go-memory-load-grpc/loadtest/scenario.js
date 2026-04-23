@@ -9,12 +9,15 @@ const TARGET_ADDR = __ENV.GRPC_ADDR || 'load-test-grpc-api:50051';
 
 const grpcReqFailed = new Counter('grpc_req_failed');
 
+const K6_VUS      = parseInt(__ENV.K6_VUS      || '20',   10);
+const K6_DURATION = __ENV.K6_DURATION || '120s';
+
 export const options = {
   scenarios: {
     constant_load: {
       executor: 'constant-vus',
-      vus: 20,
-      duration: '120s',
+      vus:      K6_VUS,
+      duration: K6_DURATION,
     },
   },
   thresholds: {
