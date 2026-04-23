@@ -32,6 +32,12 @@ import (
 	"time"
 )
 
+var fixtureIPs = map[string]string{
+	"google.com":     "142.250.80.46",
+	"cloudflare.com": "104.16.132.229",
+	"example.com":    "93.184.215.14",
+}
+
 func buildQuery(domain string, txid uint16) ([]byte, error) {
 	var b bytes.Buffer
 	binary.Write(&b, binary.BigEndian, txid)
@@ -73,6 +79,7 @@ func skipName(buf []byte, i int) int {
 }
 
 type parsed struct {
+	TxID    uint16
 	Rcode   int
 	Answers []string
 }
@@ -81,10 +88,11 @@ func parseReply(reply []byte) (parsed, error) {
 	if len(reply) < 12 {
 		return parsed{}, fmt.Errorf("reply too short")
 	}
+	txid := binary.BigEndian.Uint16(reply[0:2])
 	flags := binary.BigEndian.Uint16(reply[2:4])
 	qd := binary.BigEndian.Uint16(reply[4:6])
 	an := binary.BigEndian.Uint16(reply[6:8])
-	out := parsed{Rcode: int(flags & 0x000F)}
+	out := parsed{TxID: txid, Rcode: int(flags & 0x000F)}
 	off := 12
 	for q := uint16(0); q < qd && off < len(reply); q++ {
 		off = skipName(reply, off)
@@ -108,14 +116,32 @@ func parseReply(reply []byte) (parsed, error) {
 }
 
 type result struct {
+	Mode             string   `json:"mode"`
 	Domain           string   `json:"domain"`
 	Nameserver       string   `json:"nameserver"`
 	Rcode            int      `json:"rcode"`
 	IPs              []string `json:"ips,omitempty"`
 	SourceMismatches int      `json:"source_mismatches"`
+	TxidMismatches   int      `json:"txid_mismatches"`
 	Attempts         int      `json:"attempts"`
 	ElapsedMS        int64    `json:"elapsed_ms"`
 	Error            string   `json:"error,omitempty"`
+}
+
+type suiteCheck struct {
+	Name   string `json:"name"`
+	Passed bool   `json:"passed"`
+	Reason string `json:"reason,omitempty"`
+	Result result `json:"result"`
+}
+
+type suiteResult struct {
+	Nameserver          string       `json:"nameserver"`
+	SecondaryNameserver string       `json:"secondary_nameserver,omitempty"`
+	Fixture             bool         `json:"fixture"`
+	Passed              bool         `json:"passed"`
+	Checks              []suiteCheck `json:"checks"`
+	ElapsedMS           int64        `json:"elapsed_ms"`
 }
 
 // resolveStrict sends an A-record query for domain to nsAddr over
@@ -126,7 +152,7 @@ type result struct {
 // unconnected-UDP path do.
 func resolveStrict(domain, nsAddr string) result {
 	start := time.Now()
-	r := result{Domain: domain, Nameserver: nsAddr}
+	r := result{Mode: "unconnected_udp_strict", Domain: domain, Nameserver: nsAddr}
 
 	ns, err := net.ResolveUDPAddr("udp", nsAddr)
 	if err != nil {
@@ -171,6 +197,10 @@ func resolveStrict(domain, nsAddr string) result {
 				r.ElapsedMS = time.Since(start).Milliseconds()
 				return r
 			}
+			if p.TxID != 0x4242 {
+				r.TxidMismatches++
+				continue
+			}
 			r.Rcode = p.Rcode
 			r.IPs = p.Answers
 			r.ElapsedMS = time.Since(start).Milliseconds()
@@ -180,6 +210,219 @@ func resolveStrict(domain, nsAddr string) result {
 	r.Error = fmt.Sprintf("no accepted reply from %s after %d attempts", nsAddr, r.Attempts)
 	r.ElapsedMS = time.Since(start).Milliseconds()
 	return r
+}
+
+func resolveConnected(domain, nsAddr string) result {
+	start := time.Now()
+	r := result{Mode: "connected_udp_control", Domain: domain, Nameserver: nsAddr}
+
+	ns, err := net.ResolveUDPAddr("udp", nsAddr)
+	if err != nil {
+		r.Error = err.Error()
+		return r
+	}
+	conn, err := net.DialUDP("udp", nil, ns)
+	if err != nil {
+		r.Error = err.Error()
+		return r
+	}
+	defer conn.Close()
+
+	query, err := buildQuery(domain, 0x4343)
+	if err != nil {
+		r.Error = err.Error()
+		return r
+	}
+	r.Attempts = 1
+	if _, err := conn.Write(query); err != nil {
+		r.Error = err.Error()
+		r.ElapsedMS = time.Since(start).Milliseconds()
+		return r
+	}
+	_ = conn.SetReadDeadline(time.Now().Add(3 * time.Second))
+	buf := make([]byte, 1500)
+	n, err := conn.Read(buf)
+	if err != nil {
+		r.Error = err.Error()
+		r.ElapsedMS = time.Since(start).Milliseconds()
+		return r
+	}
+	p, err := parseReply(buf[:n])
+	if err != nil {
+		r.Error = err.Error()
+		r.ElapsedMS = time.Since(start).Milliseconds()
+		return r
+	}
+	if p.TxID != 0x4343 {
+		r.TxidMismatches++
+		r.Error = fmt.Sprintf("reply txid 0x%x did not match query txid 0x4343", p.TxID)
+		r.ElapsedMS = time.Since(start).Milliseconds()
+		return r
+	}
+	r.Rcode = p.Rcode
+	r.IPs = p.Answers
+	r.ElapsedMS = time.Since(start).Milliseconds()
+	return r
+}
+
+func resolveConcurrentStrict(primaryDomain, primaryNS, secondaryDomain, secondaryNS string) []result {
+	start := time.Now()
+	results := []result{
+		{Mode: "same_socket_multi_upstream_strict", Domain: primaryDomain, Nameserver: primaryNS},
+		{Mode: "same_socket_multi_upstream_strict", Domain: secondaryDomain, Nameserver: secondaryNS},
+	}
+
+	primaryAddr, err := net.ResolveUDPAddr("udp", primaryNS)
+	if err != nil {
+		results[0].Error = err.Error()
+		return results
+	}
+	secondaryAddr, err := net.ResolveUDPAddr("udp", secondaryNS)
+	if err != nil {
+		results[1].Error = err.Error()
+		return results
+	}
+	conn, err := net.ListenUDP("udp", &net.UDPAddr{IP: net.IPv4zero, Port: 0})
+	if err != nil {
+		results[0].Error = err.Error()
+		results[1].Error = err.Error()
+		return results
+	}
+	defer conn.Close()
+
+	queries := []struct {
+		txid uint16
+		addr *net.UDPAddr
+		idx  int
+	}{
+		{txid: 0x5101, addr: primaryAddr, idx: 0},
+		{txid: 0x5102, addr: secondaryAddr, idx: 1},
+	}
+	for _, q := range queries {
+		query, err := buildQuery(results[q.idx].Domain, q.txid)
+		if err != nil {
+			results[q.idx].Error = err.Error()
+			continue
+		}
+		results[q.idx].Attempts = 1
+		if _, err := conn.WriteToUDP(query, q.addr); err != nil {
+			results[q.idx].Error = err.Error()
+		}
+	}
+
+	deadline := time.Now().Add(3 * time.Second)
+	for time.Now().Before(deadline) {
+		if len(results[0].IPs) > 0 && len(results[1].IPs) > 0 {
+			break
+		}
+		_ = conn.SetReadDeadline(time.Now().Add(500 * time.Millisecond))
+		buf := make([]byte, 1500)
+		n, src, err := conn.ReadFromUDP(buf)
+		if err != nil {
+			continue
+		}
+		p, err := parseReply(buf[:n])
+		if err != nil {
+			continue
+		}
+		idx := -1
+		expected := primaryAddr
+		if p.TxID == 0x5101 {
+			idx = 0
+			expected = primaryAddr
+		}
+		if p.TxID == 0x5102 {
+			idx = 1
+			expected = secondaryAddr
+		}
+		if idx == -1 {
+			results[0].TxidMismatches++
+			results[1].TxidMismatches++
+			continue
+		}
+		if !src.IP.Equal(expected.IP) || src.Port != expected.Port {
+			results[idx].SourceMismatches++
+			continue
+		}
+		results[idx].Rcode = p.Rcode
+		results[idx].IPs = p.Answers
+		results[idx].ElapsedMS = time.Since(start).Milliseconds()
+	}
+
+	for i := range results {
+		if len(results[i].IPs) == 0 && results[i].Error == "" {
+			results[i].Error = fmt.Sprintf("no accepted reply from %s", results[i].Nameserver)
+		}
+		results[i].ElapsedMS = time.Since(start).Milliseconds()
+	}
+	return results
+}
+
+func validateResult(r result, fixture bool) (bool, string) {
+	if r.Error != "" {
+		return false, r.Error
+	}
+	if r.SourceMismatches != 0 {
+		return false, fmt.Sprintf("source_mismatches=%d", r.SourceMismatches)
+	}
+	if r.TxidMismatches != 0 {
+		return false, fmt.Sprintf("txid_mismatches=%d", r.TxidMismatches)
+	}
+	if len(r.IPs) == 0 {
+		return false, "no A records returned"
+	}
+	if fixture {
+		want := fixtureIPs[strings.TrimSuffix(r.Domain, ".")]
+		if want != "" && !contains(r.IPs, want) {
+			return false, fmt.Sprintf("fixture answer mismatch: want %s got %v", want, r.IPs)
+		}
+	}
+	return true, ""
+}
+
+func contains(values []string, want string) bool {
+	for _, value := range values {
+		if value == want {
+			return true
+		}
+	}
+	return false
+}
+
+func runSuite(ns, secondaryNS string, fixture bool) suiteResult {
+	start := time.Now()
+	out := suiteResult{
+		Nameserver:          ns,
+		SecondaryNameserver: secondaryNS,
+		Fixture:             fixture,
+		Passed:              true,
+	}
+
+	add := func(name string, r result) {
+		passed, reason := validateResult(r, fixture)
+		if !passed {
+			out.Passed = false
+		}
+		out.Checks = append(out.Checks, suiteCheck{Name: name, Passed: passed, Reason: reason, Result: r})
+	}
+
+	add("strict_unconnected_google", resolveStrict("google.com", ns))
+	add("strict_unconnected_cloudflare", resolveStrict("cloudflare.com", ns))
+	add("strict_unconnected_example", resolveStrict("example.com", ns))
+	add("connected_udp_control", resolveConnected("google.com", ns))
+
+	if secondaryNS != "" {
+		for i, r := range resolveConcurrentStrict("google.com", ns, "cloudflare.com", secondaryNS) {
+			name := "same_socket_multi_upstream_primary"
+			if i == 1 {
+				name = "same_socket_multi_upstream_secondary"
+			}
+			add(name, r)
+		}
+	}
+
+	out.ElapsedMS = time.Since(start).Milliseconds()
+	return out
 }
 
 func defaultNameserver() string {
@@ -216,6 +459,23 @@ func main() {
 		res := resolveStrict(domain, server)
 		w.Header().Set("Content-Type", "application/json")
 		if res.Error != "" {
+			w.WriteHeader(http.StatusBadGateway)
+		}
+		if err := json.NewEncoder(w).Encode(res); err != nil {
+			fmt.Fprintf(os.Stderr, "encode error: %v\n", err)
+		}
+	})
+
+	http.HandleFunc("/suite", func(w http.ResponseWriter, r *http.Request) {
+		server := r.URL.Query().Get("nameserver")
+		if server == "" {
+			server = ns
+		}
+		secondary := r.URL.Query().Get("secondary_nameserver")
+		fixture := r.URL.Query().Get("fixture") == "1" || r.URL.Query().Get("fixture") == "true"
+		res := runSuite(server, secondary, fixture)
+		w.Header().Set("Content-Type", "application/json")
+		if !res.Passed {
 			w.WriteHeader(http.StatusBadGateway)
 		}
 		if err := json.NewEncoder(w).Encode(res); err != nil {

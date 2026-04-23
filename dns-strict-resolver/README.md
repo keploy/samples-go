@@ -18,11 +18,13 @@ failure in name resolution` / `EAI_AGAIN`) only surfaces on the
 unconnected-UDP path, where the client is responsible for validating the
 reply's source address itself.
 
-This sample sends a DNS A query over an **unconnected** UDP socket,
-reads replies with `ReadFromUDP`, and **discards any reply whose source
-does not match the nameserver it queried** — the same check that
-`dnspython`, raw `recvfrom`-based clients, and glibc's `res_send`
-unconnected path perform.
+This sample sends DNS A queries over **unconnected** UDP sockets, reads
+replies with `ReadFromUDP`, and **discards any reply whose source does
+not match the nameserver it queried**. The `/suite` endpoint also runs a
+connected-UDP control and a same-socket multi-upstream check so the
+sample catches the broader bug class: missing reply-source SNAT, broken
+transaction-id handling, fixture DNS drift, and original-destination
+mixups when one socket talks to more than one nameserver.
 
 ## Running
 
@@ -59,11 +61,14 @@ sudo -E env PATH=$PATH keploy test -c "./dns-strict-resolver" --delay 10
 ```
 
 Both record and test must complete with `source_mismatches: 0` and a
-non-empty `ips` list for the sample to pass.
+non-empty `ips` list for the sample to pass. CI should prefer `/suite`
+over one-off `/resolve` calls because it exercises the full regression
+surface in one recorded request.
 
 ## Endpoints
 
-| Path                                          | Description                                            |
-| --------------------------------------------- | ------------------------------------------------------ |
-| `GET /health`                                 | Liveness probe used by the CI script.                  |
-| `GET /resolve?domain=<d>&nameserver=<ip:53>`  | Strict A-record lookup. `domain` defaults to `google.com`; `nameserver` defaults to the first entry in `/etc/resolv.conf`. |
+| Path | Description |
+| --- | --- |
+| `GET /health` | Liveness probe used by the CI script. |
+| `GET /resolve?domain=<d>&nameserver=<ip:53>` | Single strict unconnected-UDP A-record lookup. `domain` defaults to `google.com`; `nameserver` defaults to the first entry in `/etc/resolv.conf`. |
+| `GET /suite?nameserver=<ip:53>&secondary_nameserver=<ip:53>&fixture=1` | Full regression suite: strict unconnected lookups for all fixture domains, connected-UDP control, and optional same-socket multi-upstream validation. `fixture=1` also asserts the bundled CoreDNS fixture IPs. |
