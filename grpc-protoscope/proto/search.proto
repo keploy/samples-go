@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package search;
+
+option go_package = "./searchpb";
+
+service SearchService {
+  rpc Search(SearchRequest) returns (SearchResponse);
+}
+
+message SearchRequest {
+  string query = 1;
+}
+
+// Minimal nested structure — small enough that protoscope
+// will inline the sub-messages, producing position-dependent indentation.
+message FacetValue {
+  oneof value {
+    double numeric = 2;
+    string text = 3;
+  }
+}
+
+message FacetEntry {
+  string name = 1;
+  FacetValue data = 2;
+}
+
+message FacetBucket {
+  repeated FacetEntry entries = 1;
+}
+
+message FacetInfo {
+  FacetBucket pricing = 2;
+  FacetBucket availability = 3;
+}
+
+message SearchResponse {
+  float score = 1;
+  string hits_json = 4;
+  int32 total = 8;
+  FacetInfo facets = 9;
+}
