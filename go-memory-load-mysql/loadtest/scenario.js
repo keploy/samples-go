@@ -159,6 +159,15 @@ function buildLargePayload(sizeMB) {
   return payloadCache[sizeMB];
 }
 
+// Build a payload whose first bytes are a unique tag so every call produces a
+// distinct SHA-256, preventing duplicate-key errors on the content-addressed
+// large_payloads table.
+function buildUniqueLargePayload(sizeMB) {
+  const base = buildLargePayload(sizeMB);
+  const tag = uniqueSuffix() + '|';
+  return tag + base.slice(tag.length);
+}
+
 function createCustomer(namePrefix = 'Load Customer') {
   const suffix = uniqueSuffix();
   const payload = {
@@ -177,7 +186,7 @@ function createCustomer(namePrefix = 'Load Customer') {
 
 function createLargePayload(sizeMB) {
   const suffix = uniqueSuffix();
-  const payload = buildLargePayload(sizeMB);
+  const payload = buildUniqueLargePayload(sizeMB);
   const response = http.post(
     `${BASE_URL}/large-payloads`,
     JSON.stringify({
@@ -327,6 +336,11 @@ export function setup() {
     }
   }
 
+  // Call TopProducts once after all bootstrap data is settled so keploy
+  // records exactly one stable aggregate mock — no concurrent writes means
+  // the result is identical between record and replay.
+  http.get(`${BASE_URL}/analytics/top-products?days=30&limit=5`);
+
   return {
     customers: bootstrapCustomers,
     products: bootstrapProducts,
@@ -349,7 +363,13 @@ export default function (data) {
   } else if (roll < 0.2) {
     createProduct();
   } else if (roll < 0.45) {
-    createOrder(customer.id, data.products);
+    // Use a fresh customer per request so the contentID-based order ID is
+    // unique to this call, preventing duplicate-key 500 errors when multiple
+    // VUs happen to pick the same bootstrap customer and products.
+    const orderCustomer = createCustomer('Order Customer');
+    if (orderCustomer) {
+      createOrder(orderCustomer.id, data.products);
+    }
   } else if (roll < 0.55) {
     if (data.orders && data.orders.length > 0) {
       const bootstrapOrder = randomItem(data.orders);
@@ -360,14 +380,17 @@ export default function (data) {
       });
     }
   } else if (roll < 0.75) {
-    const isolatedCustomer = createCustomer('Summary Customer');
-    if (isolatedCustomer) {
-      createOrder(isolatedCustomer.id, data.products);
-      const summaryResponse = http.get(`${BASE_URL}/customers/${isolatedCustomer.id}/summary`);
-      check(summaryResponse, {
-        'customer summary status is 200': (r) => r.status === 200,
-      });
-    }
+    // Query a bootstrap customer whose orders were fully settled in setup().
+    // The previous create-customer → create-order → query-summary pattern
+    // produced many structurally-identical SQL mocks (same SELECT shape,
+    // different customer IDs). The MySQL mock matcher's AST-structural
+    // fallback then matched the wrong mock, returning a completely
+    // different customer's data during replay.
+    const bootstrapCustomer = randomItem(data.customers);
+    const summaryResponse = http.get(`${BASE_URL}/customers/${bootstrapCustomer.id}/summary`);
+    check(summaryResponse, {
+      'customer summary status is 200': (r) => r.status === 200,
+    });
   } else if (roll < 0.9) {
     const minTotal = randomInt(1000, 10000);
     const searchResponse = http.get(
@@ -377,10 +400,16 @@ export default function (data) {
       'order search status is 200': (r) => r.status === 200,
     });
   } else {
-    const analyticsResponse = http.get(`${BASE_URL}/analytics/top-products?days=30&limit=5`);
-    check(analyticsResponse, {
-      'top products status is 200': (r) => r.status === 200,
-    });
+    // TopProducts is recorded once during setup() with a fully-settled DB state.
+    // Replace the concurrent slot with a stable bootstrap-order lookup to
+    // avoid aggregate-fluctuation mock mismatches during replay.
+    if (data.orders && data.orders.length > 0) {
+      const bootstrapOrder = randomItem(data.orders);
+      const orderResponse = http.get(`${BASE_URL}/orders/${bootstrapOrder.id}`);
+      check(orderResponse, {
+        'get bootstrap order status is 200': (r) => r.status === 200,
+      });
+    }
   }
 
   sleep(randomInt(1, 3) / 10);

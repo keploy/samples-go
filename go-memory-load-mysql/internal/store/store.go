@@ -263,12 +263,14 @@ func (s *Store) createOrderTx(ctx context.Context, req CreateOrderRequest) (Orde
 		})
 	}
 
-	// Derive order ID from customer + sorted product IDs so the same request
-	// always produces the same INSERT query bytes for Keploy mock matching.
-	pidParts := make([]string, 0, len(req.Items)+2)
+	// Derive order ID from customer + sorted product IDs + quantities so the
+	// same request always produces the same INSERT query bytes for Keploy mock
+	// matching.  Including quantity prevents two requests that share a customer
+	// and product set but differ in quantity from colliding on the same UUID.
+	pidParts := make([]string, 0, len(req.Items)*2+2)
 	pidParts = append(pidParts, req.CustomerID, req.Status)
 	for _, it := range req.Items {
-		pidParts = append(pidParts, it.ProductID)
+		pidParts = append(pidParts, it.ProductID, fmt.Sprintf("%d", it.Quantity))
 	}
 	orderID := contentID(pidParts...)
 	createdAt := time.Now().UTC()
@@ -583,6 +585,9 @@ func (s *Store) CreateLargePayload(ctx context.Context, req CreateLargePayloadRe
 		record.PayloadSizeBytes, record.SHA256, record.CreatedAt,
 	)
 	if err != nil {
+		if isDuplicateKey(err) {
+			return LargePayloadRecord{}, fmt.Errorf("%w: payload with this content already exists", ErrConflict)
+		}
 		return LargePayloadRecord{}, fmt.Errorf("insert large payload: %w", err)
 	}
 
