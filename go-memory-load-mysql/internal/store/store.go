@@ -52,14 +52,15 @@ func (s *Store) Ping(ctx context.Context) error {
 	return s.db.PingContext(ctx)
 }
 
-func newID() string {
-	// Generate a UUID v4-style string using random bytes from crypto/sha256 as a seed
-	// fallback: use time + rand; for a load-test, a simple unique ID is sufficient.
-	raw := sha256.Sum256([]byte(fmt.Sprintf("%d", time.Now().UnixNano())))
-	b := raw[:]
-	// Format as UUID v4
-	b[6] = (b[6] & 0x0f) | 0x40
-	b[8] = (b[8] & 0x3f) | 0x80
+// contentID derives a deterministic UUID-shaped identifier from content.
+// Using SHA256 ensures the same inputs always produce the same ID, which allows
+// Keploy to match recorded MySQL mocks during replay — the INSERT query bytes
+// must be identical between record and replay runs.
+func contentID(parts ...string) string {
+	h := sha256.Sum256([]byte(strings.Join(parts, "\x00")))
+	b := h[:]
+	b[6] = (b[6] & 0x0f) | 0x40 // version 4
+	b[8] = (b[8] & 0x3f) | 0x80 // variant bits
 	return fmt.Sprintf("%08x-%04x-%04x-%04x-%12x",
 		b[0:4], b[4:6], b[6:8], b[8:10], b[10:16])
 }
@@ -85,7 +86,7 @@ func (s *Store) CreateCustomer(ctx context.Context, req CreateCustomerRequest) (
 	}
 
 	customer := Customer{
-		ID:        newID(),
+		ID:        contentID(req.Email),
 		Email:     req.Email,
 		FullName:  req.FullName,
 		Segment:   req.Segment,
@@ -125,7 +126,7 @@ func (s *Store) CreateProduct(ctx context.Context, req CreateProductRequest) (Pr
 	}
 
 	product := Product{
-		ID:             newID(),
+		ID:             contentID(req.SKU),
 		SKU:            req.SKU,
 		Name:           req.Name,
 		Category:       req.Category,
@@ -262,7 +263,14 @@ func (s *Store) createOrderTx(ctx context.Context, req CreateOrderRequest) (Orde
 		})
 	}
 
-	orderID := newID()
+	// Derive order ID from customer + sorted product IDs so the same request
+	// always produces the same INSERT query bytes for Keploy mock matching.
+	pidParts := make([]string, 0, len(req.Items)+2)
+	pidParts = append(pidParts, req.CustomerID, req.Status)
+	for _, it := range req.Items {
+		pidParts = append(pidParts, it.ProductID)
+	}
+	orderID := contentID(pidParts...)
 	createdAt := time.Now().UTC()
 
 	_, err = tx.ExecContext(ctx,
@@ -279,7 +287,7 @@ func (s *Store) createOrderTx(ctx context.Context, req CreateOrderRequest) (Orde
 		_, err = tx.ExecContext(ctx,
 			`INSERT INTO order_items (id, order_id, product_id, sku, name, category, quantity, unit_price_cents, line_total_cents)
 			 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-			newID(), orderID, item.ProductID, item.SKU, item.Name, item.Category,
+			contentID(orderID, item.ProductID), orderID, item.ProductID, item.SKU, item.Name, item.Category,
 			item.Quantity, item.UnitPriceCents, item.LineTotalCents,
 		)
 		if err != nil {
@@ -560,7 +568,7 @@ func (s *Store) CreateLargePayload(ctx context.Context, req CreateLargePayloadRe
 
 	checksum := sha256.Sum256([]byte(req.Payload))
 	record := LargePayloadRecord{
-		ID:               newID(),
+		ID:               contentID(hex.EncodeToString(checksum[:])),
 		Name:             req.Name,
 		ContentType:      req.ContentType,
 		PayloadSizeBytes: payloadSizeBytes,
