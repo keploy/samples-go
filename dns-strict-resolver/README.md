@@ -21,10 +21,11 @@ reply's source address itself.
 This sample sends DNS A queries over **unconnected** UDP sockets, reads
 replies with `ReadFromUDP`, and **discards any reply whose source does
 not match the nameserver it queried**. The `/suite` endpoint also runs a
-connected-UDP control and a same-socket multi-upstream check so the
-sample catches the broader bug class: missing reply-source SNAT, broken
-transaction-id handling, fixture DNS drift, and original-destination
-mixups when one socket talks to more than one nameserver.
+connected-UDP control and a same-socket multi-upstream check against
+fixture-only `*.keploy.test` records, so the sample catches the broader
+bug class: missing reply-source SNAT, broken transaction-id handling,
+fixture DNS drift, and original-destination mixups when one socket talks
+to more than one nameserver.
 
 ## Running
 

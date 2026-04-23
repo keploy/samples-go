@@ -33,9 +33,9 @@ import (
 )
 
 var fixtureIPs = map[string]string{
-	"google.com":     "142.250.80.46",
-	"cloudflare.com": "104.16.132.229",
-	"example.com":    "93.184.215.14",
+	"alpha.keploy.test": "10.42.0.11",
+	"beta.keploy.test":  "10.42.0.12",
+	"gamma.keploy.test": "10.42.0.13",
 }
 
 func buildQuery(domain string, txid uint16) ([]byte, error) {
@@ -406,13 +406,13 @@ func runSuite(ns, secondaryNS string, fixture bool) suiteResult {
 		out.Checks = append(out.Checks, suiteCheck{Name: name, Passed: passed, Reason: reason, Result: r})
 	}
 
-	add("strict_unconnected_google", resolveStrict("google.com", ns))
-	add("strict_unconnected_cloudflare", resolveStrict("cloudflare.com", ns))
-	add("strict_unconnected_example", resolveStrict("example.com", ns))
-	add("connected_udp_control", resolveConnected("google.com", ns))
+	add("strict_unconnected_alpha", resolveStrict("alpha.keploy.test", ns))
+	add("strict_unconnected_beta", resolveStrict("beta.keploy.test", ns))
+	add("strict_unconnected_gamma", resolveStrict("gamma.keploy.test", ns))
+	add("connected_udp_control", resolveConnected("alpha.keploy.test", ns))
 
 	if secondaryNS != "" {
-		for i, r := range resolveConcurrentStrict("google.com", ns, "cloudflare.com", secondaryNS) {
+		for i, r := range resolveConcurrentStrict("alpha.keploy.test", ns, "beta.keploy.test", secondaryNS) {
 			name := "same_socket_multi_upstream_primary"
 			if i == 1 {
 				name = "same_socket_multi_upstream_secondary"

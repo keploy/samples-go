@@ -7,3 +7,6 @@ ns.keploy.test.       IN A 172.30.0.10
 google.com.           IN A 142.250.80.46
 cloudflare.com.       IN A 104.16.132.229
 example.com.          IN A 93.184.215.14
+alpha.keploy.test.    IN A 10.42.0.11
+beta.keploy.test.     IN A 10.42.0.12
+gamma.keploy.test.    IN A 10.42.0.13
