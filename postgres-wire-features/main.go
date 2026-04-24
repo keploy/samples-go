@@ -53,6 +53,8 @@ func main() {
 		"cursor":          runCursor,
 		"admin":           runAdminStatements,
 		"validation-ping": runValidationPing,
+		"multistatement":  runMultiStatement,
+		"empty-query":     runEmptyQuery,
 	}
 
 	for name, fn := range cases {
@@ -79,6 +81,8 @@ func main() {
 			"cursor",
 			"admin",
 			"validation-ping",
+			"multistatement",
+			"empty-query",
 		}
 		results := make([]caseResult, 0, len(order))
 		status := http.StatusOK
@@ -259,6 +263,34 @@ func runValidationPing(c *pgClient) ([]queryResult, error) {
 	)
 }
 
+// runMultiStatement sends a semicolon-separated batch of four statements
+// as a SINGLE simple-Query ('Q') packet. The server answers with four
+// CommandComplete responses (plus interleaved RowDescription/DataRow for
+// the two SELECTs) before a single ReadyForQuery. A v3 recorder that
+// tracks invocations per-packet rather than per-statement under-counts
+// the result to one invocation; a correct recorder splits the batch with
+// pg_query and emits four invocations (one per statement).
+func runMultiStatement(c *pgClient) ([]queryResult, error) {
+	res, err := c.simpleQuery(`BEGIN; SELECT 1 AS a; SELECT 2 AS b; COMMIT`, "")
+	if err != nil {
+		return nil, err
+	}
+	return []queryResult{res}, nil
+}
+
+// runEmptyQuery sends a simple-Query packet with an empty SQL body. Per
+// the Postgres wire protocol the server answers with EmptyQueryResponse
+// ('I') followed by ReadyForQuery — no CommandComplete and no row data.
+// A correct recorder suppresses this as a no-op; a naive recorder emits
+// a ghost invocation with empty sqlNormalized and class=UNKNOWN.
+func runEmptyQuery(c *pgClient) ([]queryResult, error) {
+	res, err := c.simpleQuery(``, "")
+	if err != nil {
+		return nil, err
+	}
+	return []queryResult{res}, nil
+}
+
 func runQueries(c *pgClient, queries ...string) ([]queryResult, error) {
 	results := make([]queryResult, 0, len(queries))
 	for _, q := range queries {
@@ -395,6 +427,9 @@ func (c *pgClient) simpleQuery(sql, copyInput string) (queryResult, error) {
 			// CopyDone from server after COPY TO STDOUT.
 		case 'N':
 		case 'n', 's':
+		case 'I':
+			// EmptyQueryResponse — server received an empty query string.
+			// No CommandComplete follows; ReadyForQuery terminates the cycle.
 		case 'Z':
 			return res, nil
 		case 'E':

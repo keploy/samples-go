@@ -6,7 +6,7 @@ The service speaks the Postgres v3 frontend/backend protocol directly over a TCP
 
 ## What it covers
 
-A single call to `GET /run/all` walks through ten scenarios in order:
+A single call to `GET /run/all` walks through twelve scenarios in order:
 
 | Scenario | Statements |
 | --- | --- |
@@ -20,6 +20,8 @@ A single call to `GET /run/all` walks through ten scenarios in order:
 | `cursor` | `BEGIN`, `DECLARE CURSOR`, `FETCH`×2, `CLOSE`, `COMMIT` |
 | `admin` | `ANALYZE`, `REINDEX`, `LOCK TABLE`, `DO $$ … $$`, `CREATE PROCEDURE`, `CALL` |
 | `validation-ping` | `SELECT 'ok'`, `SELECT true`, `SELECT NULL`, `SELECT 1` |
+| `multistatement` | `BEGIN; SELECT 1 AS a; SELECT 2 AS b; COMMIT` sent as a **single** simple-Query packet (exercises multi-statement split) |
+| `empty-query` | simple-Query packet with empty SQL body (exercises `EmptyQueryResponse` / ghost-event suppression) |
 
 Each scenario is also reachable individually at `GET /case/<name>`. The response is JSON: per-statement `commands` (the Postgres command tag, e.g. `COPY 2`, `SELECT 1`), `rows`, and for `COPY TO STDOUT` a `copyData` array of the raw tab-separated rows.
 
@@ -71,6 +73,20 @@ In another terminal:
 ```
 
 Keploy writes the recorded HTTP tests and Postgres mocks under `keploy/`.
+
+## Validate recorded mocks
+
+Run the assertions script after recording to verify v3 protocol invariants:
+
+```bash
+./assertions.sh keploy
+```
+
+It fails the pipeline if it sees any of:
+- an invocation with `class: UNKNOWN`
+- an invocation with an empty `sqlNormalized` (ghost event)
+- the `multistatement` batch collapsed into fewer than four invocations
+- all fields encoded as `!!binary` with no readable SQL in the mocks
 
 ## Replay Recorded Tests
 

@@ -2,4 +2,5 @@ keploy/
 keploy.yml
 keploy-logs.txt
 server
+postgres-wire-features
 *.log
