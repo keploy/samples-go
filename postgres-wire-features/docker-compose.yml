@@ -5,6 +5,13 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
+      # Force trust auth (code 0). Postgres 16 defaults to scram-sha-256
+      # (code 10), which this sample's raw-v3 client does not speak — we
+      # only implement code 0 / 3 / 5. This keeps auth on a path the
+      # sample can actually complete so the downstream Postgres wire
+      # surface (CopyData, cursors, PREPARE/EXECUTE, etc.) is what the
+      # record/replay cycle is actually exercising.
+      POSTGRES_HOST_AUTH_METHOD: trust
     ports:
       - "5433:5432"
     volumes:
