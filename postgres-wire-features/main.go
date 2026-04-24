@@ -42,7 +42,7 @@ func main() {
 		_, _ = w.Write([]byte("ok\n"))
 	})
 
-	cases := map[string]func() ([]queryResult, error){
+	cases := map[string]func(*pgClient) ([]queryResult, error){
 		"setup":           runSetup,
 		"dml":             runDML,
 		"catalog-cte":     runCatalogCTE,
@@ -58,10 +58,15 @@ func main() {
 	for name, fn := range cases {
 		name, fn := name, fn
 		mux.HandleFunc("/case/"+name, func(w http.ResponseWriter, _ *http.Request) {
-			writeCase(w, name, fn)
+			writeCase(w, name, func() ([]queryResult, error) { return withClient(fn) })
 		})
 	}
 
+	// /run/all walks every scenario on a SINGLE Postgres connection. Opening
+	// a fresh connection per scenario pushes Keploy's docker-mode proxy into
+	// a back-to-back connect/close regime where it drops handshakes; sharing
+	// one connection keeps the v3 wire surface exercised without triggering
+	// that unrelated instability.
 	mux.HandleFunc("/run/all", func(w http.ResponseWriter, _ *http.Request) {
 		order := []string{
 			"setup",
@@ -77,8 +82,16 @@ func main() {
 		}
 		results := make([]caseResult, 0, len(order))
 		status := http.StatusOK
+
+		c, err := dialPostgres()
+		if err != nil {
+			writeJSON(w, http.StatusInternalServerError, caseResult{Name: "dial", Error: err.Error()})
+			return
+		}
+		defer c.conn.Close()
+
 		for _, name := range order {
-			res, err := cases[name]()
+			res, err := cases[name](c)
 			item := caseResult{Name: name, Result: res}
 			if err != nil {
 				item.Error = err.Error()
@@ -122,148 +135,128 @@ func withClient(fn func(*pgClient) ([]queryResult, error)) ([]queryResult, error
 	return fn(c)
 }
 
-func runSetup() ([]queryResult, error) {
-	return withClient(func(c *pgClient) ([]queryResult, error) {
-		return runQueries(c,
-			`DROP TABLE IF EXISTS gap_items`,
-			`CREATE TABLE gap_items (id SERIAL PRIMARY KEY, name TEXT NOT NULL)`,
-			`INSERT INTO gap_items(name) VALUES ('seed-a'), ('seed-b')`,
-			`CREATE TABLE IF NOT EXISTS flyway_schema_history (
-				installed_rank INT PRIMARY KEY,
-				version TEXT,
-				description TEXT,
-				type TEXT,
-				script TEXT,
-				checksum INT,
-				installed_by TEXT,
-				installed_on TIMESTAMP DEFAULT now(),
-				execution_time INT,
-				success BOOLEAN
-			)`,
-		)
-	})
+func runSetup(c *pgClient) ([]queryResult, error) {
+	return runQueries(c,
+		`DROP TABLE IF EXISTS gap_items`,
+		`CREATE TABLE gap_items (id SERIAL PRIMARY KEY, name TEXT NOT NULL)`,
+		`INSERT INTO gap_items(name) VALUES ('seed-a'), ('seed-b')`,
+		`CREATE TABLE IF NOT EXISTS flyway_schema_history (
+			installed_rank INT PRIMARY KEY,
+			version TEXT,
+			description TEXT,
+			type TEXT,
+			script TEXT,
+			checksum INT,
+			installed_by TEXT,
+			installed_on TIMESTAMP DEFAULT now(),
+			execution_time INT,
+			success BOOLEAN
+		)`,
+	)
 }
 
-func runDML() ([]queryResult, error) {
-	return withClient(func(c *pgClient) ([]queryResult, error) {
-		return runQueries(c,
-			`INSERT INTO flyway_schema_history
-				(installed_rank, version, description, type, script, checksum, installed_by, execution_time, success)
-			 VALUES (1, '1', 'v3 dml classifier repro', 'SQL', 'V1__gap.sql', 42, 'gap-app', 7, true)
-			 ON CONFLICT (installed_rank) DO UPDATE SET checksum = EXCLUDED.checksum`,
-			`UPDATE gap_items SET name = name || '-updated' WHERE id = 1`,
-			`DELETE FROM gap_items WHERE name = 'never-present'`,
-			`MERGE INTO gap_items AS target
-			 USING (VALUES (2, 'seed-b-merged')) AS src(id, name)
-			 ON target.id = src.id
-			 WHEN MATCHED THEN UPDATE SET name = src.name
-			 WHEN NOT MATCHED THEN INSERT (id, name) VALUES (src.id, src.name)`,
-		)
-	})
+func runDML(c *pgClient) ([]queryResult, error) {
+	return runQueries(c,
+		`INSERT INTO flyway_schema_history
+			(installed_rank, version, description, type, script, checksum, installed_by, execution_time, success)
+		 VALUES (1, '1', 'v3 dml classifier repro', 'SQL', 'V1__gap.sql', 42, 'gap-app', 7, true)
+		 ON CONFLICT (installed_rank) DO UPDATE SET checksum = EXCLUDED.checksum`,
+		`UPDATE gap_items SET name = name || '-updated' WHERE id = 1`,
+		`DELETE FROM gap_items WHERE name = 'never-present'`,
+		`MERGE INTO gap_items AS target
+		 USING (VALUES (2, 'seed-b-merged')) AS src(id, name)
+		 ON target.id = src.id
+		 WHEN MATCHED THEN UPDATE SET name = src.name
+		 WHEN NOT MATCHED THEN INSERT (id, name) VALUES (src.id, src.name)`,
+	)
 }
 
-func runCatalogCTE() ([]queryResult, error) {
-	return withClient(func(c *pgClient) ([]queryResult, error) {
-		return runQueries(c,
-			`WITH catalog_rels AS (
-				SELECT oid, relname FROM pg_catalog.pg_class WHERE relname IN ('pg_class', 'pg_type')
-			 )
-			 SELECT relname FROM catalog_rels ORDER BY relname`,
-		)
-	})
+func runCatalogCTE(c *pgClient) ([]queryResult, error) {
+	return runQueries(c,
+		`WITH catalog_rels AS (
+			SELECT oid, relname FROM pg_catalog.pg_class WHERE relname IN ('pg_class', 'pg_type')
+		 )
+		 SELECT relname FROM catalog_rels ORDER BY relname`,
+	)
 }
 
-func runCatalogSubselect() ([]queryResult, error) {
-	return withClient(func(c *pgClient) ([]queryResult, error) {
-		return runQueries(c,
-			`SELECT relname
-			 FROM (SELECT relname FROM pg_catalog.pg_class WHERE relname = 'pg_class') AS catalog_subquery`,
-		)
-	})
+func runCatalogSubselect(c *pgClient) ([]queryResult, error) {
+	return runQueries(c,
+		`SELECT relname
+		 FROM (SELECT relname FROM pg_catalog.pg_class WHERE relname = 'pg_class') AS catalog_subquery`,
+	)
 }
 
-func runCatalogSetOp() ([]queryResult, error) {
-	return withClient(func(c *pgClient) ([]queryResult, error) {
-		return runQueries(c,
-			`SELECT relname FROM pg_catalog.pg_class WHERE relname = 'pg_class'
-			 UNION
-			 SELECT relname FROM pg_catalog.pg_class WHERE relname = 'pg_type'
-			 ORDER BY relname`,
-		)
-	})
+func runCatalogSetOp(c *pgClient) ([]queryResult, error) {
+	return runQueries(c,
+		`SELECT relname FROM pg_catalog.pg_class WHERE relname = 'pg_class'
+		 UNION
+		 SELECT relname FROM pg_catalog.pg_class WHERE relname = 'pg_type'
+		 ORDER BY relname`,
+	)
 }
 
-func runCopy() ([]queryResult, error) {
-	return withClient(func(c *pgClient) ([]queryResult, error) {
-		var all []queryResult
-		setup, err := runQueries(c, `TRUNCATE gap_items RESTART IDENTITY`)
-		if err != nil {
-			return all, err
-		}
-		all = append(all, setup...)
+func runCopy(c *pgClient) ([]queryResult, error) {
+	var all []queryResult
+	setup, err := runQueries(c, `TRUNCATE gap_items RESTART IDENTITY`)
+	if err != nil {
+		return all, err
+	}
+	all = append(all, setup...)
 
-		in, err := c.simpleQuery(`COPY gap_items(name) FROM STDIN`, "copy-a\ncopy-b\n")
-		if err != nil {
-			return all, err
-		}
-		all = append(all, in)
+	in, err := c.simpleQuery(`COPY gap_items(name) FROM STDIN`, "copy-a\ncopy-b\n")
+	if err != nil {
+		return all, err
+	}
+	all = append(all, in)
 
-		out, err := c.simpleQuery(`COPY (SELECT id, name FROM gap_items ORDER BY id) TO STDOUT`, "")
-		if err != nil {
-			return all, err
-		}
-		all = append(all, out)
-		return all, nil
-	})
+	out, err := c.simpleQuery(`COPY (SELECT id, name FROM gap_items ORDER BY id) TO STDOUT`, "")
+	if err != nil {
+		return all, err
+	}
+	all = append(all, out)
+	return all, nil
 }
 
-func runPrepareExecute() ([]queryResult, error) {
-	return withClient(func(c *pgClient) ([]queryResult, error) {
-		return runQueries(c,
-			`PREPARE gap_lookup(int) AS SELECT name FROM gap_items WHERE id = $1`,
-			`EXECUTE gap_lookup(1)`,
-			`DEALLOCATE gap_lookup`,
-		)
-	})
+func runPrepareExecute(c *pgClient) ([]queryResult, error) {
+	return runQueries(c,
+		`PREPARE gap_lookup(int) AS SELECT name FROM gap_items WHERE id = $1`,
+		`EXECUTE gap_lookup(1)`,
+		`DEALLOCATE gap_lookup`,
+	)
 }
 
-func runCursor() ([]queryResult, error) {
-	return withClient(func(c *pgClient) ([]queryResult, error) {
-		return runQueries(c,
-			`BEGIN`,
-			`DECLARE gap_cursor CURSOR FOR SELECT id, name FROM gap_items ORDER BY id`,
-			`FETCH 1 FROM gap_cursor`,
-			`FETCH 1 FROM gap_cursor`,
-			`CLOSE gap_cursor`,
-			`COMMIT`,
-		)
-	})
+func runCursor(c *pgClient) ([]queryResult, error) {
+	return runQueries(c,
+		`BEGIN`,
+		`DECLARE gap_cursor CURSOR FOR SELECT id, name FROM gap_items ORDER BY id`,
+		`FETCH 1 FROM gap_cursor`,
+		`FETCH 1 FROM gap_cursor`,
+		`CLOSE gap_cursor`,
+		`COMMIT`,
+	)
 }
 
-func runAdminStatements() ([]queryResult, error) {
-	return withClient(func(c *pgClient) ([]queryResult, error) {
-		return runQueries(c,
-			`ANALYZE gap_items`,
-			`REINDEX TABLE gap_items`,
-			`BEGIN`,
-			`LOCK TABLE gap_items IN ACCESS SHARE MODE`,
-			`COMMIT`,
-			`DO $$ BEGIN PERFORM 1; END $$`,
-			`CREATE OR REPLACE PROCEDURE gap_noop() LANGUAGE plpgsql AS $$ BEGIN PERFORM 1; END $$`,
-			`CALL gap_noop()`,
-		)
-	})
+func runAdminStatements(c *pgClient) ([]queryResult, error) {
+	return runQueries(c,
+		`ANALYZE gap_items`,
+		`REINDEX TABLE gap_items`,
+		`BEGIN`,
+		`LOCK TABLE gap_items IN ACCESS SHARE MODE`,
+		`COMMIT`,
+		`DO $$ BEGIN PERFORM 1; END $$`,
+		`CREATE OR REPLACE PROCEDURE gap_noop() LANGUAGE plpgsql AS $$ BEGIN PERFORM 1; END $$`,
+		`CALL gap_noop()`,
+	)
 }
 
-func runValidationPing() ([]queryResult, error) {
-	return withClient(func(c *pgClient) ([]queryResult, error) {
-		return runQueries(c,
-			`SELECT 'ok'`,
-			`SELECT true`,
-			`SELECT NULL`,
-			`SELECT 1`,
-		)
-	})
+func runValidationPing(c *pgClient) ([]queryResult, error) {
+	return runQueries(c,
+		`SELECT 'ok'`,
+		`SELECT true`,
+		`SELECT NULL`,
+		`SELECT 1`,
+	)
 }
 
 func runQueries(c *pgClient, queries ...string) ([]queryResult, error) {
