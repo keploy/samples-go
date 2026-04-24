@@ -17,9 +17,28 @@ import (
 	"time"
 )
 
+// opTimeout bounds a single Postgres operation (startup handshake or a
+// simple-Query round trip). It protects the HTTP handler from hanging
+// indefinitely on a stalled or half-open TCP connection: each operation
+// sets a deadline on the underlying net.Conn, so `io.ReadFull` inside
+// readMessage returns a timeout error instead of blocking forever.
+const opTimeout = 30 * time.Second
+
 type pgClient struct {
 	conn net.Conn
 	user string
+}
+
+// setOpDeadline arms a per-operation deadline on the connection. Call
+// clearOpDeadline (typically via defer) to remove it so the deadline
+// doesn't leak into the next operation on a shared connection (as used
+// by /run/all).
+func (c *pgClient) setOpDeadline() error {
+	return c.conn.SetDeadline(time.Now().Add(opTimeout))
+}
+
+func (c *pgClient) clearOpDeadline() {
+	_ = c.conn.SetDeadline(time.Time{})
 }
 
 type queryResult struct {
@@ -324,6 +343,11 @@ func dialPostgres() (*pgClient, error) {
 }
 
 func (c *pgClient) startup(user, db, password string) error {
+	if err := c.setOpDeadline(); err != nil {
+		return err
+	}
+	defer c.clearOpDeadline()
+
 	var body bytes.Buffer
 	_ = binary.Write(&body, binary.BigEndian, int32(196608))
 	writeCString(&body, "user")
@@ -370,7 +394,11 @@ func (c *pgClient) startup(user, db, password string) error {
 					return err
 				}
 			default:
-				return fmt.Errorf("unsupported postgres authentication code %d", code)
+				// Postgres 16 defaults to scram-sha-256 (code 10), which
+				// this raw-v3 client does not implement. Surface a hint
+				// so users can fix local runs without digging through
+				// protocol docs.
+				return fmt.Errorf("unsupported postgres authentication code %d; this client only speaks codes 0 (trust), 3 (cleartext), and 5 (md5). Postgres 16 defaults to scram-sha-256 (code 10); configure the server with POSTGRES_HOST_AUTH_METHOD=trust or md5 (or a pg_hba.conf entry that selects one of those) for this sample", code)
 			}
 		case 'S', 'K':
 		case 'Z':
@@ -391,6 +419,11 @@ func (c *pgClient) sendPassword(password string) error {
 
 func (c *pgClient) simpleQuery(sql, copyInput string) (queryResult, error) {
 	res := queryResult{SQL: oneLine(sql)}
+	if err := c.setOpDeadline(); err != nil {
+		return res, err
+	}
+	defer c.clearOpDeadline()
+
 	var body bytes.Buffer
 	writeCString(&body, sql)
 	if err := c.writeMessage('Q', body.Bytes()); err != nil {
