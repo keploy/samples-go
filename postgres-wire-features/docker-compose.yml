@@ -1,0 +1,42 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      # Force trust auth (code 0). Postgres 16 defaults to scram-sha-256
+      # (code 10), which this sample's raw-v3 client does not speak — we
+      # only implement code 0 / 3 / 5. This keeps auth on a path the
+      # sample can actually complete so the downstream Postgres wire
+      # surface (CopyData, cursors, PREPARE/EXECUTE, etc.) is what the
+      # record/replay cycle is actually exercising. With trust auth the
+      # server never requests a password, so POSTGRES_PASSWORD/PGPASSWORD
+      # are intentionally omitted to avoid implying otherwise.
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      # Bind to loopback only so the trust-auth Postgres isn't reachable
+      # from other hosts on the developer's network.
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      PGHOST: db
+      PGPORT: "5432"
+      PGUSER: postgres
+      PGDATABASE: postgres
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
