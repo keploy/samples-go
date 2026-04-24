@@ -129,10 +129,19 @@ type result struct {
 }
 
 type suiteCheck struct {
-	Name   string `json:"name"`
-	Passed bool   `json:"passed"`
-	Reason string `json:"reason,omitempty"`
-	Result result `json:"result"`
+	Name string `json:"name"`
+	// Passed reflects whether this individual check met its assertions.
+	Passed bool `json:"passed"`
+	// Informational checks are exercised but excluded from the top-level
+	// Passed aggregation. Used for BPF behaviours that are documented
+	// trade-offs rather than regressions (e.g. the same-socket-to-multiple-
+	// upstreams case, which the cookie-keyed orig_dst map in
+	// keploy/ebpf#97 is not designed to cover: the second sendmsg4 on a
+	// reused socket overwrites the first's stored dst, and recvmsg4 SNATs
+	// every reply back to the latest destination).
+	Informational bool   `json:"informational,omitempty"`
+	Reason        string `json:"reason,omitempty"`
+	Result        result `json:"result"`
 }
 
 type suiteResult struct {
@@ -398,26 +407,40 @@ func runSuite(ns, secondaryNS string, fixture bool) suiteResult {
 		Passed:              true,
 	}
 
-	add := func(name string, r result) {
+	add := func(name string, r result, informational bool) {
 		passed, reason := validateResult(r, fixture)
-		if !passed {
+		if !passed && !informational {
 			out.Passed = false
 		}
-		out.Checks = append(out.Checks, suiteCheck{Name: name, Passed: passed, Reason: reason, Result: r})
+		out.Checks = append(out.Checks, suiteCheck{
+			Name:          name,
+			Passed:        passed,
+			Informational: informational,
+			Reason:        reason,
+			Result:        r,
+		})
 	}
 
-	add("strict_unconnected_alpha", resolveStrict("alpha.keploy.test", ns))
-	add("strict_unconnected_beta", resolveStrict("beta.keploy.test", ns))
-	add("strict_unconnected_gamma", resolveStrict("gamma.keploy.test", ns))
-	add("connected_udp_control", resolveConnected("alpha.keploy.test", ns))
+	add("strict_unconnected_alpha", resolveStrict("alpha.keploy.test", ns), false)
+	add("strict_unconnected_beta", resolveStrict("beta.keploy.test", ns), false)
+	add("strict_unconnected_gamma", resolveStrict("gamma.keploy.test", ns), false)
+	add("connected_udp_control", resolveConnected("alpha.keploy.test", ns), false)
 
 	if secondaryNS != "" {
+		// same_socket_multi_upstream_* is exercised on purpose (Keploy's
+		// cookie-keyed orig_dst_by_cookie map lets only one destination
+		// be active per socket at a time — a documented limitation of
+		// the recvmsg4 SNAT approach, tracked in keploy/ebpf#97 review
+		// threads). We run the probe so regressions in either direction
+		// surface in the result JSON, but we don't let it gate the
+		// suite. A future per-(cookie, dst, txid) tracker in the BPF
+		// would let us flip these to hard gates.
 		for i, r := range resolveConcurrentStrict("alpha.keploy.test", ns, "beta.keploy.test", secondaryNS) {
 			name := "same_socket_multi_upstream_primary"
 			if i == 1 {
 				name = "same_socket_multi_upstream_secondary"
 			}
-			add(name, r)
+			add(name, r, true)
 		}
 	}
 
