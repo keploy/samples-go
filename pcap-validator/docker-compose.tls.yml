@@ -1,0 +1,106 @@
+# TLS variant of the dependency stack used by Keploy's pcap_validator
+# pipeline. Brings up Postgres with `ssl=on` and Mongo with `--tlsMode
+# requireTLS`, both serving an ephemeral self-signed cert generated at
+# compose-up time by the `certgen` init container — no certs are
+# committed to the repo.
+#
+# Connection strings the app should use against this stack:
+#   DATABASE_URL=postgres://postgres:postgres@localhost:5432/pcapdemo?sslmode=require
+#   MONGO_URI=mongodb://localhost:27017/?tls=true&tlsInsecure=true
+#
+# Bring up only the deps:
+#   docker compose -f docker-compose.tls.yml up -d certgen postgres mongo
+
+services:
+  certgen:
+    image: alpine:3.21
+    volumes:
+      - pcap-tls-certs:/certs
+    command:
+      - sh
+      - -ec
+      - |
+        if [ -f /certs/server.crt ] && [ -f /certs/server.key ] && [ -f /certs/server.pem ]; then
+          echo "certs already present"
+          exit 0
+        fi
+        apk add --no-cache openssl >/dev/null
+        cd /certs
+        openssl req -x509 -newkey rsa:2048 -nodes -days 365 \
+          -keyout server.key -out server.crt \
+          -subj "/CN=localhost" \
+          -addext "subjectAltName = DNS:localhost,IP:127.0.0.1"
+        cat server.crt server.key > server.pem
+        # server.crt/.pem: world-readable so the mongo user (which is
+        # not root inside the mongo image) can load the keypair.
+        # server.key: stays 600 — postgres re-chowns its own copy below.
+        chmod 644 server.crt server.pem
+        chmod 600 server.key
+        echo "certs generated"
+
+  postgres:
+    image: postgres:16-alpine
+    user: "0:0"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: pcapdemo
+    ports:
+      - "5432:5432"
+    volumes:
+      - pcap-tls-certs:/var/lib/postgresql/certs
+    # Run as root briefly to fix cert ownership (postgres uid varies
+    # between alpine releases), then exec the upstream entrypoint which
+    # drops privileges to the postgres user.
+    command:
+      - sh
+      - -ec
+      - |
+        chown postgres:postgres /var/lib/postgresql/certs/server.crt /var/lib/postgresql/certs/server.key
+        chmod 600 /var/lib/postgresql/certs/server.key
+        exec docker-entrypoint.sh postgres \
+          -c ssl=on \
+          -c ssl_cert_file=/var/lib/postgresql/certs/server.crt \
+          -c ssl_key_file=/var/lib/postgresql/certs/server.key
+    depends_on:
+      certgen:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d pcapdemo"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  mongo:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - pcap-tls-certs:/etc/mongo-certs:ro
+    command:
+      - mongod
+      - --tlsMode
+      - requireTLS
+      - --tlsCertificateKeyFile
+      - /etc/mongo-certs/server.pem
+      - --tlsCAFile
+      - /etc/mongo-certs/server.crt
+      - --tlsAllowConnectionsWithoutCertificates
+    depends_on:
+      certgen:
+        condition: service_completed_successfully
+    healthcheck:
+      test:
+        - CMD
+        - mongosh
+        - --quiet
+        - --tls
+        - --tlsAllowInvalidCertificates
+        - --eval
+        - "db.adminCommand('ping').ok"
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  pcap-tls-certs:
