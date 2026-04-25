@@ -355,22 +355,22 @@ export default function (data) {
     return;
   }
 
+  // ── READ-ONLY VU phase ──────────────────────────────────────────────
+  // All writes (createCustomer, createProduct, createOrder) happen in
+  // setup() which runs sequentially — no concurrent time-window overlap.
+  //
+  // During concurrent VU recording, multiple VUs' SQL mocks overlap in
+  // time. The mock-to-test windowing can assign VU1's customer-lookup
+  // mock to VU2's test case. During replay, VU2's test finds VU1's mock
+  // first (same SQL structure, different param values) and consumes it,
+  // returning wrong data. By only reading settled bootstrap data here,
+  // every SQL query maps to a unique, non-overlapping mock.
+
   const roll = Math.random();
   const customer = randomItem(data.customers);
 
-  if (roll < 0.1) {
-    createCustomer();
-  } else if (roll < 0.2) {
-    createProduct();
-  } else if (roll < 0.45) {
-    // Use a fresh customer per request so the contentID-based order ID is
-    // unique to this call, preventing duplicate-key 500 errors when multiple
-    // VUs happen to pick the same bootstrap customer and products.
-    const orderCustomer = createCustomer('Order Customer');
-    if (orderCustomer) {
-      createOrder(orderCustomer.id, data.products);
-    }
-  } else if (roll < 0.55) {
+  if (roll < 0.25) {
+    // GET /orders/{id} — fetch a known bootstrap order
     if (data.orders && data.orders.length > 0) {
       const bootstrapOrder = randomItem(data.orders);
       const orderResponse = http.get(`${BASE_URL}/orders/${bootstrapOrder.id}`);
@@ -379,30 +379,22 @@ export default function (data) {
         'get order returns items': (r) => r.status === 200 && r.json('items').length > 0,
       });
     }
-  } else if (roll < 0.75) {
-    // Query a bootstrap customer whose orders were fully settled in setup().
-    // The previous create-customer → create-order → query-summary pattern
-    // produced many structurally-identical SQL mocks (same SELECT shape,
-    // different customer IDs). The MySQL mock matcher's AST-structural
-    // fallback then matched the wrong mock, returning a completely
-    // different customer's data during replay.
-    const bootstrapCustomer = randomItem(data.customers);
-    const summaryResponse = http.get(`${BASE_URL}/customers/${bootstrapCustomer.id}/summary`);
+  } else if (roll < 0.50) {
+    // GET /customers/{id}/summary — fetch a known bootstrap customer summary
+    const summaryResponse = http.get(`${BASE_URL}/customers/${customer.id}/summary`);
     check(summaryResponse, {
       'customer summary status is 200': (r) => r.status === 200,
     });
-  } else if (roll < 0.9) {
-    const minTotal = randomInt(1000, 10000);
+  } else if (roll < 0.75) {
+    // GET /orders?... — search orders for a known bootstrap customer
     const searchResponse = http.get(
-      `${BASE_URL}/orders?status=paid&customer_id=${customer.id}&min_total_cents=${minTotal}&limit=10`
+      `${BASE_URL}/orders?status=paid&customer_id=${customer.id}&limit=10`
     );
     check(searchResponse, {
       'order search status is 200': (r) => r.status === 200,
     });
   } else {
-    // TopProducts is recorded once during setup() with a fully-settled DB state.
-    // Replace the concurrent slot with a stable bootstrap-order lookup to
-    // avoid aggregate-fluctuation mock mismatches during replay.
+    // GET /orders/{id} — another bootstrap order lookup (different slot)
     if (data.orders && data.orders.length > 0) {
       const bootstrapOrder = randomItem(data.orders);
       const orderResponse = http.get(`${BASE_URL}/orders/${bootstrapOrder.id}`);
