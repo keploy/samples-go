@@ -3,10 +3,15 @@ set -euo pipefail
 
 BASE_URL="http://localhost:8080"
 
-# Generate random company names
-random_name() {
-  head -c 8 /dev/urandom | base64 | tr -dc 'a-zA-Z' | head -c 10
-}
+# Deterministic per-iteration company names. Previously this used a random
+# generator (head -c 8 /dev/urandom | base64 | tr -dc 'a-zA-Z' | head -c 10)
+# producing names like "Company_<8-10 random alphas>_<i>", which differ
+# between record and replay runs of the Keploy http-postgres CI pipeline.
+# The postgres-v3 replayer matches mocks by bind value, so divergent random
+# names triggered intermittent "no invocation matched" errors on test-4 /
+# test-21 (the POST /companies inserts). A deterministic counter keeps
+# inserts unique within a single run while guaranteeing record/replay agree
+# byte-for-byte on the bind payload.
 
 echo "=== Rapid-fire API test (25+ calls) ==="
 
@@ -14,7 +19,7 @@ echo "=== Rapid-fire API test (25+ calls) ==="
 echo -e "\n--- Creating 10 unique companies (parallel) ---"
 pids=()
 for i in $(seq 1 10); do
-  name="Company_$(random_name)_$i"
+  name="Company_${i}"
   curl -s -w "  HTTP %{http_code}\n" -X POST "$BASE_URL/companies" \
     -H 'Content-Type: application/json' \
     -d "{\"name\": \"$name\"}" &
