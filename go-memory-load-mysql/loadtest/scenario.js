@@ -159,15 +159,6 @@ function buildLargePayload(sizeMB) {
   return payloadCache[sizeMB];
 }
 
-// Build a payload whose first bytes are a unique tag so every call produces a
-// distinct SHA-256, preventing duplicate-key errors on the content-addressed
-// large_payloads table.
-function buildUniqueLargePayload(sizeMB) {
-  const base = buildLargePayload(sizeMB);
-  const tag = uniqueSuffix() + '|';
-  return tag + base.slice(tag.length);
-}
-
 function createCustomer(namePrefix = 'Load Customer') {
   const suffix = uniqueSuffix();
   const payload = {
@@ -186,7 +177,7 @@ function createCustomer(namePrefix = 'Load Customer') {
 
 function createLargePayload(sizeMB) {
   const suffix = uniqueSuffix();
-  const payload = buildUniqueLargePayload(sizeMB);
+  const payload = buildLargePayload(sizeMB);
   const response = http.post(
     `${BASE_URL}/large-payloads`,
     JSON.stringify({
@@ -336,11 +327,6 @@ export function setup() {
     }
   }
 
-  // Call TopProducts once after all bootstrap data is settled so keploy
-  // records exactly one stable aggregate mock — no concurrent writes means
-  // the result is identical between record and replay.
-  http.get(`${BASE_URL}/analytics/top-products?days=30&limit=5`);
-
   return {
     customers: bootstrapCustomers,
     products: bootstrapProducts,
@@ -355,22 +341,16 @@ export default function (data) {
     return;
   }
 
-  // ── READ-ONLY VU phase ──────────────────────────────────────────────
-  // All writes (createCustomer, createProduct, createOrder) happen in
-  // setup() which runs sequentially — no concurrent time-window overlap.
-  //
-  // During concurrent VU recording, multiple VUs' SQL mocks overlap in
-  // time. The mock-to-test windowing can assign VU1's customer-lookup
-  // mock to VU2's test case. During replay, VU2's test finds VU1's mock
-  // first (same SQL structure, different param values) and consumes it,
-  // returning wrong data. By only reading settled bootstrap data here,
-  // every SQL query maps to a unique, non-overlapping mock.
-
   const roll = Math.random();
   const customer = randomItem(data.customers);
 
-  if (roll < 0.25) {
-    // GET /orders/{id} — fetch a known bootstrap order
+  if (roll < 0.1) {
+    createCustomer();
+  } else if (roll < 0.2) {
+    createProduct();
+  } else if (roll < 0.45) {
+    createOrder(customer.id, data.products);
+  } else if (roll < 0.55) {
     if (data.orders && data.orders.length > 0) {
       const bootstrapOrder = randomItem(data.orders);
       const orderResponse = http.get(`${BASE_URL}/orders/${bootstrapOrder.id}`);
@@ -379,29 +359,28 @@ export default function (data) {
         'get order returns items': (r) => r.status === 200 && r.json('items').length > 0,
       });
     }
-  } else if (roll < 0.50) {
-    // GET /customers/{id}/summary — fetch a known bootstrap customer summary
-    const summaryResponse = http.get(`${BASE_URL}/customers/${customer.id}/summary`);
-    check(summaryResponse, {
-      'customer summary status is 200': (r) => r.status === 200,
-    });
   } else if (roll < 0.75) {
-    // GET /orders?... — search orders for a known bootstrap customer
+    const isolatedCustomer = createCustomer('Summary Customer');
+    if (isolatedCustomer) {
+      createOrder(isolatedCustomer.id, data.products);
+      const summaryResponse = http.get(`${BASE_URL}/customers/${isolatedCustomer.id}/summary`);
+      check(summaryResponse, {
+        'customer summary status is 200': (r) => r.status === 200,
+      });
+    }
+  } else if (roll < 0.9) {
+    const minTotal = randomInt(1000, 10000);
     const searchResponse = http.get(
-      `${BASE_URL}/orders?status=paid&customer_id=${customer.id}&limit=10`
+      `${BASE_URL}/orders?status=paid&customer_id=${customer.id}&min_total_cents=${minTotal}&limit=10`
     );
     check(searchResponse, {
       'order search status is 200': (r) => r.status === 200,
     });
   } else {
-    // GET /orders/{id} — another bootstrap order lookup (different slot)
-    if (data.orders && data.orders.length > 0) {
-      const bootstrapOrder = randomItem(data.orders);
-      const orderResponse = http.get(`${BASE_URL}/orders/${bootstrapOrder.id}`);
-      check(orderResponse, {
-        'get bootstrap order status is 200': (r) => r.status === 200,
-      });
-    }
+    const analyticsResponse = http.get(`${BASE_URL}/analytics/top-products?days=30&limit=5`);
+    check(analyticsResponse, {
+      'top products status is 200': (r) => r.status === 200,
+    });
   }
 
   sleep(randomInt(1, 3) / 10);
