@@ -32,8 +32,7 @@ export const options = {
 };
 
 // ─── setup ───────────────────────────────────────────────────────────────────
-// Seed ALL reference data (products, customers, orders, large payloads)
-// sequentially so mock time-windows are clean and isolated.
+// Seed reference data (products + customers) that VUs will share.
 
 export function setup() {
   client.connect(TARGET_ADDR, { plaintext: true });
@@ -41,7 +40,6 @@ export function setup() {
   const categories = ['electronics', 'clothing', 'books', 'home', 'sports'];
   const segments   = ['startup', 'enterprise', 'smb', 'consumer'];
 
-  // ── Create products ──
   const products = [];
   for (let i = 0; i < 10; i++) {
     const res = client.invoke('loadtest.v1.LoadTestService/CreateProduct', {
@@ -56,7 +54,6 @@ export function setup() {
     }
   }
 
-  // ── Create customers ──
   const customers = [];
   for (let i = 0; i < 5; i++) {
     const res = client.invoke('loadtest.v1.LoadTestService/CreateCustomer', {
@@ -69,60 +66,66 @@ export function setup() {
     }
   }
 
-  // ── Create orders (one per customer, using first product) ──
-  const orders = [];
-  for (let i = 0; i < customers.length; i++) {
-    const res = client.invoke('loadtest.v1.LoadTestService/CreateOrder', {
-      customer_id: customers[i],
-      status:      'pending',
-      items:       [{ product_id: products[i % products.length], quantity: 1 }],
-    });
-    if (res && res.status === grpc.StatusOK && res.message) {
-      orders.push(res.message.id);
-    }
-  }
-
-  // ── Create large payloads (one per VU slot) ──
-  const payloads = [];
-  for (let i = 0; i < K6_VUS; i++) {
-    const res = client.invoke('loadtest.v1.LoadTestService/CreateLargePayload', {
-      name:         `setup-payload-${i}-${Date.now()}`,
-      content_type: 'text/plain',
-      payload:      'x'.repeat(1024),
-    });
-    if (res && res.status === grpc.StatusOK && res.message) {
-      payloads.push(res.message.id);
-    }
-  }
-
-  // Small sleep to let data settle
-  sleep(1);
-
   client.close();
-  return { products, customers, orders, payloads };
+  return { products, customers };
 }
 
-// ─── default (100% read-only VU phase) ───────────────────────────────────────
-// VUs only read settled bootstrap data. No writes during the VU phase
-// ensures deterministic, unique query-to-mock mapping during replay.
+// ─── default ─────────────────────────────────────────────────────────────────
 
 export default function (data) {
   client.connect(TARGET_ADDR, { plaintext: true });
 
-  const custIdx    = __VU % Math.max(data.customers.length, 1);
-  const customerID = data.customers[custIdx] || '';
-  const productID  = data.products[__VU % Math.max(data.products.length, 1)] || '';
-  const orderID    = data.orders[custIdx % Math.max(data.orders.length, 1)] || '';
-  const payloadID  = data.payloads[__VU % Math.max(data.payloads.length, 1)] || '';
+  const customerID = data.customers[__VU % Math.max(data.customers.length, 1)] || '';
+  const productID  = data.products[__VU % Math.max(data.products.length, 1)]   || '';
 
-  // 1. Get order (read-only — uses settled bootstrap order)
+  // 1. Create customer
+  {
+    const res = client.invoke('loadtest.v1.LoadTestService/CreateCustomer', {
+      email:     `vu${__VU}-${Date.now()}@example.com`,
+      full_name: `VU User ${__VU}`,
+      segment:   'startup',
+    });
+    const ok = check(res, { 'create customer ok': (r) => r && r.status === grpc.StatusOK });
+    if (!ok) grpcReqFailed.add(1);
+  }
+
+  // 2. Create product
+  {
+    const res = client.invoke('loadtest.v1.LoadTestService/CreateProduct', {
+      sku:             `VU-${__VU}-${Date.now()}`,
+      name:            `VU Product ${__VU}`,
+      category:        'electronics',
+      price_cents:     1499,
+      inventory_count: 99999,
+    });
+    const ok = check(res, { 'create product ok': (r) => r && r.status === grpc.StatusOK });
+    if (!ok) grpcReqFailed.add(1);
+  }
+
+  // 3. Create order (requires seeded customer + product)
+  let orderID = '';
+  if (customerID && productID) {
+    const res = client.invoke('loadtest.v1.LoadTestService/CreateOrder', {
+      customer_id: customerID,
+      status:      'pending',
+      items:       [{ product_id: productID, quantity: 1 }],
+    });
+    const ok = check(res, { 'create order ok': (r) => r && r.status === grpc.StatusOK });
+    if (!ok) {
+      grpcReqFailed.add(1);
+    } else if (res.message) {
+      orderID = res.message.id;
+    }
+  }
+
+  // 4. Get order
   if (orderID) {
     const res = client.invoke('loadtest.v1.LoadTestService/GetOrder', { order_id: orderID });
     const ok = check(res, { 'get order ok': (r) => r && r.status === grpc.StatusOK });
     if (!ok) grpcReqFailed.add(1);
   }
 
-  // 2. Customer summary (read-only — uses settled bootstrap customer)
+  // 5. Customer summary
   if (customerID) {
     const res = client.invoke('loadtest.v1.LoadTestService/GetCustomerSummary', {
       customer_id: customerID,
@@ -131,7 +134,7 @@ export default function (data) {
     if (!ok) grpcReqFailed.add(1);
   }
 
-  // 3. Search orders (read-only — queries settled bootstrap data)
+  // 6. Search orders
   {
     const res = client.invoke('loadtest.v1.LoadTestService/SearchOrders', {
       status: 'pending',
@@ -142,18 +145,35 @@ export default function (data) {
     if (!ok) grpcReqFailed.add(1);
   }
 
-  // 4. Top products (read-only — queries settled bootstrap data)
+  // 7. Top products
   {
     const res = client.invoke('loadtest.v1.LoadTestService/TopProducts', { days: 30, limit: 5 });
     const ok = check(res, { 'top products ok': (r) => r && r.status === grpc.StatusOK });
     if (!ok) grpcReqFailed.add(1);
   }
 
-  // 5. Get large payload (read-only — uses settled bootstrap payload)
-  if (payloadID) {
-    const res = client.invoke('loadtest.v1.LoadTestService/GetLargePayload', { payload_id: payloadID });
-    const ok = check(res, { 'get payload ok': (r) => r && r.status === grpc.StatusOK });
-    if (!ok) grpcReqFailed.add(1);
+  // 8. Large payload round-trip
+  {
+    const payload   = 'x'.repeat(1024);
+    const createRes = client.invoke('loadtest.v1.LoadTestService/CreateLargePayload', {
+      name:         `payload-${__VU}-${Date.now()}`,
+      content_type: 'text/plain',
+      payload:      payload,
+    });
+    const createOk = check(createRes, { 'create payload ok': (r) => r && r.status === grpc.StatusOK });
+    if (!createOk) {
+      grpcReqFailed.add(1);
+    } else {
+      const pid = createRes.message.id;
+
+      const getRes = client.invoke('loadtest.v1.LoadTestService/GetLargePayload', { payload_id: pid });
+      const getOk  = check(getRes, { 'get payload ok': (r) => r && r.status === grpc.StatusOK });
+      if (!getOk) grpcReqFailed.add(1);
+
+      const delRes = client.invoke('loadtest.v1.LoadTestService/DeleteLargePayload', { payload_id: pid });
+      const delOk  = check(delRes, { 'delete payload ok': (r) => r && r.status === grpc.StatusOK });
+      if (!delOk) grpcReqFailed.add(1);
+    }
   }
 
   client.close();
