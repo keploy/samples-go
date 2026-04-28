@@ -52,16 +52,43 @@ func (s *Store) Ping(ctx context.Context) error {
 	return s.db.PingContext(ctx)
 }
 
-func newID() string {
-	// Generate a UUID v4-style string using random bytes from crypto/sha256 as a seed
-	// fallback: use time + rand; for a load-test, a simple unique ID is sufficient.
-	raw := sha256.Sum256([]byte(fmt.Sprintf("%d", time.Now().UnixNano())))
-	b := raw[:]
-	// Format as UUID v4
-	b[6] = (b[6] & 0x0f) | 0x40
-	b[8] = (b[8] & 0x3f) | 0x80
-	return fmt.Sprintf("%08x-%04x-%04x-%04x-%12x",
-		b[0:4], b[4:6], b[6:8], b[8:10], b[10:16])
+// contentID derives a deterministic UUID-formatted ID from the supplied key
+// parts using SHA-256, so that the same inputs always produce the same ID
+// across Keploy record and replay sessions.
+func contentID(parts ...string) string {
+	h := sha256.Sum256([]byte(strings.Join(parts, "\x00")))
+	b := make([]byte, 16)
+	copy(b, h[:16])
+	b[6] = (b[6] & 0x0f) | 0x50 // UUID version 5 (name-based SHA-1 variant, repurposed)
+	b[8] = (b[8] & 0x3f) | 0x80 // UUID variant bits
+	return fmt.Sprintf("%x-%x-%x-%x-%x", b[0:4], b[4:6], b[6:8], b[8:10], b[10:16])
+}
+
+// contentTime derives a deterministic creation timestamp from the supplied key
+// parts using the same SHA-256 approach, producing a stable value within a
+// 2-year window starting 2020-01-01. Identical inputs always return the same time.
+func contentTime(parts ...string) time.Time {
+	h := sha256.Sum256([]byte(strings.Join(parts, "\x00")))
+	const base = int64(1577836800) // 2020-01-01T00:00:00Z
+	const window = int64(2 * 365 * 24 * 3600)
+	raw := int64(h[0])<<56 | int64(h[1])<<48 | int64(h[2])<<40 | int64(h[3])<<32 |
+		int64(h[4])<<24 | int64(h[5])<<16 | int64(h[6])<<8 | int64(h[7])
+	return time.Unix(base+(raw&0x7FFFFFFFFFFFFFFF)%window, 0).UTC()
+}
+
+// orderFingerprint builds a canonical, sorted string representation of order
+// items so that the order ID is independent of input slice ordering.
+func orderFingerprint(items []OrderItemInput) string {
+	sorted := make([]OrderItemInput, len(items))
+	copy(sorted, items)
+	sort.Slice(sorted, func(i, j int) bool {
+		return sorted[i].ProductID < sorted[j].ProductID
+	})
+	parts := make([]string, len(sorted))
+	for i, inp := range sorted {
+		parts[i] = fmt.Sprintf("%s:%d", inp.ProductID, inp.Quantity)
+	}
+	return strings.Join(parts, ",")
 }
 
 func isDuplicateKey(err error) bool {
@@ -85,11 +112,11 @@ func (s *Store) CreateCustomer(ctx context.Context, req CreateCustomerRequest) (
 	}
 
 	customer := Customer{
-		ID:        newID(),
+		ID:        contentID(req.Email),
 		Email:     req.Email,
 		FullName:  req.FullName,
 		Segment:   req.Segment,
-		CreatedAt: time.Now().UTC(),
+		CreatedAt: contentTime(req.Email),
 	}
 
 	_, err := s.db.ExecContext(ctx,
@@ -125,13 +152,13 @@ func (s *Store) CreateProduct(ctx context.Context, req CreateProductRequest) (Pr
 	}
 
 	product := Product{
-		ID:             newID(),
+		ID:             contentID(req.SKU),
 		SKU:            req.SKU,
 		Name:           req.Name,
 		Category:       req.Category,
 		PriceCents:     req.PriceCents,
 		InventoryCount: req.InventoryCount,
-		CreatedAt:      time.Now().UTC(),
+		CreatedAt:      contentTime(req.SKU),
 	}
 
 	_, err := s.db.ExecContext(ctx,
@@ -198,6 +225,13 @@ func (s *Store) CreateOrder(ctx context.Context, req CreateOrderRequest) (Order,
 }
 
 func (s *Store) createOrderTx(ctx context.Context, req CreateOrderRequest) (Order, error) {
+	// Compute deterministic order ID and timestamp from the customer + item inputs
+	// before touching the DB. This ensures the same request always produces the
+	// same order ID across Keploy record and replay sessions.
+	fp := orderFingerprint(req.Items)
+	orderID := contentID(req.CustomerID, fp)
+	createdAt := contentTime(req.CustomerID, fp)
+
 	tx, err := s.db.BeginTx(ctx, nil)
 	if err != nil {
 		return Order{}, fmt.Errorf("begin transaction: %w", err)
@@ -262,9 +296,6 @@ func (s *Store) createOrderTx(ctx context.Context, req CreateOrderRequest) (Orde
 		})
 	}
 
-	orderID := newID()
-	createdAt := time.Now().UTC()
-
 	_, err = tx.ExecContext(ctx,
 		`INSERT INTO orders (id, customer_id, customer_email, customer_name, customer_segment, status, total_cents, created_at)
 		 VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
@@ -279,7 +310,7 @@ func (s *Store) createOrderTx(ctx context.Context, req CreateOrderRequest) (Orde
 		_, err = tx.ExecContext(ctx,
 			`INSERT INTO order_items (id, order_id, product_id, sku, name, category, quantity, unit_price_cents, line_total_cents)
 			 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-			newID(), orderID, item.ProductID, item.SKU, item.Name, item.Category,
+			contentID(orderID, item.ProductID), orderID, item.ProductID, item.SKU, item.Name, item.Category,
 			item.Quantity, item.UnitPriceCents, item.LineTotalCents,
 		)
 		if err != nil {
@@ -560,12 +591,12 @@ func (s *Store) CreateLargePayload(ctx context.Context, req CreateLargePayloadRe
 
 	checksum := sha256.Sum256([]byte(req.Payload))
 	record := LargePayloadRecord{
-		ID:               newID(),
+		ID:               contentID(req.Name, hex.EncodeToString(checksum[:])),
 		Name:             req.Name,
 		ContentType:      req.ContentType,
 		PayloadSizeBytes: payloadSizeBytes,
 		SHA256:           hex.EncodeToString(checksum[:]),
-		CreatedAt:        time.Now().UTC(),
+		CreatedAt:        contentTime(req.Name, hex.EncodeToString(checksum[:])),
 	}
 
 	_, err := s.db.ExecContext(ctx,
