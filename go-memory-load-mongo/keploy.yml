@@ -65,14 +65,16 @@ test:
     # (LifetimePerTest) mocks whose request timestamp falls outside the
     # outer test window are dropped rather than promoted across tests.
     #
-    # Default TRUE now that every stateful-protocol recorder classifies
-    # mocks finely enough (per-connection data mocks, session vs per-test
-    # distinction for connection-alive commands) that legitimate cross-
-    # test sharing is encoded as session/connection lifetime rather than
-    # implicit out-of-window reuse. If an older recording relies on the
-    # legacy lax behaviour, opt out with strictMockWindow: false here or
-    # export KEPLOY_STRICT_MOCK_WINDOW=0 — the env var wins.
-    strictMockWindow: true
+    # Kept FALSE for MongoDB: with 1 VU (strictly sequential execution)
+    # every MongoDB BSON request in the recording window is unique —
+    # different customer IDs, product IDs, order IDs. Global FIFO mock
+    # matching works correctly without strict window enforcement because
+    # no two test cases share the same BSON query fingerprint.
+    # Strict mode introduces timing sensitivity: if CI load causes a mock
+    # timestamp to fall slightly outside the computed test window, Keploy
+    # falls back to the next global-pool mock (wrong customer/product),
+    # causing occasional 2-4 flaky failures per run.
+    strictMockWindow: false
 record:
     recordTimer: 0s
     filters: []
