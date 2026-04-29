@@ -392,7 +392,15 @@ export default function (data) {
         'customer summary status is 200': (r) => r.status === 200,
       });
     }
-  } else if (roll < 0.9) {
+  } else {
+    // Extends from 0.75 to 1.0 (was 0.75–0.90 before top-products was moved
+    // to teardown). top-products is excluded from the VU phase because its
+    // SQL — SELECT … LIMIT 5 — carries no unique parameter that changes
+    // across calls. Keploy's MySQL mock matcher returns the first recorded
+    // response for any matching SQL pattern; with many VU calls each
+    // returning a different accumulated state, every replay gets the same
+    // early-session mock. Moving the call to teardown (one invocation,
+    // one mock) makes the match unambiguous and the test deterministic.
     const minTotal = randomInt(1000, 10000);
     const searchResponse = http.get(
       `${BASE_URL}/orders?status=paid&customer_id=${customer.id}&min_total_cents=${minTotal}&limit=10`
@@ -400,14 +408,24 @@ export default function (data) {
     check(searchResponse, {
       'order search status is 200': (r) => r.status === 200,
     });
-  } else {
-    const analyticsResponse = http.get(`${BASE_URL}/analytics/top-products?days=30&limit=5`);
-    check(analyticsResponse, {
-      'top products status is 200': (r) => r.status === 200,
-    });
   }
 
   sleep(randomInt(1, 3) / 10);
+}
+
+// teardown runs once after all VU iterations complete, while Keploy is still
+// recording. Calling top-products here produces exactly ONE recorded mock and
+// ONE test case. A single mock means Keploy's MySQL matcher has no ambiguity:
+// it always returns the one recorded response, which matches the one expected
+// response → deterministic pass. Contrast with the VU phase where each of the
+// many top-products calls returns a different accumulated-state response; the
+// matcher always serves the first recorded response (early session state) for
+// all subsequent calls, causing every later test case to fail.
+export function teardown(_data) {
+  const analyticsResponse = http.get(`${BASE_URL}/analytics/top-products?days=30&limit=5`);
+  check(analyticsResponse, {
+    'top products status is 200': (r) => r.status === 200,
+  });
 }
 
 function runLargePayloadCycle(data) {
