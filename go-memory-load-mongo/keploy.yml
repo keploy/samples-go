@@ -45,6 +45,8 @@ test:
                 quantity: [".*"]
                 total_quantity: [".*"]
                 content_type: [".*"]
+            header:
+                Content-Length: [".*"]
         test-sets: {}
     replaceWith:
         global: {}
@@ -85,20 +87,7 @@ test:
     compareAll: false
     updateTestMapping: false
     disableAutoHeaderNoise: false
-    # strictMockWindow enforces cross-test bleed prevention. Per-test
-    # (LifetimePerTest) mocks whose request timestamp falls outside the
-    # outer test window are dropped rather than promoted across tests.
-    #
-    # Kept FALSE for MongoDB: with 1 VU (strictly sequential execution)
-    # every MongoDB BSON request in the recording window is unique —
-    # different customer IDs, product IDs, order IDs. Global FIFO mock
-    # matching works correctly without strict window enforcement because
-    # no two test cases share the same BSON query fingerprint.
-    # Strict mode introduces timing sensitivity: if CI load causes a mock
-    # timestamp to fall slightly outside the computed test window, Keploy
-    # falls back to the next global-pool mock (wrong customer/product),
-    # causing occasional 2-4 flaky failures per run.
-    strictMockWindow: false
+    strictMockWindow: true
 record:
     recordTimer: 0s
     filters: []

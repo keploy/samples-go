@@ -45,6 +45,8 @@ test:
                 quantity: [".*"]
                 total_quantity: [".*"]
                 content_type: [".*"]
+            header:
+                Content-Length: [".*"]
         test-sets: {}
     replaceWith:
         global: {}
@@ -85,19 +87,7 @@ test:
     compareAll: false
     updateTestMapping: false
     disableAutoHeaderNoise: false
-    # strictMockWindow enforces cross-test bleed prevention. Per-test
-    # (LifetimePerTest) mocks whose request timestamp falls outside the
-    # outer test window are dropped rather than promoted across tests.
-    #
-    # Kept FALSE for MySQL: the MySQL wire-protocol recorder has not yet
-    # been verified to classify session-level commands (COM_PING, SET
-    # session variables, connection handshake) as session-lifetime rather
-    # than per-test mocks. Enabling strict mode prematurely would drop
-    # those mocks between tests, causing SQL connection errors.
-    # Set to true once the MySQL recorder reaches the same mock
-    # classification maturity as the MongoDB recorder (see go-memory-load-mongo
-    # keploy.yml where strictMockWindow: true is safe).
-    strictMockWindow: false
+    strictMockWindow: true
 record:
     recordTimer: 0s
     filters: []
