@@ -98,10 +98,7 @@ test:
     compareAll: false
     updateTestMapping: false
     disableAutoHeaderNoise: false
-    # Kept false to confirm whether strictMockWindow: true causes the MongoDB
-    # connection pool EOF cascade (70% confident). If CI passes with false,
-    # the cascade is confirmed as a Keploy bug and will be reported.
-    strictMockWindow: false
+    strictMockWindow: true
 record:
     recordTimer: 0s
     filters: []
