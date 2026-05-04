@@ -40,6 +40,8 @@ test:
                 total_cents: [".*"]
                 total_orders: [".*"]
                 total_spent_cents: [".*"]
+                average_order_value_cents: [".*"]
+                lifetime_value_cents: [".*"]
                 quantity: [".*"]
                 total_quantity: [".*"]
                 content_type: [".*"]

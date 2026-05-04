@@ -374,27 +374,36 @@ export default function (data) {
         'get order returns items': (r) => r.status === 200 && r.json('items').length > 0,
       });
     }
-  } else if (roll < 0.75) {
+  } else {
     const summaryResponse = http.get(`${BASE_URL}/customers/${customer.id}/summary`);
     check(summaryResponse, {
       'customer summary status is 200': (r) => r.status === 200,
     });
-  } else if (roll < 0.9) {
-    const minTotal = randomInt(1000, 10000);
+  }
+
+  sleep(randomInt(1, 3) / 10);
+}
+
+// teardown runs once after all VU iterations complete, while Keploy is still
+// recording. Stateful search endpoints and analytics live here so the DB is
+// fully settled before the call — one call → one mock → deterministic replay.
+// During the VU phase these returned non-deterministic results (new customers
+// with zero orders, different accumulated analytics state) causing FIFO mock
+// collisions where empty/stale mocks were served to wrong test cases.
+export function teardown(data) {
+  for (const customer of data.customers.slice(0, 5)) {
     const searchResponse = http.get(
-      `${BASE_URL}/orders?status=paid&customer_id=${customer.id}&min_total_cents=${minTotal}&limit=10`
+      `${BASE_URL}/orders?status=paid&customer_id=${customer.id}&min_total_cents=1000&limit=10`
     );
     check(searchResponse, {
       'order search status is 200': (r) => r.status === 200,
     });
-  } else {
-    const analyticsResponse = http.get(`${BASE_URL}/analytics/top-products?days=30&limit=5`);
-    check(analyticsResponse, {
-      'top products status is 200': (r) => r.status === 200,
-    });
   }
 
-  sleep(randomInt(1, 3) / 10);
+  const analyticsResponse = http.get(`${BASE_URL}/analytics/top-products?days=30&limit=5`);
+  check(analyticsResponse, {
+    'top products status is 200': (r) => r.status === 200,
+  });
 }
 
 function runLargePayloadCycle(data) {
