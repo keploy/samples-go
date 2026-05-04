@@ -45,6 +45,17 @@ test:
                 quantity: [".*"]
                 total_quantity: [".*"]
                 content_type: [".*"]
+                unit_price_cents: [".*"]
+                line_total_cents: [".*"]
+                favorite_category: [".*"]
+                last_order_at: [".*"]
+                customer_name: [".*"]
+                total_items: [".*"]
+                distinct_products: [".*"]
+                units_sold: [".*"]
+                revenue_cents: [".*"]
+                revenue_rank: [".*"]
+                orders_count: [".*"]
             header:
                 Content-Length: [".*"]
         test-sets: {}

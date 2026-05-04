@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"log/slog"
 	"net/http"
@@ -234,6 +235,10 @@ func (s *Server) writeStoreError(w http.ResponseWriter, err error) {
 		status = http.StatusNotFound
 		message = err.Error()
 	default:
+		// TEMP: expose full error in response body so Keploy test output
+		// captures the exact MongoDB error (helps confirm strictMockWindow root cause).
+		// Remove after root cause is confirmed and Keploy bug is filed.
+		message = fmt.Sprintf("internal: %v", err)
 		s.logger.Error("request failed", "error", err)
 	}
 
