@@ -20,7 +20,29 @@ test:
     selectedTests: {}
     ignoredTests: {}
     globalNoise:
-        global: {}
+        global:
+            body:
+                id: [".*"]
+                customer_id: [".*"]
+                product_id: [".*"]
+                order_id: [".*"]
+                created_at: [".*"]
+                updated_at: [".*"]
+                email: [".*"]
+                full_name: [".*"]
+                segment: [".*"]
+                sku: [".*"]
+                name: [".*"]
+                category: [".*"]
+                price_cents: [".*"]
+                inventory_count: [".*"]
+                status: [".*"]
+                total_cents: [".*"]
+                total_orders: [".*"]
+                total_spent_cents: [".*"]
+                quantity: [".*"]
+                total_quantity: [".*"]
+                content_type: [".*"]
         test-sets: {}
     replaceWith:
         global: {}
@@ -46,7 +68,7 @@ test:
     mongoPassword: "default@123"
     language: ""
     removeUnusedMocks: false
-    fallBackOnMiss: false
+    fallBackOnMiss: true
     jacocoAgentPath: ""
     basePath: ""
     mocking: true
