@@ -393,21 +393,19 @@ export default function (data) {
       });
     }
   } else {
-    // Extends from 0.75 to 1.0 (was 0.75–0.90 before top-products was moved
-    // to teardown). top-products is excluded from the VU phase because its
-    // SQL — SELECT … LIMIT 5 — carries no unique parameter that changes
-    // across calls. Keploy's MySQL mock matcher returns the first recorded
-    // response for any matching SQL pattern; with many VU calls each
-    // returning a different accumulated state, every replay gets the same
-    // early-session mock. Moving the call to teardown (one invocation,
-    // one mock) makes the match unambiguous and the test deterministic.
-    const minTotal = randomInt(1000, 10000);
-    const searchResponse = http.get(
-      `${BASE_URL}/orders?status=paid&customer_id=${customer.id}&min_total_cents=${minTotal}&limit=10`
-    );
-    check(searchResponse, {
-      'order search status is 200': (r) => r.status === 200,
-    });
+    // Increased from 0.75–1.0 after order-search was moved to teardown.
+    // The isolated customer+order+summary flow is self-contained: each VU
+    // creates its own customer, places one order, then fetches that customer's
+    // summary. Because the customer is brand-new and unique to this VU, the
+    // summary mock is unambiguous — no FIFO collision possible.
+    const isolatedCustomer2 = createCustomer('Summary Customer');
+    if (isolatedCustomer2) {
+      createOrder(isolatedCustomer2.id, data.products);
+      const summaryResponse = http.get(`${BASE_URL}/customers/${isolatedCustomer2.id}/summary`);
+      check(summaryResponse, {
+        'customer summary status is 200': (r) => r.status === 200,
+      });
+    }
   }
 
   sleep(randomInt(1, 3) / 10);
@@ -421,11 +419,29 @@ export default function (data) {
 // many top-products calls returns a different accumulated-state response; the
 // matcher always serves the first recorded response (early session state) for
 // all subsequent calls, causing every later test case to fail.
-export function teardown(_data) {
+// teardown runs once after all VU iterations complete, while Keploy is still
+// recording. All stateful search endpoints live here for the same reason
+// top-products does: the DB is fully settled, so each search returns a
+// deterministic result — one call → one mock → unambiguous replay.
+export function teardown(data) {
   const analyticsResponse = http.get(`${BASE_URL}/analytics/top-products?days=30&limit=5`);
   check(analyticsResponse, {
     'top products status is 200': (r) => r.status === 200,
   });
+
+  // Order search: called once per bootstrap customer after all VUs finish.
+  // During the VU phase this returned non-deterministic results (new customers
+  // with zero orders mixed into the FIFO queue alongside populated results).
+  // Here the DB is settled → every bootstrap customer has their full order
+  // history → result is always populated → one mock → deterministic replay.
+  for (const customer of data.customers.slice(0, 5)) {
+    const searchResponse = http.get(
+      `${BASE_URL}/orders?status=paid&customer_id=${customer.id}&min_total_cents=1000&limit=10`
+    );
+    check(searchResponse, {
+      'order search status is 200': (r) => r.status === 200,
+    });
+  }
 }
 
 function runLargePayloadCycle(data) {
