@@ -1,0 +1,134 @@
+name: aerospike-tls record/replay
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'aerospike-tls/**'
+      - '.github/workflows/aerospike-tls.yml'
+  pull_request:
+    paths:
+      - 'aerospike-tls/**'
+      - '.github/workflows/aerospike-tls.yml'
+  workflow_dispatch: {}
+
+# The pipeline drives one job that records each of the three
+# test-sets in order via the bundled scripts under aerospike-tls/
+# scripts/ and replays them against the captured mocks. Scripts MUST
+# run 1 → 2 → 3 in this order: keploy auto-numbers a fresh recording
+# off whatever already exists under ./keploy/, so script-1 produces
+# test-set-0, script-2 produces test-set-1, script-3 produces
+# test-set-2. The shared common.sh sources noise filters + dir
+# normalisation; we keep the sequence here so a single failure
+# pinpoints which set regressed.
+
+jobs:
+  record-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout samples-go
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.26'
+
+      # The keploy binary on the stable release stream does not yet
+      # carry the Aerospike parser. Until it does, build keploy from
+      # source against the open `feat/aerospike-parser` branches in
+      # both keploy/keploy and keploy/integrations. keploy's go.mod
+      # has a `replace github.com/keploy/integrations => ../integrations`
+      # so the two checkouts must end up as siblings on disk.
+      - name: Clone keploy + integrations (feat/aerospike-parser)
+        run: |
+          set -euxo pipefail
+          mkdir -p /tmp/build
+          git clone --depth 1 --branch feat/aerospike-parser \
+            https://github.com/keploy/keploy.git       /tmp/build/keploy
+          git clone --depth 1 --branch feat/aerospike-parser \
+            https://github.com/keploy/integrations.git /tmp/build/integrations
+
+      - name: Build keploy with the Aerospike parser
+        run: |
+          set -euxo pipefail
+          cd /tmp/build/keploy
+          go build -o /tmp/keploy .
+          sudo mv /tmp/keploy /usr/local/bin/keploy
+          keploy --version || true
+
+      # Seed an installation-id so keploy doesn't try to register the
+      # CI runner on first run. Mirrors the helper that the keploy
+      # repo uses for its own sample CI scripts.
+      - name: Seed installation id
+        run: |
+          set -eux
+          sudo mkdir -p /root/.keploy
+          echo "ObjectID('ci-aerospike-tls')" | \
+            sudo tee /root/.keploy/installation-id.yaml >/dev/null
+
+      - name: Bring up Aerospike CE
+        working-directory: aerospike-tls
+        run: |
+          set -eux
+          docker compose up -d aerospike
+          for _ in $(seq 1 60); do
+            status=$(docker compose ps aerospike --format '{{.Health}}' 2>/dev/null || true)
+            if [ "$status" = "healthy" ]; then
+              echo "aerospike: healthy"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "aerospike never reported healthy" >&2
+          docker compose logs aerospike | tail -50 >&2
+          exit 1
+
+      - name: Build the sample binary
+        working-directory: aerospike-tls
+        run: go build -o aerospike-tls .
+
+      # Each script does its own record + replay end-to-end and exits
+      # non-zero on any replay miss, so the CI step turns red on the
+      # exact set that regressed. SKIP_DOCKER + SKIP_BUILD reuse the
+      # boot + build we did above instead of repeating per script.
+      - name: script-1 — test-set-0 (CRUD)
+        working-directory: aerospike-tls
+        env:
+          KEPLOY: sudo keploy
+          SKIP_DOCKER: '1'
+          SKIP_BUILD: '1'
+        run: ./scripts/script-1.sh
+
+      - name: script-2 — test-set-1 (/parallel n = 4..24)
+        working-directory: aerospike-tls
+        env:
+          KEPLOY: sudo keploy
+          SKIP_DOCKER: '1'
+          SKIP_BUILD: '1'
+        run: ./scripts/script-2.sh
+
+      - name: script-3 — test-set-2 (/multiclient + /freshclient)
+        working-directory: aerospike-tls
+        env:
+          KEPLOY: sudo keploy
+          SKIP_DOCKER: '1'
+          SKIP_BUILD: '1'
+        run: ./scripts/script-3.sh
+
+      - name: Upload keploy logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: keploy-logs
+          path: |
+            /tmp/keploy-record-*.log
+            aerospike-tls/keploy/**
+          if-no-files-found: ignore
+
+      - name: Tear down
+        if: always()
+        working-directory: aerospike-tls
+        run: docker compose down -v || true
