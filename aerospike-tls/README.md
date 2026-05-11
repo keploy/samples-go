@@ -38,7 +38,6 @@ aerospike-tls/
 │   ├── test-set-0/      # single-endpoint CRUD: put/get/batch/touch/delete
 │   ├── test-set-1/      # /parallel: shared client, n = 4..24
 │   └── test-set-2/      # /multiclient + /freshclient
-├── MOCKS_FLOW.md        # annotated walk-through of test-set-0's mocks.yaml
 └── stunnel/             # (referenced by docker-compose for TLS termination)
 ```
 
@@ -153,10 +152,3 @@ against CE, the cleanest options are to point at Aerospike
 Enterprise, or to apply the two-line `serviceString` /
 `peersString` override locally before recording. The bundled
 test-sets in this repo were recorded with that override in place.
-
-## What `MOCKS_FLOW.md` is for
-
-It walks through `test-set-0/mocks.yaml` mock-by-mock and shows
-how each HTTP test maps onto the binary Aerospike traffic the
-proxy captured. It is intentionally `test-set-0`-specific —
-test-set-1 and test-set-2 follow the same shape.
