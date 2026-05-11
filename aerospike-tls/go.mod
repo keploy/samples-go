@@ -4,10 +4,6 @@ go 1.26
 
 require github.com/aerospike/aerospike-client-go/v7 v7.7.3
 
-// Local patch — see vendor-aerospike-client-go/client_policy.go for
-// the reason (CE doesn't answer peers-tls-std / service-tls-std).
-replace github.com/aerospike/aerospike-client-go/v7 => ./vendor-aerospike-client-go
-
 require (
 	github.com/yuin/gopher-lua v1.1.1 // indirect
 	golang.org/x/net v0.26.0 // indirect

@@ -39,8 +39,7 @@ aerospike-tls/
 │   ├── test-set-1/      # /parallel: shared client, n = 4..24
 │   └── test-set-2/      # /multiclient + /freshclient
 ├── MOCKS_FLOW.md        # annotated walk-through of test-set-0's mocks.yaml
-├── stunnel/             # (referenced by docker-compose for TLS termination)
-└── vendor-aerospike-client-go/   # local patch — see "Why the vendor dir"
+└── stunnel/             # (referenced by docker-compose for TLS termination)
 ```
 
 ## Endpoints
@@ -139,15 +138,21 @@ startup — five clients warming in parallel produces hundreds of
 concurrent TLS dials and starves stunnel's fork rate. The retry
 wrapper covers their first burst instead.
 
-## Why the vendor dir
+## A note on Aerospike CE vs EE for TLS discovery
 
-`vendor-aerospike-client-go/` is a local copy of the upstream
-`aerospike-client-go/v7` with one behavior changed: it stops
-trying to discover `peers-tls-std` / `service-tls-std`, which
-Aerospike CE doesn't answer. Without the patch, the client floods
-the cluster discovery loop with unanswered info commands during
-TLS-only bring-up. `go.mod` pins to the vendored copy via a local
-`replace` directive.
+The upstream `aerospike-client-go/v7` driver assumes the cluster
+answers Enterprise-only info commands (`service-tls-std` /
+`peers-tls-std`) during topology discovery on a TLS connection.
+Aerospike Community Edition replies `ERROR:25:enterprise only`,
+which fails node validation even though the TLS handshake itself
+succeeded.
+
+For replay (`keploy test`) that doesn't matter — Keploy serves the
+recorded discovery responses from `mocks.yaml`. For live record
+against CE, the cleanest options are to point at Aerospike
+Enterprise, or to apply the two-line `serviceString` /
+`peersString` override locally before recording. The bundled
+test-sets in this repo were recorded with that override in place.
 
 ## What `MOCKS_FLOW.md` is for
 
