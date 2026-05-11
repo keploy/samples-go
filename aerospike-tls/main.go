@@ -1,40 +1,31 @@
-// Sample Aerospike-Go application that exercises the parser over a
-// TLS-protected wire. It mirrors e2e-run/main.go endpoint-for-endpoint
-// but talks to Aerospike on port 3001 with a *tls.Conn underneath.
+// Sample Aerospike-Go application recorded and replayed end-to-end
+// with Keploy. The service exposes a flat HTTP API over a single
+// shared *as.Client (and two additional handlers that exercise
+// multi-client and per-request-fresh-client shapes) so a single
+// `keploy record` session captures the full range of Aerospike op
+// types — Info, single-record AS_MSG, BATCH_READ/WRITE, SCAN,
+// QUERY, UDF, CDT, TOUCH, DELETE.
 //
-// The point of this binary is to confirm two claims about the parser:
+// Endpoints:
 //
-//  1. The Aerospike parser is TLS-blind: it imports no crypto/tls and
-//     does not branch on PortClear/PortTLS/PortXDR. With this app
-//     pointed at port 3001 over TLS, the parser still receives plain
-//     Aerospike wire bytes — because Keploy's proxy terminates TLS
-//     upstream and hands the parser a transport that already speaks
-//     decrypted bytes.
-//
-//  2. Proxy TLS detection is byte-pattern driven, not port driven.
-//     This client sends a real TLS ClientHello on a non-3306, non-443
-//     port; the proxy still recognises it via Peek(5) → IsTLSHandshake
-//     and MITMs the connection. Port 3001 is incidental.
-//
-// Endpoints (identical contract to e2e-run):
-//
-//	GET  /health           — info "build" + "namespaces"
-//	POST /put              — single-record PUT
-//	GET  /get/{key}        — single-record GET
-//	POST /batch/put        — BATCH_WRITE
-//	GET  /batch/get        — BATCH_READ
-//	POST /scan             — full namespace scan
-//	POST /query            — secondary-index range query
-//	POST /udf              — UDF_EXECUTE
-//	POST /cdt/list/append  — CDT list append
-//	POST /cdt/map/put      — CDT map put
-//	POST /touch/{key}      — TOUCH
-//	DELETE /key/{key}      — DELETE
+//	GET    /health                — info "build" + "namespaces"
+//	POST   /put                   — single-record PUT
+//	GET    /get/{key}             — single-record GET
+//	POST   /batch/put             — sequential write loop
+//	GET    /batch/get?k=a&k=b     — BATCH_READ
+//	POST   /scan                  — full namespace scan
+//	POST   /query                 — secondary-index range query
+//	POST   /udf                   — UDF_EXECUTE
+//	POST   /cdt/list/append       — CDT list append
+//	POST   /cdt/map/put           — CDT map put
+//	POST   /touch/{key}           — TOUCH
+//	DELETE /key/{key}             — DELETE
+//	POST   /parallel?n=N&prefix=P — N goroutines, one shared client
+//	POST   /multiclient?n=N&...   — N goroutines round-robined over 4 clients
+//	POST   /freshclient?n=N&...   — N goroutines, each builds its own client
 package main
 
 import (
-	"crypto/tls"
-	"crypto/x509"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -52,53 +43,30 @@ import (
 
 func main() {
 	host := flag.String("aerospike-host", env("AEROSPIKE_HOST", "127.0.0.1"), "aerospike server host")
-	port := flag.Int("aerospike-port", envInt("AEROSPIKE_PORT", 3001), "aerospike server port (TLS service)")
-	tlsName := flag.String("tls-name", env("AEROSPIKE_TLS_NAME", "aerospike.local"), "TLS hostname expected on the server certificate")
-	caFile := flag.String("tls-ca", env("AEROSPIKE_TLS_CA", "certs/ca.pem"), "PEM file containing CA cert(s) that signed the server cert")
-	certFile := flag.String("tls-cert", env("AEROSPIKE_TLS_CERT", ""), "optional client cert PEM (mutual TLS)")
-	keyFile := flag.String("tls-key", env("AEROSPIKE_TLS_KEY", ""), "optional client key PEM (mutual TLS)")
-	insecure := flag.Bool("tls-insecure", envBool("AEROSPIKE_TLS_INSECURE", false), "skip server cert verification (debug only)")
+	port := flag.Int("aerospike-port", envInt("AEROSPIKE_PORT", 3000), "aerospike server port")
 	listen := flag.String("listen", env("LISTEN", ":8080"), "http listen address")
 	flag.Parse()
 
 	aslog.Logger.SetLevel(aslog.DEBUG)
 
-	tlsCfg, err := buildTLSConfig(*caFile, *certFile, *keyFile, *tlsName, *insecure)
-	if err != nil {
-		log.Fatalf("build tls config: %v", err)
-	}
-
 	policy := as.NewClientPolicy()
-	policy.TlsConfig = tlsCfg
-	// Aerospike CE only advertises clear-text peer addresses
-	// (peers-clear-std); behind a TLS terminator like stunnel those
-	// addresses are unreachable. Pin the client to the seed so it
-	// doesn't try to open clear-text connections to peers.
+	// Aerospike CE only advertises a single seed in single-node
+	// docker setups; pin the client to that seed so it doesn't try
+	// to discover peers that don't exist.
 	policy.SeedOnlyCluster = true
 	// Pool sizing for the parallel handler: a single /parallel?n=N
 	// curl fans out N goroutines, each grabbing its own pooled
 	// connection. The default queue size (256) is fine, but the open
-	// path is the real bottleneck under TLS-MITM replay — limit how
-	// many fresh TLS dials race the pool's connect-or-wait latch by
-	// pinning a generous concurrent-open budget. ConnectionQueueSize
-	// is set explicitly so it survives a future default-tuning drift.
+	// path is the real bottleneck under Keploy replay — pin a
+	// generous concurrent-open budget. ConnectionQueueSize is set
+	// explicitly so it survives a future default-tuning drift.
 	policy.ConnectionQueueSize = 256
-	// Hold OpeningConnectionThreshold low: stunnel's fork model on
-	// the docker side forks one child per accepted connection, and
-	// fork() is slow enough that a burst of 64+ concurrent dials
-	// can outpace the kernel's accept-queue + stunnel's fork rate
-	// at record time, producing EOFs on the proxy's upstream dial.
-	// 16 is a comfortable number for stunnel and big enough that
-	// /parallel?n=24 still fans out usefully.
 	policy.OpeningConnectionThreshold = 16
-	// Without TLSName on the Host, the client will not negotiate TLS
-	// for this host even with TlsConfig set.
-	h := as.NewHost(*host, *port)
-	h.TLSName = *tlsName
 
+	h := as.NewHost(*host, *port)
 	client, err := as.NewClientWithPolicyAndHost(policy, h)
 	if err != nil {
-		log.Fatalf("connect aerospike (tls): %v", err)
+		log.Fatalf("connect aerospike: %v", err)
 	}
 	defer client.Close()
 
@@ -135,11 +103,9 @@ func main() {
 	// per credential profile.
 	//
 	// We deliberately do NOT call warmupPool here. Five clients each
-	// warming up in parallel produces hundreds of concurrent TLS
-	// dials at startup, which the stunnel/socat fork model in the
-	// compose stack can't accept fast enough — record then dies with
-	// EOFs on the upstream dial path before any test runs. The
-	// /multiclient handler instead uses parallelDo (10ms backoff,
+	// warming up in parallel produces a hundred-plus concurrent dials
+	// at startup, which a record-time proxy can choke on. The
+	// /multiclient handler instead uses parallelDo (10 ms backoff,
 	// 5 attempts) to ride out a cold pool on first contact, and the
 	// per-op SleepBetweenRetries inside the policy gives the pool
 	// time to recycle between attempts.
@@ -174,39 +140,11 @@ func main() {
 	mux.HandleFunc("/multiclient", multiClientHandler(multiClients))
 	mux.HandleFunc("/freshclient", freshClientHandler(policy, h))
 
-	log.Printf("aerospike-tls sample listening on %s (server %s:%d tls-name=%s)",
-		*listen, *host, *port, *tlsName)
+	log.Printf("aerospike sample listening on %s (server %s:%d)", *listen, *host, *port)
 	srv := &http.Server{Addr: *listen, Handler: mux, ReadHeaderTimeout: 5 * time.Second}
 	if err := srv.ListenAndServe(); err != nil {
 		log.Fatal(err)
 	}
-}
-
-func buildTLSConfig(caFile, certFile, keyFile, tlsName string, insecure bool) (*tls.Config, error) {
-	cfg := &tls.Config{
-		ServerName:         tlsName,
-		MinVersion:         tls.VersionTLS12,
-		InsecureSkipVerify: insecure,
-	}
-	if caFile != "" {
-		caPEM, err := os.ReadFile(caFile)
-		if err != nil {
-			return nil, fmt.Errorf("read CA %q: %w", caFile, err)
-		}
-		pool := x509.NewCertPool()
-		if !pool.AppendCertsFromPEM(caPEM) {
-			return nil, fmt.Errorf("CA %q: no certs parsed", caFile)
-		}
-		cfg.RootCAs = pool
-	}
-	if certFile != "" && keyFile != "" {
-		pair, err := tls.LoadX509KeyPair(certFile, keyFile)
-		if err != nil {
-			return nil, fmt.Errorf("load client keypair: %w", err)
-		}
-		cfg.Certificates = []tls.Certificate{pair}
-	}
-	return cfg, nil
 }
 
 func env(k, def string) string {
@@ -226,20 +164,6 @@ func envInt(k string, def int) int {
 		return def
 	}
 	return n
-}
-
-func envBool(k string, def bool) bool {
-	v := os.Getenv(k)
-	if v == "" {
-		return def
-	}
-	switch strings.ToLower(v) {
-	case "1", "t", "true", "y", "yes":
-		return true
-	case "0", "f", "false", "n", "no":
-		return false
-	}
-	return def
 }
 
 func healthHandler(c *as.Client) http.HandlerFunc {

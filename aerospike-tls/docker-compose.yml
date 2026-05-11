@@ -1,11 +1,13 @@
-# Aerospike CE on plain 3000 (inside docker network), stunnel in front
-# terminating TLS on 3001 (exposed to host). Run ./gen-certs.sh first.
+# Aerospike CE on clear-text 3000, exposed to the host. The sample
+# dials it directly — no TLS terminator in the path.
 services:
   aerospike:
     image: aerospike/aerospike-server:7.2.0.1
-    container_name: aerospike-tls
+    container_name: aerospike
     networks:
       - aerospike-net
+    ports:
+      - "3000:3000"
     volumes:
       - ./aerospike-conf/aerospike.conf:/etc/aerospike/aerospike.conf:ro
     entrypoint: ["/usr/bin/asd", "--foreground", "--config-file", "/etc/aerospike/aerospike.conf"]
@@ -20,47 +22,22 @@ services:
       timeout: 3s
       retries: 20
 
-  stunnel:
-    image: alpine/socat:latest
-    container_name: aerospike-stunnel
-    depends_on:
-      aerospike:
-        condition: service_healthy
-    networks:
-      - aerospike-net
-    ports:
-      - "3001:3001"   # TLS endpoint
-    volumes:
-      - ./certs/server.pem:/certs/server.pem:ro
-      - ./certs/server.key:/certs/server.key:ro
-    command:
-      - "-d"
-      - "-d"
-      - "OPENSSL-LISTEN:3001,reuseaddr,fork,cert=/certs/server.pem,key=/certs/server.key,verify=0"
-      - "TCP:aerospike:3000"
-
   sample:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: aerospike-tls-sample
+    container_name: aerospike-sample
     depends_on:
-      stunnel:
-        condition: service_started
       aerospike:
         condition: service_healthy
     environment:
-      AEROSPIKE_HOST: stunnel
-      AEROSPIKE_PORT: "3001"
-      AEROSPIKE_TLS_NAME: aerospike.local
-      AEROSPIKE_TLS_CA: /certs/ca.pem
+      AEROSPIKE_HOST: aerospike
+      AEROSPIKE_PORT: "3000"
       LISTEN: ":8080"
     ports:
       - "8080:8080"
     networks:
       - aerospike-net
-    volumes:
-      - ./certs:/certs:ro
 
 networks:
   aerospike-net:

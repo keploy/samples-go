@@ -2,7 +2,7 @@
 path: ""
 appName: aerospike-tls
 appId: 0
-command: ./aerospike-tls -aerospike-host=127.0.0.1 -aerospike-port=3001 -tls-name=aerospike.local -tls-ca=./certs/ca.pem -tls-insecure=true -listen=:8090
+command: ./aerospike-tls -aerospike-host=127.0.0.1 -aerospike-port=3000 -listen=:8090
 templatize:
     testSets: []
 port: 0
