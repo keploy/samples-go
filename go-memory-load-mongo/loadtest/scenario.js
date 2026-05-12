@@ -17,9 +17,7 @@ const LARGE_PAYLOAD_SIZE_MBS = (__ENV.LARGE_PAYLOAD_SIZES_MB || '1,2,4')
   .map((value) => parseInt(value.trim(), 10))
   .filter((value) => Number.isFinite(value) && value > 0);
 // No fallback to [1]: an explicit LARGE_PAYLOAD_SIZES_MB=0 (or any value that
-// parses to ≤0) disables the large-payload cycle entirely. This is the CI
-// default because Keploy records >1 MB MongoDB responses as size-only mocks
-// that cannot be reconstructed during replay, causing wire-protocol EOF errors.
+// parses to ≤0) disables the large-payload cycle entirely.
 const LARGE_PAYLOAD_SIZES = LARGE_PAYLOAD_SIZE_MBS;
 
 const LARGE_PAYLOAD_STAGE_TARGETS = parsePositiveIntListEnv(
