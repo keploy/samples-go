@@ -1,3 +1,4 @@
+// Package store provides the in-memory data store for the gRPC load-test service.
 package store
 
 import (

@@ -38,7 +38,9 @@ func main() {
 	mux.HandleFunc("/healthz", func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		fmt.Fprintln(w, `{"status":"ok"}`)
+		if _, err := fmt.Fprintln(w, `{"status":"ok"}`); err != nil {
+			log.Printf("healthz write: %v", err)
+		}
 	})
 	httpServer := &http.Server{
 		Addr:    ":" + cfg.HTTPPort,

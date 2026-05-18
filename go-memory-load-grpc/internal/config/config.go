@@ -1,3 +1,4 @@
+// Package config holds runtime configuration for the gRPC load-test app.
 package config
 
 import "os"

@@ -1,3 +1,4 @@
+// Package grpcapi implements the gRPC server for the load-test service.
 package grpcapi
 
 import (

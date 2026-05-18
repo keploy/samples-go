@@ -222,7 +222,7 @@ func (s *Server) deleteLargePayload(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) writeStoreError(w http.ResponseWriter, err error) {
 	status := http.StatusInternalServerError
-	message := "internal server error"
+	var message string
 
 	switch {
 	case errors.Is(err, store.ErrValidation):
