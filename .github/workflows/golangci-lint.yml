@@ -40,6 +40,9 @@ jobs:
           - go-grpc
           - go-jwt
           - go-memory-load
+          - go-memory-load-grpc
+          - go-memory-load-mongo
+          - go-memory-load-mysql
           - go-redis
           - go-twilio
           - graphql-sql

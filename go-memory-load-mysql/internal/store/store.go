@@ -263,7 +263,10 @@ func (s *Store) createOrderTx(ctx context.Context, req CreateOrderRequest) (Orde
 		if err != nil {
 			return Order{}, fmt.Errorf("decrement inventory for product %s: %w", input.ProductID, err)
 		}
-		rowsAffected, _ := result.RowsAffected()
+		rowsAffected, raErr := result.RowsAffected()
+		if raErr != nil {
+			return Order{}, fmt.Errorf("rows affected for product %s: %w", input.ProductID, raErr)
+		}
 		if rowsAffected == 0 {
 			// Either product not found or insufficient inventory.
 			var exists int

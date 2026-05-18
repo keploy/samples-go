@@ -328,6 +328,10 @@ export function setup() {
     }
   }
 
+  if (bootstrapCustomers.length === 0 || bootstrapProducts.length === 0) {
+    throw new Error(`setup: bootstrap failed — customers=${bootstrapCustomers.length}, products=${bootstrapProducts.length}; cannot continue`);
+  }
+
   for (let i = 0; i < 40; i += 1) {
     const customer = randomItem(bootstrapCustomers);
     createOrder(customer.id, bootstrapProducts);
@@ -357,6 +361,9 @@ export default function (data) {
   }
 
   const roll = Math.random();
+  if (!data.customers || data.customers.length === 0) {
+    return; // setup produced no customers; skip iteration to avoid crash
+  }
   const customer = randomItem(data.customers);
 
   if (roll < 0.1) {

@@ -35,7 +35,11 @@ func main() {
 		logger.Error("connect mysql", "error", err)
 		os.Exit(1)
 	}
-	defer db.Close()
+	defer func() {
+		if err := db.Close(); err != nil {
+			logger.Error("close db", "error", err)
+		}
+	}()
 
 	if err := database.EnsureRuntimeSchema(ctx, db); err != nil {
 		logger.Error("ensure schema", "error", err)

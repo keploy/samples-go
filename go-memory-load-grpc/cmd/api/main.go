@@ -65,5 +65,7 @@ func main() {
 	<-ctx.Done()
 	log.Println("shutting down…")
 	grpcServer.GracefulStop()
-	_ = httpServer.Shutdown(context.Background())
+	if err := httpServer.Shutdown(context.Background()); err != nil {
+		log.Printf("HTTP server shutdown: %v", err)
+	}
 }

@@ -29,12 +29,17 @@ func Open(ctx context.Context, dsn string) (*sql.DB, error) {
 		if pingErr := db.PingContext(ctx); pingErr == nil {
 			break
 		} else if attempt == maxAttempts {
-			db.Close()
+			closeErr := db.Close()
+			if closeErr != nil {
+				return nil, fmt.Errorf("mysql did not become ready after %d attempts (close: %v): %w", maxAttempts, closeErr, pingErr)
+			}
 			return nil, fmt.Errorf("mysql did not become ready after %d attempts: %w", maxAttempts, pingErr)
 		}
 		select {
 		case <-ctx.Done():
-			db.Close()
+			if closeErr := db.Close(); closeErr != nil {
+				return nil, fmt.Errorf("context done (close: %v): %w", closeErr, ctx.Err())
+			}
 			return nil, ctx.Err()
 		case <-time.After(2 * time.Second):
 		}

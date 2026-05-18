@@ -245,6 +245,17 @@ func (s *Store) CreateOrder(customerID, orderStatus string, inputs []OrderItemIn
 		return nil, fmt.Errorf("customer %s: %w", customerID, ErrNotFound)
 	}
 
+	if orderStatus == "" {
+		orderStatus = "pending"
+	}
+	fingerprint := orderFingerprint(inputs)
+	orderID := contentID(customerID, fingerprint, orderStatus)
+	// Idempotent fast path: if an identical order already exists, return it
+	// without touching inventory (handles duplicate Keploy replay calls).
+	if existing, ok := s.orders[orderID]; ok {
+		return existing, nil
+	}
+
 	var items []OrderItem
 	var totalCents int32
 	for _, inp := range inputs {
@@ -269,16 +280,6 @@ func (s *Store) CreateOrder(customerID, orderStatus string, inputs []OrderItemIn
 		totalCents += line
 	}
 
-	if orderStatus == "" {
-		orderStatus = "pending"
-	}
-	fingerprint := orderFingerprint(inputs)
-	orderID := contentID(customerID, fingerprint, orderStatus)
-	// Idempotent: if an identical order already exists, return it without
-	// re-decrementing inventory (handles duplicate keploy replay calls).
-	if existing, ok := s.orders[orderID]; ok {
-		return existing, nil
-	}
 	o := &Order{
 		ID:         orderID,
 		CustomerID: customerID,
@@ -374,32 +375,40 @@ func (s *Store) TopProducts(days, limit int32) ([]TopProduct, error) {
 	// from content hash (not wall-clock time), so a time.Now()-based cutoff
 	// would exclude all orders during keploy replay. Using all-time data keeps
 	// mock matching deterministic across record and replay sessions.
-	agg := make(map[string]*TopProduct)
+	type productAgg struct {
+		tp       TopProduct
+		orderIDs map[string]struct{}
+	}
+	agg := make(map[string]*productAgg)
 	for _, o := range s.orders {
 		for _, it := range o.Items {
-			tp, ok := agg[it.ProductID]
+			pa, ok := agg[it.ProductID]
 			if !ok {
 				sku, name, cat := "", "", ""
 				if p := s.products[it.ProductID]; p != nil {
 					sku, name, cat = p.SKU, p.Name, p.Category
 				}
-				agg[it.ProductID] = &TopProduct{
-					ProductID: it.ProductID,
-					SKU:       sku,
-					Name:      name,
-					Category:  cat,
+				agg[it.ProductID] = &productAgg{
+					tp: TopProduct{
+						ProductID: it.ProductID,
+						SKU:       sku,
+						Name:      name,
+						Category:  cat,
+					},
+					orderIDs: make(map[string]struct{}),
 				}
-				tp = agg[it.ProductID]
+				pa = agg[it.ProductID]
 			}
-			tp.UnitsSold += it.Quantity
-			tp.RevenueCents += int64(it.LineTotalCents)
-			tp.OrdersCount++
+			pa.tp.UnitsSold += it.Quantity
+			pa.tp.RevenueCents += int64(it.LineTotalCents)
+			pa.orderIDs[o.ID] = struct{}{}
 		}
 	}
 
 	products := make([]TopProduct, 0, len(agg))
-	for _, tp := range agg {
-		products = append(products, *tp)
+	for _, pa := range agg {
+		pa.tp.OrdersCount = int32(len(pa.orderIDs))
+		products = append(products, pa.tp)
 	}
 	sort.Slice(products, func(i, j int) bool {
 		return products[i].RevenueCents > products[j].RevenueCents

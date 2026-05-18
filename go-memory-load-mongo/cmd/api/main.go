@@ -38,7 +38,9 @@ func main() {
 	defer func() {
 		disconnectCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
-		_ = client.Disconnect(disconnectCtx)
+		if err := client.Disconnect(disconnectCtx); err != nil {
+			logger.Error("disconnect mongo", "error", err)
+		}
 	}()
 
 	st := store.New(db)

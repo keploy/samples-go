@@ -258,12 +258,17 @@ func (s *Store) CreateOrder(ctx context.Context, req CreateOrderRequest) (Order,
 		).Decode(&product)
 		if err != nil {
 			if errors.Is(err, mongo.ErrNoDocuments) {
-				// Either product not found or insufficient inventory.
+				// Either product not found or insufficient inventory — do a secondary
+				// lookup to distinguish the two cases.
 				var exists Product
-				if findErr := s.products.FindOne(ctx, bson.M{"_id": input.ProductID}).Decode(&exists); findErr != nil {
+				findErr := s.products.FindOne(ctx, bson.M{"_id": input.ProductID}).Decode(&exists)
+				if findErr == nil {
+					return Order{}, fmt.Errorf("%w: product %s", ErrInsufficientInventory, input.ProductID)
+				}
+				if errors.Is(findErr, mongo.ErrNoDocuments) {
 					return Order{}, fmt.Errorf("%w: product %s", ErrNotFound, input.ProductID)
 				}
-				return Order{}, fmt.Errorf("%w: product %s", ErrInsufficientInventory, input.ProductID)
+				return Order{}, fmt.Errorf("check product existence for %s: %w", input.ProductID, findErr)
 			}
 			return Order{}, fmt.Errorf("update inventory for product %s: %w", input.ProductID, err)
 		}
@@ -319,13 +324,17 @@ func (s *Store) GetCustomerSummary(ctx context.Context, customerID string) (Cust
 		return CustomerSummary{}, fmt.Errorf("find customer: %w", err)
 	}
 
+	// Compute order-level stats (count, lifetime value) BEFORE unwinding items so
+	// that total_cents is summed once per order rather than once per item.
+	// order_totals collects {id, cents} pairs; summing cents in Go avoids
+	// double-counting when the same order has multiple items.
 	pipeline := mongo.Pipeline{
 		{{Key: "$match", Value: bson.M{"customer._id": customerID}}},
 		{{Key: "$unwind", Value: bson.M{"path": "$items", "preserveNullAndEmptyArrays": true}}},
 		{{Key: "$group", Value: bson.D{
 			{Key: "_id", Value: "$customer._id"},
 			{Key: "orders_count", Value: bson.M{"$addToSet": "$_id"}},
-			{Key: "lifetime_value_cents", Value: bson.M{"$sum": "$total_cents"}},
+			{Key: "order_totals", Value: bson.M{"$addToSet": bson.M{"id": "$_id", "cents": "$total_cents"}}},
 			{Key: "last_order_at", Value: bson.M{"$max": "$created_at"}},
 			{Key: "category_spend", Value: bson.M{"$push": bson.M{
 				"category": "$items.category",
@@ -352,10 +361,19 @@ func (s *Store) GetCustomerSummary(ctx context.Context, customerID string) (Cust
 		if ids, ok := raw["orders_count"].(bson.A); ok {
 			summary.OrdersCount = len(ids)
 		}
-		if v, ok := raw["lifetime_value_cents"].(int32); ok {
-			summary.LifetimeValueCents = int(v)
-		} else if v, ok := raw["lifetime_value_cents"].(int64); ok {
-			summary.LifetimeValueCents = int(v)
+		// Sum distinct per-order totals collected before the $unwind so each
+		// order's total_cents is counted exactly once regardless of item count.
+		if totals, ok := raw["order_totals"].(bson.A); ok {
+			for _, t := range totals {
+				if m, ok := t.(bson.M); ok {
+					switch v := m["cents"].(type) {
+					case int32:
+						summary.LifetimeValueCents += int(v)
+					case int64:
+						summary.LifetimeValueCents += int(v)
+					}
+				}
+			}
 		}
 		if summary.OrdersCount > 0 {
 			summary.AverageOrderValueCents = summary.LifetimeValueCents / summary.OrdersCount

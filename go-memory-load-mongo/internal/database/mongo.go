@@ -36,12 +36,16 @@ func Open(ctx context.Context, uri, dbName string) (*mongo.Client, *mongo.Databa
 
 		select {
 		case <-ctx.Done():
-			_ = client.Disconnect(context.Background())
+			if dErr := client.Disconnect(context.Background()); dErr != nil {
+				return nil, nil, fmt.Errorf("ping mongo: context done, disconnect: %v: %w", dErr, ctx.Err())
+			}
 			return nil, nil, fmt.Errorf("ping mongo: %w", ctx.Err())
 		case <-time.After(2 * time.Second):
 		}
 	}
 
-	_ = client.Disconnect(context.Background())
+	if dErr := client.Disconnect(context.Background()); dErr != nil {
+		return nil, nil, fmt.Errorf("ping mongo after retries (disconnect: %v): %w", dErr, pingErr)
+	}
 	return nil, nil, fmt.Errorf("ping mongo after retries: %w", pingErr)
 }
