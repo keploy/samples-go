@@ -431,20 +431,31 @@ export default function (data) {
 // top-products does: the DB is fully settled, so each search returns a
 // deterministic result — one call → one mock → unambiguous replay.
 export function teardown(data) {
-  sleep(5); // Let memory pressure clear before teardown requests so MySQL mocks are captured.
+  // 20-second sleep: the MySQL recorder (recorder/query.go) skips mock capture
+  // while memoryguard.IsRecordingPaused() is true.  After the VU phase the
+  // Keploy process holds all accumulated mocks in memory; it needs time to
+  // flush them and let GC reclaim enough to drop below the 60 % resume
+  // threshold before these teardown queries fire.  5 seconds was too short
+  // when the second memory-pressure burst overlapped the start of teardown.
+  sleep(20);
   const analyticsResponse = http.get(`${BASE_URL}/analytics/top-products?days=30&limit=5`);
   check(analyticsResponse, {
     'top products status is 200': (r) => r.status === 200,
   });
 
-  // Order search: called once per bootstrap customer after all VUs finish.
-  // During the VU phase this returned non-deterministic results (new customers
-  // with zero orders mixed into the FIFO queue alongside populated results).
-  // Here the DB is settled → every bootstrap customer has their full order
-  // history → result is always populated → one mock → deterministic replay.
-  for (const customer of data.customers.slice(0, 5)) {
+  // Order search: 5 paginated status-only queries (no customer_id).
+  // The original per-customer queries embedded a customer ID that was derived
+  // from a random email (Date.now() + Math.random()), making the SQL args
+  // differ between recording and replay even though Keploy replays the exact
+  // recorded URL — the customer IDs in data.customers come from recorded mock
+  // responses which ARE stable, but only when the customer-creation mocks were
+  // themselves captured (not dropped by syncMock during a pressure window).
+  // Using offset-based pagination avoids this dependency entirely: each query
+  // has a fixed, deterministic SQL text (LIMIT 10 OFFSET N) that is identical
+  // across every recording and replay run.
+  for (let i = 0; i < 5; i++) {
     const searchResponse = http.get(
-      `${BASE_URL}/orders?status=paid&customer_id=${customer.id}&min_total_cents=1000&limit=10`
+      `${BASE_URL}/orders?status=paid&min_total_cents=1000&limit=10&offset=${i * 10}`
     );
     check(searchResponse, {
       'order search status is 200': (r) => r.status === 200,
