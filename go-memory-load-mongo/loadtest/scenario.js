@@ -396,9 +396,16 @@ export default function (data) {
 // with zero orders, different accumulated analytics state) causing FIFO mock
 // collisions where empty/stale mocks were served to wrong test cases.
 export function teardown(data) {
-  for (const customer of data.customers.slice(0, 5)) {
+  // 20-second sleep: the MongoDB recorder (integrations-tmp/pkg/mongo/v2/encode.go)
+  // skips mock capture while memoryguard.IsRecordingPaused() is true.  After the
+  // VU phase Keploy holds all accumulated mocks in memory; it needs time to flush
+  // them and let GC reclaim enough to drop below the 60 % resume threshold before
+  // teardown queries fire.  Without this sleep teardown runs immediately after the
+  // VU phase, potentially while pressure is still active, leaving mocks uncaptured.
+  sleep(20);
+  for (let i = 0; i < 5; i++) {
     const searchResponse = http.get(
-      `${BASE_URL}/orders?status=paid&customer_id=${customer.id}&min_total_cents=1000&limit=10`
+      `${BASE_URL}/orders?status=paid&min_total_cents=1000&limit=10&offset=${i * 10}`
     );
     check(searchResponse, {
       'order search status is 200': (r) => r.status === 200,
