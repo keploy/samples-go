@@ -358,8 +358,8 @@ func (s *Store) GetCustomerSummary(ctx context.Context, customerID string) (Cust
 		// fails silently, leaving lifetime_value_cents and category_spend at zero.
 		// Decoding into a concrete struct lets the driver handle type mapping correctly.
 		var result struct {
-			OrdersCount   bson.A `bson:"orders_count"` // $addToSet of order _id strings
-			OrderTotals   []struct {
+			OrdersCount bson.A `bson:"orders_count"` // $addToSet of order _id strings
+			OrderTotals []struct {
 				Cents int `bson:"cents"`
 			} `bson:"order_totals"`
 			LastOrderAt   time.Time `bson:"last_order_at"`

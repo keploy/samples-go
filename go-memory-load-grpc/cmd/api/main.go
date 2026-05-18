@@ -1,3 +1,4 @@
+// Package main is the entry point for the gRPC load-test service.
 package main
 
 import (
