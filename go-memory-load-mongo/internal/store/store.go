@@ -352,60 +352,48 @@ func (s *Store) GetCustomerSummary(ctx context.Context, customerID string) (Cust
 	summary := CustomerSummary{Customer: customer}
 
 	if cursor.Next(ctx) {
-		var raw bson.M
-		if err := cursor.Decode(&raw); err != nil {
+		// Use a typed struct to avoid bson.M vs bson.D ambiguity: in Go driver v2,
+		// nested documents inside aggregation results decode as bson.D (ordered
+		// key-value pairs), not bson.M (map). Type-asserting to bson.M always
+		// fails silently, leaving lifetime_value_cents and category_spend at zero.
+		// Decoding into a concrete struct lets the driver handle type mapping correctly.
+		var result struct {
+			OrdersCount   bson.A `bson:"orders_count"` // $addToSet of order _id strings
+			OrderTotals   []struct {
+				Cents int `bson:"cents"`
+			} `bson:"order_totals"`
+			LastOrderAt   time.Time `bson:"last_order_at"`
+			CategorySpend []struct {
+				Category string `bson:"category"`
+				Cents    int    `bson:"cents"`
+			} `bson:"category_spend"`
+		}
+		if err := cursor.Decode(&result); err != nil {
 			return CustomerSummary{}, fmt.Errorf("decode customer summary: %w", err)
 		}
 
-		// orders_count is a set of distinct order IDs.
-		if ids, ok := raw["orders_count"].(bson.A); ok {
-			summary.OrdersCount = len(ids)
-		}
-		// Sum distinct per-order totals collected before the $unwind so each
-		// order's total_cents is counted exactly once regardless of item count.
-		if totals, ok := raw["order_totals"].(bson.A); ok {
-			for _, t := range totals {
-				if m, ok := t.(bson.M); ok {
-					switch v := m["cents"].(type) {
-					case int32:
-						summary.LifetimeValueCents += int(v)
-					case int64:
-						summary.LifetimeValueCents += int(v)
-					}
-				}
-			}
+		summary.OrdersCount = len(result.OrdersCount)
+		for _, tot := range result.OrderTotals {
+			summary.LifetimeValueCents += tot.Cents
 		}
 		if summary.OrdersCount > 0 {
 			summary.AverageOrderValueCents = summary.LifetimeValueCents / summary.OrdersCount
 		}
-		if t, ok := raw["last_order_at"].(time.Time); ok {
-			summary.LastOrderAt = &t
+		if !result.LastOrderAt.IsZero() {
+			summary.LastOrderAt = &result.LastOrderAt
 		}
 
-		// Find favourite category by total spend.
-		if spends, ok := raw["category_spend"].(bson.A); ok {
-			catSpend := map[string]int{}
-			for _, item := range spends {
-				if m, ok := item.(bson.M); ok {
-					cat, _ := m["category"].(string)
-					var cents int
-					switch v := m["cents"].(type) {
-					case int32:
-						cents = int(v)
-					case int64:
-						cents = int(v)
-					}
-					catSpend[cat] += cents
-				}
-			}
-			best, bestCents := "", 0
-			for cat, cents := range catSpend {
-				if cents > bestCents || (cents == bestCents && cat < best) {
-					best, bestCents = cat, cents
-				}
-			}
-			summary.FavoriteCategory = best
+		catSpend := map[string]int{}
+		for _, item := range result.CategorySpend {
+			catSpend[item.Category] += item.Cents
 		}
+		best, bestCents := "", 0
+		for cat, cents := range catSpend {
+			if cents > bestCents || (cents == bestCents && cat < best) {
+				best, bestCents = cat, cents
+			}
+		}
+		summary.FavoriteCategory = best
 	}
 
 	return summary, nil
