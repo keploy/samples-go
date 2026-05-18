@@ -424,6 +424,7 @@ export default function (data) {
 // top-products does: the DB is fully settled, so each search returns a
 // deterministic result — one call → one mock → unambiguous replay.
 export function teardown(data) {
+  sleep(5); // Let memory pressure clear before teardown requests so MySQL mocks are captured.
   const analyticsResponse = http.get(`${BASE_URL}/analytics/top-products?days=30&limit=5`);
   check(analyticsResponse, {
     'top products status is 200': (r) => r.status === 200,

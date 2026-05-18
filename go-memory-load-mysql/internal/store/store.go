@@ -630,6 +630,11 @@ func (s *Store) GetLargePayload(ctx context.Context, payloadID string) (LargePay
 		return LargePayloadDetail{}, fmt.Errorf("find large payload: %w", err)
 	}
 
+	// Guard against LONGTEXT driver byte-count differences across binary versions (±1 byte).
+	if b := []byte(d.Payload); d.PayloadSizeBytes > 0 && len(b) > d.PayloadSizeBytes {
+		d.Payload = string(b[:d.PayloadSizeBytes])
+	}
+
 	return d, nil
 }
 
