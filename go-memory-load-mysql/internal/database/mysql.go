@@ -21,7 +21,7 @@ func Open(ctx context.Context, dsn string) (*sql.DB, error) {
 	db.SetMaxOpenConns(25)
 	db.SetMaxIdleConns(10)
 	db.SetConnMaxLifetime(5 * time.Minute)
-	db.SetConnMaxIdleTime(5 * time.Second)
+	db.SetConnMaxIdleTime(2 * time.Minute)
 
 	// Retry loop — MySQL can take a few seconds to become ready.
 	const maxAttempts = 20
