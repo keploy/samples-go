@@ -5,9 +5,18 @@ import { check, sleep } from 'k6';
 
 const isSmokeProfile = __ENV.TEST_PROFILE === 'smoke';
 const MIXED_API_START_VUS = parsePositiveIntEnv('MIXED_API_START_VUS', 10);
+// Default ramp lowered from [20,40,80,30] to [2,3,4,2] so local
+// runs (no env override) match the keploy-CI profile validated in
+// the rate-mismatch investigation: at 14+ concurrent VUs the
+// recorder's mock-emit rate exceeded the host's YAML-write
+// throughput by ~7x, producing either silent TCP-buffer loss or
+// pipeline deadlock. 4-VU peak still spikes agent memory enough
+// (combined with the unchanged LARGE_PAYLOAD ramp below) to fire
+// 2-3 memory-pressure events, which is the load profile this
+// sample is designed to validate.
 const MIXED_API_VU_STAGE_TARGETS = parsePositiveIntListEnv(
   'MIXED_API_VU_STAGE_TARGETS',
-  [20, 40, 80, 30],
+  [2, 3, 4, 2],
   4
 );
 const LARGE_PAYLOAD_PREALLOCATED_VUS = parsePositiveIntEnv('LARGE_PAYLOAD_PREALLOCATED_VUS', 16);

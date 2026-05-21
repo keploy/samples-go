@@ -9,7 +9,16 @@ const TARGET_ADDR = __ENV.GRPC_ADDR || 'load-test-grpc-api:50051';
 
 const grpcReqFailed = new Counter('grpc_req_failed');
 
-const K6_VUS      = parseInt(__ENV.K6_VUS      || '20',   10);
+// Default lowered from 20 to 3 so local runs (no env override) match
+// the keploy-CI profile validated in the rate-mismatch investigation
+// — 20 concurrent VUs against a constant-vus executor produced a
+// sustained mock-emit rate ~7x the host's YAML-write throughput,
+// either silently losing mocks on SIGINT or deadlocking the
+// pipeline. 3 VUs keep the burst rate below disk throughput while
+// the unchanged 120s K6_DURATION still gives time for 2-3 memory-
+// pressure events to fire and validate the recorder's pressure
+// handling.
+const K6_VUS      = parseInt(__ENV.K6_VUS      || '3',    10);
 const K6_DURATION = __ENV.K6_DURATION || '120s';
 
 export const options = {

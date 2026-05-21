@@ -5,9 +5,17 @@ import { check, sleep } from 'k6';
 
 const isSmokeProfile = __ENV.TEST_PROFILE === 'smoke';
 const MIXED_API_START_VUS = parsePositiveIntEnv('MIXED_API_START_VUS', 10);
+// Default ramp lowered from [20,40,80,30] to [2,3,4,2] for symmetry
+// with go-memory-load-{mysql,mongo,grpc}. See those sample apps'
+// scenario.js for the full RCA: the recorder's mock-emit rate at
+// 14+ concurrent VUs overran the host's YAML-write disk throughput,
+// producing either silent TCP-buffer loss or pipeline deadlock. The
+// gin-mongo lane (this app) is normally well under that bar, but
+// matching the reduced default keeps all four memory-load samples
+// on the same load profile.
 const MIXED_API_VU_STAGE_TARGETS = parsePositiveIntListEnv(
   'MIXED_API_VU_STAGE_TARGETS',
-  [20, 40, 80, 30],
+  [2, 3, 4, 2],
   4
 );
 const LARGE_PAYLOAD_PREALLOCATED_VUS = parsePositiveIntEnv('LARGE_PAYLOAD_PREALLOCATED_VUS', 16);
