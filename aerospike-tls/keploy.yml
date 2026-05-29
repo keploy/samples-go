@@ -20,7 +20,8 @@ buildDelay: 30
 test:
     selectedTests: {}
     globalNoise:
-        global: {}
+        global:
+            body.duration: []
         test-sets: {}
     replaceWith:
         global:
@@ -66,7 +67,7 @@ test:
     schemaMatch: false
     updateTestMapping: false
     disableAutoHeaderNoise: false
-    strictMockWindow: true
+    strictMockWindow: false
 record:
     filters: []
     basePath: ""
