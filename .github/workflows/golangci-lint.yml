@@ -26,6 +26,7 @@ jobs:
       fail-fast: false
       matrix:
         working-directory:
+          - aerospike-tls
           - book-store-inventory
           - connect-tunnel
           - dns-dedup

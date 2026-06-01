@@ -1,0 +1,43 @@
+# Aerospike CE on clear-text 3000, exposed to the host. The sample
+# dials it directly — no TLS terminator in the path.
+services:
+  aerospike:
+    image: aerospike/aerospike-server:7.2.0.1
+    container_name: aerospike
+    networks:
+      - aerospike-net
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./aerospike-conf/aerospike.conf:/etc/aerospike/aerospike.conf:ro
+    entrypoint: ["/usr/bin/asd", "--foreground", "--config-file", "/etc/aerospike/aerospike.conf"]
+    command: []
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    healthcheck:
+      test: ["CMD", "asinfo", "-h", "127.0.0.1", "-p", "3000", "-v", "build"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  sample:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aerospike-sample
+    depends_on:
+      aerospike:
+        condition: service_healthy
+    environment:
+      AEROSPIKE_HOST: aerospike
+      AEROSPIKE_PORT: "3000"
+      LISTEN: ":8080"
+    ports:
+      - "8080:8080"
+    networks:
+      - aerospike-net
+
+networks:
+  aerospike-net:
