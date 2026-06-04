@@ -26,9 +26,26 @@ type App struct {
 
 const SearchIndex = "documents"
 
+// schemaNoiseDemo reports whether the keploy schema-noise-detection demo mode
+// is enabled (env STAMP_CREATED_AT). It is OFF by default, so the app's normal
+// behaviour and the committed keploy recordings are unchanged; the
+// schema-noise-detection CI pipeline turns it on.
+func schemaNoiseDemo() bool { return os.Getenv("STAMP_CREATED_AT") != "" }
+
 func (a *App) Initialize() error {
 	var err error
-	a.DB, err = elasticsearch.NewDefaultClient()
+	cfg := elasticsearch.Config{}
+	if schemaNoiseDemo() {
+		// DisableKeepAlives so every outgoing Elasticsearch call uses a fresh
+		// connection that closes right after the response. keploy finalizes an
+		// outgoing HTTP mock when the connection closes; on a pooled keep-alive
+		// connection it would otherwise buffer the request/response until the
+		// app shuts down and lose them when the context is cancelled.
+		cfg.Transport = &http.Transport{DisableKeepAlives: true}
+	}
+	// Addresses are taken from the ELASTICSEARCH_URL env when cfg.Addresses is
+	// empty (NewClient honours it, same as NewDefaultClient).
+	a.DB, err = elasticsearch.NewClient(cfg)
 
 	if err != nil {
 		return fmt.Errorf("error : %s", err)
@@ -58,6 +75,12 @@ type Document struct {
 	ID      string `json:"id,omitempty"`
 	Title   string `json:"title"`
 	Content string `json:"content"`
+	// CreatedAt is stamped server-side on every create, so the document body
+	// sent to Elasticsearch carries a volatile field that differs between a
+	// keploy recording and each replay. This is what
+	// `--schema-noise-detection` detects and persists as
+	// req_body_noise: { body.created_at: [] } on the outgoing ES mock.
+	CreatedAt int64 `json:"created_at,omitempty"`
 }
 
 type CreateDocumentResponse struct {
@@ -80,6 +103,13 @@ func (a *App) createDocument(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
+	}
+
+	// In schema-noise demo mode, stamp a server-side creation time so the
+	// outgoing ES request body drifts every run (the volatile field the
+	// schema-noise-detection pipeline detects). Off by default.
+	if schemaNoiseDemo() {
+		doc.CreatedAt = time.Now().UnixNano()
 	}
 
 	data, err := json.Marshal(doc)
