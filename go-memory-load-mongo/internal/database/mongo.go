@@ -14,10 +14,14 @@ import (
 // Open creates a new MongoDB client, verifies connectivity with retries, and
 // returns the client and the named database handle.
 func Open(ctx context.Context, uri, dbName string) (*mongo.Client, *mongo.Database, error) {
+	// No SetMinPoolSize: keep the pool lazy so mongo connections open on the
+	// first query rather than eagerly at startup. An eager pool opens its
+	// connections before keploy's k8s sidecar agent attaches, so that traffic
+	// is never intercepted and the mocks are missed; lazy pooling lets every
+	// connection be recorded.
 	opts := options.Client().
 		ApplyURI(uri).
 		SetMaxPoolSize(25).
-		SetMinPoolSize(10).
 		SetMaxConnIdleTime(5 * time.Minute)
 
 	client, err := mongo.Connect(opts)
