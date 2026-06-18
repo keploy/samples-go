@@ -1,0 +1,187 @@
+syntax = "proto3";
+
+package loadtest.v1;
+
+option go_package = "loadtestgrpcapi/api/proto/loadtestv1";
+
+// LoadTestService exposes CRUD operations for the gRPC memory load test.
+service LoadTestService {
+  // Customer operations
+  rpc CreateCustomer(CreateCustomerRequest) returns (Customer);
+  rpc GetCustomerSummary(GetCustomerSummaryRequest) returns (CustomerSummary);
+
+  // Product operations
+  rpc CreateProduct(CreateProductRequest) returns (Product);
+
+  // Order operations
+  rpc CreateOrder(CreateOrderRequest) returns (Order);
+  rpc GetOrder(GetOrderRequest) returns (Order);
+  rpc SearchOrders(SearchOrdersRequest) returns (SearchOrdersResponse);
+
+  // Analytics
+  rpc TopProducts(TopProductsRequest) returns (TopProductsResponse);
+
+  // Large payload operations
+  rpc CreateLargePayload(CreateLargePayloadRequest) returns (LargePayloadRecord);
+  rpc GetLargePayload(GetLargePayloadRequest) returns (LargePayloadDetail);
+  rpc DeleteLargePayload(DeleteLargePayloadRequest) returns (DeleteLargePayloadResponse);
+}
+
+// ─── Messages ────────────────────────────────────────────────────────────────
+
+message Customer {
+  string id         = 1;
+  string email      = 2;
+  string full_name  = 3;
+  string segment    = 4;
+  string created_at = 5; // RFC3339
+}
+
+message CreateCustomerRequest {
+  string email     = 1;
+  string full_name = 2;
+  string segment   = 3;
+}
+
+message GetCustomerSummaryRequest {
+  string customer_id = 1;
+}
+
+message CustomerSummary {
+  Customer customer                  = 1;
+  int32    orders_count              = 2;
+  int64    lifetime_value_cents      = 3;
+  int64    average_order_value_cents = 4;
+  string   favorite_category         = 5;
+  string   last_order_at             = 6; // RFC3339, empty if no orders
+}
+
+message Product {
+  string id              = 1;
+  string sku             = 2;
+  string name            = 3;
+  string category        = 4;
+  int32  price_cents     = 5;
+  int32  inventory_count = 6;
+  string created_at      = 7; // RFC3339
+}
+
+message CreateProductRequest {
+  string sku             = 1;
+  string name            = 2;
+  string category        = 3;
+  int32  price_cents     = 4;
+  int32  inventory_count = 5;
+}
+
+message OrderItem {
+  string product_id       = 1;
+  string sku              = 2;
+  string name             = 3;
+  string category         = 4;
+  int32  quantity         = 5;
+  int32  unit_price_cents = 6;
+  int32  line_total_cents = 7;
+}
+
+message Order {
+  string            id          = 1;
+  Customer          customer    = 2;
+  string            status      = 3;
+  int32             total_cents = 4;
+  string            created_at  = 5; // RFC3339
+  repeated OrderItem items      = 6;
+}
+
+message OrderItemInput {
+  string product_id = 1;
+  int32  quantity   = 2;
+}
+
+message CreateOrderRequest {
+  string                  customer_id = 1;
+  string                  status      = 2;
+  repeated OrderItemInput items       = 3;
+}
+
+message GetOrderRequest {
+  string order_id = 1;
+}
+
+message SearchOrdersRequest {
+  string status           = 1;
+  string customer_id      = 2;
+  int64  min_total_cents  = 3;
+  string created_from     = 4; // RFC3339
+  string created_through  = 5; // RFC3339
+  int32  limit            = 6;
+  int32  offset           = 7;
+}
+
+message OrderSearchResult {
+  string order_id          = 1;
+  string customer_id       = 2;
+  string customer_name     = 3;
+  string status            = 4;
+  int32  total_cents       = 5;
+  string created_at        = 6; // RFC3339
+  int32  total_items       = 7;
+  int32  distinct_products = 8;
+}
+
+message SearchOrdersResponse {
+  repeated OrderSearchResult results = 1;
+}
+
+message TopProductsRequest {
+  int32 days  = 1;
+  int32 limit = 2;
+}
+
+message TopProduct {
+  string product_id    = 1;
+  string sku           = 2;
+  string name          = 3;
+  string category      = 4;
+  int32  units_sold    = 5;
+  int64  revenue_cents = 6;
+  int32  orders_count  = 7;
+  int32  revenue_rank  = 8;
+}
+
+message TopProductsResponse {
+  repeated TopProduct products = 1;
+}
+
+message LargePayloadRecord {
+  string id                 = 1;
+  string name               = 2;
+  string content_type       = 3;
+  int64  payload_size_bytes = 4;
+  string sha256             = 5;
+  string created_at         = 6; // RFC3339
+}
+
+message LargePayloadDetail {
+  LargePayloadRecord record  = 1;
+  string             payload = 2;
+}
+
+message CreateLargePayloadRequest {
+  string name         = 1;
+  string content_type = 2;
+  string payload      = 3;
+}
+
+message GetLargePayloadRequest {
+  string payload_id = 1;
+}
+
+message DeleteLargePayloadRequest {
+  string payload_id = 1;
+}
+
+message DeleteLargePayloadResponse {
+  bool               deleted = 1;
+  LargePayloadRecord record  = 2;
+}
