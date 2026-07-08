@@ -30,11 +30,23 @@ services:
           - postgresDb
 
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      # Probe TCP (127.0.0.1:5432), NOT the default unix socket. During first-boot
+      # init the postgres entrypoint runs a TEMPORARY server that is reachable on
+      # the socket but not on TCP (listen_addresses is empty while init.sql runs;
+      # only afterwards does the real server bind 0.0.0.0:5432). A socket probe
+      # therefore reports "healthy" seconds before TCP accepts, so
+      # `depends_on: service_healthy` releases go-app while its TCP connect
+      # (host=postgresDb:5432, single attempt, no retry) is still refused and the
+      # app exits. The app talks to Postgres over TCP, so the gate must probe TCP.
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -p 5432 -U postgres -d postgres"]
       interval: 5s
       timeout: 5s
-      retries: 5
-      start_period: 30s
+      # Generous budget so the gate stays patient through a slow first-boot init on
+      # emulated amd64 (postgres:10.5 on Apple-silicon / colima CI runners), where
+      # the init window is many seconds wide. A fast native boot still flips healthy
+      # on the first successful probe — these only bound when we give up.
+      retries: 30
+      start_period: 90s
 
 networks:
     babab: 
