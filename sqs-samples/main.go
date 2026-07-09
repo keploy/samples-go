@@ -82,6 +82,15 @@ func main() {
 
 	r := gin.Default()
 
+	// Liveness/readiness endpoint. Static routes take precedence over the
+	// "/:param" wildcard in gin, so this is not shadowed by getURL. Lets the
+	// replay driver gate on real app readiness (keploy --health-url) instead of
+	// a fixed --delay, which under CI contention fired requests before the app
+	// was serving and produced spurious "status_code got=0" failures.
+	r.GET("/healthz", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"status": "ok"})
+	})
+
 	r.GET("/:param", getURL)
 	r.POST("/url", putURL)
 	srv := &http.Server{
