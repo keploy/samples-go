@@ -2,11 +2,13 @@ version: '3.8'
 
 services:
   db:
-    image: postgres
-    container_name: postgres
+    image: mysql:8.0
+    container_name: mysql
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydb
     ports:
-      - "5432:5432"
+      - "3306:3306"
+    command: --default-authentication-plugin=mysql_native_password
