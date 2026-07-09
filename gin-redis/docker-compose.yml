@@ -6,6 +6,9 @@ services:
     container_name: ginRedisApp
     ports:
       - "3001:3001"
+    environment:
+      - REDIS_HOST=myredis
+      - REDIS_PORT=6379
     depends_on:
       - redis 
   redis:
@@ -13,3 +16,5 @@ services:
     container_name: myredis
     ports:
       - "6379:6379"
+
+
