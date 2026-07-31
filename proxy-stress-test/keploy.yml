@@ -1,0 +1,11 @@
+# Checked in so `keploy test` ignores the one field in these responses that
+# cannot be reproduced: each stress endpoint reports its own wall-clock
+# elapsed time (main.go's `time.Since(start).String()` on /api/transfer,
+# /api/batch-transfer and /api/post-transfer). Without this, those three test
+# cases mismatch on every replay, forever.
+#
+# `keploy config --generate` is a no-op when this file exists, so CI keeps
+# working unchanged and `./test.sh` gets the same behaviour as CI.
+test:
+    globalNoise:
+        global: {"body": {"duration": []}}

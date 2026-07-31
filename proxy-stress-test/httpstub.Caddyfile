@@ -1,0 +1,33 @@
+# Local stand-in for httpbin.org, served over real HTTPS on 443 so the
+# CONNECT-tunnel + TLS-cert-caching path this sample stresses is unchanged.
+#
+# `tls internal` mints a self-signed cert from Caddy's local CA. Nothing
+# validates it and nothing needs to: the app sets InsecureSkipVerify to accept
+# keploy's MITM cert (main.go), and keploy never validates upstream certs
+# either (proxy_v2.go, locked in by TestNewProxyTLSUpgradeFn_DestSide_
+# AlwaysInsecureSkipVerify). So no CA has to be distributed to any container.
+{
+	auto_https disable_redirects
+	admin off
+}
+
+https://httpstub:443, https://127.0.0.1:443 {
+	tls internal
+
+	handle /get {
+		header Content-Type application/json
+		# Padded to roughly httpbin /get's response size so the volume of data
+		# crossing the CONNECT tunnel stays comparable to what this lane used to
+		# exercise; the tunnel and the TLS handshake are the point, not the body.
+		respond `{"url":"https://httpstub/get","ok":true,"headers":{"Accept-Encoding":"gzip","Host":"httpstub","User-Agent":"Go-http-client/1.1"},"origin":"127.0.0.1","args":{},"padding":"0123456789012345678901234567890123456789012345678901234567890123456789"}` 200
+	}
+
+	handle /post {
+		header Content-Type application/json
+		respond `{"url":"https://httpstub/post","ok":true}` 200
+	}
+
+	handle {
+		respond 404
+	}
+}

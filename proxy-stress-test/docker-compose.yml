@@ -28,6 +28,30 @@ services:
              echo 'ConnectPort 443' >> /tmp/tp.conf &&
              tinyproxy -d -c /tmp/tp.conf"
 
+  # Local stand-in for httpbin.org. This lane used to drive 20 concurrent HTTPS
+  # calls at the public internet during RECORD, so the recorded response
+  # depended on whether httpbin was healthy: a slow or 5xx httpbin got baked
+  # into the expected body ("succeeded": 6, "failed": 14, "status": 503) and
+  # never reproduced on replay, failing the test set for reasons unrelated to
+  # keploy. It also burned minutes per run in 30s timeouts, and truncated one
+  # record window enough that only 3 of 5 test cases were captured.
+  #
+  # Still real HTTPS on 443, so the CONNECT-tunnel and TLS-cert-caching paths
+  # this sample exists to stress are untouched — only the far end moves
+  # in-cluster, where it is deterministic.
+  httpstub:
+    image: caddy:2-alpine
+    volumes:
+      - ./httpstub.Caddyfile:/etc/caddy/Caddyfile:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --no-check-certificate -O /dev/null https://127.0.0.1/get || exit 1"]
+      interval: 2s
+      timeout: 5s
+      retries: 15
+      # Caddy mints its internal CA on first boot; give it room before the
+      # first probe counts against the retry budget.
+      start_period: 5s
+
   app:
     build: .
     container_name: proxyStressApp
@@ -36,7 +60,8 @@ services:
     environment:
       LISTEN_ADDR: ":8080"
       DATABASE_URL: "postgres://repro:repro@db:5432/reprodb?sslmode=disable"
-      HTTPS_TARGET: "https://httpbin.org/get"
+      HTTPS_TARGET: "https://httpstub/get"
+      HTTPS_POST_TARGET: "https://httpstub/post"
       HTTP_PROXY_URL: "http://proxy:3128"
       # 20 concurrent HTTPS connections through CONNECT tunnel.
       # Exercises TLS cert caching (same code path as production 42).
@@ -54,6 +79,8 @@ services:
       BG_NOISE_CONNS: "1"
     depends_on:
       db:
+        condition: service_healthy
+      httpstub:
         condition: service_healthy
     # Resource limits for GitHub Actions ubuntu-latest (4 vCPU / 16GB).
     deploy:
