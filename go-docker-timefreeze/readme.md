@@ -7,7 +7,7 @@
 
 ```dockerfile
 # Download the time freeze agent
-ADD https://keploy-enterprise.s3.us-west-2.amazonaws.com/releases/latest/assets/go_freeze_time_amd64 /lib/keploy/go_freeze_time_amd64
+ADD https://keployenterprise.blob.core.windows.net/releases/latest/assets/go_freeze_time_amd64 /lib/keploy/go_freeze_time_amd64
 
 # Set suitable permissions
 RUN chmod +x /lib/keploy/go_freeze_time_amd64
@@ -25,7 +25,7 @@ RUN go build -tags=faketime <your_main_file>
 
 ```dockerfile
 # Download the time freeze agent
-ADD https://keploy-enterprise.s3.us-west-2.amazonaws.com/releases/latest/assets/go_freeze_time_arm64 /lib/keploy/go_freeze_time_arm64
+ADD https://keployenterprise.blob.core.windows.net/releases/latest/assets/go_freeze_time_arm64 /lib/keploy/go_freeze_time_arm64
 
 # Set suitable permissions
 RUN chmod +x /lib/keploy/go_freeze_time_arm64
