@@ -12,7 +12,21 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./db/init:/docker-entrypoint-initdb.d:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U app_user -d orderdb"]
+      # -h 127.0.0.1 is load-bearing: it forces a TCP probe.
+      #
+      # Without it pg_isready talks to the Unix socket, and postgres'
+      # docker-entrypoint runs a *temporary* server reachable only over that
+      # socket (listen_addresses='') once initdb has finished, to create the
+      # database and run docker-entrypoint-initdb.d. The socket therefore
+      # answers "accepting connections" while no TCP listener exists at all,
+      # so compose marks this service healthy and depends_on:
+      # service_healthy releases the dependent straight into ECONNREFUSED.
+      #
+      # Short but real: ~235ms with no initdb.d scripts, and 1.2s of
+      # false-healthy plus a 2.7s shutdown checkpoint in the CI failure this
+      # was diagnosed from. Only bites on a fresh volume -- a populated one
+      # skips the temporary server entirely, which is why it failed rarely.
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U app_user -d orderdb"]
       interval: 5s
       timeout: 5s
       retries: 20
