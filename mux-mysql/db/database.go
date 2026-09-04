@@ -31,7 +31,7 @@ func GetWebsiteFromID(id string, db *sql.DB) (string, error) {
 	err := row.Scan(&link)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return "", fmt.Errorf("Website not found")
+			return "", fmt.Errorf("website not found")
 		}
 		return "", err
 	}

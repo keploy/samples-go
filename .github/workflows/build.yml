@@ -18,6 +18,14 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
+          # 'stable' on purpose, and deliberately NOT the pinned version used
+          # by golangci-lint.yml. Building on the current Go is this job's
+          # whole point: it is the signal that these samples still compile
+          # against the latest release. The lint job pins instead, because a
+          # linter has to understand the compiler's export-data format and a
+          # floating toolchain there silently outruns it. Every sample's
+          # go.mod is <= the lint pin, so the lint toolchain can still build
+          # all of them.
           go-version: 'stable'
 
       - name: Build projects
