@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  go-app:
+    build:
+      context: .
+    container_name: s3KeployApp
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mount AWS credentials from host machine
+      - ~/.aws:/root/.aws:ro
+    networks:
+      - keploy-network
+
+networks:
+  keploy-network:
+    external: true
