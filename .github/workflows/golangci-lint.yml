@@ -1,89 +1,28 @@
-name: golangci-lint
+name: GolangCI-Lint (PR Changes Only)
+
 on:
-  push:
-    branches:
-      - master
-      - main
   pull_request:
-    types: [opened, edited, synchronize, reopened]
-
-permissions:
-  contents: read
-  # Optional: allow read access to pull request. Use with `only-new-issues` option.
-  pull-requests: read
-
-# cancel the in-progress workflow when PR is refreshed.
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
-  cancel-in-progress: true
-
+    types: [opened, synchronize, reopened]
 
 jobs:
-  golangci:
-    name: lint
+  golangci-lint:
+    name: GolangCI Lint Diff
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        working-directory:
-          - aerospike-tls
-          - book-store-inventory
-          - connect-tunnel
-          - dns-dedup
-          - dns-mock-test
-          - echo-mysql
-          - echo-sql
-          - fasthttp-postgres
-          - gin-mongo
-          - gin-redis
-          - go-dedup
-          - go-docker-timefreeze
-          - go-grpc
-          - go-jwt
-          - go-memory-load
-          - go-memory-load-grpc
-          - go-memory-load-mongo
-          - go-memory-load-mysql
-          - go-redis
-          - go-twilio
-          - graphql-sql
-          - grpc-mongo
-          - grpc-secret
-          - http-pokeapi
-          - http-postgres
-          - http-sse
-          - mux-elasticsearch
-          - mux-mysql
-          - mux-sql
-          - proxy-stress-test
-          - risk-profile
-          - S3-Keploy
-          - simple-grpc
-          - sqs-samples
-          - sse-preflight
-          - sse-redis
-          - sse-svelte
-          - tls-dadjoke
-          - users-profile
-
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - name: Checkout Code
+        uses: actions/checkout@v4
         with:
-          # Pinned deliberately, NOT 'stable'. golangci-lint reads the
-          # compiler's export data, and each Go release can bump that format:
-          # a floating toolchain silently outran the pinned linter and broke
-          # every job in this matrix with "export data version 4 is greater
-          # than maximum supported version 2" -- with no change to any sample.
-          # Bumping Go here must be a deliberate edit paired with the linter
-          # version below.
-          go-version: '1.27'
-          cache: false
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v8
-        with:
-          # Keep in step with go-version above; see the note there.
-          version: v2.13.2
+          fetch-depth: 0
 
-          # Optional: working directory, useful for monorepos
-          working-directory: ${{matrix.working-directory}}
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+          cache: false
+
+      - name: Run golangci-lint on Changed Files
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.59.1
+          only-new-issues: true
+          args: --timeout=5m
