@@ -5,7 +5,7 @@ A sample Go application demonstrating [Keploy](https://keploy.io) integration wi
 ## Prerequisites
 
 - [Docker](https://www.docker.com/) & Docker Compose
-- [Go](https://golang.org/) 1.23+
+- [Go](https://golang.org/) 1.25+
 
 ## Quick Start
 
