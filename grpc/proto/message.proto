@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option go_package = "github.com/keploy/samples-go/grpc/generated";
+
+service StudentService {
+  rpc GetStudent(StudentRequest) returns (StudentResponse) {};
+  rpc GetStudentStream(StudentRequest) returns (stream StudentResponse) {};
+  rpc SendStudentStream(stream StudentRequest) returns (StudentResponse) {};
+  rpc SendAndGetStudentStream(stream StudentRequest) returns (stream StudentResponse) {}
+}
+
+message StudentRequest {
+  int32 id = 1;
+}
+
+message StudentResponse {
+  string name = 1;
+  int32 age = 2;
+}
