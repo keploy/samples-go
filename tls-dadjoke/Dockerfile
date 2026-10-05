@@ -29,17 +29,14 @@ FROM debian:bookworm-slim
 # Set the working directory for the final stage.
 WORKDIR /app
 
+# Keploy injects its per-run MITM CA and the trust env vars automatically; no
+# certificate needs to be baked in. (ca-certificates gives the base image real
+# public roots.)
 RUN apt-get update && apt-get install -y ca-certificates
-# Download the ca.crt file and the setup_ca.sh script
-ADD  https://raw.githubusercontent.com/keploy/keploy/refs/heads/main/pkg/core/proxy/tls/asset/ca.crt ca.crt
-ADD https://raw.githubusercontent.com/keploy/keploy/refs/heads/main/pkg/core/proxy/tls/asset/setup_ca.sh setup_ca.sh
-# Give execute permission to the setup_ca.sh script
-RUN chmod +x setup_ca.sh
 
 COPY --from=builder /app/main /app/main
 
 # Expose port 8080 to allow traffic to the server.
 EXPOSE 8080
 
-# Run the CA setup script and then run the application server
-CMD ["/bin/bash", "-c", "source ./setup_ca.sh && /app/main"]
+CMD ["/app/main"]
