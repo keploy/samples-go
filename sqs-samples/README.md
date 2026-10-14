@@ -89,7 +89,7 @@ Start the application (assuming it's a Gin application) using:
 ```
 ./ginApp
 ```
-Ensure the application is running before proceeding with the next steps.
+Ensure the application is running before proceeding with the next steps. `GET /healthz` answers `200` once the app's SQS consumer has polled the queue for the first time, and `503` before (with the error, if the consumer stopped). Once `200`, it stays `200`.
 
 ## Step 6: Send Requests Using curl
 ## 6.1 Send POST Request to Shorten URL
@@ -123,6 +123,7 @@ This will run your application in record mode and capture all interactions with 
 Once the interactions are captured, you can run Keploy in test mode to validate the captured requests:
 
 ```
-sudo -E env PATH=$PATH <path to your keploy binary> test -c "go run main.go" --delay 30  &> logs.txt
+sudo -E env PATH=$PATH <path to your keploy binary> test -c "go run ." --delay 30  &> logs.txt
 ```
-This will execute the recorded tests and output the results to test_logs.txt.
+This will execute the recorded tests and output the results to logs.txt.
+To start the tests as soon as the app has polled SQS, add `--health-url http://localhost:8080/healthz`.

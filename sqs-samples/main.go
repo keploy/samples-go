@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"sync/atomic"
 	"syscall"
 	"time"
 
@@ -78,12 +79,11 @@ func main() {
 
 	fmt.Printf("awsCfg: %v\n", awsCfg)
 
-	go consumeSQSMessages(ctx, awsCfg)
+	// /healthz's state, which the SQS consumer sets.
+	ready := newReadiness()
+	go consumeSQSMessages(ctx, awsCfg, ready)
 
-	r := gin.Default()
-
-	r.GET("/:param", getURL)
-	r.POST("/url", putURL)
+	r := newRouter(ready)
 	srv := &http.Server{
 		Addr:    ":" + port,
 		Handler: r,
@@ -109,8 +109,18 @@ func main() {
 	logger.Info("server exiting")
 }
 
-// consumeSQSMessages consumes messages from the SQS queue
-func consumeSQSMessages(ctx context.Context, awsCfg aws.Config) {
+// newRouter is the app's routes; /healthz answers from rd.
+func newRouter(rd *readiness) *gin.Engine {
+	r := gin.Default()
+	r.GET("/healthz", rd.healthz)
+	r.GET("/:param", getURL)
+	r.POST("/url", putURL)
+	return r
+}
+
+// consumeSQSMessages consumes messages from the SQS queue, and tells rd when
+// its first poll came back, or why it stopped.
+func consumeSQSMessages(ctx context.Context, awsCfg aws.Config, rd *readiness) {
 	logger, _ := zap.NewProduction()
 	sqsClient := sqs.NewFromConfig(awsCfg)
 
@@ -124,8 +134,10 @@ func consumeSQSMessages(ctx context.Context, awsCfg aws.Config) {
 
 		if err != nil {
 			logger.Error(fmt.Sprintf("Failed to receive messages: %v", err))
+			rd.markStopped(err)
 			break
 		}
+		rd.markPolled()
 
 		// If no messages were received, just continue
 		if len(resp.Messages) == 0 {
@@ -158,4 +170,41 @@ func consumeSQSMessages(ctx context.Context, awsCfg aws.Config) {
 			}
 		}
 	}
+}
+
+// readiness is what /healthz answers: 503 until the SQS consumer's first
+// ReceiveMessage came back, with messages or with none, and 200 from then on.
+// A caller that waits on /healthz (keploy test's --health-url) then knows the
+// app has already talked to SQS, however short its run. 200 means "the first
+// poll is done", not "the consumer is alive": once 200, it stays 200.
+type readiness struct {
+	polled atomic.Bool
+	// stopErr is why the consumer stopped, when it did.
+	stopErr atomic.Pointer[error]
+}
+
+func newReadiness() *readiness {
+	return &readiness{}
+}
+
+// markPolled records that a poll came back.
+func (r *readiness) markPolled() {
+	r.polled.Store(true)
+}
+
+// markStopped records that the consumer stopped on err.
+func (r *readiness) markStopped(err error) {
+	r.stopErr.Store(&err)
+}
+
+func (r *readiness) healthz(c *gin.Context) {
+	if r.polled.Load() {
+		c.String(http.StatusOK, "ok")
+		return
+	}
+	if err := r.stopErr.Load(); err != nil {
+		c.String(http.StatusServiceUnavailable, "SQS consumer stopped: %v", *err)
+		return
+	}
+	c.String(http.StatusServiceUnavailable, "waiting for the first SQS poll")
 }
