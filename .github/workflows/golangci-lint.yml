@@ -76,8 +76,11 @@ jobs:
           # every job in this matrix with "export data version 4 is greater
           # than maximum supported version 2" -- with no change to any sample.
           # Bumping Go here must be a deliberate edit paired with the linter
-          # version below.
-          go-version: '1.27'
+          # version below. Pinned to the patch release too: '1.27' floated to
+          # 1.27.2, whose export data (version 5) v2.13.2 cannot read
+          # ("export data version 5 is greater than maximum supported
+          # version 4"), and every job broke again with no change to a sample.
+          go-version: '1.27.1'
           cache: false
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v8
