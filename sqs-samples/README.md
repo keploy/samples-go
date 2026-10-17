@@ -83,6 +83,29 @@ go build -o ginApp .
 ```
 This will build the Go application and output the executable ginApp.
 
+### 4.2 Builds that speak SQS's Query protocol
+
+The AWS SDKs speak to SQS in one of two wire protocols. The default build
+(aws-sdk-go-v2, `service/sqs` v1.38.1) speaks JSON: an `X-Amz-Target:
+AmazonSQS.ReceiveMessage` header and a JSON body. SDKs from before SQS's move
+to JSON speak the Query protocol: a form body
+(`Action=ReceiveMessage&...&Version=2012-11-05`) and XML answers. Two builds of
+the same app speak it, one per Go SDK family, each pinned to the family's last
+release before JSON:
+
+```
+# aws-sdk-go v1.47.5 (v1.47.6 is the first that speaks JSON)
+go build -tags sqs_sdk_v1 -o ginApp .
+
+# aws-sdk-go-v2 service/sqs v1.26.0 (v1.27.0 is the first that speaks JSON)
+go build -modfile=go.v2query.mod -o ginApp .
+```
+
+`go.v2query.mod` is `go.mod` with `service/sqs` and the SDK modules it needs
+pinned to their releases of that time. Keploy's CI records and replays all
+three builds. `main_test.go` tests the default build and the `go.v2query.mod` one
+(`go test -modfile=go.v2query.mod .`).
+
 ## Step 5: Run the Application
 Start the application (assuming it's a Gin application) using:
 

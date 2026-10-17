@@ -1,3 +1,5 @@
+//go:build !sqs_sdk_v1
+
 package main
 
 import (
@@ -5,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"strings"
 	"sync/atomic"
 	"testing"
@@ -23,18 +26,24 @@ func get(r http.Handler, path string) *httptest.ResponseRecorder {
 // fakeSQS is an SQS endpoint whose first ReceiveMessage gets first's answer,
 // and every later one waits until its caller gives up or the test ends.
 // again closes when the second one comes: the consumer is past its first
-// poll.
-func fakeSQS(t *testing.T, first func(w http.ResponseWriter)) (cfg aws.Config, again <-chan struct{}) {
+// poll. It answers in the protocol the call is made in (query: SQS's Query
+// protocol, which go.v2query.mod's build speaks; else JSON).
+func fakeSQS(t *testing.T, first func(w http.ResponseWriter, query bool)) (cfg aws.Config, again <-chan struct{}) {
 	t.Helper()
 	var calls atomic.Int32
 	ended := make(chan struct{})
 	second := make(chan struct{})
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if got := r.Header.Get("X-Amz-Target"); got != "AmazonSQS.ReceiveMessage" {
+		// Read whole, so the server notices the caller hanging up.
+		body, _ := io.ReadAll(r.Body)
+		query := r.Header.Get("X-Amz-Target") == ""
+		if query {
+			if form, err := url.ParseQuery(string(body)); err != nil || form.Get("Action") != "ReceiveMessage" {
+				t.Errorf("the consumer called %q", body)
+			}
+		} else if got := r.Header.Get("X-Amz-Target"); got != "AmazonSQS.ReceiveMessage" {
 			t.Errorf("the consumer called %q", got)
 		}
-		// Read whole, so the server notices the caller hanging up.
-		_, _ = io.Copy(io.Discard, r.Body)
 		if n := calls.Add(1); n > 1 {
 			if n == 2 {
 				close(second)
@@ -45,8 +54,12 @@ func fakeSQS(t *testing.T, first func(w http.ResponseWriter)) (cfg aws.Config, a
 			}
 			return
 		}
-		w.Header().Set("Content-Type", "application/x-amz-json-1.0")
-		first(w)
+		if query {
+			w.Header().Set("Content-Type", "text/xml")
+		} else {
+			w.Header().Set("Content-Type", "application/x-amz-json-1.0")
+		}
+		first(w, query)
 	}))
 	// Cleanups run last first: the waiting polls end before Close waits on
 	// them.
@@ -89,7 +102,13 @@ func TestHealthzWaitsForTheFirstSQSPoll(t *testing.T) {
 // does once the consumer has stopped.
 func TestTheConsumersFirstPollMakesTheAppReady(t *testing.T) {
 	gin.SetMode(gin.TestMode)
-	cfg, again := fakeSQS(t, func(w http.ResponseWriter) { _, _ = w.Write([]byte(`{"Messages":[]}`)) })
+	cfg, again := fakeSQS(t, func(w http.ResponseWriter, query bool) {
+		if query {
+			_, _ = w.Write([]byte(`<ReceiveMessageResponse xmlns="http://queue.amazonaws.com/doc/2012-11-05/"><ReceiveMessageResult/></ReceiveMessageResponse>`))
+			return
+		}
+		_, _ = w.Write([]byte(`{"Messages":[]}`))
+	})
 	rd := newReadiness()
 	ctx, cancel := context.WithCancel(context.Background())
 	done := make(chan struct{})
@@ -122,7 +141,12 @@ func TestTheConsumersFirstPollMakesTheAppReady(t *testing.T) {
 // unready, and /healthz says why.
 func TestHealthzSaysWhyTheConsumerStopped(t *testing.T) {
 	gin.SetMode(gin.TestMode)
-	cfg, again := fakeSQS(t, func(w http.ResponseWriter) {
+	cfg, again := fakeSQS(t, func(w http.ResponseWriter, query bool) {
+		if query {
+			w.WriteHeader(http.StatusBadRequest)
+			_, _ = w.Write([]byte(`<ErrorResponse><Error><Type>Sender</Type><Code>AWS.SimpleQueueService.NonExistentQueue</Code><Message>The specified queue does not exist.</Message></Error><RequestId>r-1</RequestId></ErrorResponse>`))
+			return
+		}
 		w.Header().Set("x-amzn-query-error", "AWS.SimpleQueueService.NonExistentQueue;Sender")
 		w.WriteHeader(http.StatusBadRequest)
 		_, _ = w.Write([]byte(`{"__type":"com.amazonaws.sqs#QueueDoesNotExist","message":"The specified queue does not exist."}`))
