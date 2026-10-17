@@ -74,6 +74,32 @@ jobs:
                 exit 1
               fi
 
+              # The SQS sample's builds that speak SQS's Query protocol, one
+              # per Go SDK family (sqs-samples/README.md, 4.2). Each needs
+              # modules the default build does not (aws-sdk-go v1; the
+              # aws-sdk-go-v2 versions go.v2query.mod pins), fetched first
+              # with the same retry.
+              if [ "$dir_name" = sqs-samples ]; then
+                for flag in -tags=sqs_sdk_v1 -modfile=go.v2query.mod; do
+                  n=0
+                  until go list -deps "$flag" ./... >/dev/null; do
+                    n=$((n+1))
+                    if [ "$n" -ge 5 ]; then
+                      echo "go list -deps $flag failed in $dir after $n attempts" >&2
+                      exit 1
+                    fi
+                    echo "go list -deps $flag failed in $dir (attempt $n), retrying in $((n*5))s"
+                    sleep $((n*5))
+                  done
+                done
+                if go build -tags sqs_sdk_v1 ./... && go build -modfile=go.v2query.mod ./...; then
+                  echo "Successfully built the Query-protocol builds of $dir"
+                else
+                  echo "Failed to build the Query-protocol builds of $dir" >&2
+                  exit 1
+                fi
+              fi
+
               # Return to the base directory
               cd ..
             else

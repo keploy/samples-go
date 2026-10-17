@@ -3,14 +3,13 @@ module sqs
 go 1.22.1
 
 require (
+	github.com/aws/aws-sdk-go v1.47.5
 	github.com/aws/aws-sdk-go-v2 v1.36.3
 	github.com/aws/aws-sdk-go-v2/config v1.29.9
 	github.com/aws/aws-sdk-go-v2/credentials v1.17.62
-	github.com/aws/aws-sdk-go-v2/service/appconfigdata v1.19.1
 	github.com/aws/aws-sdk-go-v2/service/sqs v1.38.1
 	github.com/gin-gonic/gin v1.10.0
 	github.com/itchyny/base58-go v0.2.2
-	github.com/joho/godotenv v1.5.1
 	go.mongodb.org/mongo-driver v1.17.3
 	go.uber.org/zap v1.27.0
 )
@@ -37,6 +36,7 @@ require (
 	github.com/go-playground/validator/v10 v10.20.0 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
+	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.16.7 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.7 // indirect
