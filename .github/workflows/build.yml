@@ -8,6 +8,16 @@ on:
     types: [opened, edited, synchronize, reopened]
 
 jobs:
+  # keploy's CI clones this repo at main and builds these Dockerfiles: one Go
+  # module fetch made only once there fails its lane on a reset download.
+  dockerfile-fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Every Go module fetch in a Dockerfile runs in a retry loop
+        run: python3 .github/scripts/check_go_fetch_retried.py --self-test
+
   build:
     runs-on: ubuntu-latest
 
@@ -40,6 +50,21 @@ jobs:
 
               # Change to the project directory
               cd "$dir" || continue
+
+              # Fetch what the build needs first, retried: proxy.golang.org
+              # now and then resets a download mid-transfer, and one reset
+              # would fail this whole job. `go list -deps` loads exactly the
+              # packages `go build` does, so it fetches nothing more.
+              n=0
+              until go list -deps ./... >/dev/null; do
+                n=$((n+1))
+                if [ "$n" -ge 5 ]; then
+                  echo "go list -deps failed in $dir after $n attempts" >&2
+                  exit 1
+                fi
+                echo "go list -deps failed in $dir (attempt $n), retrying in $((n*5))s"
+                sleep $((n*5))
+              done
 
               # Build the project (supports modules with multiple commands under ./cmd/*)
               if go build ./...; then
