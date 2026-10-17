@@ -8,6 +8,16 @@ on:
     types: [opened, edited, synchronize, reopened]
 
 jobs:
+  # keploy's CI clones this repo at main and builds these Dockerfiles: one Go
+  # module fetch made only once there fails its lane on a reset download.
+  dockerfile-fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Every Go module fetch in a Dockerfile runs in a retry loop
+        run: python3 .github/scripts/check_go_fetch_retried.py --self-test
+
   build:
     runs-on: ubuntu-latest
 
