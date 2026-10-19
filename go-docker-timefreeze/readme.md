@@ -1,57 +1,26 @@
-
 ---
 
-## Time Freeze Agent Setup
+## Time freezing
 
-### amd64/x86_64 🖥️
+The app signs JWTs that expire, so a replay a day later fails unless the
+app's clock is frozen at the recording's time. Keploy does that with the
+`--freezeTime` flag on `keploy test`. Build and record the image as it is:
+there is nothing to add to the Dockerfile and nothing to rebuild.
 
-```dockerfile
-# Download the time freeze agent
-ADD https://keployenterprise.blob.core.windows.net/releases/latest/assets/go_freeze_time_amd64 /lib/keploy/go_freeze_time_amd64
+When you replay, Keploy patches a copy of the image's Go binary (`/main`) so
+that it reads the frozen clock, and mounts the copy over the original in the
+container. Your image is not changed. Keploy logs a `time-freeze[go]` line
+that says whether it patched the binary and, if it could not, why.
 
-# Set suitable permissions
-RUN chmod +x /lib/keploy/go_freeze_time_amd64
+This needs a local Docker daemon that shares the host's temporary directory
+with Keploy (not a remote daemon, or one in a VM such as Docker Desktop
+without file sharing, colima, lima or podman machine). Where that is not
+possible, see the fallback, a replay-only build with Keploy's `faketime`
+runtime, in the
+[time freezing docs](https://keploy.io/docs/keploy-cloud/time-freezing/#fallback-a-replay-only-faketime-build).
+Never record with that build.
 
-# Run the binary
-RUN /lib/keploy/go_freeze_time_amd64
-
-# Build your binary with fake time (during test mode)
-RUN go build -tags=faketime <your_main_file>
-```
-
----
-
-### arm64/aarch64 📱
-
-```dockerfile
-# Download the time freeze agent
-ADD https://keployenterprise.blob.core.windows.net/releases/latest/assets/go_freeze_time_arm64 /lib/keploy/go_freeze_time_arm64
-
-# Set suitable permissions
-RUN chmod +x /lib/keploy/go_freeze_time_arm64
-
-# Run the binary
-RUN /lib/keploy/go_freeze_time_arm64
-
-# Build your binary with fake time (during test mode)
-RUN go build -tags=faketime <your_main_file>
-```
-
-> **Note:** Only add the `faketime` tag to your build script during **Test MODE**.
-
-Re-build your Docker image.
-
-Now add the `--freeze-time` flag when running your tests with Keploy, like so:
-
-```bash
-keploy test -c "<appCmd>" --freeze-time
-```
-
-
-## before building, kindly ensure to move the time freezing agent binary to this directory
-
-
-## command to build docker image 
+## command to build docker image
 
 ```
 docker build -t go-jwt-app-normal .
