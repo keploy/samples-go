@@ -63,7 +63,7 @@ The API will be available at `http://localhost:8080`.
 ## Record Testcases with Keploy
 
 ```bash
-keploy record -c "docker compose up" --container-name api --delay 10
+keploy record -c "docker compose up" --container-name api
 ```
 
 In another terminal:
