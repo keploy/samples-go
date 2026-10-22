@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/sha256"
 	"fmt"
+	"log"
 	"math/big"
 	"net/http"
 	"time"
@@ -65,6 +66,9 @@ func getURL(c *gin.Context) {
 	c.Redirect(http.StatusSeeOther, u.URL)
 }
 
+// handlingLine is what putURL says once it handles a request it parsed.
+const handlingLine = "POST /url: writing the short link"
+
 func putURL(c *gin.Context) {
 	var m map[string]string
 
@@ -79,6 +83,10 @@ func putURL(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "missing url param"})
 		return
 	}
+	// Said before the write, once the request is the app's to handle: keploy's
+	// S12 lane waits on this line to know the request's test window is open
+	// (keploy's ingress opens it before the app reads the request).
+	log.Println(handlingLine)
 
 	// The forced variant (consumer.go) answers once the consumer deleted a
 	// message after the write: the wait starts before the write, so a delete

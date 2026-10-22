@@ -6,9 +6,11 @@ import (
 	"context"
 	"errors"
 	"io"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"os"
 	"strings"
 	"sync"
 	"testing"
@@ -191,10 +193,18 @@ func TestTheAppIsReadyOnlyOnceItsFirstBatchIsDone(t *testing.T) {
 // panic).
 func TestAnUnparseablePostIsRefusedBeforeAnyMongoCall(t *testing.T) {
 	gin.SetMode(gin.TestMode)
+	var said strings.Builder
+	log.SetOutput(&said)
+	t.Cleanup(func() { log.SetOutput(os.Stderr) })
 	w := httptest.NewRecorder()
 	newRouter(newReadiness()).ServeHTTP(w, httptest.NewRequest(http.MethodPost, "/url", strings.NewReader("{not json")))
 	if w.Code != http.StatusBadRequest || !strings.Contains(w.Body.String(), "failed to decode req") {
 		t.Fatalf("answered %d %q", w.Code, w.Body.String())
+	}
+	// The lane waits on the handling line for the request it sends after P:
+	// P never says it.
+	if strings.Contains(said.String(), handlingLine) {
+		t.Fatalf("P said %q", handlingLine)
 	}
 }
 
