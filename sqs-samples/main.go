@@ -40,6 +40,14 @@ func main() {
 	if err != nil {
 		logger.Fatal("failed to create mgo db client", zap.Error(err))
 	}
+	// One ping, on the app's one client, as it starts: its connection to
+	// MongoDB is made here, before any request or message.
+	pingCtx, cancelPing := context.WithTimeout(context.Background(), 10*time.Second)
+	err = client.Ping(pingCtx, nil)
+	cancelPing()
+	if err != nil {
+		logger.Fatal("failed to ping MongoDB", zap.Error(err))
+	}
 	db := client.Database(dbName)
 
 	col = db.Collection(collection)
@@ -93,10 +101,12 @@ func newRouter(rd *readiness) *gin.Engine {
 }
 
 // readiness is what /healthz answers: 503 until the SQS consumer's first
-// ReceiveMessage came back, with messages or with none, and 200 from then on.
-// A caller that waits on /healthz (keploy test's --health-url) then knows the
-// app has already talked to SQS, however short its run. 200 means "the first
-// poll is done", not "the consumer is alive": once 200, it stays 200.
+// ReceiveMessage came back empty, or its first batch was processed (each
+// message's insert and delete done, failed or not: consumer.go), and 200 from
+// then on. A caller that waits on /healthz (keploy test's --health-url) then
+// knows the app has already talked to SQS, and processed what the queue held
+// as it started, however short its run. 200 means "the first poll is done",
+// not "the consumer is alive": once 200, it stays 200.
 type readiness struct {
 	polled atomic.Bool
 	// stopErr is why the consumer stopped, when it did.

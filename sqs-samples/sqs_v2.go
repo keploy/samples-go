@@ -6,13 +6,11 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/sqs"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.uber.org/zap"
 )
 
@@ -57,11 +55,12 @@ func consumeSQSMessages(ctx context.Context, awsCfg aws.Config, rd *readiness) {
 	sqsClient := sqs.NewFromConfig(awsCfg)
 
 	for {
-		// Receive messages from SQS with WaitTimeSeconds = 4 and MaxMessages = 10
+		// Receive up to 10 messages, holding the poll 4 s on an empty queue
+		// (0 in the forced variant: consumer.go).
 		resp, err := sqsClient.ReceiveMessage(ctx, &sqs.ReceiveMessageInput{
 			QueueUrl:            &queueURL,
 			MaxNumberOfMessages: 10,
-			WaitTimeSeconds:     4,
+			WaitTimeSeconds:     pollWaitSeconds(),
 		})
 
 		if err != nil {
@@ -69,11 +68,16 @@ func consumeSQSMessages(ctx context.Context, awsCfg aws.Config, rd *readiness) {
 			rd.markStopped(err)
 			break
 		}
-		rd.markPolled()
+		if forcedVariant() {
+			// The forced variant is ready before any batch.
+			rd.markPolled()
+		}
 
-		// If no messages were received, just continue
+		// If no messages were received, the app is ready, and polls again
 		if len(resp.Messages) == 0 {
 			logger.Info("No messages received")
+			rd.markPolled()
+			afterEmptyPoll(ctx)
 			continue
 		}
 
@@ -82,10 +86,8 @@ func consumeSQSMessages(ctx context.Context, awsCfg aws.Config, rd *readiness) {
 			event := message.Body
 			log.Printf("Received event: %s", *event)
 
-			// Insert event into MongoDB
-			eventDocument := bson.D{{Key: "event", Value: *event}, {Key: "processed_at", Value: time.Now()}}
-			_, err := col2.InsertOne(context.Background(), eventDocument)
-			if err != nil {
+			// Record the event in MongoDB: a duplicate read, then the insert
+			if err := recordEvent(context.Background(), *event); err != nil {
 				log.Println("Failed to insert event into MongoDB:", err)
 			}
 
@@ -99,7 +101,12 @@ func consumeSQSMessages(ctx context.Context, awsCfg aws.Config, rd *readiness) {
 				logger.Error(fmt.Sprintf("Failed to delete message: %v", err))
 			} else {
 				logger.Info(fmt.Sprintf("Message deleted: %s\n", *message.MessageId))
+				consumerDeletes.notify()
 			}
 		}
+		// Ready once the batch's inserts and deletes are done, failed or
+		// not: what the queue held as the app started is processed before
+		// it says it is ready.
+		rd.markPolled()
 	}
 }

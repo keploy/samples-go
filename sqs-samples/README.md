@@ -112,7 +112,9 @@ Start the application (assuming it's a Gin application) using:
 ```
 ./ginApp
 ```
-Ensure the application is running before proceeding with the next steps. `GET /healthz` answers `200` once the app's SQS consumer has polled the queue for the first time, and `503` before (with the error, if the consumer stopped). Once `200`, it stays `200`.
+Ensure the application is running before proceeding with the next steps. `GET /healthz` answers `200` once the app's SQS consumer has polled the queue for the first time and processed what that poll delivered (for each message: a read of whether its event was recorded already, the insert into MongoDB, and the delete from the queue, whether they succeeded or not), and `503` before (with the error, if the consumer stopped). A first poll that finds the queue empty makes the app ready at once. Once `200`, it stays `200`. The app pings MongoDB once as it starts, on its one client.
+
+`SQS_S12_FORCED=1` runs the variant keploy's S12 lane forces a consumer's work into a request with: the app is ready after its first poll, before processing it; polls are short (`WaitTimeSeconds: 0`, with a 200 ms pause after an empty answer); and `POST /url`, once it has written its URL, waits (at most 25 s) for the consumer's next delete before it answers.
 
 ## Step 6: Send Requests Using curl
 ## 6.1 Send POST Request to Shorten URL

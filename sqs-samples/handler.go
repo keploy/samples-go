@@ -80,6 +80,13 @@ func putURL(c *gin.Context) {
 		return
 	}
 
+	// The forced variant (consumer.go) answers once the consumer deleted a
+	// message after the write: the wait starts before the write, so a delete
+	// that follows the write closely is not missed.
+	var deleted <-chan struct{}
+	if forcedVariant() {
+		deleted = consumerDeletes.next()
+	}
 	t := time.Now()
 	id := GenerateShortLink(u)
 	err = Upsert(c.Request.Context(), URL{
@@ -91,6 +98,9 @@ func putURL(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
+	}
+	if deleted != nil {
+		waitForDelete(c.Request.Context(), deleted)
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"ts":  time.Now().UnixNano(),
