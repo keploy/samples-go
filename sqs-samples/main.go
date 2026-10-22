@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"sync"
 	"sync/atomic"
 	"syscall"
 	"time"
@@ -111,15 +112,20 @@ type readiness struct {
 	polled atomic.Bool
 	// stopErr is why the consumer stopped, when it did.
 	stopErr atomic.Pointer[error]
+	// ready is closed once, as the app turns ready (markPolled): what a
+	// test waits on.
+	ready     chan struct{}
+	readyOnce sync.Once
 }
 
 func newReadiness() *readiness {
-	return &readiness{}
+	return &readiness{ready: make(chan struct{})}
 }
 
-// markPolled records that a poll came back.
+// markPolled records that the app is ready (see readiness).
 func (r *readiness) markPolled() {
 	r.polled.Store(true)
+	r.readyOnce.Do(func() { close(r.ready) })
 }
 
 // markStopped records that the consumer stopped on err.

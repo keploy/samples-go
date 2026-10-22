@@ -12,7 +12,6 @@ import (
 	"strings"
 	"sync"
 	"testing"
-	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/credentials"
@@ -112,15 +111,20 @@ func (q *fakeQueue) serve(t *testing.T) aws.Config {
 }
 
 // heldEvents is an event store whose insert waits for release, noting each
-// call; insertFails makes the insert fail.
+// call, and telling read of each read; insertFails makes the insert fail.
 type heldEvents struct {
 	q           *fakeQueue
 	release     chan struct{}
+	read        chan struct{}
 	insertFails bool
 }
 
 func (e heldEvents) recorded(context.Context, string) (int64, error) {
 	e.q.note("CountDocuments")
+	select {
+	case e.read <- struct{}{}:
+	default:
+	}
 	return 0, nil
 }
 
@@ -149,7 +153,8 @@ func TestTheAppIsReadyOnlyOnceItsFirstBatchIsDone(t *testing.T) {
 			cfg := q.serve(t)
 			release := make(chan struct{})
 			prev := eventStore
-			eventStore = heldEvents{q: q, release: release, insertFails: tc.insertFails}
+			read := make(chan struct{}, 1)
+			eventStore = heldEvents{q: q, release: release, read: read, insertFails: tc.insertFails}
 			t.Cleanup(func() { eventStore = prev })
 			rd := newReadiness()
 			ctx, cancel := context.WithCancel(context.Background())
@@ -162,20 +167,17 @@ func TestTheAppIsReadyOnlyOnceItsFirstBatchIsDone(t *testing.T) {
 				cancel()
 				<-done
 			})
-			for deadline := time.Now().Add(5 * time.Second); len(q.seen()) < 2; time.Sleep(time.Millisecond) {
-				if time.Now().After(deadline) {
-					t.Fatalf("the consumer did not read the event: %v", q.seen())
-				}
-			}
+			// Each wait is on the event itself (go test's own timeout bounds
+			// a test that never sees it): the read, the delete, readiness.
+			<-read
 			if w := get(newRouter(rd), "/healthz"); w.Code != http.StatusServiceUnavailable {
 				t.Fatalf("with the insert held, /healthz answered %d", w.Code)
 			}
 			close(release)
 			<-q.deleted
-			for deadline := time.Now().Add(5 * time.Second); get(newRouter(rd), "/healthz").Code != http.StatusOK; time.Sleep(time.Millisecond) {
-				if time.Now().After(deadline) {
-					t.Fatal("the app is not ready after its first batch")
-				}
+			<-rd.ready
+			if w := get(newRouter(rd), "/healthz"); w.Code != http.StatusOK {
+				t.Fatalf("after its first batch, /healthz answered %d", w.Code)
 			}
 			if got := strings.Join(q.seen()[:4], ","); got != "ReceiveMessage,CountDocuments,InsertOne,DeleteMessage" {
 				t.Fatalf("calls %s; want the read before the insert, the delete after it", got)
@@ -218,7 +220,7 @@ func TestTheForcedVariant(t *testing.T) {
 	d.notify()
 	select {
 	case <-next:
-	case <-time.After(time.Second):
+	default:
 		t.Fatal("the delete after the wait did not wake it")
 	}
 }

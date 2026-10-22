@@ -78,13 +78,27 @@ var eventStore events = mongoEvents{}
 type mongoEvents struct{}
 
 func (mongoEvents) recorded(ctx context.Context, event string) (int64, error) {
+	ctx, cancel := context.WithTimeout(ctx, mongoCallTimeout)
+	defer cancel()
 	return col2.CountDocuments(ctx, bson.M{"event": event})
 }
 
 func (mongoEvents) insert(ctx context.Context, event string) error {
+	ctx, cancel := context.WithTimeout(ctx, mongoCallTimeout)
+	defer cancel()
 	_, err := col2.InsertOne(ctx, bson.D{{Key: "event", Value: event}, {Key: "processed_at", Value: time.Now()}})
 	return err
 }
+
+// mongoCallTimeout bounds each of the consumer's MongoDB calls: keploy's S12
+// lane holds MongoDB (fsyncLock, docker pause) to place the consumer's calls,
+// and a hold that outlives the bound fails the call, which the app logs
+// ("Failed to read whether ...", "Failed to insert event ..."), so the lane
+// fails on that line instead of hanging. A plain deadline: the driver bounds
+// the call client-side only, and sends no maxTimeMS (that is client-side
+// operation timeouts' doing, which the app does not set), so what keploy
+// records of the call does not change with it.
+const mongoCallTimeout = 30 * time.Second
 
 // recordEvent records a message's event: it reads first whether the event
 // was recorded already (a duplicate read, before the write), then inserts
