@@ -258,3 +258,23 @@ func TestTheForcedVariant(t *testing.T) {
 		t.Fatal("the delete after the wait did not wake it")
 	}
 }
+
+// Only the forced variant's first parsed POST /url waits for the consumer's
+// delete (the window test's: the lane sends one message, for it); every later
+// one answers at once, as every POST /url does outside the forced variant.
+// Mutation: every parsed POST /url waiting.
+func TestOnlyTheForcedVariantsFirstPostWaitsForADelete(t *testing.T) {
+	forcedWaitTaken.Store(false)
+	t.Cleanup(func() { forcedWaitTaken.Store(false) })
+	t.Setenv(forcedVariantEnv, "")
+	if forcedDeleteWait() != nil {
+		t.Fatal("outside the forced variant a POST /url waited")
+	}
+	t.Setenv(forcedVariantEnv, "1")
+	if forcedDeleteWait() == nil {
+		t.Fatal("the forced variant's first POST /url did not wait for a delete")
+	}
+	if forcedDeleteWait() != nil {
+		t.Fatal("a later POST /url of the forced variant waited for a delete")
+	}
+}

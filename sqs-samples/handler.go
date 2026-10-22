@@ -88,13 +88,10 @@ func putURL(c *gin.Context) {
 	// (keploy's ingress opens it before the app reads the request).
 	log.Println(handlingLine)
 
-	// The forced variant (consumer.go) answers once the consumer deleted a
-	// message after the write: the wait starts before the write, so a delete
-	// that follows the write closely is not missed.
-	var deleted <-chan struct{}
-	if forcedVariant() {
-		deleted = consumerDeletes.next()
-	}
+	// The forced variant's first parsed POST /url (consumer.go) answers once
+	// the consumer deleted a message after the write: the wait starts before
+	// the write, so a delete that follows the write closely is not missed.
+	deleted := forcedDeleteWait()
 	t := time.Now()
 	id := GenerateShortLink(u)
 	err = Upsert(c.Request.Context(), URL{

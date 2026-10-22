@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -25,8 +26,10 @@ import (
 // The forced variant (SQS_S12_FORCED=1, keploy's S12 lane) is ready after
 // the first poll, before any batch; polls short (WaitTimeSeconds 0, a pause
 // after an empty answer), so a message is delivered on a poll sent after it;
-// and POST /url, once it has written its URL, waits for the consumer's next
-// delete before it answers, so the consumer's work lands inside its request.
+// and the first POST /url it parses, once it has written its URL, waits for
+// the consumer's next delete before it answers, so the consumer's work lands
+// inside that request. Every later POST /url answers at once: the lane sends
+// one message, for that request.
 
 // forcedVariantEnv turns the forced variant on.
 const forcedVariantEnv = "SQS_S12_FORCED"
@@ -135,6 +138,20 @@ func (d *deleteSignal) notify() {
 	defer d.mu.Unlock()
 	close(d.ch)
 	d.ch = make(chan struct{})
+}
+
+// forcedWaitTaken is whether a POST /url took the forced variant's wait.
+var forcedWaitTaken atomic.Bool
+
+// forcedDeleteWait is what a parsed POST /url waits on once it has written
+// its URL: in the forced variant, for the first one the app parses, the
+// consumer's next delete (consumerDeletes.next, taken now, before the write);
+// nil, no wait, for every later one, and outside the forced variant.
+func forcedDeleteWait() <-chan struct{} {
+	if !forcedVariant() || !forcedWaitTaken.CompareAndSwap(false, true) {
+		return nil
+	}
+	return consumerDeletes.next()
 }
 
 // forcedWaitMax bounds the forced variant's wait for a delete, under the
