@@ -137,9 +137,10 @@ func (d *deleteSignal) notify() {
 	d.ch = make(chan struct{})
 }
 
-// forcedWaitMax bounds the forced variant's wait for a delete, under the S12
-// lane driver's 30 s timeout, so a lane whose message never comes fails on
-// its own wait, not on a request that never ends.
+// forcedWaitMax bounds the forced variant's wait for a delete, under the
+// 30 s bound on the consumer's MongoDB calls (mongoCallTimeout), so a lane
+// whose message never comes gets the request's answer, and fails on what it
+// recorded, not on a request that never ends.
 const forcedWaitMax = 25 * time.Second
 
 // waitForDelete waits for the consumer's delete that deleted closes at, or
