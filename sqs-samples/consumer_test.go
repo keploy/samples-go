@@ -10,6 +10,7 @@ import (
 	"os"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/credentials"
@@ -172,9 +173,9 @@ func TestOnlyTheForcedVariantsFirstPostWaitsForADelete(t *testing.T) {
 }
 
 // The forced variant's POST /url waits until the consumer's work on the next
-// message ends: its delete answered, or failed (the app says so, and keploy's
-// S12 lane fails on that line), or the consumer stopped. Each ends the wait
-// as it comes, never a timer. Mutation: tell the waiter of a delete done
+// message ends: its delete answered, or failed (the app logs that it
+// failed), or the consumer stopped. Each ends the wait as it comes, never a
+// timer. Mutation: tell the waiter of a delete done
 // only, or not of the consumer's stop.
 func TestTheForcedWaitEndsWithTheMessagesWork(t *testing.T) {
 	for _, tc := range []struct {
@@ -202,7 +203,14 @@ func TestTheForcedWaitEndsWithTheMessagesWork(t *testing.T) {
 				<-done
 			})
 			<-q.deleted
-			<-waiter // the event itself; go test's timeout bounds a test that never sees it
+			// The consumer is told the delete's answer at once and ends the
+			// wait then: a bound far past that fails a wait that never ends
+			// now, not at go test's timeout.
+			select {
+			case <-waiter:
+			case <-time.After(30 * time.Second):
+				t.Fatal("the consumer's delete ended, and the forced variant's wait did not")
+			}
 		})
 	}
 	t.Run("the consumer stopped", func(t *testing.T) {

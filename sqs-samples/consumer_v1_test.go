@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -112,7 +113,14 @@ func TestTheV1ForcedWaitEndsWithTheMessagesWork(t *testing.T) {
 				<-done
 			})
 			<-q.deleted
-			<-waiter
+			// The consumer is told the delete's answer at once and ends the
+			// wait then: a bound far past that fails a wait that never ends
+			// now, not at go test's timeout.
+			select {
+			case <-waiter:
+			case <-time.After(30 * time.Second):
+				t.Fatal("the consumer's delete ended, and the forced variant's wait did not")
+			}
 		})
 	}
 	t.Run("the consumer stopped", func(t *testing.T) {
