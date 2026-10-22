@@ -89,8 +89,9 @@ func putURL(c *gin.Context) {
 	log.Println(handlingLine)
 
 	// The forced variant's first parsed POST /url (consumer.go) answers once
-	// the consumer deleted a message after the write: the wait starts before
-	// the write, so a delete that follows the write closely is not missed.
+	// the consumer's delete of a message after the write ended (or the
+	// consumer stopped): the wait starts before the write, so a delete that
+	// follows the write closely is not missed.
 	deleted := forcedDeleteWait()
 	t := time.Now()
 	id := GenerateShortLink(u)

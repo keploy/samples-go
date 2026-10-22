@@ -58,6 +58,7 @@ func consumeSQSMessages(ctx context.Context, sqsClient *sqs.SQS, rd *readiness) 
 		if err != nil {
 			logger.Error(fmt.Sprintf("Failed to receive messages: %v", err))
 			rd.markStopped(err)
+			consumerDeletes.notify() // no message's work is coming
 			break
 		}
 		if forcedVariant() {
@@ -93,8 +94,9 @@ func consumeSQSMessages(ctx context.Context, sqsClient *sqs.SQS, rd *readiness) 
 				logger.Error(fmt.Sprintf("Failed to delete message: %v", err))
 			} else {
 				logger.Info(fmt.Sprintf("Message deleted: %s\n", *message.MessageId))
-				consumerDeletes.notify()
 			}
+			// The message's work is over, its delete done or failed.
+			consumerDeletes.notify()
 		}
 		// Ready once the batch's inserts and deletes are done, failed or
 		// not: what the queue held as the app started is processed before

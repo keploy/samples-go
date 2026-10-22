@@ -27,8 +27,8 @@ import (
 // the first poll, before any batch; polls short (WaitTimeSeconds 0, a pause
 // after an empty answer), so a message is delivered on a poll sent after it;
 // and the first POST /url it parses, once it has written its URL, waits for
-// the consumer's next delete before it answers, so the consumer's work lands
-// inside that request. Every later POST /url answers at once: the lane sends
+// the consumer's next delete to end (done or failed, or the consumer's stop)
+// before it answers, so the consumer's work lands inside that request. Every later POST /url answers at once: the lane sends
 // one message, for that request.
 
 // forcedVariantEnv turns the forced variant on.
@@ -115,8 +115,10 @@ func recordEvent(ctx context.Context, event string) error {
 	return eventStore.insert(ctx, event)
 }
 
-// deleteSignal tells a waiter of the consumer's next delete (the forced
-// variant's POST /url).
+// deleteSignal tells a waiter (the forced variant's POST /url) that the
+// consumer's work on its next message is over: its delete was answered, or
+// failed. It tells it too when the consumer stops: no message's work is
+// coming then.
 type deleteSignal struct {
 	mu sync.Mutex
 	ch chan struct{}
@@ -125,14 +127,15 @@ type deleteSignal struct {
 // consumerDeletes is the consumer's deletes.
 var consumerDeletes = &deleteSignal{ch: make(chan struct{})}
 
-// next is a channel closed at the consumer's next delete after this call.
+// next is a channel closed at the end of the consumer's next delete after
+// this call, done or failed, or at its stop.
 func (d *deleteSignal) next() <-chan struct{} {
 	d.mu.Lock()
 	defer d.mu.Unlock()
 	return d.ch
 }
 
-// notify says the consumer deleted a message.
+// notify says the consumer's delete of a message ended, or it stopped.
 func (d *deleteSignal) notify() {
 	d.mu.Lock()
 	defer d.mu.Unlock()
@@ -154,14 +157,20 @@ func forcedDeleteWait() <-chan struct{} {
 	return consumerDeletes.next()
 }
 
-// forcedWaitMax bounds the forced variant's wait for a delete, under the
-// 30 s bound on the consumer's MongoDB calls (mongoCallTimeout), so a lane
-// whose message never comes gets the request's answer, and fails on what it
-// recorded, not on a request that never ends.
-const forcedWaitMax = 25 * time.Second
+// forcedWaitMax ends the forced variant's wait for the consumer's delete when
+// nothing does: neither the delete, done or failed, nor the consumer's stop,
+// which end it as they come (deleteSignal). A message's work ends on its own
+// (its two MongoDB calls at mongoCallTimeout, 30 s, each), so a wait longer
+// than that work can take means no message came. The app then says so
+// (noDelete), and keploy's S12 lane fails on that line: a hold that outlives
+// the wait fails the lane with a message, never a recording it judges.
+const forcedWaitMax = 3 * mongoCallTimeout
 
-// waitForDelete waits for the consumer's delete that deleted closes at, or
-// until ctx ends, or forcedWaitMax.
+// noDelete is what the app says when the forced variant's wait ran out.
+const noDelete = "No message's work ended while POST /url waited for the consumer (" + forcedVariantEnv + ")"
+
+// waitForDelete waits until the consumer's delete that deleted closes at
+// ends, done or failed, or the consumer stops, or ctx ends, or forcedWaitMax.
 func waitForDelete(ctx context.Context, deleted <-chan struct{}) {
 	t := time.NewTimer(forcedWaitMax)
 	defer t.Stop()
@@ -169,6 +178,6 @@ func waitForDelete(ctx context.Context, deleted <-chan struct{}) {
 	case <-deleted:
 	case <-ctx.Done():
 	case <-t.C:
-		log.Println("No delete came while POST /url waited for the consumer (" + forcedVariantEnv + ")")
+		log.Println(noDelete)
 	}
 }
