@@ -23,11 +23,19 @@ type App struct {
 	Server *http.Server
 }
 
+// getEnv returns the value of the environment variable key, or fallback if it is unset or empty.
+func getEnv(key, fallback string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
+	}
+	return fallback
+}
+
 func (a *App) Initialize(host, user, password, dbname string) error {
 	time.Sleep(2 * time.Second)
 	connectionString := fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s sslmode=disable",
-		host, "5432", user, password, dbname)
+		host, getEnv("DB_PORT", "5432"), user, password, dbname)
 
 	var err error
 	a.DB, err = sql.Open("postgres", connectionString)

@@ -1,4 +1,4 @@
-# Use the Go 1.19 base image with the bullseye tag
+# Use the Go 1.20 base image with the bookworm tag
 FROM golang:1.20-bookworm
 
 

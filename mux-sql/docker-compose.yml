@@ -1,15 +1,16 @@
-version: '3.7'
 services:
     go-app:
       build:
         context: .
+      # Rebuild on every `up`, so Keploy always tests your latest code.
+      pull_policy: build
       container_name: muxSqlApp
+      environment:
+        - DB_HOST=postgres
       ports:
         - "8010:8010"
       depends_on:
         - postgres
-      networks:
-        - keploy-network 
 
     postgres:
         image: postgres:10.5
@@ -19,14 +20,9 @@ services:
           - POSTGRES_USER=postgres
           - POSTGRES_PASSWORD=password
         ports:
-          - '5432:5432'
-        volumes: 
+          # Override if 5432 is taken on your machine, e.g. POSTGRES_HOST_PORT=5434
+          - '${POSTGRES_HOST_PORT:-5432}:5432'
+        volumes:
           # - ./postgres-data:/var/lib/postgresql/data
           # copy the sql script to create tables
           - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
-        networks:
-          - keploy-network
-
-networks:
-  keploy-network:
-    external: true

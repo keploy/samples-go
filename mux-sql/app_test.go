@@ -15,7 +15,7 @@ var a App
 
 func TestMain(m *testing.M) {
 	err := a.Initialize(
-		"localhost", "postgres", "password",
+		getEnv("DB_HOST", "localhost"), "postgres", "password",
 		"postgres")
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to initialize application: %v\n", err)
