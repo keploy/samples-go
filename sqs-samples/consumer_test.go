@@ -84,12 +84,15 @@ func (q *fakeQueue) serve(t *testing.T) aws.Config {
 		case "DeleteMessage":
 			defer close(q.deleted)
 			if q.deleteFails {
+				// Headers before the status: what follows WriteHeader is not sent.
+				if !query {
+					w.Header().Set("x-amzn-query-error", "ReceiptHandleIsInvalid;Sender")
+				}
 				w.WriteHeader(http.StatusBadRequest)
 				if query {
 					_, _ = w.Write([]byte(`<ErrorResponse><Error><Type>Sender</Type><Code>ReceiptHandleIsInvalid</Code><Message>no</Message></Error><RequestId>r</RequestId></ErrorResponse>`))
 					return
 				}
-				w.Header().Set("x-amzn-query-error", "ReceiptHandleIsInvalid;Sender")
 				_, _ = w.Write([]byte(`{"__type":"com.amazonaws.sqs#ReceiptHandleIsInvalid","message":"no"}`))
 				return
 			}
@@ -205,6 +208,27 @@ func TestAnUnparseablePostIsRefusedBeforeAnyMongoCall(t *testing.T) {
 	// P never says it.
 	if strings.Contains(said.String(), handlingLine) {
 		t.Fatalf("P said %q", handlingLine)
+	}
+}
+
+// A POST /url it parsed says it handles it before its write: keploy's S12
+// lane waits on the line to know the request's window is open, and holds
+// MongoDB writes meanwhile, so a line said after the write would never come.
+// col is nil here: the write panics, which gin recovers as a 500, after the
+// line. Mutation: say it after the write.
+func TestAParsedPostSaysItHandlesItBeforeItsWrite(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	t.Setenv(forcedVariantEnv, "")
+	var said strings.Builder
+	log.SetOutput(&said)
+	t.Cleanup(func() { log.SetOutput(os.Stderr) })
+	w := httptest.NewRecorder()
+	newRouter(newReadiness()).ServeHTTP(w, httptest.NewRequest(http.MethodPost, "/url", strings.NewReader(`{"url": "https://google.com"}`)))
+	if !strings.Contains(said.String(), handlingLine) {
+		t.Fatalf("answered %d, said %q; want %q before the write", w.Code, said.String(), handlingLine)
+	}
+	if w.Code != http.StatusInternalServerError {
+		t.Fatalf("answered %d; want the write's panic recovered as a 500", w.Code)
 	}
 }
 
