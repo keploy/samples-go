@@ -2,6 +2,8 @@
 
 A sample user authentication to test Keploy integration capabilities using [Gin](https://gin-gonic.com/) and [Redis](https://redis.io/).
 
+> **Note:** Keploy records and mocks Redis only in [Keploy Enterprise](https://keploy.io/docs/keploy-cloud/cloud-installation/), the `keploy` that `curl --silent -O -L https://keploy.io/install.sh && source install.sh` installs; a free account is enough for it (free-tier runs are subject to a usage allowance). The open-source `keploy` that this README installs (the `ghcr.io/keploy/keploy` image or the keploy/keploy GitHub release binary) passes the app's Redis calls through to the real Redis server in record and in test mode, records no Redis mocks, and logs that the Redis calls are skipped. With it, keep the Redis container running while `keploy test` runs, and expect the OTP verification test to fail (see below).
+
 ## Setup URL shortener
 
 ```bash
@@ -92,7 +94,7 @@ this will return the OTP verification response.
 
 _Now, let's see the magic! 🪄💫_
 
-Now both these API calls were captured as a testcase and should be visible on the Keploy CLI. You should be seeing an app named `keploy folder` with the test cases we just captured and data mocks created.
+Now both these API calls were captured as a testcase and should be visible on the Keploy CLI. You should be seeing an app named `keploy folder` with the test cases we just captured and, with Keploy Enterprise, the Redis mocks created.
 
 ### Run the captured testcases
 
@@ -102,9 +104,7 @@ Now that we have our testcase captured, run the test file.
 keploy test -c "sudo docker run -p 3001:3001 --rm --network <networkName> --name ginRedisApp gin-app:1.0" --delay 10
 ```
 
-So no need to setup dependencies like Redis, web-go locally or write mocks for your testing.
-
-**The application thinks it's talking to Redis 😄**
+The open-source `keploy` passes the Redis calls through, so keep the Redis container running while the tests run. Even then, the OTP verification test fails with it: the replayed request for an OTP stores a new random OTP in the live Redis, so the recorded OTP no longer matches. With [Keploy Enterprise](https://keploy.io/docs/keploy-cloud/cloud-installation/), Keploy replays the Redis calls from the recorded mocks instead, so there is no need to set up Redis or write mocks for your testing: **the application thinks it's talking to Redis 😄**
 
 We will get output something like this:
 
@@ -118,7 +118,7 @@ In `test-2.yml` go to the noisefield and `-body.token` in noise. Now, it's the t
 keploy test -c "sudo docker run -p 3001:3001 --rm --network <networkName> --name ginRedisApp gin-app:1.0" --delay 10
 ```
 
-This time all the test cases will pass.
+With the open-source `keploy`, the OTP verification test still fails. With Keploy Enterprise, all the test cases pass this time:
 ![testruns](./img/testRunPass.png?raw=true "Recent testruns")
 
 ## Run app Natively on local machine
@@ -166,7 +166,7 @@ Once we have our binary file ready,this command will start the recording of API 
 sudo -E keploy record -c "./gin-redis"
 ```
 
-Make API Calls using Hoppscotch, Postman or cURL command. Keploy with capture those calls to generate the test-suites containing testcases and data mocks.
+Make API Calls using Hoppscotch, Postman or cURL command. Keploy will capture those calls to generate the test-suites containing testcases and, with Keploy Enterprise, Redis mocks.
 
 ### Generate testcases
 
@@ -210,7 +210,7 @@ this will return the OTP verification response.
 }
 ```
 
-You'll be able to see new test file and mock file generated in your project codebase locally.
+You'll be able to see new test file and, with Keploy Enterprise, mock file generated in your project codebase locally.
 
 ### Run the Test Mode
 
@@ -222,9 +222,7 @@ sudo -E keploy test -c "./gin-redis" --delay 10
 
 > Note: If delay value is not defined, by default it would be `5`.
 
-So no need to setup dependencies like Redis, web-go locally or write mocks for your testing.
-
-**The application thinks it's talking to Redis 😄**
+The open-source `keploy` passes the Redis calls through, so keep the Redis container running while the tests run. Even then, the OTP verification test fails with it: the replayed request for an OTP stores a new random OTP in the live Redis, so the recorded OTP no longer matches. With [Keploy Enterprise](https://keploy.io/docs/keploy-cloud/cloud-installation/), Keploy replays the Redis calls from the recorded mocks instead, so there is no need to set up Redis or write mocks for your testing: **the application thinks it's talking to Redis 😄**
 
 We will get output something like this:
 
@@ -238,6 +236,6 @@ In `test-2.yml` go to the noisefield and `-body.token` in noise. Now, it's the t
 sudo -E keploy test -c "./gin-redis" --delay 10
 ```
 
-This time all the test cases will pass.
+With the open-source `keploy`, the OTP verification test still fails. With Keploy Enterprise, all the test cases pass this time:
 
 ![testruns](./img/testRunPass.png?raw=true "Recent testruns")
