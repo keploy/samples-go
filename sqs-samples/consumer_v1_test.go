@@ -101,7 +101,10 @@ func TestTheV1ForcedWaitEndsWithTheMessagesWork(t *testing.T) {
 			prev := eventStore
 			eventStore = heldEvents{q: q, release: release, read: make(chan struct{}, 1)}
 			t.Cleanup(func() { eventStore = prev })
-			waiter := consumerDeletes.next()
+			prevDeletes := consumerDeletes
+			consumerDeletes = newDeleteSignal()
+			t.Cleanup(func() { consumerDeletes = prevDeletes })
+			waiter := consumerDeletes.firstEnded()
 			ctx, cancel := context.WithCancel(context.Background())
 			done := make(chan struct{})
 			go func() {
@@ -127,7 +130,10 @@ func TestTheV1ForcedWaitEndsWithTheMessagesWork(t *testing.T) {
 		t.Setenv(forcedVariantEnv, "1")
 		q := &fakeQueue{}
 		client := v1Client(t, q.serve(t))
-		waiter := consumerDeletes.next()
+		prevDeletes := consumerDeletes
+		consumerDeletes = newDeleteSignal()
+		t.Cleanup(func() { consumerDeletes = prevDeletes })
+		waiter := consumerDeletes.firstEnded()
 		ctx, cancel := context.WithCancel(context.Background())
 		cancel()
 		rd := newReadiness()

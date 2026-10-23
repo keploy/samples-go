@@ -126,7 +126,9 @@ func TestAParsedPostSaysItHandlesItBeforeItsWrite(t *testing.T) {
 }
 
 // The forced variant polls short; the default holds each poll 4 s. A waiter
-// of the next delete is told of the next one, not of one before it waited.
+// of the next delete is told of the next one, not of one before it waited;
+// a waiter of the first delete is told of it, whether it came before the
+// wait or after. Mutation: forget the first delete once it is past.
 func TestTheForcedVariant(t *testing.T) {
 	t.Setenv(forcedVariantEnv, "")
 	if pollWaitSeconds() != 4 || forcedVariant() {
@@ -136,7 +138,13 @@ func TestTheForcedVariant(t *testing.T) {
 	if pollWaitSeconds() != 0 || !forcedVariant() {
 		t.Fatal("the forced variant polls short")
 	}
-	d := &deleteSignal{ch: make(chan struct{})}
+	d := newDeleteSignal()
+	first := d.firstEnded()
+	select {
+	case <-first:
+		t.Fatal("a wait for the first delete ended before any delete")
+	default:
+	}
 	d.notify()
 	next := d.next()
 	select {
@@ -144,11 +152,40 @@ func TestTheForcedVariant(t *testing.T) {
 		t.Fatal("a delete before the wait woke it")
 	default:
 	}
+	for _, w := range []<-chan struct{}{first, d.firstEnded()} {
+		select {
+		case <-w:
+		default:
+			t.Fatal("the first delete did not end a wait for it, taken before it or after")
+		}
+	}
 	d.notify()
 	select {
 	case <-next:
 	default:
 		t.Fatal("the delete after the wait did not wake it")
+	}
+}
+
+// At replay the consumer can end its work on the message before the window
+// test's request reaches the app (its delivery is the test's, served once
+// the test opens): the forced variant's wait, taken after that delete, still
+// ends. Mutation: wait for the next delete only.
+func TestTheForcedWaitEndsOnADeleteThatCameFirst(t *testing.T) {
+	forcedWaitTaken.Store(false)
+	prev := consumerDeletes
+	consumerDeletes = newDeleteSignal()
+	t.Cleanup(func() { forcedWaitTaken.Store(false); consumerDeletes = prev })
+	t.Setenv(forcedVariantEnv, "1")
+	consumerDeletes.notify()
+	w := forcedDeleteWait()
+	if w == nil {
+		t.Fatal("the forced variant's first POST /url did not wait")
+	}
+	select {
+	case <-w:
+	default:
+		t.Fatal("the consumer's delete came before the wait, and the wait did not end")
 	}
 }
 
@@ -191,7 +228,10 @@ func TestTheForcedWaitEndsWithTheMessagesWork(t *testing.T) {
 			prev := eventStore
 			eventStore = heldEvents{q: q, release: release, read: make(chan struct{}, 1)}
 			t.Cleanup(func() { eventStore = prev })
-			waiter := consumerDeletes.next()
+			prevDeletes := consumerDeletes
+			consumerDeletes = newDeleteSignal()
+			t.Cleanup(func() { consumerDeletes = prevDeletes })
+			waiter := consumerDeletes.firstEnded()
 			ctx, cancel := context.WithCancel(context.Background())
 			done := make(chan struct{})
 			go func() {
@@ -217,7 +257,10 @@ func TestTheForcedWaitEndsWithTheMessagesWork(t *testing.T) {
 		t.Setenv(forcedVariantEnv, "1")
 		q := &fakeQueue{}
 		cfg := v2Config(q.serve(t))
-		waiter := consumerDeletes.next()
+		prevDeletes := consumerDeletes
+		consumerDeletes = newDeleteSignal()
+		t.Cleanup(func() { consumerDeletes = prevDeletes })
+		waiter := consumerDeletes.firstEnded()
 		ctx, cancel := context.WithCancel(context.Background())
 		cancel() // its first poll fails: it stops
 		rd := newReadiness()

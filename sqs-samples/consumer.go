@@ -116,16 +116,22 @@ func recordEvent(ctx context.Context, event string) error {
 }
 
 // deleteSignal tells a waiter (the forced variant's POST /url) that the
-// consumer's work on its next message is over: its delete was answered, or
-// failed. It tells it too when the consumer stops: no message's work is
-// coming then.
+// consumer's work on a message is over: its delete was answered, or failed.
+// It tells it too when the consumer stops: no message's work is coming then.
 type deleteSignal struct {
 	mu sync.Mutex
 	ch chan struct{}
+	// first is closed at the end of the consumer's first delete, or at its
+	// stop, and stays closed.
+	first chan struct{}
+}
+
+func newDeleteSignal() *deleteSignal {
+	return &deleteSignal{ch: make(chan struct{}), first: make(chan struct{})}
 }
 
 // consumerDeletes is the consumer's deletes.
-var consumerDeletes = &deleteSignal{ch: make(chan struct{})}
+var consumerDeletes = newDeleteSignal()
 
 // next is a channel closed at the end of the consumer's next delete after
 // this call, done or failed, or at its stop.
@@ -135,26 +141,44 @@ func (d *deleteSignal) next() <-chan struct{} {
 	return d.ch
 }
 
+// firstEnded is a channel closed at the end of the consumer's first delete
+// since the app started, done or failed, or at its stop: closed already when
+// that came before this call.
+func (d *deleteSignal) firstEnded() <-chan struct{} {
+	return d.first
+}
+
 // notify says the consumer's delete of a message ended, or it stopped.
 func (d *deleteSignal) notify() {
 	d.mu.Lock()
 	defer d.mu.Unlock()
 	close(d.ch)
 	d.ch = make(chan struct{})
+	select {
+	case <-d.first:
+	default:
+		close(d.first)
+	}
 }
 
 // forcedWaitTaken is whether a POST /url took the forced variant's wait.
 var forcedWaitTaken atomic.Bool
 
 // forcedDeleteWait is what a parsed POST /url waits on once it has written
-// its URL: in the forced variant, for the first one the app parses, the
-// consumer's next delete (consumerDeletes.next, taken now, before the write);
-// nil, no wait, for every later one, and outside the forced variant.
+// its URL: in the forced variant, for the first one the app parses, the end
+// of the consumer's first delete since the app started
+// (consumerDeletes.firstEnded); nil, no wait, for every later one, and
+// outside the forced variant. The lane sends its one message only once this
+// request's upsert was made, so at record that delete is the work on it. At
+// replay the consumer can take the message's recorded delivery as soon as
+// the request's test opens, before the app reads the request, and end its
+// work before the wait is taken: a wait for the next delete only then never
+// ended.
 func forcedDeleteWait() <-chan struct{} {
 	if !forcedVariant() || !forcedWaitTaken.CompareAndSwap(false, true) {
 		return nil
 	}
-	return consumerDeletes.next()
+	return consumerDeletes.firstEnded()
 }
 
 // forcedWaitMax ends the forced variant's wait for the consumer's delete when
