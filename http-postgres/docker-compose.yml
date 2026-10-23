@@ -28,6 +28,16 @@ services:
       interval: 2s
       timeout: 5s
       retries: 5
+      # A first start on a fresh volume runs initdb before Postgres listens
+      # on TCP, and on a loaded host that can outlast 5 probes 2s apart: the
+      # service went unhealthy while it was still starting, and its
+      # depends_on: service_healthy dependent (api) failed with it. No failed
+      # probe counts during start_period, and the first that passes marks it
+      # healthy: a db that starts is waited on until it answers, and no
+      # longer. One that exits ends the wait at once ("dependency failed to
+      # start: container ... exited"). Only a db that runs and never answers
+      # is called unhealthy, after start_period and 5 more probes.
+      start_period: 10m
 
   api:
     build: .
