@@ -106,7 +106,7 @@ record:
     memoryLimit: 0
 configPath: ""
 bypassRules: []
-disableMapping: true
+disableMapping: false
 contract:
     driven: "consumer"
     mappings:

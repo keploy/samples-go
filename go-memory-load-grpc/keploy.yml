@@ -84,7 +84,7 @@ report:
     summary: false
     testCaseIDs: []
     format: ""
-disableMapping: true
+disableMapping: false
 retryPassing: false
 configPath: ""
 bypassRules: []
