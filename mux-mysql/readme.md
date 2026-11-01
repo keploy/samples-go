@@ -16,7 +16,7 @@ go mod download
 # Installing Keploy 
  
 ```  bash
-curl -O https://raw.githubusercontent.com/keploy/keploy/main/keploy.sh && source keploy.sh 
+source /dev/stdin <<<"$(curl -fsSL https://raw.githubusercontent.com/keploy/keploy/main/keploy.sh || echo 'echo Keploy installer download failed >&2; return 1')" 
 ```
 
 # Running the Application

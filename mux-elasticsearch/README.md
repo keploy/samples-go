@@ -12,7 +12,7 @@ go mod download
 Install keploy via one-click:-
 
 ```sh
-curl --silent -O -L https://keploy.io/install.sh && source install.sh
+source /dev/stdin <<<"$(curl -fsSL https://keploy.io/install.sh || echo 'echo Keploy installer download failed >&2; return 1')"
 ```
 
 ### Install And Run Elastic 
