@@ -52,7 +52,7 @@ func getProducts(ctx context.Context, db *sql.DB, start, count int) ([]product, 
 		return nil, err
 	}
 
-	defer handleDeferError(rows.Close())
+	defer func() { handleDeferError(rows.Close()) }()
 
 	products := []product{}
 
