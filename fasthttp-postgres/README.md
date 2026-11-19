@@ -30,7 +30,7 @@ keploy record -c "docker compose up" --container-name=fasthttp_app
 
 ###### 1. Post Requests
 ```shell
-curl -X POST -H "Content-Type: application/json" -d '{"name":"Author Name"}' http://localhost:8080/authors
+curl -X POST -H "Content-Type: application/json" -d '{"first_name":"Author","last_name":"Name"}' http://localhost:8080/authors
 ```
 
 ```shell
@@ -93,7 +93,7 @@ keploy record -c "./app"
 
 ###### 1. Post Requests
 ```shell
-curl -X POST -H "Content-Type: application/json" -d '{"name":"Author Name"}' http://localhost:8080/authors
+curl -X POST -H "Content-Type: application/json" -d '{"first_name":"Author","last_name":"Name"}' http://localhost:8080/authors
 ```
 ```shell
 curl -X POST -H "Content-Type: application/json" -d '{"title":"Book Title","author_id":1}' http://localhost:8080/books
