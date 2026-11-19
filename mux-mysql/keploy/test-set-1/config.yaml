@@ -1,0 +1,8 @@
+preScript: ""
+postScript: ""
+appCommand: ""
+template: {}
+metadata: {}
+mockRegistry:
+    mock: e80858e9b4f4a6e4255eda1e656a8279c6251c374c5bb51c108974bba5dc295f
+    app: mux-mysql
