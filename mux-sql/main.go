@@ -15,8 +15,8 @@ func handleDeferError(err error) {
 func main() {
 	a := &App{}
 	err := a.Initialize(
-		"localhost", // postgres host
-		// "postgres", //Change localhost to postgres when using Docker to run keploy
+		// Postgres host: docker-compose.yml sets DB_HOST=postgres; natively it's localhost.
+		getEnv("DB_HOST", "localhost"),
 		"postgres", // username
 		"password", // password
 		"postgres") // db_name

@@ -52,7 +52,9 @@ func getProducts(ctx context.Context, db *sql.DB, start, count int) ([]product, 
 		return nil, err
 	}
 
-	defer handleDeferError(rows.Close())
+	// Wrap in a closure: a plain `defer handleDeferError(rows.Close())` evaluates
+	// rows.Close() immediately, which closed the rows before they were read.
+	defer func() { handleDeferError(rows.Close()) }()
 
 	products := []product{}
 
@@ -62,6 +64,10 @@ func getProducts(ctx context.Context, db *sql.DB, start, count int) ([]product, 
 			return nil, err
 		}
 		products = append(products, p)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
 	}
 
 	return products, nil
