@@ -1,0 +1,56 @@
+{
+  "version": "api.keploy.io/v1beta1",
+  "kind": "Http",
+  "name": "get-api-locations-pastoria-city-area-1",
+  "spec": {
+    "metadata": null,
+    "req": {
+      "method": "GET",
+      "proto_major": 1,
+      "proto_minor": 1,
+      "url": "http://localhost:8080/api/locations/pastoria-city-area",
+      "url_params": {},
+      "header": {
+        "Accept": "*/*",
+        "Host": "localhost:8080",
+        "User-Agent": "curl/8.18.0"
+      },
+      "body": "",
+      "body_ref": {
+        "path": "",
+        "size": 0
+      },
+      "binary": "",
+      "form": null,
+      "timestamp": "2026-10-11T21:58:29.857396752+05:30"
+    },
+    "resp": {
+      "status_code": 200,
+      "header": {
+        "Access-Control-Allow-Headers": "*",
+        "Access-Control-Allow-Methods": "GET,POST,OPTIONS,PUT,DELETE",
+        "Access-Control-Allow-Origin": "*",
+        "Content-Length": "114",
+        "Content-Type": "application/json",
+        "Date": "Sun, 11 Oct 2026 16:28:30 GMT"
+      },
+      "body": "[\"tentacool\",\"tentacruel\",\"magikarp\",\"gyarados\",\"remoraid\",\"octillery\",\"wingull\",\"pelipper\",\"shellos\",\"gastrodon\"]",
+      "status_message": "OK",
+      "proto_major": 0,
+      "proto_minor": 0,
+      "binary": "",
+      "timestamp": "2026-10-11T21:58:30.032316994+05:30"
+    },
+    "objects": null,
+    "assertions": {
+      "noise": {
+        "header.Date": []
+      }
+    },
+    "created": 1791736110,
+    "reqTimestampMock": "0001-01-01T00:00:00Z",
+    "resTimestampMock": "0001-01-01T00:00:00Z",
+    "app_port": 8080
+  },
+  "curl": "curl --request GET \\\n  --url http://localhost:8080/api/locations/pastoria-city-area \\\n  --header 'Accept: */*' \\\n  --header 'Host: localhost:8080' \\\n  --header 'User-Agent: curl/8.18.0' \\\n"
+}

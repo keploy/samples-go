@@ -1,0 +1,167 @@
+
+[38;5;208m═══════════════════════════════════════════════════════════════════════════════[0m
+  [1m[38;5;208m🚀  TRY THE FULL KEPLOY (FREE)[0m
+  This is Keploy's open-source build. Keploy from keploy.io (free with an account) adds:
+    • PostgreSQL, MongoDB, gRPC, HTTP/2, Kafka — on top of this build's HTTP + MySQL
+    • Recording apps running natively on macOS and Windows
+    • Recording and testing apps that run in Podman
+    • AI-powered test generation, sandbox replay, MCP for AI agents
+      (Claude Code, Cursor, Copilot, Gemini, …)
+  [2mInstall:[0m  [1mcurl --silent -O -L https://keploy.io/install.sh && source install.sh[0m
+[38;5;208m═══════════════════════════════════════════════════════════════════════════════[0m
+
+
+[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m▄[0m
+[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m▄[0m
+[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m▒[0m
+[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▀[0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▄[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▌[0m
+[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▄[0m[38;5;202m▌[0m[38;5;202m▌[0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m▀[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▄[0m[38;5;202m▌[0m[38;5;202m▀[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m▌[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▄[0m[38;5;202m▌[0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m▌[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m▌[0m[38;5;202m▌[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m
+[38;5;208m [0m[38;5;208m [0m[38;5;208m [0m[38;5;208m [0m[38;5;208m [0m[38;5;208m [0m[38;5;208m [0m[38;5;208m▓[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m▌[0m[38;5;208m▓[0m[38;5;202m▓[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m▄[0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m [0m[38;5;202m▐[0m[38;5;202m█[0m[38;5;202m▌[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▌[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▌[0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▓[0m
+[38;5;214m [0m[38;5;214m [0m[38;5;214m [0m[38;5;214m [0m[38;5;214m [0m[38;5;214m [0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▀[0m[38;5;214m▀[0m[38;5;214m▀[0m[38;5;214m▀[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▌[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m▌[0m[38;5;202m▄[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m▐[0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m▄[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m▀[0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m▀[0m[38;5;202m█[0m[38;5;202m▄[0m[38;5;202m▄[0m[38;5;202m█[0m[38;5;202m▀[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m█[0m
+[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m▓[0m[38;5;226m▌[0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;202m [0m[38;5;202m▐[0m[38;5;202m█[0m[38;5;202m▌[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▌[0m
+[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m▓[0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202mO[0m[38;5;202mP[0m[38;5;202mE[0m[38;5;202mN[0m[38;5;202m [0m[38;5;202mS[0m[38;5;202mO[0m[38;5;202mU[0m[38;5;202mR[0m[38;5;202mC[0m[38;5;202mE[0m
+
+version: 3-dev
+
+🐰 Keploy: 2026-10-11T21:59:51.268600785+05:30 	[34mINFO[0m	Test Sets to be Replayed	{"testSets": ["test-set-0", "test-set-1", "test-set-2", "test-set-3"]}
+🐰 Keploy(agent): 2026-10-11T21:59:52+05:30	[34mINFO[0m	starting UDP DNS server at addr :26789
+🐰 Keploy(agent): 2026-10-11T21:59:52+05:30	[34mINFO[0m	starting TCP DNS server at addr :26789
+🐰 Keploy(agent): 2026-10-11T21:59:52+05:30	[34mINFO[0m	Keploy has taken control of the DNS resolution mechanism, your application may misbehave if you have provided wrong domain name in your application code.
+🐰 Keploy(agent): 2026-10-11T21:59:52+05:30	[34mINFO[0m	Proxy started at port:16789
+🐰 Keploy(agent): 2026-10-11T21:59:52+05:30	[34mINFO[0m	Starting Agent's HTTP server	{"addr": "127.0.0.1:62680"}
+🐰 Keploy: 2026-10-11T21:59:53.291864522+05:30 	[34mINFO[0m	pointing Java at a merged keploy truststore via JAVA_TOOL_OPTIONS (the JDK's cacerts is left untouched)	{"truststore": "/tmp/keploy-java-truststore-1000.jks", "system_source": "/etc/ssl/certs/ca-certificates.crt"}
+🐰 Keploy: 2026-10-11T21:59:53.292023397+05:30 	[34mINFO[0m	running	{"test-set": "test-set-0", "attempt": 1}
+🐰 Keploy(agent): 2026-10-11T21:59:53+05:30	[34mINFO[0m	agent mock residency: per-test mocks parked on disk (windowed)	{"onDisk": 0, "spilledResponses": 0, "diskBytes": 0, "residentPerTest": 0, "residentConfig": 5}
+🐰 Keploy: 2026-10-11T21:59:53.299884208+05:30 	[34mINFO[0m	stored the mocks on the agent	{"mocks": 5, "bytes": 30812, "sentBytes": 6605, "encoding": "zstd", "took": "4.066364ms"}
+🐰 Keploy(agent): 2026-10-11T21:59:53+05:30	[34mINFO[0m	strict mock-window containment is ACTIVE for this session — per-test mocks whose request timestamp falls outside the outer test window will be dropped rather than promoted across tests. If your replays start reporting missing mocks after an upgrade, this is likely why. To opt out: set KEPLOY_STRICT_MOCK_WINDOW=0 in the environment, OR test.strictMockWindow: false in keploy.yaml.	{"viaPerCallFlag": true, "viaEnvOverride": false, "escape_hatch_env": "KEPLOY_STRICT_MOCK_WINDOW=0", "escape_hatch_config": "test.strictMockWindow: false"}
+🐰 Keploy: 2026-10-11T21:59:53.301618703+05:30 	[34mINFO[0m	Starting Application :	{"executing_cmd": "/usr/bin/sh -c ./http-pokeapi"}
+2026/10/11 21:59:55 The server is live on port 8080
+🐰 Keploy: 2026-10-11T22:00:00.314245689+05:30 	[34mINFO[0m	starting test for	{"test case": "get-api-locations-1", "test set": "test-set-0"}
+🐰 Keploy: 2026-10-11T22:00:00.357439691+05:30 	[34mINFO[0m	result	{"testcase id": "get-api-locations-1", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-11T22:00:00.364039547+05:30 	[34mINFO[0m	starting test for	{"test case": "get-api-locations-2", "test set": "test-set-0"}
+🐰 Keploy: 2026-10-11T22:00:00.36877995+05:30 	[34mINFO[0m	result	{"testcase id": "get-api-locations-2", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-11T22:00:00.370617445+05:30 	[34mINFO[0m	starting test for	{"test case": "get-api-locations-eterna-city-area-1", "test set": "test-set-0"}
+🐰 Keploy: 2026-10-11T22:00:00.373223688+05:30 	[34mINFO[0m	result	{"testcase id": "get-api-locations-eterna-city-area-1", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-11T22:00:00.374032477+05:30 	[34mINFO[0m	starting test for	{"test case": "get-api-greet-1", "test set": "test-set-0"}
+🐰 Keploy: 2026-10-11T22:00:00.375092182+05:30 	[34mINFO[0m	result	{"testcase id": "get-api-greet-1", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-11T22:00:00.375662764+05:30 	[34mINFO[0m	starting test for	{"test case": "get-api-greet-2", "test set": "test-set-0"}
+🐰 Keploy: 2026-10-11T22:00:00.377108052+05:30 	[34mINFO[0m	result	{"testcase id": "get-api-greet-2", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-11T22:00:00.377839466+05:30 	[34mINFO[0m	starting test for	{"test case": "get-api-greet-3", "test set": "test-set-0"}
+🐰 Keploy: 2026-10-11T22:00:00.37885663+05:30 	[34mINFO[0m	result	{"testcase id": "get-api-greet-3", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-11T22:00:00.386151776+05:30 	[34mINFO[0m	Successfully merged and saved test-mock mappings	{"testSetID": "test-set-0", "totalTests": 3}
+🐰 Keploy: 2026-10-11T22:00:00.386222276+05:30 	[34mINFO[0m	Successfully saved test-mock mappings	{"testSetID": "test-set-0", "numTests": 3, "startupMocks": 0}
+
+ <=========================================> 
+  TESTRUN SUMMARY. For test-set: [32m[1m"[0m[32mtest-set-0[0m[32m[1m"[0m
+	Total tests:        [34m[1m6[0m
+	Total test passed:  [34m[1m6[0m
+	Total test failed:  [34m[1m0[0m
+	Time Taken:         [32m[1m"[0m[32m7.09 s[0m[32m[1m"[0m
+ <=========================================> 
+
+🐰 Keploy: 2026-10-11T22:00:00.697071515+05:30 	[34mINFO[0m	running	{"test-set": "test-set-1", "attempt": 1}
+🐰 Keploy(agent): 2026-10-11T22:00:00+05:30	[34mINFO[0m	agent mock residency: per-test mocks parked on disk (windowed)	{"onDisk": 0, "spilledResponses": 0, "diskBytes": 0, "residentPerTest": 0, "residentConfig": 5}
+🐰 Keploy: 2026-10-11T22:00:00.712727096+05:30 	[34mINFO[0m	stored the mocks on the agent	{"mocks": 5, "bytes": 32026, "sentBytes": 6694, "encoding": "zstd", "took": "9.767306ms"}
+🐰 Keploy: 2026-10-11T22:00:00.713885551+05:30 	[34mINFO[0m	Starting Application :	{"executing_cmd": "/usr/bin/sh -c ./http-pokeapi"}
+2026/10/11 22:00:02 The server is live on port 8080
+🐰 Keploy: 2026-10-11T22:00:07.730261568+05:30 	[34mINFO[0m	starting test for	{"test case": "get-api-locations-1", "test set": "test-set-1"}
+🐰 Keploy: 2026-10-11T22:00:07.76410068+05:30 	[34mINFO[0m	result	{"testcase id": "get-api-locations-1", "testset id": "test-set-1", "passed": "true"}
+🐰 Keploy: 2026-10-11T22:00:07.764913886+05:30 	[34mINFO[0m	starting test for	{"test case": "get-api-locations-2", "test set": "test-set-1"}
+🐰 Keploy: 2026-10-11T22:00:07.766838005+05:30 	[34mINFO[0m	result	{"testcase id": "get-api-locations-2", "testset id": "test-set-1", "passed": "true"}
+🐰 Keploy: 2026-10-11T22:00:07.767493378+05:30 	[34mINFO[0m	starting test for	{"test case": "get-api-locations-pastoria-city-area-1", "test set": "test-set-1"}
+🐰 Keploy: 2026-10-11T22:00:07.772016032+05:30 	[34mINFO[0m	result	{"testcase id": "get-api-locations-pastoria-city-area-1", "testset id": "test-set-1", "passed": "true"}
+🐰 Keploy: 2026-10-11T22:00:07.773557319+05:30 	[34mINFO[0m	starting test for	{"test case": "get-api-greet-1", "test set": "test-set-1"}
+🐰 Keploy: 2026-10-11T22:00:07.774852066+05:30 	[34mINFO[0m	result	{"testcase id": "get-api-greet-1", "testset id": "test-set-1", "passed": "true"}
+🐰 Keploy: 2026-10-11T22:00:07.775542814+05:30 	[34mINFO[0m	starting test for	{"test case": "get-api-greet-2", "test set": "test-set-1"}
+🐰 Keploy: 2026-10-11T22:00:07.776645686+05:30 	[34mINFO[0m	result	{"testcase id": "get-api-greet-2", "testset id": "test-set-1", "passed": "true"}
+🐰 Keploy: 2026-10-11T22:00:07.777296559+05:30 	[34mINFO[0m	starting test for	{"test case": "get-api-greet-3", "test set": "test-set-1"}
+🐰 Keploy: 2026-10-11T22:00:07.778171515+05:30 	[34mINFO[0m	result	{"testcase id": "get-api-greet-3", "testset id": "test-set-1", "passed": "true"}
+🐰 Keploy: 2026-10-11T22:00:07.782599877+05:30 	[34mINFO[0m	Successfully merged and saved test-mock mappings	{"testSetID": "test-set-1", "totalTests": 3}
+🐰 Keploy: 2026-10-11T22:00:07.782628794+05:30 	[34mINFO[0m	Successfully saved test-mock mappings	{"testSetID": "test-set-1", "numTests": 3, "startupMocks": 0}
+
+ <=========================================> 
+  TESTRUN SUMMARY. For test-set: [32m[1m"[0m[32mtest-set-1[0m[32m[1m"[0m
+	Total tests:        [34m[1m6[0m
+	Total test passed:  [34m[1m6[0m
+	Total test failed:  [34m[1m0[0m
+	Time Taken:         [32m[1m"[0m[32m7.08 s[0m[32m[1m"[0m
+ <=========================================> 
+
+🐰 Keploy: 2026-10-11T22:00:08.087281009+05:30 	[34mINFO[0m	running	{"test-set": "test-set-2", "attempt": 1}
+🐰 Keploy(agent): 2026-10-11T22:00:08+05:30	[34mINFO[0m	agent mock residency: per-test mocks parked on disk (windowed)	{"onDisk": 0, "spilledResponses": 0, "diskBytes": 0, "residentPerTest": 0, "residentConfig": 5}
+🐰 Keploy: 2026-10-11T22:00:08.101953259+05:30 	[34mINFO[0m	stored the mocks on the agent	{"mocks": 5, "bytes": 30834, "sentBytes": 6614, "encoding": "zstd", "took": "5.514942ms"}
+🐰 Keploy: 2026-10-11T22:00:08.104608377+05:30 	[34mINFO[0m	Starting Application :	{"executing_cmd": "/usr/bin/sh -c ./http-pokeapi"}
+2026/10/11 22:00:10 The server is live on port 8080
+🐰 Keploy: 2026-10-11T22:00:15.112159919+05:30 	[34mINFO[0m	starting test for	{"test case": "get-api-locations-1", "test set": "test-set-2"}
+🐰 Keploy: 2026-10-11T22:00:15.144726034+05:30 	[34mINFO[0m	result	{"testcase id": "get-api-locations-1", "testset id": "test-set-2", "passed": "true"}
+🐰 Keploy: 2026-10-11T22:00:15.145338699+05:30 	[34mINFO[0m	starting test for	{"test case": "get-api-locations-2", "test set": "test-set-2"}
+🐰 Keploy: 2026-10-11T22:00:15.146986361+05:30 	[34mINFO[0m	result	{"testcase id": "get-api-locations-2", "testset id": "test-set-2", "passed": "true"}
+🐰 Keploy: 2026-10-11T22:00:15.147666317+05:30 	[34mINFO[0m	starting test for	{"test case": "get-api-locations-eterna-city-area-1", "test set": "test-set-2"}
+🐰 Keploy: 2026-10-11T22:00:15.149592437+05:30 	[34mINFO[0m	result	{"testcase id": "get-api-locations-eterna-city-area-1", "testset id": "test-set-2", "passed": "true"}
+🐰 Keploy: 2026-10-11T22:00:15.15015881+05:30 	[34mINFO[0m	starting test for	{"test case": "get-api-greet-1", "test set": "test-set-2"}
+🐰 Keploy: 2026-10-11T22:00:15.150939308+05:30 	[34mINFO[0m	result	{"testcase id": "get-api-greet-1", "testset id": "test-set-2", "passed": "true"}
+🐰 Keploy: 2026-10-11T22:00:15.151455765+05:30 	[34mINFO[0m	starting test for	{"test case": "get-api-greet-2", "test set": "test-set-2"}
+🐰 Keploy: 2026-10-11T22:00:15.152127513+05:30 	[34mINFO[0m	result	{"testcase id": "get-api-greet-2", "testset id": "test-set-2", "passed": "true"}
+🐰 Keploy: 2026-10-11T22:00:15.152632345+05:30 	[34mINFO[0m	starting test for	{"test case": "get-api-greet-3", "test set": "test-set-2"}
+🐰 Keploy: 2026-10-11T22:00:15.154067883+05:30 	[34mINFO[0m	result	{"testcase id": "get-api-greet-3", "testset id": "test-set-2", "passed": "true"}
+🐰 Keploy: 2026-10-11T22:00:15.156533542+05:30 	[34mINFO[0m	Successfully merged and saved test-mock mappings	{"testSetID": "test-set-2", "totalTests": 3}
+🐰 Keploy: 2026-10-11T22:00:15.156565542+05:30 	[34mINFO[0m	Successfully saved test-mock mappings	{"testSetID": "test-set-2", "numTests": 3, "startupMocks": 0}
+
+ <=========================================> 
+  TESTRUN SUMMARY. For test-set: [32m[1m"[0m[32mtest-set-2[0m[32m[1m"[0m
+	Total tests:        [34m[1m6[0m
+	Total test passed:  [34m[1m6[0m
+	Total test failed:  [34m[1m0[0m
+	Time Taken:         [32m[1m"[0m[32m7.07 s[0m[32m[1m"[0m
+ <=========================================> 
+
+🐰 Keploy: 2026-10-11T22:00:15.465012497+05:30 	[34mINFO[0m	running	{"test-set": "test-set-3", "attempt": 1}
+🐰 Keploy(agent): 2026-10-11T22:00:15+05:30	[34mINFO[0m	agent mock residency: per-test mocks parked on disk (windowed)	{"onDisk": 0, "spilledResponses": 0, "diskBytes": 0, "residentPerTest": 0, "residentConfig": 5}
+🐰 Keploy: 2026-10-11T22:00:15.469787525+05:30 	[34mINFO[0m	stored the mocks on the agent	{"mocks": 5, "bytes": 32042, "sentBytes": 6692, "encoding": "zstd", "took": "3.16495ms"}
+🐰 Keploy: 2026-10-11T22:00:15.470216774+05:30 	[34mINFO[0m	Starting Application :	{"executing_cmd": "/usr/bin/sh -c ./http-pokeapi"}
+2026/10/11 22:00:17 The server is live on port 8080
+🐰 Keploy: 2026-10-11T22:00:22.476249195+05:30 	[34mINFO[0m	starting test for	{"test case": "get-api-locations-1", "test set": "test-set-3"}
+🐰 Keploy: 2026-10-11T22:00:22.493705521+05:30 	[34mINFO[0m	result	{"testcase id": "get-api-locations-1", "testset id": "test-set-3", "passed": "true"}
+🐰 Keploy: 2026-10-11T22:00:22.494948809+05:30 	[34mINFO[0m	starting test for	{"test case": "get-api-locations-2", "test set": "test-set-3"}
+🐰 Keploy: 2026-10-11T22:00:22.496559971+05:30 	[34mINFO[0m	result	{"testcase id": "get-api-locations-2", "testset id": "test-set-3", "passed": "true"}
+🐰 Keploy: 2026-10-11T22:00:22.496947136+05:30 	[34mINFO[0m	starting test for	{"test case": "get-api-locations-pastoria-city-area-1", "test set": "test-set-3"}
+🐰 Keploy: 2026-10-11T22:00:22.498656256+05:30 	[34mINFO[0m	result	{"testcase id": "get-api-locations-pastoria-city-area-1", "testset id": "test-set-3", "passed": "true"}
+🐰 Keploy: 2026-10-11T22:00:22.499229505+05:30 	[34mINFO[0m	starting test for	{"test case": "get-api-greet-1", "test set": "test-set-3"}
+🐰 Keploy: 2026-10-11T22:00:22.500892083+05:30 	[34mINFO[0m	result	{"testcase id": "get-api-greet-1", "testset id": "test-set-3", "passed": "true"}
+🐰 Keploy: 2026-10-11T22:00:22.501402665+05:30 	[34mINFO[0m	starting test for	{"test case": "get-api-greet-2", "test set": "test-set-3"}
+🐰 Keploy: 2026-10-11T22:00:22.50206333+05:30 	[34mINFO[0m	result	{"testcase id": "get-api-greet-2", "testset id": "test-set-3", "passed": "true"}
+🐰 Keploy: 2026-10-11T22:00:22.502569162+05:30 	[34mINFO[0m	starting test for	{"test case": "get-api-greet-3", "test set": "test-set-3"}
+🐰 Keploy: 2026-10-11T22:00:22.503235368+05:30 	[34mINFO[0m	result	{"testcase id": "get-api-greet-3", "testset id": "test-set-3", "passed": "true"}
+🐰 Keploy: 2026-10-11T22:00:22.507441523+05:30 	[34mINFO[0m	Successfully merged and saved test-mock mappings	{"testSetID": "test-set-3", "totalTests": 3}
+🐰 Keploy: 2026-10-11T22:00:22.507467148+05:30 	[34mINFO[0m	Successfully saved test-mock mappings	{"testSetID": "test-set-3", "numTests": 3, "startupMocks": 0}
+
+ <=========================================> 
+  TESTRUN SUMMARY. For test-set: [32m[1m"[0m[32mtest-set-3[0m[32m[1m"[0m
+	Total tests:        [34m[1m6[0m
+	Total test passed:  [34m[1m6[0m
+	Total test failed:  [34m[1m0[0m
+	Time Taken:         [32m[1m"[0m[32m7.04 s[0m[32m[1m"[0m
+ <=========================================> 
+
+
+ <=========================================> 
+  COMPLETE TESTRUN SUMMARY. 
+	Total tests: [34m[1m24[0m
+	Total test passed: [34m[1m24[0m
+	Total test failed: [34m[1m0[0m
+	Total time taken: [32m[1m"[0m[32m28.27 s[0m[32m[1m"[0m
+
+	Test Suite Name		Total Test	Passed		Failed		Time Taken	
+
+	[32m[1m"[0m[32mtest-set-0[0m[32m[1m"[0m		[34m[1m6[0m		[34m[1m6[0m		[34m[1m0[0m		[32m[1m"[0m[32m7.09 s[0m[32m[1m"[0m
+	[32m[1m"[0m[32mtest-set-1[0m[32m[1m"[0m		[34m[1m6[0m		[34m[1m6[0m		[34m[1m0[0m		[32m[1m"[0m[32m7.08 s[0m[32m[1m"[0m
+	[32m[1m"[0m[32mtest-set-2[0m[32m[1m"[0m		[34m[1m6[0m		[34m[1m6[0m		[34m[1m0[0m		[32m[1m"[0m[32m7.07 s[0m[32m[1m"[0m
+	[32m[1m"[0m[32mtest-set-3[0m[32m[1m"[0m		[34m[1m6[0m		[34m[1m6[0m		[34m[1m0[0m		[32m[1m"[0m[32m7.04 s[0m[32m[1m"[0m
+<=========================================> 
+
+🐰 Keploy: 2026-10-11T22:00:23.314415016+05:30 	[34mINFO[0m	stopping Keploy	{"reason": "replay completed successfully"}
+🐰 Keploy: 2026-10-11T22:00:23.314714057+05:30 	[34mINFO[0m	Stopping keploy agent
+🐰 Keploy(agent): 2026-10-11T22:00:23+05:30	[34mINFO[0m	stopping Keploy	{"reason": "stop requested via agent API"}
+🐰 Keploy(agent): 2026-10-11T22:00:23+05:30	[34mINFO[0m	Shutting down agent HTTP server
+🐰 Keploy(agent): 2026-10-11T22:00:23+05:30	[34mINFO[0m	HTTP server stopped
+🐰 Keploy: 2026-10-11T22:00:23.31601897+05:30 	[34mINFO[0m	Keploy agent stopped.

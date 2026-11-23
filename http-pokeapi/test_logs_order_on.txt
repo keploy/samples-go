@@ -1,0 +1,293 @@
+
+[38;5;208m═══════════════════════════════════════════════════════════════════════════════[0m
+  [1m[38;5;208m🚀  TRY THE FULL KEPLOY (FREE)[0m
+  This is Keploy's open-source build. Keploy from keploy.io (free with an account) adds:
+    • PostgreSQL, MongoDB, gRPC, HTTP/2, Kafka — on top of this build's HTTP + MySQL
+    • Recording apps running natively on macOS and Windows
+    • Recording and testing apps that run in Podman
+    • AI-powered test generation, sandbox replay, MCP for AI agents
+      (Claude Code, Cursor, Copilot, Gemini, …)
+  [2mInstall:[0m  [1mcurl --silent -O -L https://keploy.io/install.sh && source install.sh[0m
+[38;5;208m═══════════════════════════════════════════════════════════════════════════════[0m
+
+
+[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m▄[0m
+[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m▄[0m
+[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m▒[0m
+[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▀[0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▄[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▌[0m
+[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▄[0m[38;5;202m▌[0m[38;5;202m▌[0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m▀[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▄[0m[38;5;202m▌[0m[38;5;202m▀[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m▌[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▄[0m[38;5;202m▌[0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m▌[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m▌[0m[38;5;202m▌[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m
+[38;5;208m [0m[38;5;208m [0m[38;5;208m [0m[38;5;208m [0m[38;5;208m [0m[38;5;208m [0m[38;5;208m [0m[38;5;208m▓[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m▌[0m[38;5;208m▓[0m[38;5;202m▓[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m▄[0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m [0m[38;5;202m▐[0m[38;5;202m█[0m[38;5;202m▌[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▌[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▌[0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▓[0m
+[38;5;214m [0m[38;5;214m [0m[38;5;214m [0m[38;5;214m [0m[38;5;214m [0m[38;5;214m [0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▀[0m[38;5;214m▀[0m[38;5;214m▀[0m[38;5;214m▀[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▌[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m▌[0m[38;5;202m▄[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m▐[0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m▄[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m▀[0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m▀[0m[38;5;202m█[0m[38;5;202m▄[0m[38;5;202m▄[0m[38;5;202m█[0m[38;5;202m▀[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m█[0m
+[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m▓[0m[38;5;226m▌[0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;202m [0m[38;5;202m▐[0m[38;5;202m█[0m[38;5;202m▌[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▌[0m
+[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m▓[0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202mO[0m[38;5;202mP[0m[38;5;202mE[0m[38;5;202mN[0m[38;5;202m [0m[38;5;202mS[0m[38;5;202mO[0m[38;5;202mU[0m[38;5;202mR[0m[38;5;202mC[0m[38;5;202mE[0m
+
+version: 3-dev
+
+🐰 Keploy: 2026-10-11T22:00:25.698713574+05:30 	[34mINFO[0m	Test Sets to be Replayed	{"testSets": ["test-set-0", "test-set-1", "test-set-2", "test-set-3"]}
+🐰 Keploy(agent): 2026-10-11T22:00:27+05:30	[34mINFO[0m	starting UDP DNS server at addr :26789
+🐰 Keploy(agent): 2026-10-11T22:00:27+05:30	[34mINFO[0m	starting TCP DNS server at addr :26789
+🐰 Keploy(agent): 2026-10-11T22:00:27+05:30	[34mINFO[0m	Keploy has taken control of the DNS resolution mechanism, your application may misbehave if you have provided wrong domain name in your application code.
+🐰 Keploy(agent): 2026-10-11T22:00:27+05:30	[34mINFO[0m	Proxy started at port:16789
+🐰 Keploy(agent): 2026-10-11T22:00:27+05:30	[34mINFO[0m	Starting Agent's HTTP server	{"addr": "127.0.0.1:64712"}
+🐰 Keploy: 2026-10-11T22:00:28.732639984+05:30 	[34mINFO[0m	pointing Java at a merged keploy truststore via JAVA_TOOL_OPTIONS (the JDK's cacerts is left untouched)	{"truststore": "/tmp/keploy-java-truststore-1000.jks", "system_source": "/etc/ssl/certs/ca-certificates.crt"}
+🐰 Keploy: 2026-10-11T22:00:28.732905282+05:30 	[34mINFO[0m	running	{"test-set": "test-set-0", "attempt": 1}
+🐰 Keploy: 2026-10-11T22:00:28.739121365+05:30 	[34mINFO[0m	Successfully loaded test-mock mappings	{"testSetID": "test-set-0", "filePath": "/home/keploy/plg/keploy-wt-proven-strictfail/samples-go/http-pokeapi/proven-order-run/keploy/test-set-0/mappings.yaml", "numTests": 3, "hasMeaningfulMappings": true}
+🐰 Keploy(agent): 2026-10-11T22:00:28+05:30	[34mINFO[0m	agent mock residency: per-test mocks parked on disk (windowed)	{"onDisk": 0, "spilledResponses": 0, "diskBytes": 0, "residentPerTest": 0, "residentConfig": 5}
+🐰 Keploy: 2026-10-11T22:00:28.748028187+05:30 	[34mINFO[0m	stored the mocks on the agent	{"mocks": 5, "bytes": 30812, "sentBytes": 6581, "encoding": "zstd", "took": "2.325354ms"}
+🐰 Keploy(agent): 2026-10-11T22:00:28+05:30	[34mINFO[0m	strict mock-window containment is ACTIVE for this session — per-test mocks whose request timestamp falls outside the outer test window will be dropped rather than promoted across tests. If your replays start reporting missing mocks after an upgrade, this is likely why. To opt out: set KEPLOY_STRICT_MOCK_WINDOW=0 in the environment, OR test.strictMockWindow: false in keploy.yaml.	{"viaPerCallFlag": true, "viaEnvOverride": false, "escape_hatch_env": "KEPLOY_STRICT_MOCK_WINDOW=0", "escape_hatch_config": "test.strictMockWindow: false"}
+🐰 Keploy: 2026-10-11T22:00:28.751209272+05:30 	[34mINFO[0m	Starting Application :	{"executing_cmd": "/usr/bin/sh -c ./http-pokeapi"}
+2026/10/11 22:00:30 The server is live on port 8080
+🐰 Keploy: 2026-10-11T22:00:35.774032846+05:30 	[34mINFO[0m	starting test for	{"test case": "get-api-locations-1", "test set": "test-set-0"}
+Testrun failed for testcase with id: [31m[1m"[0m[31mget-api-locations-1[0m[31m[1m"[0m
+
+--------------------------------------------------------------------
+
+[37m┌[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m┐[0m
+[37m│[0m                                       [91mGET - API - LOCATIONS - 1[0m                                       [37m│[0m
+[37m├[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m┤[0m
+[37m│[0m                    EXPECT BODY                    │                   ACTUAL BODY                     [37m│[0m
+[37m│[0m ──────────────────────────────────────────────────┼────────────────────────────────────────────────── [37m│[0m
+[37m│[0m  {                                                │ {                                                 [37m│[0m
+[37m│[0m   [0]: [31m"mt-coronet-1f-from-exterior"[0m              │  [0]: [32m"canalave-city-area"[0m                        [37m│[0m
+[37m│[0m   [1]: [31m"mt-coronet-6f"[0m                            │  [1]: [32m"eterna-city-area"[0m                          [37m│[0m
+[37m│[0m   [2]: [31m"mt-coronet-5f"[0m                            │  [2]: [32m"pastoria-city-area"[0m                        [37m│[0m
+[37m│[0m   [3]: [31m"mt-coronet-4f-small-room"[0m                 │  [3]: [32m"sunyshore-city-area"[0m                       [37m│[0m
+[37m│[0m   [4]: [31m"mt-coronet-4f"[0m                            │  [4]: [32m"sinnoh-pokemon-league-area"[0m                [37m│[0m
+[37m│[0m   [5]: [31m"mt-coronet-exterior-blizzard"[0m             │  [5]: [32m"oreburgh-mine-1f"[0m                          [37m│[0m
+[37m│[0m   [6]: [31m"mt-coronet-exterior-snowfall"[0m             │  [6]: [32m"oreburgh-mine-b1f"[0m                         [37m│[0m
+[37m│[0m   [7]: [31m"mt-coronet-3f"[0m                            │  [7]: [32m"valley-windworks-area"[0m                     [37m│[0m
+[37m│[0m   [8]: [31m"mt-coronet-2f"[0m                            │  [8]: [32m"eterna-forest-area"[0m                        [37m│[0m
+[37m│[0m   [9]: [31m"mt-coronet-1f-route-207"[0m                  │  [9]: [32m"fuego-ironworks-area"[0m                      [37m│[0m
+[37m│[0m   [10]: [31m"fuego-ironworks-area"[0m                    │  [10]: [32m"mt-coronet-1f-route-207"[0m                  [37m│[0m
+[37m│[0m   [11]: [31m"eterna-forest-area"[0m                      │  [11]: [32m"mt-coronet-2f"[0m                            [37m│[0m
+[37m│[0m   [12]: [31m"valley-windworks-area"[0m                   │  [12]: [32m"mt-coronet-3f"[0m                            [37m│[0m
+[37m│[0m   [13]: [31m"oreburgh-mine-b1f"[0m                       │  [13]: [32m"mt-coronet-exterior-snowfall"[0m             [37m│[0m
+[37m│[0m   [14]: [31m"oreburgh-mine-1f"[0m                        │  [14]: [32m"mt-coronet-exterior-blizzard"[0m             [37m│[0m
+[37m│[0m   [15]: [31m"sinnoh-pokemon-league-area"[0m              │  [15]: [32m"mt-coronet-4f"[0m                            [37m│[0m
+[37m│[0m   [16]: [31m"sunyshore-city-area"[0m                     │  [16]: [32m"mt-coronet-4f-small-room"[0m                 [37m│[0m
+[37m│[0m   [17]: [31m"pastoria-city-area"[0m                      │  [17]: [32m"mt-coronet-5f"[0m                            [37m│[0m
+[37m│[0m   [18]: [31m"eterna-city-area"[0m                        │  [18]: [32m"mt-coronet-6f"[0m                            [37m│[0m
+[37m│[0m   [19]: [31m"canalave-city-area"[0m                      │  [19]: [32m"mt-coronet-1f-from-exterior"[0m              [37m│[0m
+[37m│[0m   }                                               │  }                                                [37m│[0m
+[37m└[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m┘[0m
+🐰 Keploy: 2026-10-11T22:00:35.853965692+05:30 	[34mINFO[0m	result	{"testcase id": "[31mget-api-locations-1[0m", "testset id": "[31mtest-set-0[0m", "passed": "[31mfalse[0m"}
+🐰 Keploy: 2026-10-11T22:00:35.854475789+05:30 	[34mINFO[0m	starting test for	{"test case": "[38;5;208mget-api-locations-2[0;25;0m", "test set": "[38;5;208mtest-set-0[0;25;0m"}
+Testrun failed for testcase with id: [31m[1m"[0m[31mget-api-locations-2[0m[31m[1m"[0m
+
+--------------------------------------------------------------------
+
+[37m┌[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m┐[0m
+[37m│[0m                                       [91mGET - API - LOCATIONS - 2[0m                                       [37m│[0m
+[37m├[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m┤[0m
+[37m│[0m                    EXPECT BODY                    │                   ACTUAL BODY                     [37m│[0m
+[37m│[0m ──────────────────────────────────────────────────┼────────────────────────────────────────────────── [37m│[0m
+[37m│[0m  {                                                │ {                                                 [37m│[0m
+[37m│[0m   [0]: [31m"mt-coronet-1f-from-exterior"[0m              │  [0]: [32m"canalave-city-area"[0m                        [37m│[0m
+[37m│[0m   [1]: [31m"mt-coronet-6f"[0m                            │  [1]: [32m"eterna-city-area"[0m                          [37m│[0m
+[37m│[0m   [2]: [31m"mt-coronet-5f"[0m                            │  [2]: [32m"pastoria-city-area"[0m                        [37m│[0m
+[37m│[0m   [3]: [31m"mt-coronet-4f-small-room"[0m                 │  [3]: [32m"sunyshore-city-area"[0m                       [37m│[0m
+[37m│[0m   [4]: [31m"mt-coronet-4f"[0m                            │  [4]: [32m"sinnoh-pokemon-league-area"[0m                [37m│[0m
+[37m│[0m   [5]: [31m"mt-coronet-exterior-blizzard"[0m             │  [5]: [32m"oreburgh-mine-1f"[0m                          [37m│[0m
+[37m│[0m   [6]: [31m"mt-coronet-exterior-snowfall"[0m             │  [6]: [32m"oreburgh-mine-b1f"[0m                         [37m│[0m
+[37m│[0m   [7]: [31m"mt-coronet-3f"[0m                            │  [7]: [32m"valley-windworks-area"[0m                     [37m│[0m
+[37m│[0m   [8]: [31m"mt-coronet-2f"[0m                            │  [8]: [32m"eterna-forest-area"[0m                        [37m│[0m
+[37m│[0m   [9]: [31m"mt-coronet-1f-route-207"[0m                  │  [9]: [32m"fuego-ironworks-area"[0m                      [37m│[0m
+[37m│[0m   [10]: [31m"fuego-ironworks-area"[0m                    │  [10]: [32m"mt-coronet-1f-route-207"[0m                  [37m│[0m
+[37m│[0m   [11]: [31m"eterna-forest-area"[0m                      │  [11]: [32m"mt-coronet-2f"[0m                            [37m│[0m
+[37m│[0m   [12]: [31m"valley-windworks-area"[0m                   │  [12]: [32m"mt-coronet-3f"[0m                            [37m│[0m
+[37m│[0m   [13]: [31m"oreburgh-mine-b1f"[0m                       │  [13]: [32m"mt-coronet-exterior-snowfall"[0m             [37m│[0m
+[37m│[0m   [14]: [31m"oreburgh-mine-1f"[0m                        │  [14]: [32m"mt-coronet-exterior-blizzard"[0m             [37m│[0m
+[37m│[0m   [15]: [31m"sinnoh-pokemon-league-area"[0m              │  [15]: [32m"mt-coronet-4f"[0m                            [37m│[0m
+[37m│[0m   [16]: [31m"sunyshore-city-area"[0m                     │  [16]: [32m"mt-coronet-4f-small-room"[0m                 [37m│[0m
+[37m│[0m   [17]: [31m"pastoria-city-area"[0m                      │  [17]: [32m"mt-coronet-5f"[0m                            [37m│[0m
+[37m│[0m   [18]: [31m"eterna-city-area"[0m                        │  [18]: [32m"mt-coronet-6f"[0m                            [37m│[0m
+[37m│[0m   [19]: [31m"canalave-city-area"[0m                      │  [19]: [32m"mt-coronet-1f-from-exterior"[0m              [37m│[0m
+[37m│[0m   }                                               │  }                                                [37m│[0m
+[37m└[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m┘[0m
+🐰 Keploy: 2026-10-11T22:00:35.858948784+05:30 	[34mINFO[0m	result	{"testcase id": "[31mget-api-locations-2[0m", "testset id": "[31mtest-set-0[0m", "passed": "[31mfalse[0m"}
+🐰 Keploy: 2026-10-11T22:00:35.859304668+05:30 	[34mINFO[0m	starting test for	{"test case": "[38;5;208mget-api-locations-eterna-city-area-1[0;25;0m", "test set": "[38;5;208mtest-set-0[0;25;0m"}
+🐰 Keploy: 2026-10-11T22:00:35.860387739+05:30 	[34mINFO[0m	result	{"testcase id": "[32mget-api-locations-eterna-city-area-1[0m", "testset id": "[32mtest-set-0[0m", "passed": "[32mtrue[0m"}
+🐰 Keploy: 2026-10-11T22:00:35.860619245+05:30 	[34mINFO[0m	starting test for	{"test case": "[38;5;208mget-api-greet-1[0;25;0m", "test set": "[38;5;208mtest-set-0[0;25;0m"}
+🐰 Keploy: 2026-10-11T22:00:35.861908238+05:30 	[34mINFO[0m	result	{"testcase id": "[32mget-api-greet-1[0m", "testset id": "[32mtest-set-0[0m", "passed": "[32mtrue[0m"}
+🐰 Keploy: 2026-10-11T22:00:35.862280498+05:30 	[34mINFO[0m	starting test for	{"test case": "[38;5;208mget-api-greet-2[0;25;0m", "test set": "[38;5;208mtest-set-0[0;25;0m"}
+🐰 Keploy: 2026-10-11T22:00:35.862648841+05:30 	[34mINFO[0m	result	{"testcase id": "[32mget-api-greet-2[0m", "testset id": "[32mtest-set-0[0m", "passed": "[32mtrue[0m"}
+🐰 Keploy: 2026-10-11T22:00:35.862848138+05:30 	[34mINFO[0m	starting test for	{"test case": "[38;5;208mget-api-greet-3[0;25;0m", "test set": "[38;5;208mtest-set-0[0;25;0m"}
+🐰 Keploy: 2026-10-11T22:00:35.864059546+05:30 	[34mINFO[0m	result	{"testcase id": "[32mget-api-greet-3[0m", "testset id": "[32mtest-set-0[0m", "passed": "[32mtrue[0m"}
+🐰 Keploy: 2026-10-11T22:00:35.864103714+05:30 	[34mINFO[0m	Retrying passing test cases to validate mock consistency	{"replay": 1, "remaining_tests": 4}
+
+ <=========================================> 
+  TESTRUN SUMMARY. For test-set: [31m[1m"[0m[31mtest-set-0[0m[31m[1m"[0m
+	Total tests:        [34m[1m6[0m
+	Total test passed:  [34m[1m4[0m
+	Total test failed:  [34m[1m2[0m
+	Time Taken:         [31m[1m"[0m[31m7.13 s[0m[31m[1m"[0m
+ <=========================================> 
+
+🐰 Keploy: 2026-10-11T22:00:36.224647942+05:30 	[34mINFO[0m	running	{"test-set": "[38;5;208mtest-set-1[0;25;0m", "attempt": 1}
+🐰 Keploy: 2026-10-11T22:00:36.227155217+05:30 	[34mINFO[0m	Successfully loaded test-mock mappings	{"testSetID": "test-set-1", "filePath": "/home/keploy/plg/keploy-wt-proven-strictfail/samples-go/http-pokeapi/proven-order-run/keploy/test-set-1/mappings.yaml", "numTests": 3, "hasMeaningfulMappings": true}
+🐰 Keploy(agent): 2026-10-11T22:00:36+05:30	[34mINFO[0m	agent mock residency: per-test mocks parked on disk (windowed)	{"onDisk": 0, "spilledResponses": 0, "diskBytes": 0, "residentPerTest": 0, "residentConfig": 5}
+🐰 Keploy: 2026-10-11T22:00:36.262968842+05:30 	[34mINFO[0m	stored the mocks on the agent	{"mocks": 5, "bytes": 32026, "sentBytes": 6693, "encoding": "zstd", "took": "24.936ms"}
+🐰 Keploy: 2026-10-11T22:00:36.266209137+05:30 	[34mINFO[0m	Starting Application :	{"executing_cmd": "/usr/bin/sh -c ./http-pokeapi"}
+2026/10/11 22:00:38 The server is live on port 8080
+🐰 Keploy: 2026-10-11T22:00:43.285090664+05:30 	[34mINFO[0m	starting test for	{"test case": "[38;5;208mget-api-locations-1[0;25;0m", "test set": "[38;5;208mtest-set-1[0;25;0m"}
+Testrun failed for testcase with id: [31m[1m"[0m[31mget-api-locations-1[0m[31m[1m"[0m
+
+--------------------------------------------------------------------
+
+[37m┌[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m┐[0m
+[37m│[0m                                       [91mGET - API - LOCATIONS - 1[0m                                       [37m│[0m
+[37m├[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m┤[0m
+[37m│[0m                    EXPECT BODY                    │                   ACTUAL BODY                     [37m│[0m
+[37m│[0m ──────────────────────────────────────────────────┼────────────────────────────────────────────────── [37m│[0m
+[37m│[0m  {                                                │ {                                                 [37m│[0m
+[37m│[0m   [0]: [31m"mt-coronet-1f-from-exterior"[0m              │  [0]: [32m"canalave-city-area"[0m                        [37m│[0m
+[37m│[0m   [1]: [31m"mt-coronet-6f"[0m                            │  [1]: [32m"eterna-city-area"[0m                          [37m│[0m
+[37m│[0m   [2]: [31m"mt-coronet-5f"[0m                            │  [2]: [32m"pastoria-city-area"[0m                        [37m│[0m
+[37m│[0m   [3]: [31m"mt-coronet-4f-small-room"[0m                 │  [3]: [32m"sunyshore-city-area"[0m                       [37m│[0m
+[37m│[0m   [4]: [31m"mt-coronet-4f"[0m                            │  [4]: [32m"sinnoh-pokemon-league-area"[0m                [37m│[0m
+[37m│[0m   [5]: [31m"mt-coronet-exterior-blizzard"[0m             │  [5]: [32m"oreburgh-mine-1f"[0m                          [37m│[0m
+[37m│[0m   [6]: [31m"mt-coronet-exterior-snowfall"[0m             │  [6]: [32m"oreburgh-mine-b1f"[0m                         [37m│[0m
+[37m│[0m   [7]: [31m"mt-coronet-3f"[0m                            │  [7]: [32m"valley-windworks-area"[0m                     [37m│[0m
+[37m│[0m   [8]: [31m"mt-coronet-2f"[0m                            │  [8]: [32m"eterna-forest-area"[0m                        [37m│[0m
+[37m│[0m   [9]: [31m"mt-coronet-1f-route-207"[0m                  │  [9]: [32m"fuego-ironworks-area"[0m                      [37m│[0m
+[37m│[0m   [10]: [31m"fuego-ironworks-area"[0m                    │  [10]: [32m"mt-coronet-1f-route-207"[0m                  [37m│[0m
+[37m│[0m   [11]: [31m"eterna-forest-area"[0m                      │  [11]: [32m"mt-coronet-2f"[0m                            [37m│[0m
+[37m│[0m   [12]: [31m"valley-windworks-area"[0m                   │  [12]: [32m"mt-coronet-3f"[0m                            [37m│[0m
+[37m│[0m   [13]: [31m"oreburgh-mine-b1f"[0m                       │  [13]: [32m"mt-coronet-exterior-snowfall"[0m             [37m│[0m
+[37m│[0m   [14]: [31m"oreburgh-mine-1f"[0m                        │  [14]: [32m"mt-coronet-exterior-blizzard"[0m             [37m│[0m
+[37m│[0m   [15]: [31m"sinnoh-pokemon-league-area"[0m              │  [15]: [32m"mt-coronet-4f"[0m                            [37m│[0m
+[37m│[0m   [16]: [31m"sunyshore-city-area"[0m                     │  [16]: [32m"mt-coronet-4f-small-room"[0m                 [37m│[0m
+[37m│[0m   [17]: [31m"pastoria-city-area"[0m                      │  [17]: [32m"mt-coronet-5f"[0m                            [37m│[0m
+[37m│[0m   [18]: [31m"eterna-city-area"[0m                        │  [18]: [32m"mt-coronet-6f"[0m                            [37m│[0m
+[37m│[0m   [19]: [31m"canalave-city-area"[0m                      │  [19]: [32m"mt-coronet-1f-from-exterior"[0m              [37m│[0m
+[37m│[0m   }                                               │  }                                                [37m│[0m
+[37m└[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m┘[0m
+🐰 Keploy: 2026-10-11T22:00:43.441504181+05:30 	[34mINFO[0m	result	{"testcase id": "[31mget-api-locations-1[0m", "testset id": "[31mtest-set-1[0m", "passed": "[31mfalse[0m"}
+🐰 Keploy: 2026-10-11T22:00:43.443130302+05:30 	[34mINFO[0m	starting test for	{"test case": "[38;5;208mget-api-locations-2[0;25;0m", "test set": "[38;5;208mtest-set-1[0;25;0m"}
+Testrun failed for testcase with id: [31m[1m"[0m[31mget-api-locations-2[0m[31m[1m"[0m
+
+--------------------------------------------------------------------
+
+[37m┌[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m┐[0m
+[37m│[0m                                       [91mGET - API - LOCATIONS - 2[0m                                       [37m│[0m
+[37m├[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m┤[0m
+[37m│[0m                    EXPECT BODY                    │                   ACTUAL BODY                     [37m│[0m
+[37m│[0m ──────────────────────────────────────────────────┼────────────────────────────────────────────────── [37m│[0m
+[37m│[0m  {                                                │ {                                                 [37m│[0m
+[37m│[0m   [0]: [31m"mt-coronet-1f-from-exterior"[0m              │  [0]: [32m"canalave-city-area"[0m                        [37m│[0m
+[37m│[0m   [1]: [31m"mt-coronet-6f"[0m                            │  [1]: [32m"eterna-city-area"[0m                          [37m│[0m
+[37m│[0m   [2]: [31m"mt-coronet-5f"[0m                            │  [2]: [32m"pastoria-city-area"[0m                        [37m│[0m
+[37m│[0m   [3]: [31m"mt-coronet-4f-small-room"[0m                 │  [3]: [32m"sunyshore-city-area"[0m                       [37m│[0m
+[37m│[0m   [4]: [31m"mt-coronet-4f"[0m                            │  [4]: [32m"sinnoh-pokemon-league-area"[0m                [37m│[0m
+[37m│[0m   [5]: [31m"mt-coronet-exterior-blizzard"[0m             │  [5]: [32m"oreburgh-mine-1f"[0m                          [37m│[0m
+[37m│[0m   [6]: [31m"mt-coronet-exterior-snowfall"[0m             │  [6]: [32m"oreburgh-mine-b1f"[0m                         [37m│[0m
+[37m│[0m   [7]: [31m"mt-coronet-3f"[0m                            │  [7]: [32m"valley-windworks-area"[0m                     [37m│[0m
+[37m│[0m   [8]: [31m"mt-coronet-2f"[0m                            │  [8]: [32m"eterna-forest-area"[0m                        [37m│[0m
+[37m│[0m   [9]: [31m"mt-coronet-1f-route-207"[0m                  │  [9]: [32m"fuego-ironworks-area"[0m                      [37m│[0m
+[37m│[0m   [10]: [31m"fuego-ironworks-area"[0m                    │  [10]: [32m"mt-coronet-1f-route-207"[0m                  [37m│[0m
+[37m│[0m   [11]: [31m"eterna-forest-area"[0m                      │  [11]: [32m"mt-coronet-2f"[0m                            [37m│[0m
+[37m│[0m   [12]: [31m"valley-windworks-area"[0m                   │  [12]: [32m"mt-coronet-3f"[0m                            [37m│[0m
+[37m│[0m   [13]: [31m"oreburgh-mine-b1f"[0m                       │  [13]: [32m"mt-coronet-exterior-snowfall"[0m             [37m│[0m
+[37m│[0m   [14]: [31m"oreburgh-mine-1f"[0m                        │  [14]: [32m"mt-coronet-exterior-blizzard"[0m             [37m│[0m
+[37m│[0m   [15]: [31m"sinnoh-pokemon-league-area"[0m              │  [15]: [32m"mt-coronet-4f"[0m                            [37m│[0m
+[37m│[0m   [16]: [31m"sunyshore-city-area"[0m                     │  [16]: [32m"mt-coronet-4f-small-room"[0m                 [37m│[0m
+[37m│[0m   [17]: [31m"pastoria-city-area"[0m                      │  [17]: [32m"mt-coronet-5f"[0m                            [37m│[0m
+[37m│[0m   [18]: [31m"eterna-city-area"[0m                        │  [18]: [32m"mt-coronet-6f"[0m                            [37m│[0m
+[37m│[0m   [19]: [31m"canalave-city-area"[0m                      │  [19]: [32m"mt-coronet-1f-from-exterior"[0m              [37m│[0m
+[37m│[0m   }                                               │  }                                                [37m│[0m
+[37m└[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m─[0m[37m┘[0m
+🐰 Keploy: 2026-10-11T22:00:43.467301032+05:30 	[34mINFO[0m	result	{"testcase id": "[31mget-api-locations-2[0m", "testset id": "[31mtest-set-1[0m", "passed": "[31mfalse[0m"}
+🐰 Keploy: 2026-10-11T22:00:43.469602234+05:30 	[34mINFO[0m	starting test for	{"test case": "[38;5;208mget-api-locations-pastoria-city-area-1[0;25;0m", "test set": "[38;5;208mtest-set-1[0;25;0m"}
+🐰 Keploy: 2026-10-11T22:00:43.475794385+05:30 	[34mINFO[0m	result	{"testcase id": "[32mget-api-locations-pastoria-city-area-1[0m", "testset id": "[32mtest-set-1[0m", "passed": "[32mtrue[0m"}
+🐰 Keploy: 2026-10-11T22:00:43.479395876+05:30 	[34mINFO[0m	starting test for	{"test case": "[38;5;208mget-api-greet-1[0;25;0m", "test set": "[38;5;208mtest-set-1[0;25;0m"}
+🐰 Keploy: 2026-10-11T22:00:43.501199362+05:30 	[34mINFO[0m	result	{"testcase id": "[32mget-api-greet-1[0m", "testset id": "[32mtest-set-1[0m", "passed": "[32mtrue[0m"}
+🐰 Keploy: 2026-10-11T22:00:43.502825983+05:30 	[34mINFO[0m	starting test for	{"test case": "[38;5;208mget-api-greet-2[0;25;0m", "test set": "[38;5;208mtest-set-1[0;25;0m"}
+🐰 Keploy: 2026-10-11T22:00:43.507000097+05:30 	[34mINFO[0m	result	{"testcase id": "[32mget-api-greet-2[0m", "testset id": "[32mtest-set-1[0m", "passed": "[32mtrue[0m"}
+🐰 Keploy: 2026-10-11T22:00:43.508569302+05:30 	[34mINFO[0m	starting test for	{"test case": "[38;5;208mget-api-greet-3[0;25;0m", "test set": "[38;5;208mtest-set-1[0;25;0m"}
+🐰 Keploy: 2026-10-11T22:00:43.513354123+05:30 	[34mINFO[0m	result	{"testcase id": "[32mget-api-greet-3[0m", "testset id": "[32mtest-set-1[0m", "passed": "[32mtrue[0m"}
+🐰 Keploy: 2026-10-11T22:00:43.513451747+05:30 	[34mINFO[0m	Retrying passing test cases to validate mock consistency	{"replay": 1, "remaining_tests": 4}
+
+ <=========================================> 
+  TESTRUN SUMMARY. For test-set: [31m[1m"[0m[31mtest-set-1[0m[31m[1m"[0m
+	Total tests:        [34m[1m6[0m
+	Total test passed:  [34m[1m4[0m
+	Total test failed:  [34m[1m2[0m
+	Time Taken:         [31m[1m"[0m[31m7.29 s[0m[31m[1m"[0m
+ <=========================================> 
+
+🐰 Keploy: 2026-10-11T22:00:43.869421713+05:30 	[34mINFO[0m	running	{"test-set": "[38;5;208mtest-set-2[0;25;0m", "attempt": 1}
+🐰 Keploy: 2026-10-11T22:00:43.871571374+05:30 	[34mINFO[0m	Successfully loaded test-mock mappings	{"testSetID": "test-set-2", "filePath": "/home/keploy/plg/keploy-wt-proven-strictfail/samples-go/http-pokeapi/proven-order-run/keploy/test-set-2/mappings.yaml", "numTests": 3, "hasMeaningfulMappings": true}
+🐰 Keploy(agent): 2026-10-11T22:00:43+05:30	[34mINFO[0m	agent mock residency: per-test mocks parked on disk (windowed)	{"onDisk": 0, "spilledResponses": 0, "diskBytes": 0, "residentPerTest": 0, "residentConfig": 5}
+🐰 Keploy: 2026-10-11T22:00:43.886860127+05:30 	[34mINFO[0m	stored the mocks on the agent	{"mocks": 5, "bytes": 30834, "sentBytes": 6599, "encoding": "zstd", "took": "8.809019ms"}
+🐰 Keploy: 2026-10-11T22:00:43.894332733+05:30 	[34mINFO[0m	Starting Application :	{"executing_cmd": "/usr/bin/sh -c ./http-pokeapi"}
+2026/10/11 22:00:45 The server is live on port 8080
+🐰 Keploy: 2026-10-11T22:00:50.907649235+05:30 	[34mINFO[0m	starting test for	{"test case": "[38;5;208mget-api-locations-1[0;25;0m", "test set": "[38;5;208mtest-set-2[0;25;0m"}
+🐰 Keploy: 2026-10-11T22:00:50.930210261+05:30 	[34mINFO[0m	result	{"testcase id": "[32mget-api-locations-1[0m", "testset id": "[32mtest-set-2[0m", "passed": "[32mtrue[0m"}
+🐰 Keploy: 2026-10-11T22:00:50.930588718+05:30 	[34mINFO[0m	starting test for	{"test case": "[38;5;208mget-api-locations-2[0;25;0m", "test set": "[38;5;208mtest-set-2[0;25;0m"}
+🐰 Keploy: 2026-10-11T22:00:50.937171118+05:30 	[34mINFO[0m	result	{"testcase id": "[32mget-api-locations-2[0m", "testset id": "[32mtest-set-2[0m", "passed": "[32mtrue[0m"}
+🐰 Keploy: 2026-10-11T22:00:50.938698489+05:30 	[34mINFO[0m	starting test for	{"test case": "[38;5;208mget-api-locations-eterna-city-area-1[0;25;0m", "test set": "[38;5;208mtest-set-2[0;25;0m"}
+🐰 Keploy: 2026-10-11T22:00:50.944085058+05:30 	[34mINFO[0m	result	{"testcase id": "[32mget-api-locations-eterna-city-area-1[0m", "testset id": "[32mtest-set-2[0m", "passed": "[32mtrue[0m"}
+🐰 Keploy: 2026-10-11T22:00:50.944659765+05:30 	[34mINFO[0m	starting test for	{"test case": "[38;5;208mget-api-greet-1[0;25;0m", "test set": "[38;5;208mtest-set-2[0;25;0m"}
+🐰 Keploy: 2026-10-11T22:00:50.948907588+05:30 	[34mINFO[0m	result	{"testcase id": "[32mget-api-greet-1[0m", "testset id": "[32mtest-set-2[0m", "passed": "[32mtrue[0m"}
+🐰 Keploy: 2026-10-11T22:00:50.951602706+05:30 	[34mINFO[0m	starting test for	{"test case": "[38;5;208mget-api-greet-2[0;25;0m", "test set": "[38;5;208mtest-set-2[0;25;0m"}
+🐰 Keploy: 2026-10-11T22:00:50.952569078+05:30 	[34mINFO[0m	result	{"testcase id": "[32mget-api-greet-2[0m", "testset id": "[32mtest-set-2[0m", "passed": "[32mtrue[0m"}
+🐰 Keploy: 2026-10-11T22:00:50.954066116+05:30 	[34mINFO[0m	starting test for	{"test case": "[38;5;208mget-api-greet-3[0;25;0m", "test set": "[38;5;208mtest-set-2[0;25;0m"}
+🐰 Keploy: 2026-10-11T22:00:50.955568612+05:30 	[34mINFO[0m	result	{"testcase id": "[32mget-api-greet-3[0m", "testset id": "[32mtest-set-2[0m", "passed": "[32mtrue[0m"}
+
+ <=========================================> 
+  TESTRUN SUMMARY. For test-set: [32m[1m"[0m[32mtest-set-2[0m[32m[1m"[0m
+	Total tests:        [34m[1m6[0m
+	Total test passed:  [34m[1m6[0m
+	Total test failed:  [34m[1m0[0m
+	Time Taken:         [32m[1m"[0m[32m7.09 s[0m[32m[1m"[0m
+ <=========================================> 
+
+🐰 Keploy: 2026-10-11T22:00:51.27222247+05:30 	[34mINFO[0m	running	{"test-set": "[38;5;208mtest-set-3[0;25;0m", "attempt": 1}
+🐰 Keploy: 2026-10-11T22:00:51.273678467+05:30 	[34mINFO[0m	Successfully loaded test-mock mappings	{"testSetID": "test-set-3", "filePath": "/home/keploy/plg/keploy-wt-proven-strictfail/samples-go/http-pokeapi/proven-order-run/keploy/test-set-3/mappings.yaml", "numTests": 3, "hasMeaningfulMappings": true}
+🐰 Keploy(agent): 2026-10-11T22:00:51+05:30	[34mINFO[0m	agent mock residency: per-test mocks parked on disk (windowed)	{"onDisk": 0, "spilledResponses": 0, "diskBytes": 0, "residentPerTest": 0, "residentConfig": 5}
+🐰 Keploy: 2026-10-11T22:00:51.285126729+05:30 	[34mINFO[0m	stored the mocks on the agent	{"mocks": 5, "bytes": 32042, "sentBytes": 6690, "encoding": "zstd", "took": "7.65048ms"}
+🐰 Keploy: 2026-10-11T22:00:51.285808269+05:30 	[34mINFO[0m	Starting Application :	{"executing_cmd": "/usr/bin/sh -c ./http-pokeapi"}
+2026/10/11 22:00:53 The server is live on port 8080
+🐰 Keploy: 2026-10-11T22:00:58.297845274+05:30 	[34mINFO[0m	starting test for	{"test case": "[38;5;208mget-api-locations-1[0;25;0m", "test set": "[38;5;208mtest-set-3[0;25;0m"}
+🐰 Keploy: 2026-10-11T22:00:58.342597618+05:30 	[34mINFO[0m	result	{"testcase id": "[32mget-api-locations-1[0m", "testset id": "[32mtest-set-3[0m", "passed": "[32mtrue[0m"}
+🐰 Keploy: 2026-10-11T22:00:58.343659199+05:30 	[34mINFO[0m	starting test for	{"test case": "[38;5;208mget-api-locations-2[0;25;0m", "test set": "[38;5;208mtest-set-3[0;25;0m"}
+🐰 Keploy: 2026-10-11T22:00:58.346228651+05:30 	[34mINFO[0m	result	{"testcase id": "[32mget-api-locations-2[0m", "testset id": "[32mtest-set-3[0m", "passed": "[32mtrue[0m"}
+🐰 Keploy: 2026-10-11T22:00:58.346779191+05:30 	[34mINFO[0m	starting test for	{"test case": "[38;5;208mget-api-locations-pastoria-city-area-1[0;25;0m", "test set": "[38;5;208mtest-set-3[0;25;0m"}
+🐰 Keploy: 2026-10-11T22:00:58.350047516+05:30 	[34mINFO[0m	result	{"testcase id": "[32mget-api-locations-pastoria-city-area-1[0m", "testset id": "[32mtest-set-3[0m", "passed": "[32mtrue[0m"}
+🐰 Keploy: 2026-10-11T22:00:58.350532681+05:30 	[34mINFO[0m	starting test for	{"test case": "[38;5;208mget-api-greet-1[0;25;0m", "test set": "[38;5;208mtest-set-3[0;25;0m"}
+🐰 Keploy: 2026-10-11T22:00:58.352208677+05:30 	[34mINFO[0m	result	{"testcase id": "[32mget-api-greet-1[0m", "testset id": "[32mtest-set-3[0m", "passed": "[32mtrue[0m"}
+🐰 Keploy: 2026-10-11T22:00:58.352859842+05:30 	[34mINFO[0m	starting test for	{"test case": "[38;5;208mget-api-greet-2[0;25;0m", "test set": "[38;5;208mtest-set-3[0;25;0m"}
+🐰 Keploy: 2026-10-11T22:00:58.354611546+05:30 	[34mINFO[0m	result	{"testcase id": "[32mget-api-greet-2[0m", "testset id": "[32mtest-set-3[0m", "passed": "[32mtrue[0m"}
+🐰 Keploy: 2026-10-11T22:00:58.356074584+05:30 	[34mINFO[0m	starting test for	{"test case": "[38;5;208mget-api-greet-3[0;25;0m", "test set": "[38;5;208mtest-set-3[0;25;0m"}
+🐰 Keploy: 2026-10-11T22:00:58.356871832+05:30 	[34mINFO[0m	result	{"testcase id": "[32mget-api-greet-3[0m", "testset id": "[32mtest-set-3[0m", "passed": "[32mtrue[0m"}
+
+ <=========================================> 
+  TESTRUN SUMMARY. For test-set: [32m[1m"[0m[32mtest-set-3[0m[32m[1m"[0m
+	Total tests:        [34m[1m6[0m
+	Total test passed:  [34m[1m6[0m
+	Total test failed:  [34m[1m0[0m
+	Time Taken:         [32m[1m"[0m[32m7.08 s[0m[32m[1m"[0m
+ <=========================================> 
+
+
+ <=========================================> 
+  COMPLETE TESTRUN SUMMARY. 
+	Total tests: [34m[1m24[0m
+	Total test passed: [34m[1m20[0m
+	Total test failed: [34m[1m4[0m
+	Total time taken: [32m[1m"[0m[32m28.59 s[0m[32m[1m"[0m
+
+	Test Suite Name		Total Test	Passed		Failed		Time Taken	Failed Testcases	
+
+	[31m[1m"[0m[31mtest-set-0[0m[31m[1m"[0m		[34m[1m6[0m		[34m[1m4[0m		[34m[1m2[0m		[31m[1m"[0m[31m7.13 s[0m[31m[1m"[0m	[31m[1m"[0m[31mget-api-locations-1, get-api-locations-2[0m[31m[1m"[0m
+	[31m[1m"[0m[31mtest-set-1[0m[31m[1m"[0m		[34m[1m6[0m		[34m[1m4[0m		[34m[1m2[0m		[31m[1m"[0m[31m7.29 s[0m[31m[1m"[0m	[31m[1m"[0m[31mget-api-locations-2, get-api-locations-1[0m[31m[1m"[0m
+	[32m[1m"[0m[32mtest-set-2[0m[32m[1m"[0m		[34m[1m6[0m		[34m[1m6[0m		[34m[1m0[0m		[32m[1m"[0m[32m7.09 s[0m[32m[1m"[0m	[32m[1m"[0m[32m-[0m[32m[1m"[0m
+	[32m[1m"[0m[32mtest-set-3[0m[32m[1m"[0m		[34m[1m6[0m		[34m[1m6[0m		[34m[1m0[0m		[32m[1m"[0m[32m7.08 s[0m[32m[1m"[0m	[32m[1m"[0m[32m-[0m[32m[1m"[0m
+<=========================================> 
+
+🐰 Keploy: 2026-10-11T22:00:59.17234104+05:30 	[34mINFO[0m	stopping Keploy	{"reason": "replay completed successfully"}
+🐰 Keploy: 2026-10-11T22:00:59.172920372+05:30 	[34mINFO[0m	Stopping keploy agent
+🐰 Keploy(agent): 2026-10-11T22:00:59+05:30	[34mINFO[0m	stopping Keploy	{"reason": "stop requested via agent API"}
+🐰 Keploy(agent): 2026-10-11T22:00:59+05:30	[34mINFO[0m	Shutting down agent HTTP server
+🐰 Keploy(agent): 2026-10-11T22:00:59+05:30	[34mINFO[0m	HTTP server stopped
+🐰 Keploy: 2026-10-11T22:00:59.173816245+05:30 	[34mINFO[0m	Keploy agent stopped.
