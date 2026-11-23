@@ -6,6 +6,19 @@ streaming test-case support** — it produces responses with a mix of stable
 fields (served from Redis mocks during replay) and flaky runtime fields
 (timestamps, UUIDs) that exercise noise configuration.
 
+> **Note:** Keploy records and mocks Redis only in
+> [Keploy Enterprise](https://keploy.io/docs/keploy-cloud/cloud-installation/),
+> the `keploy` that `curl --silent -O -L https://keploy.io/install.sh && source install.sh`
+> installs; a free account is enough for it (free-tier runs are subject to
+> a usage allowance). The open-source `keploy` (installed with
+> `curl --silent -O -L https://keploy.io/install.sh && source install.sh --oss`,
+> the keploy/keploy GitHub release binary, or the `ghcr.io/keploy/keploy`
+> image) passes this app's Redis calls through
+> to the real Redis server in record and in test mode, records no Redis mocks,
+> and logs that the Redis calls are skipped. With it, keep Redis running while
+> `keploy test` runs. Every mention of Redis mocks in this README applies to
+> Keploy Enterprise.
+
 ## Prerequisites
 
 | Tool | Purpose |
@@ -110,7 +123,9 @@ keploy test -c "./sse-redis-app" --delay 7
 During replay keploy:
 
 1. Starts the app.
-2. Mocks all outgoing Redis calls (no live Redis needed).
+2. Mocks all outgoing Redis calls (no live Redis needed). This is Keploy
+   Enterprise only: the open-source `keploy` passes them through, so Redis
+   must be running.
 3. Replays each recorded HTTP request.
 4. For streaming responses, validates the body incrementally:
    - **SSE**: compares field keys, event names, and JSON `data` payloads per
