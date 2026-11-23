@@ -1,0 +1,30 @@
+version: api.keploy.io/v1beta1
+kind: TestMocksMapping
+test_set_id: test-set-0
+tests:
+  - id: test-1
+    mock_entries:
+      - name: mock-2
+        kind: Http
+        timestamp: 1791735894
+        reqTimestampMock: "2026-10-11T21:54:54.08721714+05:30"
+        resTimestampMock: "2026-10-11T21:54:54.247364159+05:30"
+      - name: mock-4
+        kind: Http
+        timestamp: 1791735897
+        reqTimestampMock: "2026-10-11T21:54:57.428100972+05:30"
+        resTimestampMock: "2026-10-11T21:54:57.597956496+05:30"
+  - id: test-2
+    mock_entries:
+      - name: mock-3
+        kind: Http
+        timestamp: 1791735897
+        reqTimestampMock: "2026-10-11T21:54:57.256028482+05:30"
+        resTimestampMock: "2026-10-11T21:54:57.417763786+05:30"
+  - id: test-3
+    mock_entries:
+      - name: mock-4
+        kind: Http
+        timestamp: 1791735897
+        reqTimestampMock: "2026-10-11T21:54:57.428100972+05:30"
+        resTimestampMock: "2026-10-11T21:54:57.597956496+05:30"

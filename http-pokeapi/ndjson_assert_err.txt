@@ -1,0 +1,13 @@
+
+[38;5;208m═══════════════════════════════════════════════════════════════════════════════[0m
+  [1m[38;5;208m🚀  TRY THE FULL KEPLOY (FREE)[0m
+  This is Keploy's open-source build. Keploy from keploy.io (free with an account) adds:
+    • PostgreSQL, MongoDB, gRPC, HTTP/2, Kafka — on top of this build's HTTP + MySQL
+    • Recording apps running natively on macOS and Windows
+    • Recording and testing apps that run in Podman
+    • AI-powered test generation, sandbox replay, MCP for AI agents
+      (Claude Code, Cursor, Copilot, Gemini, …)
+  [2mInstall:[0m  [1mcurl --silent -O -L https://keploy.io/install.sh && source install.sh[0m
+[38;5;208m═══════════════════════════════════════════════════════════════════════════════[0m
+
+🐰 Keploy: 2026-10-11T21:55:31.910941671+05:30 	[34mINFO[0m	No test sets selected for report generation, Generating report for all test sets

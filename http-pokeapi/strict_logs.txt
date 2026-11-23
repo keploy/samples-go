@@ -1,0 +1,133 @@
+
+[38;5;208m═══════════════════════════════════════════════════════════════════════════════[0m
+  [1m[38;5;208m🚀  TRY THE FULL KEPLOY (FREE)[0m
+  This is Keploy's open-source build. Keploy from keploy.io (free with an account) adds:
+    • PostgreSQL, MongoDB, gRPC, HTTP/2, Kafka — on top of this build's HTTP + MySQL
+    • Recording apps running natively on macOS and Windows
+    • Recording and testing apps that run in Podman
+    • AI-powered test generation, sandbox replay, MCP for AI agents
+      (Claude Code, Cursor, Copilot, Gemini, …)
+  [2mInstall:[0m  [1mcurl --silent -O -L https://keploy.io/install.sh && source install.sh[0m
+[38;5;208m═══════════════════════════════════════════════════════════════════════════════[0m
+
+
+[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m▄[0m
+[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m▄[0m
+[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m▒[0m
+[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▀[0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▄[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▌[0m
+[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▄[0m[38;5;202m▌[0m[38;5;202m▌[0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m▀[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▄[0m[38;5;202m▌[0m[38;5;202m▀[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m▌[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▄[0m[38;5;202m▌[0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m▌[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m▌[0m[38;5;202m▌[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m
+[38;5;208m [0m[38;5;208m [0m[38;5;208m [0m[38;5;208m [0m[38;5;208m [0m[38;5;208m [0m[38;5;208m [0m[38;5;208m▓[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m▌[0m[38;5;208m▓[0m[38;5;202m▓[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m▄[0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m [0m[38;5;202m▐[0m[38;5;202m█[0m[38;5;202m▌[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▌[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▌[0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▓[0m
+[38;5;214m [0m[38;5;214m [0m[38;5;214m [0m[38;5;214m [0m[38;5;214m [0m[38;5;214m [0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▀[0m[38;5;214m▀[0m[38;5;214m▀[0m[38;5;214m▀[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▌[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m▌[0m[38;5;202m▄[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m▐[0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m▄[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m▀[0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m▀[0m[38;5;202m█[0m[38;5;202m▄[0m[38;5;202m▄[0m[38;5;202m█[0m[38;5;202m▀[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m█[0m
+[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m▓[0m[38;5;226m▌[0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;202m [0m[38;5;202m▐[0m[38;5;202m█[0m[38;5;202m▌[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▌[0m
+[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m▓[0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202mO[0m[38;5;202mP[0m[38;5;202mE[0m[38;5;202mN[0m[38;5;202m [0m[38;5;202mS[0m[38;5;202mO[0m[38;5;202mU[0m[38;5;202mR[0m[38;5;202mC[0m[38;5;202mE[0m
+
+version: 3-dev
+
+🐰 Keploy: 2026-10-11T21:55:32.01707974+05:30 	[34mINFO[0m	Test Sets to be Replayed	{"testSets": ["test-set-0"]}
+🐰 Keploy(agent): 2026-10-11T21:55:35+05:30	[34mINFO[0m	starting TCP DNS server at addr :26789
+🐰 Keploy(agent): 2026-10-11T21:55:35+05:30	[34mINFO[0m	starting UDP DNS server at addr :26789
+🐰 Keploy(agent): 2026-10-11T21:55:35+05:30	[34mINFO[0m	Keploy has taken control of the DNS resolution mechanism, your application may misbehave if you have provided wrong domain name in your application code.
+🐰 Keploy(agent): 2026-10-11T21:55:35+05:30	[34mINFO[0m	Proxy started at port:16789
+🐰 Keploy(agent): 2026-10-11T21:55:35+05:30	[34mINFO[0m	Starting Agent's HTTP server	{"addr": "127.0.0.1:62164"}
+🐰 Keploy: 2026-10-11T21:55:36.075662205+05:30 	[34mINFO[0m	pointing Java at a merged keploy truststore via JAVA_TOOL_OPTIONS (the JDK's cacerts is left untouched)	{"truststore": "/tmp/keploy-java-truststore-1000.jks", "system_source": "/etc/ssl/certs/ca-certificates.crt"}
+🐰 Keploy: 2026-10-11T21:55:36.07578842+05:30 	[34mINFO[0m	running	{"test-set": "test-set-0", "attempt": 1}
+🐰 Keploy: 2026-10-11T21:55:36.078768292+05:30 	[34mINFO[0m	Successfully loaded test-mock mappings	{"testSetID": "test-set-0", "filePath": "/home/keploy/plg/keploy-wt-proven-verdicts/samples-go/http-pokeapi/keploy/test-set-0/mappings.yaml", "numTests": 3, "hasMeaningfulMappings": true}
+🐰 Keploy(agent): 2026-10-11T21:55:36+05:30	[34mINFO[0m	agent mock residency: per-test mocks parked on disk (windowed)	{"onDisk": 3, "spilledResponses": 1, "diskBytes": 48546, "residentPerTest": 0, "residentConfig": 2}
+🐰 Keploy: 2026-10-11T21:55:36.090016909+05:30 	[34mINFO[0m	stored the mocks on the agent	{"mocks": 5, "bytes": 33818, "sentBytes": 6755, "encoding": "zstd", "took": "6.221799ms"}
+🐰 Keploy(agent): 2026-10-11T21:55:36+05:30	[34mINFO[0m	strict mock-window containment is ACTIVE for this session — per-test mocks whose request timestamp falls outside the outer test window will be dropped rather than promoted across tests. If your replays start reporting missing mocks after an upgrade, this is likely why. To opt out: set KEPLOY_STRICT_MOCK_WINDOW=0 in the environment, OR test.strictMockWindow: false in keploy.yaml.	{"viaPerCallFlag": true, "viaEnvOverride": false, "escape_hatch_env": "KEPLOY_STRICT_MOCK_WINDOW=0", "escape_hatch_config": "test.strictMockWindow: false"}
+🐰 Keploy: 2026-10-11T21:55:36.094120092+05:30 	[34mINFO[0m	Starting Application :	{"executing_cmd": "/usr/bin/sh -c ./http-pokeapi"}
+2026/10/11 21:55:38 The server is live on port 8080
+🐰 Keploy: 2026-10-11T21:55:43.118020668+05:30 	[34mINFO[0m	starting test for	{"test case": "test-1", "test set": "test-set-0"}
+🐰 Keploy(agent): 2026-10-11T21:55:43+05:30	[31mERROR[0m	failed to mock the outgoing message	{"Client ConnectionID": "0", "Destination ConnectionID": "1", "Destination Address": "172.67.195.193:443", "Client IP Address": "127.0.0.1:49412", "error": "no matching mock found for GET /api/v2/location-area"}
+2026/10/11 21:55:43 Responding with 5XX error: bad status code : 502
+🐰 Keploy(agent): 2026-10-11T21:55:43+05:30	[33mWARN[0m	mock mismatch: no matching mock for outgoing call	{"protocol": "HTTP", "destination": "pokeapi.co", "actual": "GET /api/v2/location-area", "match_phase": "no_schema_candidates", "candidates": 1, "closest": "mock-2", "next_step": "Only values drifted (path). If these are dynamic (timestamps, ids, tokens), add them to the matching noise (test.globalNoise); otherwise re-record with 'keploy record'.", "destination_scope": "in_compared_set"}
+🐰 Keploy(agent): 2026-10-11T21:55:43+05:30	[31mERROR[0m	failed to handle the client connection	{"error": "no matching mock found for GET /api/v2/location-area"}
+🐰 Keploy: 2026-10-11T21:55:43.218950118+05:30 	[31mERROR[0m	mock mapping mismatch detected; marking testcase as obsolete. Re-record the test case or run with --update-test-mapping to regenerate mappings	{"testcase": "test-1", "testset": "test-set-0", "expectedMocks": ["mock-2"], "actualMocks": []}
+🐰 Keploy: 2026-10-11T21:55:43.218986786+05:30 	[34mINFO[0m	result	{"testcase id": "test-1", "testset id": "test-set-0", "passed": "false"}
+🐰 Keploy: 2026-10-11T21:55:43.21960682+05:30 	[34mINFO[0m	starting test for	{"test case": "test-2", "test set": "test-set-0"}
+🐰 Keploy(agent): 2026-10-11T21:55:43+05:30	[31mERROR[0m	failed to mock the outgoing message	{"Client ConnectionID": "2", "Destination ConnectionID": "3", "Destination Address": "172.67.195.193:443", "Client IP Address": "127.0.0.1:49418", "error": "no matching mock found for GET /api/v2/location-area"}
+🐰 Keploy(agent): 2026-10-11T21:55:43+05:30	[33mWARN[0m	mock mismatch: no matching mock for outgoing call	{"protocol": "HTTP", "destination": "pokeapi.co", "actual": "GET /api/v2/location-area", "match_phase": "no_schema_candidates", "candidates": 1, "closest": "mock-3", "next_step": "Only values drifted (path). If these are dynamic (timestamps, ids, tokens), add them to the matching noise (test.globalNoise); otherwise re-record with 'keploy record'.", "destination_scope": "in_compared_set"}
+🐰 Keploy(agent): 2026-10-11T21:55:43+05:30	[31mERROR[0m	failed to handle the client connection	{"error": "no matching mock found for GET /api/v2/location-area"}
+2026/10/11 21:55:43 Responding with 5XX error: bad status code : 502
+🐰 Keploy: 2026-10-11T21:55:43.227863856+05:30 	[31mERROR[0m	mock mapping mismatch detected; marking testcase as obsolete. Re-record the test case or run with --update-test-mapping to regenerate mappings	{"testcase": "test-2", "testset": "test-set-0", "expectedMocks": ["mock-3"], "actualMocks": []}
+🐰 Keploy: 2026-10-11T21:55:43.227890566+05:30 	[34mINFO[0m	result	{"testcase id": "test-2", "testset id": "test-set-0", "passed": "false"}
+🐰 Keploy: 2026-10-11T21:55:43.228450139+05:30 	[34mINFO[0m	starting test for	{"test case": "test-3", "test set": "test-set-0"}
+🐰 Keploy(agent): 2026-10-11T21:55:43+05:30	[31mERROR[0m	failed to mock the outgoing message	{"Client ConnectionID": "4", "Destination ConnectionID": "5", "Destination Address": "172.67.195.193:443", "Client IP Address": "127.0.0.1:49420", "error": "no matching mock found for GET /api/v2/location-area/canalave-city-area"}
+🐰 Keploy(agent): 2026-10-11T21:55:43+05:30	[33mWARN[0m	mock mismatch: no matching mock for outgoing call	{"protocol": "HTTP", "destination": "pokeapi.co", "actual": "GET /api/v2/location-area/canalave-city-area", "match_phase": "no_schema_candidates", "candidates": 1, "closest": "mock-4", "next_step": "Only values drifted (path). If these are dynamic (timestamps, ids, tokens), add them to the matching noise (test.globalNoise); otherwise re-record with 'keploy record'.", "destination_scope": "in_compared_set"}
+🐰 Keploy(agent): 2026-10-11T21:55:43+05:30	[31mERROR[0m	failed to handle the client connection	{"error": "no matching mock found for GET /api/v2/location-area/canalave-city-area"}
+2026/10/11 21:55:43 Responding with 5XX error: bad status code : 502
+2026/10/11 21:55:43 http: superfluous response.WriteHeader call from main.respondWithJSON (response.go:31)
+🐰 Keploy: 2026-10-11T21:55:43.232034127+05:30 	[31mERROR[0m	mock mapping mismatch detected; marking testcase as obsolete. Re-record the test case or run with --update-test-mapping to regenerate mappings	{"testcase": "test-3", "testset": "test-set-0", "expectedMocks": ["mock-4"], "actualMocks": []}
+🐰 Keploy: 2026-10-11T21:55:43.232054878+05:30 	[34mINFO[0m	result	{"testcase id": "test-3", "testset id": "test-set-0", "passed": "false"}
+🐰 Keploy: 2026-10-11T21:55:43.232150841+05:30 	[33mWARN[0m	some tests did not exercise a dependency their recording says they use, and were not failed for it (run with --assert-dependencies to fail on this). Note that an outgoing call made AFTER the response is written is not attributable to this test's window	{"testset": "test-set-0", "tests": 3, "responseStillMatched": 0, "sample": ["test-1", "test-2", "test-3"]}
+
+ <=========================================> 
+  TESTRUN SUMMARY. For test-set: [32m[1m"[0m[32mtest-set-0[0m[32m[1m"[0m
+	Total tests:        [34m[1m3[0m
+	Total test passed:  [34m[1m0[0m
+	Total test failed:  [34m[1m0[0m
+	Total test obsolete: [34m[1m3[0m
+	Time Taken:         [32m[1m"[0m[32m7.16 s[0m[32m[1m"[0m
+ <=========================================> 
+
+
+ <=========================================> 
+  COMPLETE TESTRUN SUMMARY. 
+	Total tests: [34m[1m3[0m
+	Total test passed: [34m[1m0[0m
+	Total test failed: [34m[1m0[0m
+	Total test obsolete: [34m[1m3[0m
+	Total time taken: [32m[1m"[0m[32m7.16 s[0m[32m[1m"[0m
+
+	Test Suite Name		Total Test	Passed		Failed		Obsolete		Time Taken	
+
+	[32m[1m"[0m[32mtest-set-0[0m[32m[1m"[0m		[34m[1m3[0m		[34m[1m0[0m		[34m[1m0[0m		[34m[1m3[0m		[32m[1m"[0m[32m7.16 s[0m[32m[1m"[0m
+<=========================================> 
+
+🐰 Keploy: 2026-10-11T21:55:44.050401409+05:30 	[33mWARN[0m	Tests passed, but some outgoing calls did not match the recorded mocks.	{"test_sets": "test-set-0", "next_step": "Review the mismatch summary below. Add drifting dynamic fields as noise (test.globalNoise), or re-record the test-set with 'keploy record' if the request structure changed."}
+
+=========================== MOCK MISMATCH ===========================
+
+Test: test-set-0 / test-1
+  Mock mismatch: [HTTP] GET /api/v2/location-area  →  pokeapi.co   (closest mock: mock-2)   [match stopped at: no_schema_candidates, 1 candidate mock(s)]
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                               MOCK - 2                                                │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│                   EXPECT HEADER                   │                  ACTUAL HEADER                    │
+│ ──────────────────────────────────────────────────┼────────────────────────────────────────────────── │
+│        url: /api/v0-mismatch/location-area        │            url: /api/v2/location-area             │
+└───────────────────────────────────────────────────────────────────────────────────────────────────────┘
+  Hint: Only values drifted (path). If these are dynamic (timestamps, ids, tokens), add them to the matching noise (test.globalNoise); otherwise re-record with 'keploy record'.
+  Expected mocks not consumed: mock-2
+
+Test: test-set-0 / test-2
+  Mock mismatch: [HTTP] GET /api/v2/location-area  →  pokeapi.co   (closest mock: mock-3)   [match stopped at: no_schema_candidates, 1 candidate mock(s)]
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                               MOCK - 3                                                │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│                   EXPECT HEADER                   │                  ACTUAL HEADER                    │
+│ ──────────────────────────────────────────────────┼────────────────────────────────────────────────── │
+│        url: /api/v0-mismatch/location-area        │            url: /api/v2/location-area             │
+└───────────────────────────────────────────────────────────────────────────────────────────────────────┘
+  Hint: Only values drifted (path). If these are dynamic (timestamps, ids, tokens), add them to the matching noise (test.globalNoise); otherwise re-record with 'keploy record'.
+  Expected mocks not consumed: mock-3
+
+Test: test-set-0 / test-3
+  Mock mismatch: [HTTP] GET /api/v2/location-area/canalave-city-area  →  pokeapi.co   (closest mock: mock-4)   [match stopped at: no_schema_candidates, 1 candidate mock(s)]
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                               MOCK - 4                                                │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│                   EXPECT HEADER                   │                  ACTUAL HEADER                    │
+│ ──────────────────────────────────────────────────┼────────────────────────────────────────────────── │
+│  url: /api/v0-mismatch/location-area/canalave-cit │ url: /api/v2/location-area/canalave-city-area     │
+│  rea                                              │                                                   │
+└───────────────────────────────────────────────────────────────────────────────────────────────────────┘
+  Hint: Only values drifted (path). If these are dynamic (timestamps, ids, tokens), add them to the matching noise (test.globalNoise); otherwise re-record with 'keploy record'.
+  Expected mocks not consumed: mock-4
+
+🐰 Keploy: 2026-10-11T21:55:44.054800442+05:30 	[34mINFO[0m	stopping Keploy	{"reason": "replay completed successfully"}
+🐰 Keploy: 2026-10-11T21:55:44.058296842+05:30 	[34mINFO[0m	Stopping keploy agent
+🐰 Keploy(agent): 2026-10-11T21:55:44+05:30	[34mINFO[0m	stopping Keploy	{"reason": "stop requested via agent API"}
+🐰 Keploy(agent): 2026-10-11T21:55:44+05:30	[34mINFO[0m	Shutting down agent HTTP server
+🐰 Keploy(agent): 2026-10-11T21:55:44+05:30	[34mINFO[0m	HTTP server stopped
+🐰 Keploy: 2026-10-11T21:55:44.060410875+05:30 	[34mINFO[0m	Keploy agent stopped.

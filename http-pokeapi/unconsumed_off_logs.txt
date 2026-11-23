@@ -1,0 +1,73 @@
+
+[38;5;208m═══════════════════════════════════════════════════════════════════════════════[0m
+  [1m[38;5;208m🚀  TRY THE FULL KEPLOY (FREE)[0m
+  This is Keploy's open-source build. Keploy from keploy.io (free with an account) adds:
+    • PostgreSQL, MongoDB, gRPC, HTTP/2, Kafka — on top of this build's HTTP + MySQL
+    • Recording apps running natively on macOS and Windows
+    • Recording and testing apps that run in Podman
+    • AI-powered test generation, sandbox replay, MCP for AI agents
+      (Claude Code, Cursor, Copilot, Gemini, …)
+  [2mInstall:[0m  [1mcurl --silent -O -L https://keploy.io/install.sh && source install.sh[0m
+[38;5;208m═══════════════════════════════════════════════════════════════════════════════[0m
+
+
+[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m▄[0m
+[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m▄[0m
+[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m▒[0m
+[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▀[0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▄[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▌[0m
+[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▄[0m[38;5;202m▌[0m[38;5;202m▌[0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m▀[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▄[0m[38;5;202m▌[0m[38;5;202m▀[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m▌[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▄[0m[38;5;202m▌[0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m▌[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m▌[0m[38;5;202m▌[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m
+[38;5;208m [0m[38;5;208m [0m[38;5;208m [0m[38;5;208m [0m[38;5;208m [0m[38;5;208m [0m[38;5;208m [0m[38;5;208m▓[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m█[0m[38;5;208m▌[0m[38;5;208m▓[0m[38;5;202m▓[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m▄[0m[38;5;202m▓[0m[38;5;202m▓[0m[38;5;202m [0m[38;5;202m▐[0m[38;5;202m█[0m[38;5;202m▌[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▌[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▌[0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▓[0m
+[38;5;214m [0m[38;5;214m [0m[38;5;214m [0m[38;5;214m [0m[38;5;214m [0m[38;5;214m [0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▀[0m[38;5;214m▀[0m[38;5;214m▀[0m[38;5;214m▀[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▓[0m[38;5;214m▌[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m▓[0m[38;5;202m▌[0m[38;5;202m▄[0m[38;5;202m▄[0m[38;5;202m [0m[38;5;202m▐[0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m▄[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m▀[0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m█[0m[38;5;202m [0m[38;5;202m▀[0m[38;5;202m█[0m[38;5;202m▄[0m[38;5;202m▄[0m[38;5;202m█[0m[38;5;202m▀[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▓[0m[38;5;202m█[0m
+[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m▓[0m[38;5;226m▌[0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;202m [0m[38;5;202m▐[0m[38;5;202m█[0m[38;5;202m▌[0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m█[0m[38;5;202m▌[0m
+[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m▓[0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;226m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202m [0m[38;5;202mO[0m[38;5;202mP[0m[38;5;202mE[0m[38;5;202mN[0m[38;5;202m [0m[38;5;202mS[0m[38;5;202mO[0m[38;5;202mU[0m[38;5;202mR[0m[38;5;202mC[0m[38;5;202mE[0m
+
+version: 3-dev
+
+🐰 Keploy: 2026-10-11T21:56:37.526060052+05:30 	[34mINFO[0m	Test Sets to be Replayed	{"testSets": ["test-set-0"]}
+🐰 Keploy(agent): 2026-10-11T21:56:39+05:30	[34mINFO[0m	starting UDP DNS server at addr :26789
+🐰 Keploy(agent): 2026-10-11T21:56:39+05:30	[34mINFO[0m	starting TCP DNS server at addr :26789
+🐰 Keploy(agent): 2026-10-11T21:56:39+05:30	[34mINFO[0m	Keploy has taken control of the DNS resolution mechanism, your application may misbehave if you have provided wrong domain name in your application code.
+🐰 Keploy(agent): 2026-10-11T21:56:39+05:30	[34mINFO[0m	Proxy started at port:16789
+🐰 Keploy(agent): 2026-10-11T21:56:39+05:30	[34mINFO[0m	Starting Agent's HTTP server	{"addr": "127.0.0.1:62003"}
+🐰 Keploy: 2026-10-11T21:56:39.546441064+05:30 	[34mINFO[0m	pointing Java at a merged keploy truststore via JAVA_TOOL_OPTIONS (the JDK's cacerts is left untouched)	{"truststore": "/tmp/keploy-java-truststore-1000.jks", "system_source": "/etc/ssl/certs/ca-certificates.crt"}
+🐰 Keploy: 2026-10-11T21:56:39.546556236+05:30 	[34mINFO[0m	running	{"test-set": "test-set-0", "attempt": 1}
+🐰 Keploy: 2026-10-11T21:56:39.547544149+05:30 	[34mINFO[0m	Successfully loaded test-mock mappings	{"testSetID": "test-set-0", "filePath": "/home/keploy/plg/keploy-wt-proven-verdicts/samples-go/http-pokeapi/unconsumed-run/keploy/test-set-0/mappings.yaml", "numTests": 3, "hasMeaningfulMappings": true}
+🐰 Keploy(agent): 2026-10-11T21:56:39+05:30	[34mINFO[0m	agent mock residency: per-test mocks parked on disk (windowed)	{"onDisk": 0, "spilledResponses": 0, "diskBytes": 0, "residentPerTest": 0, "residentConfig": 5}
+🐰 Keploy: 2026-10-11T21:56:39.553247496+05:30 	[34mINFO[0m	stored the mocks on the agent	{"mocks": 5, "bytes": 32361, "sentBytes": 6729, "encoding": "zstd", "took": "3.158456ms"}
+🐰 Keploy(agent): 2026-10-11T21:56:39+05:30	[34mINFO[0m	strict mock-window containment is ACTIVE for this session — per-test mocks whose request timestamp falls outside the outer test window will be dropped rather than promoted across tests. If your replays start reporting missing mocks after an upgrade, this is likely why. To opt out: set KEPLOY_STRICT_MOCK_WINDOW=0 in the environment, OR test.strictMockWindow: false in keploy.yaml.	{"viaPerCallFlag": true, "viaEnvOverride": false, "escape_hatch_env": "KEPLOY_STRICT_MOCK_WINDOW=0", "escape_hatch_config": "test.strictMockWindow: false"}
+🐰 Keploy: 2026-10-11T21:56:39.554365164+05:30 	[34mINFO[0m	Starting Application :	{"executing_cmd": "/usr/bin/sh -c ./http-pokeapi"}
+2026/10/11 21:56:41 The server is live on port 8080
+🐰 Keploy: 2026-10-11T21:56:46.568801433+05:30 	[34mINFO[0m	starting test for	{"test case": "test-1", "test set": "test-set-0"}
+🐰 Keploy: 2026-10-11T21:56:46.607939371+05:30 	[34mINFO[0m	result	{"testcase id": "test-1", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-11T21:56:46.608954661+05:30 	[34mINFO[0m	starting test for	{"test case": "test-2", "test set": "test-set-0"}
+🐰 Keploy: 2026-10-11T21:56:46.611438466+05:30 	[34mINFO[0m	result	{"testcase id": "test-2", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-11T21:56:46.612388877+05:30 	[34mINFO[0m	starting test for	{"test case": "test-3", "test set": "test-set-0"}
+🐰 Keploy: 2026-10-11T21:56:46.615752175+05:30 	[34mINFO[0m	result	{"testcase id": "test-3", "testset id": "test-set-0", "passed": "true"}
+
+ <=========================================> 
+  TESTRUN SUMMARY. For test-set: [32m[1m"[0m[32mtest-set-0[0m[32m[1m"[0m
+	Total tests:        [34m[1m3[0m
+	Total test passed:  [34m[1m3[0m
+	Total test failed:  [34m[1m0[0m
+	Time Taken:         [32m[1m"[0m[32m7.07 s[0m[32m[1m"[0m
+ <=========================================> 
+
+
+ <=========================================> 
+  COMPLETE TESTRUN SUMMARY. 
+	Total tests: [34m[1m3[0m
+	Total test passed: [34m[1m3[0m
+	Total test failed: [34m[1m0[0m
+	Total time taken: [32m[1m"[0m[32m7.07 s[0m[32m[1m"[0m
+
+	Test Suite Name		Total Test	Passed		Failed		Time Taken	
+
+	[32m[1m"[0m[32mtest-set-0[0m[32m[1m"[0m		[34m[1m3[0m		[34m[1m3[0m		[34m[1m0[0m		[32m[1m"[0m[32m7.07 s[0m[32m[1m"[0m
+<=========================================> 
+
+🐰 Keploy: 2026-10-11T21:56:47.430070086+05:30 	[34mINFO[0m	stopping Keploy	{"reason": "replay completed successfully"}
+🐰 Keploy: 2026-10-11T21:56:47.430393349+05:30 	[34mINFO[0m	Stopping keploy agent
+🐰 Keploy(agent): 2026-10-11T21:56:47+05:30	[34mINFO[0m	stopping Keploy	{"reason": "stop requested via agent API"}
+🐰 Keploy: 2026-10-11T21:56:47.430662068+05:30 	[34mINFO[0m	Keploy agent stopped.
+🐰 Keploy(agent): 2026-10-11T21:56:47+05:30	[34mINFO[0m	Shutting down agent HTTP server
+🐰 Keploy(agent): 2026-10-11T21:56:47+05:30	[34mINFO[0m	HTTP server stopped
