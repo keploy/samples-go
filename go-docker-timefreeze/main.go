@@ -84,6 +84,38 @@ func protectedHandler(w http.ResponseWriter, _ *http.Request) {
 	}
 }
 
+const (
+	// checkTimeTolerance is the maximum allowed skew between client and server
+	// timestamps on /check-time.
+	checkTimeTolerance = time.Second
+	// unixMilliThreshold distinguishes Unix millisecond timestamps (13+ digits,
+	// e.g. 1795763955968) from legacy Unix second timestamps (10 digits).
+	unixMilliThreshold int64 = 1_000_000_000_000
+)
+
+// evaluateTimeSkew compares serverNow against a client-supplied Unix timestamp
+// (milliseconds when >= unixMilliThreshold, otherwise legacy whole seconds) at
+// matching precision so sub-second truncation never eats into the 1-second
+// tolerance window.
+func evaluateTimeSkew(serverNow time.Time, clientTimestamp int64) (serverVal int64, diff time.Duration, ok bool) {
+	if clientTimestamp >= unixMilliThreshold {
+		serverVal = serverNow.UnixMilli()
+		diffMs := serverVal - clientTimestamp
+		if diffMs < 0 {
+			diffMs = -diffMs
+		}
+		diff = time.Duration(diffMs) * time.Millisecond
+		return serverVal, diff, diff <= checkTimeTolerance
+	}
+	serverVal = serverNow.Unix()
+	diffSec := serverVal - clientTimestamp
+	if diffSec < 0 {
+		diffSec = -diffSec
+	}
+	diff = time.Duration(diffSec) * time.Second
+	return serverVal, diff, diff <= checkTimeTolerance
+}
+
 // checkTimeHandler checks if a client-provided timestamp is within 1 second of the server time.
 func checkTimeHandler(w http.ResponseWriter, r *http.Request) {
 	// 1. Get the timestamp string from the URL query parameter 'ts'
@@ -97,35 +129,29 @@ func checkTimeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 2. Parse the string into an integer (Unix timestamp in seconds)
+	// 2. Parse the string into an integer (Unix timestamp in milliseconds or legacy seconds)
 	clientTimestamp, err := strconv.ParseInt(clientTimeStr, 10, 64)
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
-		if err := json.NewEncoder(w).Encode(map[string]string{"error": "Invalid timestamp format. Must be a Unix timestamp in seconds."}); err != nil {
+		if err := json.NewEncoder(w).Encode(map[string]string{"error": "Invalid timestamp format. Must be a Unix timestamp in milliseconds or seconds."}); err != nil {
 			log.Printf("encode error: %v", err)
 		}
 		return
 	}
 
-	// 3. Get the current server time as a Unix timestamp in seconds
-	serverTimestamp := time.Now().Unix()
+	// 3. Compare server time against client time at matching precision
+	serverVal, diff, ok := evaluateTimeSkew(time.Now(), clientTimestamp)
 
-	// 4. Calculate the absolute difference in seconds
-	diff := serverTimestamp - clientTimestamp
-	if diff < 0 {
-		diff = -diff
-	}
+	fmt.Printf("Server Time: %d, Client Time: %d, Difference: %s\n", serverVal, clientTimestamp, diff)
 
-	fmt.Printf("Server Time: %d, Client Time: %d, Difference: %ds\n", serverTimestamp, clientTimestamp, diff)
-
-	// 5. Check if the difference is greater than 1 second
-	if diff > 1 {
+	// 4. Check if the difference is greater than 1 second
+	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	// 6. If the check passes, wait for 1 second before sending a 200 OK response
+	// 5. If the check passes, wait for 1 second before sending a 200 OK response
 	time.Sleep(1 * time.Second)
 	w.WriteHeader(http.StatusOK)
 }
