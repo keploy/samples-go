@@ -1,0 +1,45 @@
+services:
+  cert-generator:
+    build:
+      context: .
+      dockerfile: Dockerfile.certs
+    container_name: mtls-cert-generator
+    volumes:
+      - certs:/certs
+
+  mtls-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mtls-server
+    environment:
+      APP_BIN: mtls-server
+    depends_on:
+      cert-generator:
+        condition: service_completed_successfully
+    ports:
+      - "8443:8443"
+    volumes:
+      - certs:/certs:ro
+
+  mtls-client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mtls-client
+    environment:
+      APP_BIN: mtls-client
+      CLIENT_API_ADDR: ":8080"
+      SERVER_URL: "https://mtls-server:8443/hello"
+    depends_on:
+      cert-generator:
+        condition: service_completed_successfully
+      mtls-server:
+        condition: service_started
+    ports:
+      - "8080:8080"
+    volumes:
+      - certs:/certs:ro
+
+volumes:
+  certs:
